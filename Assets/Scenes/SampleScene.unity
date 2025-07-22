@@ -1038,7 +1038,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterCore: {fileID: 1584378324}
-  characterControl: {fileID: 2133410356}
+  characterControl: {fileID: 0}
 --- !u!1 &1584378322
 GameObject:
   m_ObjectHideFlags: 0
@@ -1085,7 +1085,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f08a1463d1573774b9b4a39a0048f437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterControl: {fileID: 2133410356}
+  moveSpeed: 5
+  cameraTransform: {fileID: 0}
+  turnRate: 1800
+  ActionPoints: 100
+  MaxActionPoints: 100
+  lastPosition: {x: 0, y: 0}
+  pointSpacing: 0.2
+  line: {fileID: 2133410358}
+  characterController: {fileID: 2133410357}
   controls: {fileID: -944628639613478452, guid: a52a20b044e6b8d4293e780047598b63, type: 3}
   characterExecutor: {fileID: 1554418991}
   nowState: 0
@@ -1530,7 +1538,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2133410353}
   - component: {fileID: 2133410354}
-  - component: {fileID: 2133410356}
   - component: {fileID: 2133410357}
   - component: {fileID: 2133410358}
   m_Layer: 0
@@ -1579,27 +1586,6 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2133410356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2133410351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 284636237a461b848ae2ec9fa579a7dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  cameraTransform: {fileID: 0}
-  controls: {fileID: -944628639613478452, guid: a52a20b044e6b8d4293e780047598b63, type: 3}
-  turnRate: 1800
-  ActionPoints: 100
-  MaxActionPoints: 100
-  lastPosition: {x: 0, y: 0}
-  pointSpacing: 0.2
-  characterController: {fileID: 2133410357}
 --- !u!143 &2133410357
 CharacterController:
   m_ObjectHideFlags: 0
