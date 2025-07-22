@@ -1,0 +1,82 @@
+{
+    "name": "PlayerControl",
+    "maps": [
+        {
+            "name": "CharacterControl",
+            "id": "dfcaee68-1b50-4fae-81f8-0211de7634da",
+            "actions": [
+                {
+                    "name": "MoveCharacter",
+                    "type": "Value",
+                    "id": "9745f104-2f35-46b2-9891-480ff3e9001f",
+                    "expectedControlType": "Stick",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "MoveCamera",
+                    "type": "Value",
+                    "id": "8ebd8d40-6761-4573-997d-3afdad815f85",
+                    "expectedControlType": "Stick",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "54acb6e2-da58-4aac-9a22-71a0bc73779d",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveCharacter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "06abd9f3-2f3c-4033-851a-625cfc253ffb",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "GeneralControl",
+            "id": "7d74c59e-d678-4321-8d55-628629a380a8",
+            "actions": [
+                {
+                    "name": "Confirm",
+                    "type": "Button",
+                    "id": "d5e2a09c-c9c1-4e94-b4b9-0d3a5ce84d36",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2e82279a-1309-4df2-8964-747d8d6b4cd5",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Confirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
