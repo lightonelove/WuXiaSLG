@@ -58,6 +58,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Comfirm",
+                    "type": "Button",
+                    "id": "9406b292-5259-496f-aa38-169332f06fc3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -126,32 +135,15 @@
                     "action": "SkillD",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "GeneralControl",
-            "id": "7d74c59e-d678-4321-8d55-628629a380a8",
-            "actions": [
-                {
-                    "name": "Confirm",
-                    "type": "Button",
-                    "id": "d5e2a09c-c9c1-4e94-b4b9-0d3a5ce84d36",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
+                },
                 {
                     "name": "",
-                    "id": "2e82279a-1309-4df2-8964-747d8d6b4cd5",
+                    "id": "533e4ff7-d025-4dd8-bcfa-c6955c8fc23d",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Confirm",
+                    "action": "Comfirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

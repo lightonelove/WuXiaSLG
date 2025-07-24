@@ -25,11 +25,14 @@ public class CharacterCore : MonoBehaviour
     
     public CharacterController characterController;
     
+    public Animator CharacterControlAnimator;
+    public Animator CharacterExecuteAnimator;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public InputActionAsset controls;
     public CharacterExcutor characterExecutor;
 
-    public enum CharacterCoreState{ ControlState, ExcutionState }
+    public enum CharacterCoreState{ ControlState, ExcutionState, UsingSkill }
 
     public CharacterCoreState nowState = CharacterCoreState.ControlState;
     
@@ -48,6 +51,7 @@ public class CharacterCore : MonoBehaviour
     
     public void ControlUpdate()
     {
+
         Move();
         CheckConfirm();
         lastPosition = new Vector2(characterController.transform.position.x, characterController.transform.position.z);
@@ -92,7 +96,7 @@ public class CharacterCore : MonoBehaviour
         RecordedPositions.Enqueue(characterController.transform.position);
         RecordedRotaitons.Enqueue(characterController.transform.rotation);
         float distance = (lastPosition - nowPosition).magnitude;
-        
+        Debug.Log("??????" + distance);
         lastPosition = nowPosition;
         ActionPoints -= distance * 5.0f;
 
@@ -108,8 +112,7 @@ public class CharacterCore : MonoBehaviour
 
     public bool CheckConfirm()
     {
-        
-        bool confirmPressed = controls.FindActionMap("GeneralControl").FindAction("Confirm").WasPressedThisFrame();
+        bool confirmPressed = FindAction("Comfirm").WasPressedThisFrame();
         if (confirmPressed)
         {
             Debug.Log("ConfirmPressed");
@@ -130,11 +133,33 @@ public class CharacterCore : MonoBehaviour
         if (nowState == CharacterCoreState.ControlState)
         {
             ControlUpdate();
-            if (CheckConfirm())
+
+            if (CheckSkillA())
+            {
+                nowState = CharacterCoreState.UsingSkill;
+                CharacterControlAnimator.Play("SkillA");
+            }
+            else if (CheckSkillB())
+            {
+                nowState = CharacterCoreState.UsingSkill;
+                CharacterControlAnimator.Play("SkillB");
+            }
+            else if (CheckSkillC())
+            {
+                nowState = CharacterCoreState.UsingSkill;
+                CharacterControlAnimator.Play("SkillC");
+            }
+            else if (CheckSkillD())
+            {
+                nowState = CharacterCoreState.UsingSkill;
+                CharacterControlAnimator.Play("SkillD");
+            }
+            else if (CheckConfirm())
             {
                 characterExecutor.RecordedPosition = RecordedPositions;
                 characterExecutor.RecordedRotation = RecordedRotaitons;
                 nowState = CharacterCoreState.ExcutionState;
+                return;
             }
         }
         else if (nowState == CharacterCoreState.ExcutionState)
@@ -142,6 +167,38 @@ public class CharacterCore : MonoBehaviour
             characterExecutor.ExecutorUpdate();
             ReFillAP();
         }
+        else if (nowState == CharacterCoreState.UsingSkill)
+        {
+            AnimatorStateInfo stateInfo = CharacterControlAnimator.GetCurrentAnimatorStateInfo(0);
+            if (stateInfo.normalizedTime >= 1.0f)
+            {
+                Debug.Log("動畫播放完畢，執行事件");
+                nowState = CharacterCoreState.ControlState;
+            }
+
+        }
     }
+
+    public bool CheckSkillA()
+    {
+        bool confirmPressed = FindAction("SkillA").WasPressedThisFrame();
+        return confirmPressed;
+    }
+    public bool CheckSkillB()
+    {
+        bool confirmPressed = FindAction("SkillB").WasPressedThisFrame();
+        return confirmPressed;
+    }
+    public bool CheckSkillC()
+    {
+        bool confirmPressed = FindAction("SkillC").WasPressedThisFrame();
+        return confirmPressed;
+    }
+    public bool CheckSkillD()
+    {
+        bool confirmPressed = FindAction("SkillD").WasPressedThisFrame();
+        return confirmPressed;
+    }
+
 
 }
