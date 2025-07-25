@@ -30,7 +30,7 @@ public class CharacterCore : MonoBehaviour
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public InputActionAsset controls;
-    public CharacterExcutor characterExecutor;
+    public GameObject characterExecutor;
 
     public enum CharacterCoreState{ ControlState, ExcutionState, UsingSkill }
 
@@ -40,6 +40,7 @@ public class CharacterCore : MonoBehaviour
     {
         line.positionCount = 0;
         AddPoint(new Vector3(characterController.transform.position.x, 0.1f, characterController.transform.position.z));
+      
     }
     void AddPoint(Vector3 flatPos)
     {
@@ -68,10 +69,16 @@ public class CharacterCore : MonoBehaviour
         moveAmount = FindAction("MoveCharacter").ReadValue<Vector2>();
 
         if (moveAmount.magnitude < 0.5f)
+        {
+            CharacterControlAnimator.SetBool("isMoving", false);
             return;
+        }
 
         if (ActionPoints <= 0)
+        {
+            CharacterControlAnimator.SetBool("isMoving", false);
             return;
+        }
 
         Vector2 moveDir = moveAmount.normalized;
         Vector3 inputDirection = new Vector3(moveDir.x, 0, moveDir.y);
@@ -79,6 +86,7 @@ public class CharacterCore : MonoBehaviour
         // 角色轉向（保留你原本的 turnRate 邏輯）
         if (inputDirection.sqrMagnitude > 0f)
         {
+            CharacterControlAnimator.SetBool("isMoving", true);
             Quaternion targetRotation = Quaternion.LookRotation(inputDirection, Vector3.up);
             float angleDiff = Quaternion.Angle(characterController.transform.rotation, targetRotation);
 
@@ -86,6 +94,7 @@ public class CharacterCore : MonoBehaviour
             float t = Mathf.Min(1f, rotationStep / angleDiff);
             characterController.transform.rotation = Quaternion.Slerp(characterController.transform.rotation, targetRotation, t);
         }
+
 
         // 用 CharacterController 移動
         Vector3 moveVelocity = inputDirection * moveSpeed;
@@ -156,15 +165,13 @@ public class CharacterCore : MonoBehaviour
             }
             else if (CheckConfirm())
             {
-                characterExecutor.RecordedPosition = RecordedPositions;
-                characterExecutor.RecordedRotation = RecordedRotaitons;
                 nowState = CharacterCoreState.ExcutionState;
                 return;
             }
         }
         else if (nowState == CharacterCoreState.ExcutionState)
         {
-            characterExecutor.ExecutorUpdate();
+            ExecutorUpdate();
             ReFillAP();
         }
         else if (nowState == CharacterCoreState.UsingSkill)
@@ -176,6 +183,21 @@ public class CharacterCore : MonoBehaviour
                 nowState = CharacterCoreState.ControlState;
             }
 
+        }
+    }
+    
+    public void ExecutorUpdate()
+    {
+        if (RecordedPositions.Count != 0)
+        {
+            Vector3 pos = RecordedPositions.Dequeue();
+            Quaternion rot = RecordedRotaitons.Dequeue();
+            characterExecutor.transform.position = pos;
+            characterExecutor.transform.rotation = rot;
+        }
+        else
+        {
+            nowState = CharacterCore.CharacterCoreState.ControlState;
         }
     }
 
@@ -199,6 +221,7 @@ public class CharacterCore : MonoBehaviour
         bool confirmPressed = FindAction("SkillD").WasPressedThisFrame();
         return confirmPressed;
     }
+
 
 
 }
