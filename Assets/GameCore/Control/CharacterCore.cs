@@ -20,8 +20,7 @@ public class CharacterCore : MonoBehaviour
     private List<Vector3> points = new List<Vector3>();
     private Vector3 lastDrawPoint;
     
-    public Queue<Vector3> RecordedPositions = new Queue<Vector3>();
-    public Queue<Quaternion> RecordedRotaitons = new Queue<Quaternion>();
+    public Queue<CombatAction> RecordedActions = new Queue<CombatAction>();
     
     public CharacterController characterController;
     
@@ -102,8 +101,11 @@ public class CharacterCore : MonoBehaviour
         
         // 計算移動距離（Z 軸）
         Vector2 nowPosition = new Vector2(characterController.transform.position.x, characterController.transform.position.z);
-        RecordedPositions.Enqueue(characterController.transform.position);
-        RecordedRotaitons.Enqueue(characterController.transform.rotation);
+        CombatAction tempAction = new CombatAction();
+        tempAction.Position = characterController.transform.position;
+        tempAction.rotation = characterController.transform.rotation;
+        tempAction.type = CombatAction.ActionType.Move;
+        RecordedActions.Enqueue(tempAction);
         float distance = (lastPosition - nowPosition).magnitude;
         Debug.Log("??????" + distance);
         lastPosition = nowPosition;
@@ -188,12 +190,17 @@ public class CharacterCore : MonoBehaviour
     
     public void ExecutorUpdate()
     {
-        if (RecordedPositions.Count != 0)
+        if (RecordedActions.Count != 0)
         {
-            Vector3 pos = RecordedPositions.Dequeue();
-            Quaternion rot = RecordedRotaitons.Dequeue();
-            characterExecutor.transform.position = pos;
-            characterExecutor.transform.rotation = rot;
+            
+            CombatAction tempAction = RecordedActions.Dequeue();
+            if (tempAction.type == CombatAction.ActionType.Move)
+            {
+                Vector3 pos = tempAction.Position;
+                Quaternion rot = tempAction.rotation;
+                characterExecutor.transform.position = pos;
+                characterExecutor.transform.rotation = rot;
+            }
         }
         else
         {
