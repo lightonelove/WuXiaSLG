@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CombatAction : MonoBehaviour
+public class CombatAction
 {
     public enum ActionType {SkillA, SkillB, SkillC, SkillD, Move}
 

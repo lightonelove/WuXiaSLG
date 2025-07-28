@@ -14,7 +14,7 @@ public class AnimationRelativePos : MonoBehaviour
     {
         Vector3 deltaPosition = animator.deltaPosition;
         
-        if (characterController != null)
+        if (characterController != null && characterController.enabled)
         {
             characterController.Move(deltaPosition);
         }

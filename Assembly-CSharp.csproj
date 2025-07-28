@@ -61,11 +61,10 @@
     <Compile Include="Assets\GameCore\Control\CharacterCore.cs" />
     <Compile Include="Assets\GameCore\Enemy\EnemyCore.cs" />
     <Compile Include="Assets\ArtResources\TestBed\UI\APBar.cs" />
-    <Compile Include="Assets\GameCore\Control\CharacterControl.cs" />
-    <Compile Include="Assets\GameCore\Control\CharacterExecutor.cs" />
     <Compile Include="Assets\Tool\AnimationPathRebinder.cs" />
     <Compile Include="Assets\GameCore\Character\Health.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
+    <Compile Include="Assets\GameCore\Control\CombatAction.cs" />
     <Compile Include="Assets\GameCore\Enemy\DamageDealer.cs" />
     <Compile Include="Assets\ArtResources\TestBed\UI\SLGCoreUI.cs" />
     <Compile Include="Assets\GameCore\Enemy\DamageReceiver.cs" />

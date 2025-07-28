@@ -13,8 +13,8 @@ TagManager:
   - UI
   - DamageDealer
   - DamageReceiver
-  - 
-  - 
+  - CharacterExecutor
+  - CharacterControl
   - 
   - 
   - 

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
+
 public class CharacterCore : MonoBehaviour
 {
     // For Control //
@@ -23,6 +24,7 @@ public class CharacterCore : MonoBehaviour
     public Queue<CombatAction> RecordedActions = new Queue<CombatAction>();
     
     public CharacterController characterController;
+    public CharacterController characterControllerForExecutor;
     
     public Animator CharacterControlAnimator;
     public Animator CharacterExecuteAnimator;
@@ -31,7 +33,7 @@ public class CharacterCore : MonoBehaviour
     public InputActionAsset controls;
     public GameObject characterExecutor;
 
-    public enum CharacterCoreState{ ControlState, ExcutionState, UsingSkill }
+    public enum CharacterCoreState{ ControlState, ExcutionState, UsingSkill, ExecutingSkill }
 
     public CharacterCoreState nowState = CharacterCoreState.ControlState;
     
@@ -107,7 +109,6 @@ public class CharacterCore : MonoBehaviour
         tempAction.type = CombatAction.ActionType.Move;
         RecordedActions.Enqueue(tempAction);
         float distance = (lastPosition - nowPosition).magnitude;
-        Debug.Log("??????" + distance);
         lastPosition = nowPosition;
         ActionPoints -= distance * 5.0f;
 
@@ -145,26 +146,39 @@ public class CharacterCore : MonoBehaviour
         {
             ControlUpdate();
 
-            if (CheckSkillA())
+            if (CheckSkillA() || CheckSkillB() || CheckSkillC() || CheckSkillC())
             {
+                CombatAction tempActionMove = new CombatAction();
                 nowState = CharacterCoreState.UsingSkill;
-                CharacterControlAnimator.Play("SkillA");
+                tempActionMove.Position = characterController.transform.position;
+                tempActionMove.rotation = characterController.transform.rotation;
+                tempActionMove.type = CombatAction.ActionType.Move;
+                RecordedActions.Enqueue(tempActionMove);
+                CombatAction tempActionSkill = new CombatAction();
+                if (CheckSkillA())
+                {
+                    CharacterControlAnimator.Play("SkillA");
+                    tempActionSkill.type = CombatAction.ActionType.SkillA;
+                    
+                }
+                else if (CheckSkillB())
+                {
+                    CharacterControlAnimator.Play("SkillB");
+                    tempActionSkill.type = CombatAction.ActionType.SkillB;
+                }
+                else if (CheckSkillC())
+                {
+                    CharacterControlAnimator.Play("SkillC");
+                    tempActionSkill.type = CombatAction.ActionType.SkillC;
+                }
+                else if (CheckSkillD())
+                {
+                    CharacterControlAnimator.Play("SkillD");
+                    tempActionSkill.type = CombatAction.ActionType.SkillD;
+                }
+                RecordedActions.Enqueue(tempActionSkill);
             }
-            else if (CheckSkillB())
-            {
-                nowState = CharacterCoreState.UsingSkill;
-                CharacterControlAnimator.Play("SkillB");
-            }
-            else if (CheckSkillC())
-            {
-                nowState = CharacterCoreState.UsingSkill;
-                CharacterControlAnimator.Play("SkillC");
-            }
-            else if (CheckSkillD())
-            {
-                nowState = CharacterCoreState.UsingSkill;
-                CharacterControlAnimator.Play("SkillD");
-            }
+
             else if (CheckConfirm())
             {
                 nowState = CharacterCoreState.ExcutionState;
@@ -176,15 +190,24 @@ public class CharacterCore : MonoBehaviour
             ExecutorUpdate();
             ReFillAP();
         }
-        else if (nowState == CharacterCoreState.UsingSkill)
+        else if (nowState == CharacterCoreState.ExecutingSkill)
         {
-            AnimatorStateInfo stateInfo = CharacterControlAnimator.GetCurrentAnimatorStateInfo(0);
+            AnimatorStateInfo stateInfo = CharacterExecuteAnimator.GetCurrentAnimatorStateInfo(0);
             if (stateInfo.normalizedTime >= 1.0f)
             {
                 Debug.Log("動畫播放完畢，執行事件");
                 nowState = CharacterCoreState.ControlState;
             }
-
+        }
+        else if (nowState == CharacterCoreState.UsingSkill)
+        {
+            AnimatorStateInfo stateInfo = CharacterControlAnimator.GetCurrentAnimatorStateInfo(0);
+            characterControllerForExecutor.enabled = false;
+            if (stateInfo.normalizedTime >= 1.0f)
+            {
+                Debug.Log("動畫播放完畢，執行事件");
+                nowState = CharacterCoreState.ControlState;
+            }
         }
     }
     
@@ -200,6 +223,34 @@ public class CharacterCore : MonoBehaviour
                 Quaternion rot = tempAction.rotation;
                 characterExecutor.transform.position = pos;
                 characterExecutor.transform.rotation = rot;
+            }
+            else if (tempAction.type == CombatAction.ActionType.SkillA)
+            {
+                Debug.Log("SkillA");
+                characterControllerForExecutor.enabled = true;
+                CharacterExecuteAnimator.Play("SkillA");
+                nowState = CharacterCoreState.ExecutingSkill;
+            }
+            else if (tempAction.type == CombatAction.ActionType.SkillB)
+            {
+                Debug.Log("SkillB");
+                characterControllerForExecutor.enabled = true;
+                CharacterExecuteAnimator.Play("SkillB");
+                nowState = CharacterCoreState.ExecutingSkill;
+            }
+            else if (tempAction.type == CombatAction.ActionType.SkillC)
+            {
+                Debug.Log("SkillC");
+                characterControllerForExecutor.enabled = true;
+                CharacterExecuteAnimator.Play("SkillC");
+                nowState = CharacterCoreState.ExecutingSkill;
+            }
+            else if (tempAction.type == CombatAction.ActionType.SkillD)
+            {
+                Debug.Log("SkillD");
+                characterControllerForExecutor.enabled = true;
+                CharacterExecuteAnimator.Play("SkillD");
+                nowState = CharacterCoreState.ExecutingSkill;
             }
         }
         else
