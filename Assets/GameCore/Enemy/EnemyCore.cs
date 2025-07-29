@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
-using System.Collections; // 如果需要使用協程 (Coroutines)
+using System.Collections;
+using Unity.Entities.Content; // 如果需要使用協程 (Coroutines)
 
 /// <summary>
 /// 定義敵人的所有可能狀態
@@ -10,6 +12,7 @@ public enum EnemyState
     Moving,     // 移動中
     Attacking,  // 攻擊中
     Dead,        // 死亡狀態
+    Hurt,          //受傷狀態
     Attacked     // 在Preview中被攻擊到的狀態
 }
 
@@ -35,6 +38,8 @@ public class EnemyCore : MonoBehaviour
     [Tooltip("顯示敵人目前的狀態，主要用於偵錯")]
     [SerializeField] private EnemyState currentState = EnemyState.Idle;
 
+    public DamageReceiver damageReceiver;
+
     // C# 屬性 (Property)，方便外部程式碼安全地讀取數值
     public Health health;
 
@@ -54,6 +59,11 @@ public class EnemyCore : MonoBehaviour
         currentHealth = maxHealth;
         // 回合開始時，恢復所有行動點數
         RestoreActionPoints();
+    }
+
+    private void Start()
+    {
+        damageReceiver.onDamaged.AddListener(ToHurt);
     }
 
     /// <summary>
@@ -126,7 +136,7 @@ public class EnemyCore : MonoBehaviour
 
         currentHealth -= damage;
         Debug.Log(gameObject.name + " 受到 " + damage + " 點傷害，剩餘血量: " + currentHealth);
-
+        
         // 檢查血量是否歸零
         if (currentHealth <= 0)
         {
@@ -184,7 +194,7 @@ public class EnemyCore : MonoBehaviour
     {
         if (currentState == EnemyState.Attacked)
             return;
-        currentState = EnemyState.Attacked;
+        SetState(EnemyState.Attacked);
         animator.Play("Attacked_Preview");
     }
 
@@ -208,7 +218,21 @@ public class EnemyCore : MonoBehaviour
         Debug.Log(gameObject.name + " 狀態切換為: " + newState);
     }
 
+    public void ToHurt(float amount)
+    {
+        Debug.Log("Hurted");
+        currentState = EnemyState.Hurt;
+        animator.Play("Hurt");
+        animator.playbackTime = 0;
+    }
 
+    public void ReturnFromPreview()
+    {
+        SetState(EnemyState.Idle);
+        animator.Play("Idle");
+    }
+    
+    
     // --- 私有方法 (Private Methods) ---
 
     /// <summary>

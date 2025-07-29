@@ -288,6 +288,7 @@ MonoBehaviour:
   attackPower: 15
   maxActionPoints: 40
   currentState: 0
+  damageReceiver: {fileID: 1181071552201193841}
   health: {fileID: 7697422947043063634}
   animator: {fileID: 494543029378924733}
 --- !u!114 &7697422947043063634
@@ -1006,6 +1007,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fded1ae414bd2bc49bbc20d054643357, type: 3}
+--- !u!114 &1181071552201193841 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4574451190531000145, guid: fded1ae414bd2bc49bbc20d054643357, type: 3}
+  m_PrefabInstance: {fileID: 3395631993872186912}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59804118561a67f4d93d3bb710dbe3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4067519630100189302 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1688021666883382870, guid: fded1ae414bd2bc49bbc20d054643357, type: 3}

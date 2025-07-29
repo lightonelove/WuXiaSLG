@@ -4,7 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="" />
+    <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyAnimator.controller" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyAnimator.controller.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy_Prototype_A.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy_Prototype_A/Attacked_Preview.anim" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy_Prototype_A/Attacked_Preview.anim.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy_Prototype_A/Enemy_Prototype_A.overrideController" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy_Prototype_A/Enemy_Prototype_A.overrideController.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/PreviewDealer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/PreviewDealer.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/PreviewReceiver.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/PreviewReceiver.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/PreviewReceiver.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/PreviewReceiver.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterCore.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/DamageReceiver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/DamageReceiver.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/DamageReceiver.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/DamageReceiver.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyCore.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/Physics2DSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Physics2DSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp-Editor.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp-Editor.csproj.AssemblyReference.cache" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,11 +43,11 @@
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Enemy/DamageDealer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Enemy/DamageReceiver.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "node.js.selected.package.tslint": "(autodetect)"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
   }
-}]]></component>
+}</component>
   <component name="TaskManager">
     <servers />
   </component>

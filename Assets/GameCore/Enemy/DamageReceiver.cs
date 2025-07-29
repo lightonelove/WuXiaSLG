@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// 傷害接收器。它的唯一職責是偵測來自 DamageDealer 的碰撞/觸發，
@@ -8,7 +9,9 @@ public class DamageReceiver : MonoBehaviour
 {
     // 對 Health 元件的引用
     public Health healthComponent;
-
+    [System.Serializable]
+    public class DamageEvent : UnityEvent<float> { }
+    public DamageEvent onDamaged;
     private void Awake()
     {
         // 在初始時，自動獲取掛在同一個物件上的 Health 元件
@@ -24,7 +27,11 @@ public class DamageReceiver : MonoBehaviour
         {
             // 自己不處理傷害邏輯，而是呼叫 Health 元件的 TakeDamage 方法
             // 將傷害處理的權力交出去
+            float damageAmount = dealer.GetDamage();
             healthComponent.TakeDamage(dealer.GetDamage());
+            onDamaged?.Invoke(damageAmount);
         }
     }
+    
+    
 }

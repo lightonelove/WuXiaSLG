@@ -180,6 +180,7 @@ public class CharacterCore : MonoBehaviour
 
             else if (CheckConfirm())
             {
+                CombatCore.Instance.ConfirmAction();
                 nowState = CharacterCoreState.ExcutionState;
                 return;
             }
