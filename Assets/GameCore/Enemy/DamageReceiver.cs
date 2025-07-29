@@ -4,7 +4,6 @@ using UnityEngine;
 /// 傷害接收器。它的唯一職責是偵測來自 DamageDealer 的碰撞/觸發，
 /// 然後通知 Health 元件去處理傷害。
 /// </summary>
-[RequireComponent(typeof(Health))] // 強制此物件也必須有 Health 元件
 public class DamageReceiver : MonoBehaviour
 {
     // 對 Health 元件的引用

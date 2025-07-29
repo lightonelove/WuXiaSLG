@@ -9,7 +9,8 @@ public enum EnemyState
     Idle,       // 待機狀態
     Moving,     // 移動中
     Attacking,  // 攻擊中
-    Dead        // 死亡狀態
+    Dead,        // 死亡狀態
+    Attacked     // 在Preview中被攻擊到的狀態
 }
 
 public class EnemyCore : MonoBehaviour
@@ -36,6 +37,8 @@ public class EnemyCore : MonoBehaviour
 
     // C# 屬性 (Property)，方便外部程式碼安全地讀取數值
     public Health health;
+
+    public Animator animator;
 
     public int CurrentActionPoints => currentActionPoints;
     public EnemyState CurrentState => currentState;
@@ -174,6 +177,16 @@ public class EnemyCore : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 進入戰鬥Preview狀態
+    /// </summary>
+    public void ToPreview()
+    {
+        if (currentState == EnemyState.Attacked)
+            return;
+        currentState = EnemyState.Attacked;
+        animator.Play("Attacked_Preview");
+    }
 
     /// <summary>
     /// 在新回合開始時恢復所有AP

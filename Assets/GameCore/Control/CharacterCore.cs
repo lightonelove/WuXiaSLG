@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class CharacterCore : MonoBehaviour
 {
     // For Control //
-    public float moveSpeed = 5f;
+    public float moveSpeed = 20f;
     public Transform cameraTransform;
     public float turnRate = 720;
     private Vector2 moveAmount;
@@ -159,7 +159,6 @@ public class CharacterCore : MonoBehaviour
                 {
                     CharacterControlAnimator.Play("SkillA");
                     tempActionSkill.type = CombatAction.ActionType.SkillA;
-                    
                 }
                 else if (CheckSkillB())
                 {
@@ -195,17 +194,15 @@ public class CharacterCore : MonoBehaviour
             AnimatorStateInfo stateInfo = CharacterExecuteAnimator.GetCurrentAnimatorStateInfo(0);
             if (stateInfo.normalizedTime >= 1.0f)
             {
-                Debug.Log("動畫播放完畢，執行事件");
+                characterControllerForExecutor.enabled = false;
                 nowState = CharacterCoreState.ControlState;
             }
         }
         else if (nowState == CharacterCoreState.UsingSkill)
         {
             AnimatorStateInfo stateInfo = CharacterControlAnimator.GetCurrentAnimatorStateInfo(0);
-            characterControllerForExecutor.enabled = false;
             if (stateInfo.normalizedTime >= 1.0f)
             {
-                Debug.Log("動畫播放完畢，執行事件");
                 nowState = CharacterCoreState.ControlState;
             }
         }

@@ -15,7 +15,7 @@ TagManager:
   - DamageReceiver
   - CharacterExecutor
   - CharacterControl
-  - 
+  - CombatPreview
   - 
   - 
   - 
