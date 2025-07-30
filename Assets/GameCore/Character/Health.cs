@@ -11,16 +11,14 @@ public class Health : MonoBehaviour
     [SerializeField]
     [Tooltip("最大血量")]
     private float maxHealth = 100f;
-
-    // 當前血量（私有，只能由這個腳本控制）
-    private float currentHealth;
+    
+    public float currentHealth;
 
     // 唯讀屬性，供外部腳本（如UI）安全地讀取數值
     public float CurrentHealth => currentHealth;
     public float MaxHealth => maxHealth;
     public bool IsDead => currentHealth <= 0;
-
-
+    
     [Header("事件系統")]
     [Tooltip("當受到傷害時觸發的事件。參數: 造成的傷害值")]
     public UnityEvent<float> OnDamageTaken;
