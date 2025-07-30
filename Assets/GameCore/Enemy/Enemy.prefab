@@ -280,6 +280,7 @@ GameObject:
   - component: {fileID: 1727198852497152677}
   - component: {fileID: 7697422947043063634}
   - component: {fileID: 518237636265674845}
+  - component: {fileID: 670760991645550886}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -317,8 +318,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c0ef436daebb14fb986a1ca2a55d3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
   attackPower: 15
+  speed: 10
   maxActionPoints: 40
   currentState: 0
   damageReceiver: {fileID: 1181071552201193841}
@@ -362,6 +363,21 @@ MonoBehaviour:
   healthBarPrefab: {fileID: 1919692162533371824, guid: 6050aad88e8c73543a5dd58362fed6f1, type: 3}
   anchor: {fileID: 4467518771117506341}
   health: {fileID: 7697422947043063634}
+--- !u!114 &670760991645550886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588288096788536482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94af54f32b419f74791aa875a2f3d45b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Enemy_A
+  Speed: 300
+  ActionValue: 0
 --- !u!1 &2136123735653131465
 GameObject:
   m_ObjectHideFlags: 0

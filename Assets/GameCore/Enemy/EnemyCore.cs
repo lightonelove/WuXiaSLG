@@ -21,7 +21,8 @@ public class EnemyCore : MonoBehaviour
     [Header("敵人基本數值")]
 
     [Tooltip("敵人的攻擊力")]
-    [SerializeField] private float attackPower = 15f;
+    [SerializeField] public float attackPower = 15f;
+    [SerializeField] public float speed = 10f;
 
     [Header("行動與狀態 (用於回合制)")]
     [Tooltip("每回合可用的最大行動點數 (AP)")]

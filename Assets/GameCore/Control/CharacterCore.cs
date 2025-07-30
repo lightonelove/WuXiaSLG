@@ -278,6 +278,5 @@ public class CharacterCore : MonoBehaviour
         return confirmPressed;
     }
 
-
-
+    
 }

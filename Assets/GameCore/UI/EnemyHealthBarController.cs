@@ -78,9 +78,7 @@ public class EnemyHealthBarController : MonoBehaviour
     /// <param name="maxHealth">最大血量</param>
     public void UpdateHealth(float currentHealth, float maxHealth)
     {
-        Debug.Log("Updating Health1");
         if (healthSlider == null) return;
-        Debug.Log("Updating Health2");
         healthSlider.maxValue = maxHealth;
         healthSlider.value = currentHealth;
     }
