@@ -19,11 +19,6 @@ public enum EnemyState
 public class EnemyCore : MonoBehaviour
 {
     [Header("敵人基本數值")]
-    [Tooltip("敵人的最大血量")]
-    [SerializeField] private float maxHealth = 100f;
-    
-    [Tooltip("敵人的當前血量")]
-    private float currentHealth;
 
     [Tooltip("敵人的攻擊力")]
     [SerializeField] private float attackPower = 15f;
@@ -56,7 +51,6 @@ public class EnemyCore : MonoBehaviour
     void Awake()
     {
         // 遊戲開始時，將當前血量設為最大血量
-        currentHealth = maxHealth;
         // 回合開始時，恢復所有行動點數
         RestoreActionPoints();
     }
@@ -129,21 +123,6 @@ public class EnemyCore : MonoBehaviour
     /// 讓敵人受到傷害
     /// </summary>
     /// <param name="damage">受到的傷害數值</param>
-    public void TakeDamage(float damage)
-    {
-        // 如果已經死亡，就不要再受傷了
-        if (currentState == EnemyState.Dead) return;
-
-        currentHealth -= damage;
-        Debug.Log(gameObject.name + " 受到 " + damage + " 點傷害，剩餘血量: " + currentHealth);
-        
-        // 檢查血量是否歸零
-        if (currentHealth <= 0)
-        {
-            currentHealth = 0; // 避免血量變負數
-            Die();
-        }
-    }
     
     private void OnTriggerEnter(Collider other)
     {

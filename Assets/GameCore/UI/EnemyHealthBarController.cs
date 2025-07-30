@@ -17,6 +17,7 @@ public class EnemyHealthBarController : MonoBehaviour
     public Health health;
 
 
+
     // --- 私有變數 ---
     private GameObject healthBarInstance;
     private UIFollowWorldObject followScript;

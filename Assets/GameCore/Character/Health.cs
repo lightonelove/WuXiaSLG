@@ -29,7 +29,6 @@ public class Health : MonoBehaviour
     [Tooltip("當血量歸零時觸發的事件")]
     public UnityEvent OnDie;
 
-
     private void Awake()
     {
         // 初始化血量
