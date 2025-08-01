@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatEntity : MonoBehaviour
 {
@@ -6,6 +7,7 @@ public class CombatEntity : MonoBehaviour
     public string Name;
     public float Speed;
     public float ActionValue; // 當前的行動值
+    public Sprite PortraitIcon;
         
 
     // 提供一個方法來推進此角色的行動值

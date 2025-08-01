@@ -32,6 +32,7 @@ public class CombatCore : MonoBehaviour
         AllCombatEntity.AddRange(combatEntityInScene);
 
         List<ClonedCombatEntity> ClonedCombatEntity = PredictTurnOrder(10);
+        SLGCoreUI.Instance.turnOrderUIController.UpdateTurnOrderDisplay(ClonedCombatEntity);
 
         for (int i = 0; i < ClonedCombatEntity.Count; ++i)
         {

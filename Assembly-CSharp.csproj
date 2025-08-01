@@ -60,24 +60,26 @@
   <ItemGroup>
     <Compile Include="Assets\GameCore\Control\CharacterCore.cs" />
     <Compile Include="Assets\GameCore\UI\UIDamageNumberSpawner.cs" />
+    <Compile Include="Assets\GameCore\UI\TurnOrderUIController.cs" />
     <Compile Include="Assets\GameCore\Enemy\EnemyCore.cs" />
-    <Compile Include="Assets\ArtResources\TestBed\UI\APBar.cs" />
+    <Compile Include="Assets\GameCore\Control\PreviewReceiver.cs" />
     <Compile Include="Assets\GameCore\UI\UIFollowWorldObject.cs" />
     <Compile Include="Assets\GameCore\UI\EnemyHealthBarController.cs" />
     <Compile Include="Assets\Tool\AnimationPathRebinder.cs" />
     <Compile Include="Assets\GameCore\Character\Health.cs" />
     <Compile Include="Assets\GameCore\Enemy\PreviewDealer.cs" />
+    <Compile Include="Assets\GameCore\UI\SLGCoreUI.cs" />
+    <Compile Include="Assets\GameCore\UI\APBar.cs" />
+    <Compile Include="Assets\GameCore\UI\FloatingUIDamageNumber.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\GameCore\Control\CombatAction.cs" />
     <Compile Include="Assets\GameCore\Enemy\DamageDealer.cs" />
     <Compile Include="Assets\GameCore\Control\CombatCore.cs" />
-    <Compile Include="Assets\ArtResources\TestBed\UI\SLGCoreUI.cs" />
     <Compile Include="Assets\GameCore\Enemy\DamageReceiver.cs" />
     <Compile Include="Assets\GameCore\Control\ClonedCombatEntity.cs" />
     <Compile Include="Assets\GameCore\Control\AnimationRelativePos.cs" />
-    <Compile Include="Assets\FloatingUIDamageNumber.cs" />
     <Compile Include="Assets\GameCore\Control\CombatEntity.cs" />
-    <Compile Include="Assets\PreviewReceiver.cs" />
+    <Compile Include="Assets\GameCore\UI\TurnOrderIcon.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
@@ -998,6 +1000,9 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
       <HintPath>C:\Users\light\WuXiaSLG_Prototype\Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>C:\Users\light\WuXiaSLG_Prototype\Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Navigation.Editor.ConversionSystem">
       <HintPath>C:\Users\light\WuXiaSLG_Prototype\Library\ScriptAssemblies\Unity.AI.Navigation.Editor.ConversionSystem.dll</HintPath>
