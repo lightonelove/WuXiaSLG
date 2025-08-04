@@ -6,21 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assembly-CSharp-Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp-Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Character/Health.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Character/Health.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterCore.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CombatCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CombatCore.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CombatEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CombatEntity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/UI/TurnOrderIcon.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/UI/TurnOrderIcon.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyCore.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/DefaultVolumeProfile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/DefaultVolumeProfile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EntitiesClientSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EntitiesClientSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WuXiaSLG_Prototype.sln" beforeDir="false" afterPath="$PROJECT_DIR$/WuXiaSLG_Prototype.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp-Editor.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp-Editor.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,7 +124,7 @@
       <workItem from="1754287241841" duration="158000" />
       <workItem from="1754288161960" duration="165000" />
       <workItem from="1754288360497" duration="10000" />
-      <workItem from="1754288394482" duration="2822000" />
+      <workItem from="1754288394482" duration="7949000" />
     </task>
     <servers />
   </component>

@@ -1,7 +1,9 @@
 using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Entities.Content; // 如果需要使用協程 (Coroutines)
+using UnityEngine.AI;
 
 /// <summary>
 /// 定義敵人的所有可能狀態
@@ -13,7 +15,10 @@ public enum EnemyState
     Attacking,  // 攻擊中
     Dead,        // 死亡狀態
     Hurt,          //受傷狀態
-    Attacked     // 在Preview中被攻擊到的狀態
+    Attacked,     // 在Preview中被攻擊到的狀態
+    WaitingTurn,  // 等待回合
+    ExecutingTurn, // 執行回合中
+    TurnComplete  // 回合完成
 }
 
 public class EnemyCore : MonoBehaviour
@@ -26,14 +31,29 @@ public class EnemyCore : MonoBehaviour
 
     [Header("行動與狀態 (用於回合制)")]
     [Tooltip("每回合可用的最大行動點數 (AP)")]
-    [SerializeField] private int maxActionPoints = 40;
+    [SerializeField] public float maxActionPoints = 60f;
     
-    private int currentActionPoints;
+    public float currentActionPoints;
 
     [Header("目前狀態")]
     [Tooltip("顯示敵人目前的狀態，主要用於偵錯")]
     [SerializeField] private EnemyState currentState = EnemyState.Idle;
 
+    [Header("移動相關")]
+    public CharacterController characterController;
+    public float moveSpeed = 8f;
+    public float turnRate = 360f;
+    public float stoppingDistance = 2f; // 停止追蹤的距離
+    public float apCostPerMeter = 5f; // 每公尺消耗的AP
+    
+    [Header("AI尋路")]
+    public NavMeshAgent navAgent;
+    public bool useNavMesh = true; // 是否使用NavMesh尋路
+    
+    [Header("目標追蹤")]
+    public Transform currentTarget; // 當前追蹤的目標
+    private Vector2 lastPosition;
+    
     public DamageReceiver damageReceiver;
 
     // C# 屬性 (Property)，方便外部程式碼安全地讀取數值
@@ -41,7 +61,7 @@ public class EnemyCore : MonoBehaviour
 
     public Animator animator;
 
-    public int CurrentActionPoints => currentActionPoints;
+    public float CurrentActionPoints => currentActionPoints;
     public EnemyState CurrentState => currentState;
 
 
@@ -54,11 +74,28 @@ public class EnemyCore : MonoBehaviour
         // 遊戲開始時，將當前血量設為最大血量
         // 回合開始時，恢復所有行動點數
         RestoreActionPoints();
+        
+        // 初始化元件
+        if (characterController == null)
+            characterController = GetComponent<CharacterController>();
+        if (navAgent == null)
+            navAgent = GetComponent<NavMeshAgent>();
+            
+        // 如果使用NavMesh，初始設定
+        if (navAgent != null && useNavMesh)
+        {
+            navAgent.speed = moveSpeed;
+            navAgent.angularSpeed = turnRate;
+            navAgent.stoppingDistance = stoppingDistance;
+            navAgent.enabled = false; // 初始時關閉，回合開始時才啟用
+        }
     }
 
     private void Start()
     {
         damageReceiver.onDamaged.AddListener(ToHurt);
+        
+        lastPosition = new Vector2(transform.position.x, transform.position.z);
     }
 
     /// <summary>
@@ -152,7 +189,7 @@ public class EnemyCore : MonoBehaviour
     /// </summary>
     /// <param name="cost">移動需要消耗的AP</param>
     /// <returns>如果AP足夠則回傳true，否則回傳false</returns>
-    public bool SpendActionPoints(int cost)
+    public bool SpendActionPoints(float cost)
     {
         if (currentActionPoints >= cost)
         {
@@ -212,6 +249,276 @@ public class EnemyCore : MonoBehaviour
         animator.Play("Idle");
     }
     
+    
+    // --- 回合制移動方法 ---
+    
+    /// <summary>
+    /// 開始敵人的回合
+    /// </summary>
+    public void StartTurn()
+    {
+        Debug.Log($"{gameObject.name} StartTurn called, current state: {currentState}");
+        
+        SetState(EnemyState.ExecutingTurn);
+        RestoreActionPoints();
+        
+        // 尋找最近的玩家作為目標
+        FindClosestPlayer();
+        
+        // 如果使用NavMesh，啟用NavMeshAgent並設定目標
+        if (useNavMesh && navAgent != null && currentTarget != null)
+        {
+            navAgent.enabled = true;
+            navAgent.speed = 0; // 先設為0，透過程式控制移動
+            navAgent.SetDestination(currentTarget.position);
+        }
+        
+        Debug.Log($"{gameObject.name} 開始回合，AP: {currentActionPoints}, Target: {(currentTarget ? currentTarget.name : "None")}");
+    }
+    
+    /// <summary>
+    /// 執行敵人回合的AI邏輯
+    /// </summary>
+    public IEnumerator ExecuteTurn()
+    {
+        Debug.Log($"{gameObject.name} ExecuteTurn started, state: {currentState}, target: {(currentTarget ? currentTarget.name : "None")}, AP: {currentActionPoints}");
+        
+        if (currentState != EnemyState.ExecutingTurn) 
+        {
+            Debug.Log($"{gameObject.name} ExecuteTurn 退出: 狀態不正確 ({currentState})");
+            yield break;
+        }
+        
+        float turnStartTime = Time.time;
+        float maxTurnDuration = 5f; // 最長回合時間
+        
+        // 如果有目標，開始追蹤
+        while (currentTarget != null && currentActionPoints > 0 && 
+               (Time.time - turnStartTime) < maxTurnDuration)
+        {
+            // 每幀重新尋找最近的玩家，以防玩家在執行狀態中移動
+            FindClosestPlayer();
+            
+            if (currentTarget == null) break;
+            
+            float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
+            
+            // 如果已經足夠接近目標，結束移動
+            if (distanceToTarget <= stoppingDistance)
+            {
+                Debug.Log($"{gameObject.name} 已接近目標，停止移動 (距離: {distanceToTarget})");
+                break;
+            }
+            
+            // 如果使用NavMesh，更新目標位置
+            if (useNavMesh && navAgent != null && navAgent.enabled)
+            {
+                navAgent.SetDestination(currentTarget.position);
+            }
+            
+            // 移動向目標
+            bool moved = MoveTowardsTarget();
+            
+            if (!moved)
+            {
+                Debug.Log($"{gameObject.name} 無法繼續移動，剩餘AP: {currentActionPoints}");
+                break;
+            }
+            
+            yield return null; // 等待下一幀
+        }
+        
+        Debug.Log($"{gameObject.name} ExecuteTurn 完成，原因: Target={currentTarget}, AP={currentActionPoints}, Time={(Time.time - turnStartTime)}");
+        
+        // 回合結束
+        EndTurn();
+    }
+    
+    /// <summary>
+    /// 向目標移動
+    /// </summary>
+    bool MoveTowardsTarget()
+    {
+        if (currentTarget == null)
+        {
+            Debug.Log($"{gameObject.name} MoveTowardsTarget: 沒有目標");
+            return false;
+        }
+        
+        if (currentActionPoints <= 0)
+        {
+            Debug.Log($"{gameObject.name} MoveTowardsTarget: AP不足 ({currentActionPoints})");
+            return false;
+        }
+        
+        if (useNavMesh && navAgent != null && navAgent.enabled)
+        {
+            // 使用NavMeshAgent移動
+            //Debug.Log($"{gameObject.name} 使用NavMesh移動");
+            return MoveWithNavMesh();
+        }
+        else
+        {
+            // 使用直接移動
+            //Debug.Log($"{gameObject.name} 使用直接移動");
+            return MoveDirectly();
+        }
+    }
+    
+    /// <summary>
+    /// 使用NavMesh移動
+    /// </summary>
+    bool MoveWithNavMesh()
+    {
+        Debug.Log("navAgent.pathPending:" + navAgent.pathPending);
+        Debug.Log("navAgent.remainingDistance:" + navAgent.remainingDistance);
+        if (!navAgent.pathPending && navAgent.remainingDistance > 0.1f)
+        {
+            // 計算這一幀要移動的距離
+            float frameDistance = moveSpeed * Time.deltaTime;
+            float apCost = frameDistance * apCostPerMeter;
+            Debug.Log("有進來");
+            // 檢查AP是否足夠
+            if (currentActionPoints < apCost)
+            {
+                frameDistance = currentActionPoints / apCostPerMeter;
+                apCost = currentActionPoints;
+            }
+            
+            if (frameDistance > 0)
+            {
+                // 設定NavMeshAgent的速度來控制移動
+                navAgent.speed = frameDistance / Time.deltaTime;
+                
+                // 消耗AP
+                currentActionPoints -= apCost;
+                
+                if (animator != null)
+                {
+                    animator.SetBool("isMoving", true);
+                }
+                
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /// <summary>
+    /// 直接移動（不使用NavMesh）
+    /// </summary>
+    bool MoveDirectly()
+    {
+        Vector3 direction = (currentTarget.position - transform.position).normalized;
+        direction.y = 0; // 保持在水平面上
+        
+        // 轉向目標
+        if (direction.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnRate * Time.deltaTime / 360f);
+            
+            if (animator != null)
+            {
+                animator.SetBool("isMoving", true);
+            }
+        }
+        
+        // 計算這一幀的移動距離
+        float moveDistance = moveSpeed * Time.deltaTime;
+        Vector3 moveVector = direction * moveDistance;
+        
+        // 計算AP消耗
+        float apCost = moveDistance * apCostPerMeter;
+        
+        // 檢查AP是否足夠
+        if (currentActionPoints < apCost)
+        {
+            // 用剩餘的AP移動部分距離
+            moveDistance = currentActionPoints / apCostPerMeter;
+            moveVector = direction * moveDistance;
+            apCost = currentActionPoints;
+        }
+        
+        // 使用CharacterController移動
+        if (characterController != null && characterController.enabled)
+        {
+            characterController.Move(moveVector);
+        }
+        else
+        {
+            // 直接移動
+            transform.position += moveVector;
+        }
+        
+        // 消耗AP
+        currentActionPoints -= apCost;
+        
+        return true;
+    }
+    
+    /// <summary>
+    /// 尋找最近的玩家
+    /// </summary>
+    void FindClosestPlayer()
+    {
+        float closestDistance = float.MaxValue;
+        CharacterCore closestCharacter = null;
+        
+        // 從CombatCore獲取所有玩家角色
+        if (CombatCore.Instance != null)
+        {
+            foreach (var character in CombatCore.Instance.AllCharacters)
+            {
+                if (character != null && character.gameObject.activeInHierarchy)
+                {
+                    // 使用角色的真實位置計算距離
+                    Vector3 playerRealPos = character.GetRealPosition();
+                    float distance = Vector3.Distance(transform.position, playerRealPos);
+                    
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestCharacter = character;
+                    }
+                }
+            }
+        }
+        
+        // 設定目標為最近角色的真實 Transform
+        if (closestCharacter != null)
+        {
+            currentTarget = closestCharacter.GetRealTransform();
+            Debug.Log($"{gameObject.name} 鎖定目標: {closestCharacter.name} (真實位置: {closestCharacter.GetRealPosition()})");
+        }
+        else
+        {
+            currentTarget = null;
+            Debug.Log($"{gameObject.name} 沒有找到目標");
+        }
+    }
+    
+    /// <summary>
+    /// 結束回合
+    /// </summary>
+    public void EndTurn()
+    {
+        if (animator != null)
+        {
+            animator.SetBool("isMoving", false);
+        }
+        
+        // 如果使用NavMesh，停止移動並關閉NavMeshAgent
+        if (useNavMesh && navAgent != null && navAgent.enabled)
+        {
+            navAgent.ResetPath();
+            navAgent.enabled = false;
+        }
+        
+        SetState(EnemyState.TurnComplete);
+        Debug.Log($"{gameObject.name} 回合結束，剩餘AP: {currentActionPoints}");
+    }
     
     // --- 私有方法 (Private Methods) ---
 

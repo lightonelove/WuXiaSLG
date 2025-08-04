@@ -183,18 +183,24 @@ public class CombatCore : MonoBehaviour
             else if (character.nowState == CharacterCore.CharacterCoreState.ExcutionState)
             {
                 // 正在執行記錄的動作
-                Debug.Log($"Player {character.name} is executing actions...");
+                //Debug.Log($"Player {character.name} is executing actions...");
             }
             else if (character.nowState == CharacterCore.CharacterCoreState.ExecutingSkill)
             {
                 // 正在執行技能動作
-                Debug.Log($"Player {character.name} is executing skill...");
+                //Debug.Log($"Player {character.name} is executing skill...");
             }
             
             yield return null;
         }
         
-        Debug.Log($"Player {character.name} turn completed!");
+        // 同步玩家位置（將 CharacterController 位置更新為 CharacterExecutor 的位置）
+        character.SyncPositionAfterExecution();
+        
+        // 重置玩家狀態為 ControlState，準備下一回合
+        character.nowState = CharacterCore.CharacterCoreState.ControlState;
+        
+        Debug.Log($"Player {character.name} turn completed and reset to ControlState!");
     }
     
     IEnumerator ProcessEnemyTurn(EnemyCore enemy)
@@ -203,14 +209,25 @@ public class CombatCore : MonoBehaviour
         
         currentCombatState = CombatState.ProcessingAction;
         
-        // TODO: 實作敵人AI邏輯
-        // 這裡暫時只是等待一段時間模擬敵人思考
-        yield return new WaitForSeconds(1.5f);
+        // 開始敵人回合
+        enemy.StartTurn();
         
-        // 敵人可以執行移動、攻擊等動作
-        // enemy.PerformAIAction();
+        // 等待一小段時間讓玩家看到是誰的回合
+        yield return new WaitForSeconds(0.5f);
         
-        Debug.Log($"Enemy {enemy.name} turn completed!");
+        // 執行敵人的AI邏輯（追蹤玩家）
+        yield return StartCoroutine(enemy.ExecuteTurn());
+        
+        // 等待敵人狀態變為 TurnComplete
+        while (enemy.CurrentState != EnemyState.TurnComplete && isCombatActive)
+        {
+            yield return null;
+        }
+        
+        // 重置敵人狀態為 Idle，準備下一回合
+        enemy.SetState(EnemyState.Idle);
+        
+        Debug.Log($"Enemy {enemy.name} turn completed and reset to Idle!");
     }
     
     CombatEntity CalculateNextActorFromActual()

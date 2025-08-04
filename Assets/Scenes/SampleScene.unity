@@ -555,6 +555,43 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+--- !u!1 &451338891 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5313538990482577220, guid: 10c7494e3f196484384e9eaa25fabf84, type: 3}
+  m_PrefabInstance: {fileID: 6102996864610147521}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &451338896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 451338891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 1
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.13333334
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 902d4c75422cb164da9aca1a22c82b9c, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &481536061
 GameObject:
   m_ObjectHideFlags: 0
@@ -1275,7 +1312,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5355287738686104127, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 12.96
       objectReference: {fileID: 0}
     - target: {fileID: 5355287738686104127, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1315,7 +1352,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6903515148748646631, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: Speed
-      value: 200
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6903515148748646631, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: PortraitIcon
@@ -1339,12 +1376,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 670760991645550886, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: Speed
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 670760991645550886, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: PortraitIcon
       value: 
       objectReference: {fileID: 21300000, guid: 8bcd682a7363d7d4bb2d0d255b35a356, type: 3}
     - target: {fileID: 1588288096788536482, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 1727198852497152677, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: useNavMesh
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7146826614908490065, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1402,6 +1447,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 962191123296609048, guid: 10c7494e3f196484384e9eaa25fabf84, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2054966300493638115, guid: 10c7494e3f196484384e9eaa25fabf84, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -1509,7 +1558,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5313538990482577220, guid: 10c7494e3f196484384e9eaa25fabf84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 451338896}
   m_SourcePrefab: {fileID: 100100000, guid: 10c7494e3f196484384e9eaa25fabf84, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

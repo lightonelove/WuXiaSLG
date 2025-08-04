@@ -281,6 +281,7 @@ GameObject:
   - component: {fileID: 7697422947043063634}
   - component: {fileID: 518237636265674845}
   - component: {fileID: 670760991645550886}
+  - component: {fileID: 3309778327019055104}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -321,7 +322,16 @@ MonoBehaviour:
   attackPower: 15
   speed: 10
   maxActionPoints: 40
+  currentActionPoints: 0
   currentState: 0
+  characterController: {fileID: 0}
+  moveSpeed: 8
+  turnRate: 360
+  stoppingDistance: 2
+  apCostPerMeter: 5
+  navAgent: {fileID: 0}
+  useNavMesh: 0
+  currentTarget: {fileID: 0}
   damageReceiver: {fileID: 1181071552201193841}
   health: {fileID: 7697422947043063634}
   animator: {fileID: 494543029378924733}
@@ -378,6 +388,30 @@ MonoBehaviour:
   Name: Enemy_A
   Speed: 300
   ActionValue: 0
+  PortraitIcon: {fileID: 0}
+  CharacterCore: {fileID: 0}
+--- !u!195 &3309778327019055104
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588288096788536482}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.42
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &2136123735653131465
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,7 +561,7 @@ Transform:
   m_GameObject: {fileID: 2919571597364982655}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.884, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 0.75, y: 1, z: 0.75}
   m_ConstrainProportionsScale: 0
   m_Children:

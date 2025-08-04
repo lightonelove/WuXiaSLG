@@ -257,6 +257,63 @@ public class CharacterCore : MonoBehaviour
             nowState = CharacterCore.CharacterCoreState.TurnComplete;
         }
     }
+    
+    /// <summary>
+    /// 獲取玩家的真實位置（考慮 ExecutionState 時的 CharacterExecutor 位置）
+    /// </summary>
+    /// <returns>玩家的真實世界位置</returns>
+    public Vector3 GetRealPosition()
+    {
+        // 如果在執行狀態且有 characterExecutor，使用 executor 的位置
+        if ((nowState == CharacterCoreState.ExcutionState || nowState == CharacterCoreState.ExecutingSkill) 
+            && characterExecutor != null)
+        {
+            return characterExecutor.transform.position;
+        }
+        
+        // 否則使用 CharacterController 的位置
+        return characterController.transform.position;
+    }
+    
+    /// <summary>
+    /// 獲取玩家的真實 Transform（用於敵人追蹤）
+    /// </summary>
+    /// <returns>玩家的真實 Transform</returns>
+    public Transform GetRealTransform()
+    {
+        // 如果在執行狀態且有 characterExecutor，使用 executor 的 transform
+        if ((nowState == CharacterCoreState.ExcutionState || nowState == CharacterCoreState.ExecutingSkill) 
+            && characterExecutor != null)
+        {
+            return characterExecutor.transform;
+        }
+        
+        // 否則使用 CharacterController 的 transform
+        return characterController.transform;
+    }
+    
+    /// <summary>
+    /// 在回合結束時同步位置（將 CharacterCore 位置更新為 CharacterExecutor 的位置）
+    /// </summary>
+    public void SyncPositionAfterExecution()
+    {
+        if (characterExecutor != null && characterController != null)
+        {
+            // 計算位置差異
+            Vector3 executorPos = characterExecutor.transform.position;
+            Vector3 controllerPos = characterController.transform.position;
+            
+            Debug.Log($"同步位置: Controller({controllerPos}) -> Executor({executorPos})");
+            
+            // 更新 CharacterController 的位置
+            characterController.transform.position = executorPos;
+            characterController.transform.rotation = characterExecutor.transform.rotation;
+            
+            // 如果 characterExecutor 有子物件，需要保持它們的相對位置
+            // 這裡我們重置 characterExecutor 的位置為與 CharacterController 相同
+            // 這樣下次移動時就會從正確的位置開始
+        }
+    }
 
     public bool CheckSkillA()
     {
