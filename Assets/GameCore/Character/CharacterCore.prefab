@@ -611,6 +611,7 @@ GameObject:
   - component: {fileID: 5355287738686104127}
   - component: {fileID: 507542057868587843}
   - component: {fileID: 6903515148748646631}
+  - component: {fileID: 5525503941534339325}
   m_Layer: 0
   m_Name: CharacterCore
   m_TagString: Untagged
@@ -677,6 +678,31 @@ MonoBehaviour:
   Name: MainCharacter_A
   Speed: 10
   ActionValue: 0
+  PortraitIcon: {fileID: 0}
+  CharacterCore: {fileID: 0}
+--- !u!114 &5525503941534339325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2522113828692673003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d01ace6e97d251f41a0eef70b75612dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  OnDamageTaken:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDie:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3221956964958836908
 GameObject:
   m_ObjectHideFlags: 0

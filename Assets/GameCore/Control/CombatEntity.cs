@@ -8,8 +8,9 @@ public class CombatEntity : MonoBehaviour
     public float Speed;
     public float ActionValue; // 當前的行動值
     public Sprite PortraitIcon;
-        
+    public CharacterCore CharacterCore;
 
+    
     // 提供一個方法來推進此角色的行動值
     public void AdvanceActionValue(float time)
     {
@@ -23,4 +24,6 @@ public class CombatEntity : MonoBehaviour
         ClonedCombatEntity clone = new ClonedCombatEntity(Name, Speed, ActionValue, this);
         return clone;
     }
+
+
 }

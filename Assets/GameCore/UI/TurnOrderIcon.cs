@@ -20,10 +20,8 @@ public class TurnOrderIcon : MonoBehaviour
         }
 
         gameObject.SetActive(true);
-        Debug.Log("SettingIcon");
         if (characterPortraitImage != null && character.PortraitIcon != null)
         {
-            Debug.Log("SettingIcon2");
             characterPortraitImage.sprite = character.PortraitIcon;
         }
         else

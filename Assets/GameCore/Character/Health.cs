@@ -83,4 +83,46 @@ public class Health : MonoBehaviour
         currentHealth = Mathf.Min(currentHealth + amount, maxHealth); // 確保不會超過最大血量
         OnHealthChanged?.Invoke(currentHealth, maxHealth); // 同樣通知UI更新
     }
+    
+    /// <summary>
+    /// 取得當前血量的方法（與屬性 CurrentHealth 功能相同）
+    /// </summary>
+    /// <returns>當前血量值</returns>
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+    
+    /// <summary>
+    /// 取得最大血量的方法（與屬性 MaxHealth 功能相同）
+    /// </summary>
+    /// <returns>最大血量值</returns>
+    public float GetMaxHealth()
+    {
+        return maxHealth;
+    }
+    
+    /// <summary>
+    /// 設定最大血量
+    /// </summary>
+    /// <param name="newMaxHealth">新的最大血量值</param>
+    public void SetMaxHealth(float newMaxHealth)
+    {
+        maxHealth = newMaxHealth;
+        // 如果當前血量超過新的最大血量，調整當前血量
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+            OnHealthChanged?.Invoke(currentHealth, maxHealth);
+        }
+    }
+    
+    /// <summary>
+    /// 重置血量至最大值
+    /// </summary>
+    public void ResetHealth()
+    {
+        currentHealth = maxHealth;
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
+    }
 }

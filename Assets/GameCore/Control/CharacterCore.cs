@@ -18,7 +18,7 @@ public class CharacterCore : MonoBehaviour
     
     public float pointSpacing = 0.2f; // 每隔幾公尺新增一點
     public LineRenderer line;
-    private List<Vector3> points = new List<Vector3>();
+    public List<Vector3> points = new List<Vector3>();
     private Vector3 lastDrawPoint;
     
     public Queue<CombatAction> RecordedActions = new Queue<CombatAction>();
@@ -33,7 +33,7 @@ public class CharacterCore : MonoBehaviour
     public InputActionAsset controls;
     public GameObject characterExecutor;
 
-    public enum CharacterCoreState{ ControlState, ExcutionState, UsingSkill, ExecutingSkill }
+    public enum CharacterCoreState{ ControlState, ExcutionState, UsingSkill, ExecutingSkill, TurnComplete }
 
     public CharacterCoreState nowState = CharacterCoreState.ControlState;
     
@@ -43,7 +43,7 @@ public class CharacterCore : MonoBehaviour
         AddPoint(new Vector3(characterController.transform.position.x, 0.1f, characterController.transform.position.z));
       
     }
-    void AddPoint(Vector3 flatPos)
+    public void AddPoint(Vector3 flatPos)
     {
         points.Add(flatPos);
         line.positionCount = points.Count;
@@ -196,7 +196,7 @@ public class CharacterCore : MonoBehaviour
             if (stateInfo.normalizedTime >= 1.0f)
             {
                 characterControllerForExecutor.enabled = false;
-                nowState = CharacterCoreState.ControlState;
+                nowState = CharacterCoreState.TurnComplete;
             }
         }
         else if (nowState == CharacterCoreState.UsingSkill)
@@ -253,7 +253,8 @@ public class CharacterCore : MonoBehaviour
         }
         else
         {
-            nowState = CharacterCore.CharacterCoreState.ControlState;
+            // 執行完成，標記回合結束
+            nowState = CharacterCore.CharacterCoreState.TurnComplete;
         }
     }
 
