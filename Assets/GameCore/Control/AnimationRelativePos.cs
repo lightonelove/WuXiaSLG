@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class AnimationRelativePos : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class AnimationRelativePos : MonoBehaviour
     [SerializeField] private bool enableDebugVisualization = false; // 啟用調試視覺化
     [SerializeField] private Color debugCollisionColor = Color.red; // 碰撞點顏色
     [SerializeField] private float debugCubeSize = 0.3f; // 調試方塊大小
+    
+    [Header("標籤忽略設定")]
+    [SerializeField] private List<string> ignoreTags = new List<string> { "Player", "Enemy" }; // 要忽略的標籤列表
     
     private Vector3 lastSafePosition;
     private bool rootMotionBlocked = false;
@@ -100,8 +104,8 @@ public class AnimationRelativePos : MonoBehaviour
                 return false;
             }
             
-            // 檢查碰撞物體的標籤，確保不是玩家或敵人
-            if (!hit.collider.CompareTag("Player") && !hit.collider.CompareTag("Enemy"))
+            // 檢查碰撞物體的標籤，確保不在忽略列表中
+            if (!ShouldIgnoreCollider(hit.collider))
             {
                 Debug.Log($"射線檢測到碰撞: {hit.collider.name}, 距離: {hit.distance}, 點: {hit.point}");
                 
@@ -119,8 +123,8 @@ public class AnimationRelativePos : MonoBehaviour
                     if (col.transform == transform || col.transform.IsChildOf(transform))
                         continue;
                         
-                    // 忽略玩家和敵人
-                    if (col.CompareTag("Player") || col.CompareTag("Enemy"))
+                    // 忽略標籤列表中的物體
+                    if (ShouldIgnoreCollider(col))
                         continue;
                         
                     Debug.Log($"膠囊檢測確認碰撞: {col.name}");
@@ -131,7 +135,7 @@ public class AnimationRelativePos : MonoBehaviour
             }
             else
             {
-                Debug.Log($"忽略碰撞（玩家或敵人）: {hit.collider.name}");
+                Debug.Log($"忽略碰撞（標籤在忽略列表中）: {hit.collider.name}");
             }
         }
         
@@ -173,6 +177,68 @@ public class AnimationRelativePos : MonoBehaviour
     public bool IsRootMotionBlocked()
     {
         return rootMotionBlocked;
+    }
+    
+    /// <summary>
+    /// 檢查碰撞器是否應該被忽略
+    /// </summary>
+    /// <param name="collider">要檢查的碰撞器</param>
+    /// <returns>如果應該忽略則返回true</returns>
+    private bool ShouldIgnoreCollider(Collider collider)
+    {
+        if (collider == null) return true;
+        
+        // 檢查所有忽略標籤
+        foreach (string tag in ignoreTags)
+        {
+            if (collider.CompareTag(tag))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /// <summary>
+    /// 添加要忽略的標籤
+    /// </summary>
+    /// <param name="tag">要添加的標籤</param>
+    public void AddIgnoreTag(string tag)
+    {
+        if (!string.IsNullOrEmpty(tag) && !ignoreTags.Contains(tag))
+        {
+            ignoreTags.Add(tag);
+        }
+    }
+    
+    /// <summary>
+    /// 移除要忽略的標籤
+    /// </summary>
+    /// <param name="tag">要移除的標籤</param>
+    public void RemoveIgnoreTag(string tag)
+    {
+        if (!string.IsNullOrEmpty(tag))
+        {
+            ignoreTags.Remove(tag);
+        }
+    }
+    
+    /// <summary>
+    /// 清空所有忽略標籤
+    /// </summary>
+    public void ClearIgnoreTags()
+    {
+        ignoreTags.Clear();
+    }
+    
+    /// <summary>
+    /// 獲取當前忽略標籤列表的副本
+    /// </summary>
+    /// <returns>忽略標籤列表的副本</returns>
+    public List<string> GetIgnoreTags()
+    {
+        return new List<string>(ignoreTags);
     }
 
     void Update()

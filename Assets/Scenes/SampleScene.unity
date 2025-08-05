@@ -1310,6 +1310,38 @@ PrefabInstance:
       propertyPath: wallLayerMask.m_Bits
       value: 2039
       objectReference: {fileID: 0}
+    - target: {fileID: 610529947170750612, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: ignoreTags.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 610529947170750612, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: 'ignoreTags.Array.data[0]'
+      value: CombatController
+      objectReference: {fileID: 0}
+    - target: {fileID: 921727934772688165, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
+    - target: {fileID: 1233597914681208157, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
+    - target: {fileID: 1996408480484655463, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
+    - target: {fileID: 2016731918549319857, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
+    - target: {fileID: 2037464825203265334, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
+    - target: {fileID: 2064022455274687587, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
     - target: {fileID: 2522113828692673003, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_Name
       value: CharacterCore
@@ -1318,9 +1350,33 @@ PrefabInstance:
       propertyPath: wallLayerMask.m_Bits
       value: 2039
       objectReference: {fileID: 0}
+    - target: {fileID: 2634317466618877225, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: ignoreTags.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2634317466618877225, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: 'ignoreTags.Array.data[0]'
+      value: CombatController
+      objectReference: {fileID: 0}
+    - target: {fileID: 3221956964958836908, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
+    - target: {fileID: 3558076197235826109, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794307710100400762, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
+    - target: {fileID: 4585917144084893723, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
     - target: {fileID: 5355287738686104127, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.96
+      value: -2.03
       objectReference: {fileID: 0}
     - target: {fileID: 5355287738686104127, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1328,7 +1384,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5355287738686104127, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.8
       objectReference: {fileID: 0}
     - target: {fileID: 5355287738686104127, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1370,6 +1426,22 @@ PrefabInstance:
       propertyPath: CharacterCore
       value: 
       objectReference: {fileID: 1095111008}
+    - target: {fileID: 7212891627696010057, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
+    - target: {fileID: 7832689739135729561, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
+    - target: {fileID: 7969756744873377125, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
+    - target: {fileID: 9162912869376663710, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_TagString
+      value: CombatController
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
