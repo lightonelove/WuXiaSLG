@@ -12,8 +12,11 @@ public class CharacterCore : MonoBehaviour
     public float turnRate = 720;
     private Vector2 moveAmount;
 
-    public float ActionPoints = 100;
-    public float MaxActionPoints = 100;
+    [Header("資源系統")]
+    public float Stamina = 100;
+    public float MaxStamina = 100;
+    public float SP = 100;
+    public float MaxSP = 100;
     public Vector2 lastPosition;
     
     public float pointSpacing = 0.2f; // 每隔幾公尺新增一點
@@ -29,9 +32,19 @@ public class CharacterCore : MonoBehaviour
     public Animator CharacterControlAnimator;
     public Animator CharacterExecuteAnimator;
     
+    [Header("動畫根運動控制")]
+    public AnimationRelativePos executorAnimationRelativePos;
+    public AnimationRelativePos controllerAnimationRelativePos;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public InputActionAsset controls;
     public GameObject characterExecutor;
+    
+    [Header("技能配置")]
+    public CombatSkill skillA;
+    public CombatSkill skillB;
+    public CombatSkill skillC;
+    public CombatSkill skillD;
 
     public enum CharacterCoreState{ ControlState, ExcutionState, UsingSkill, ExecutingSkill, TurnComplete }
 
@@ -75,7 +88,7 @@ public class CharacterCore : MonoBehaviour
             return;
         }
 
-        if (ActionPoints <= 0)
+        if (Stamina <= 0)
         {
             CharacterControlAnimator.SetBool("isMoving", false);
             return;
@@ -110,11 +123,11 @@ public class CharacterCore : MonoBehaviour
         RecordedActions.Enqueue(tempAction);
         float distance = (lastPosition - nowPosition).magnitude;
         lastPosition = nowPosition;
-        ActionPoints -= distance * 5.0f;
+        Stamina -= distance * 5.0f;
 
         // 更新 UI
-        SLGCoreUI.Instance.apBar.slider.maxValue = MaxActionPoints;
-        SLGCoreUI.Instance.apBar.slider.value = ActionPoints;
+        SLGCoreUI.Instance.apBar.slider.maxValue = MaxStamina;
+        SLGCoreUI.Instance.apBar.slider.value = Stamina;
     }
     
     public InputAction FindAction(string id)
@@ -136,7 +149,8 @@ public class CharacterCore : MonoBehaviour
     
     public void ReFillAP()
     {
-        ActionPoints = MaxActionPoints;
+        Stamina = MaxStamina;
+        SP = MaxSP;
     }
     
     // Update is called once per frame
@@ -155,24 +169,63 @@ public class CharacterCore : MonoBehaviour
                 tempActionMove.type = CombatAction.ActionType.Move;
                 RecordedActions.Enqueue(tempActionMove);
                 CombatAction tempActionSkill = new CombatAction();
+                
+                // 啟用控制階段的根運動碰撞防護
+                if (controllerAnimationRelativePos != null)
+                {
+                    controllerAnimationRelativePos.SetCollisionProtection(true);
+                }
+                
                 if (CheckSkillA())
                 {
-                    CharacterControlAnimator.Play("SkillA");
+                    if (skillA != null)
+                    {
+                        CharacterControlAnimator.Play(skillA.AnimationName);
+                        SP -= skillA.SPCost;
+                    }
+                    else
+                    {
+                        CharacterControlAnimator.Play("SkillA");
+                    }
                     tempActionSkill.type = CombatAction.ActionType.SkillA;
                 }
                 else if (CheckSkillB())
                 {
-                    CharacterControlAnimator.Play("SkillB");
+                    if (skillB != null)
+                    {
+                        CharacterControlAnimator.Play(skillB.AnimationName);
+                        SP -= skillB.SPCost;
+                    }
+                    else
+                    {
+                        CharacterControlAnimator.Play("SkillB");
+                    }
                     tempActionSkill.type = CombatAction.ActionType.SkillB;
                 }
                 else if (CheckSkillC())
                 {
-                    CharacterControlAnimator.Play("SkillC");
+                    if (skillC != null)
+                    {
+                        CharacterControlAnimator.Play(skillC.AnimationName);
+                        SP -= skillC.SPCost;
+                    }
+                    else
+                    {
+                        CharacterControlAnimator.Play("SkillC");
+                    }
                     tempActionSkill.type = CombatAction.ActionType.SkillC;
                 }
                 else if (CheckSkillD())
                 {
-                    CharacterControlAnimator.Play("SkillD");
+                    if (skillD != null)
+                    {
+                        CharacterControlAnimator.Play(skillD.AnimationName);
+                        SP -= skillD.SPCost;
+                    }
+                    else
+                    {
+                        CharacterControlAnimator.Play("SkillD");
+                    }
                     tempActionSkill.type = CombatAction.ActionType.SkillD;
                 }
                 RecordedActions.Enqueue(tempActionSkill);
@@ -196,6 +249,13 @@ public class CharacterCore : MonoBehaviour
             if (stateInfo.normalizedTime >= 1.0f)
             {
                 characterControllerForExecutor.enabled = false;
+                
+                // 技能執行完成，禁用碰撞防護
+                if (executorAnimationRelativePos != null)
+                {
+                    executorAnimationRelativePos.SetCollisionProtection(false);
+                }
+                
                 nowState = CharacterCoreState.TurnComplete;
             }
         }
@@ -204,6 +264,12 @@ public class CharacterCore : MonoBehaviour
             AnimatorStateInfo stateInfo = CharacterControlAnimator.GetCurrentAnimatorStateInfo(0);
             if (stateInfo.normalizedTime >= 1.0f)
             {
+                // 技能動畫完成，禁用控制階段的碰撞防護
+                if (controllerAnimationRelativePos != null)
+                {
+                    controllerAnimationRelativePos.SetCollisionProtection(false);
+                }
+                
                 nowState = CharacterCoreState.ControlState;
             }
         }
@@ -226,28 +292,68 @@ public class CharacterCore : MonoBehaviour
             {
                 Debug.Log("SkillA");
                 characterControllerForExecutor.enabled = true;
-                CharacterExecuteAnimator.Play("SkillA");
+                
+                // 啟用動畫根運動碰撞防護
+                if (executorAnimationRelativePos != null)
+                {
+                    executorAnimationRelativePos.SetCollisionProtection(true);
+                }
+                
+                if (skillA != null)
+                    CharacterExecuteAnimator.Play(skillA.AnimationName);
+                else
+                    CharacterExecuteAnimator.Play("SkillA");
                 nowState = CharacterCoreState.ExecutingSkill;
             }
             else if (tempAction.type == CombatAction.ActionType.SkillB)
             {
                 Debug.Log("SkillB");
                 characterControllerForExecutor.enabled = true;
-                CharacterExecuteAnimator.Play("SkillB");
+                
+                // 啟用動畫根運動碰撞防護
+                if (executorAnimationRelativePos != null)
+                {
+                    executorAnimationRelativePos.SetCollisionProtection(true);
+                }
+                
+                if (skillB != null)
+                    CharacterExecuteAnimator.Play(skillB.AnimationName);
+                else
+                    CharacterExecuteAnimator.Play("SkillB");
                 nowState = CharacterCoreState.ExecutingSkill;
             }
             else if (tempAction.type == CombatAction.ActionType.SkillC)
             {
                 Debug.Log("SkillC");
                 characterControllerForExecutor.enabled = true;
-                CharacterExecuteAnimator.Play("SkillC");
+                
+                // 啟用動畫根運動碰撞防護
+                if (executorAnimationRelativePos != null)
+                {
+                    executorAnimationRelativePos.SetCollisionProtection(true);
+                }
+                
+                if (skillC != null)
+                    CharacterExecuteAnimator.Play(skillC.AnimationName);
+                else
+                    CharacterExecuteAnimator.Play("SkillC");
                 nowState = CharacterCoreState.ExecutingSkill;
             }
             else if (tempAction.type == CombatAction.ActionType.SkillD)
             {
                 Debug.Log("SkillD");
                 characterControllerForExecutor.enabled = true;
-                CharacterExecuteAnimator.Play("SkillD");
+                
+                // 啟用動畫根運動碰撞防護
+                if (executorAnimationRelativePos != null)
+                {
+                    executorAnimationRelativePos.SetCollisionProtection(true);
+                }
+                
+                if (skillD != null)
+                    CharacterExecuteAnimator.Play(skillD.AnimationName);
+                else
+                    CharacterExecuteAnimator.Play("SkillD");
                 nowState = CharacterCoreState.ExecutingSkill;
             }
         }
@@ -318,21 +424,37 @@ public class CharacterCore : MonoBehaviour
     public bool CheckSkillA()
     {
         bool confirmPressed = FindAction("SkillA").WasPressedThisFrame();
+        if (confirmPressed && skillA != null)
+        {
+            return SP >= skillA.SPCost;
+        }
         return confirmPressed;
     }
     public bool CheckSkillB()
     {
         bool confirmPressed = FindAction("SkillB").WasPressedThisFrame();
+        if (confirmPressed && skillB != null)
+        {
+            return SP >= skillB.SPCost;
+        }
         return confirmPressed;
     }
     public bool CheckSkillC()
     {
         bool confirmPressed = FindAction("SkillC").WasPressedThisFrame();
+        if (confirmPressed && skillC != null)
+        {
+            return SP >= skillC.SPCost;
+        }
         return confirmPressed;
     }
     public bool CheckSkillD()
     {
         bool confirmPressed = FindAction("SkillD").WasPressedThisFrame();
+        if (confirmPressed && skillD != null)
+        {
+            return SP >= skillD.SPCost;
+        }
         return confirmPressed;
     }
 

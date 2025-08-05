@@ -158,7 +158,8 @@ public class CombatCore : MonoBehaviour
         character.nowState = CharacterCore.CharacterCoreState.ControlState;
         
         // 重置行動點
-        character.ActionPoints = character.MaxActionPoints;
+        character.Stamina = character.MaxStamina;
+        character.SP = character.MaxSP;
         
         // 清空之前的行動記錄
         character.RecordedActions.Clear();

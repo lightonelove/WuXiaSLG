@@ -651,17 +651,24 @@ MonoBehaviour:
   moveSpeed: 5
   cameraTransform: {fileID: 0}
   turnRate: 1800
-  ActionPoints: 100
-  MaxActionPoints: 100
+  Stamina: 100
+  MaxStamina: 100
+  SP: 3
+  MaxSP: 3
   lastPosition: {x: 0, y: 0}
   pointSpacing: 0.2
   line: {fileID: 5005064996059580870}
+  points: []
   characterController: {fileID: 8825805718575351922}
   characterControllerForExecutor: {fileID: 463888508229038036}
   CharacterControlAnimator: {fileID: 2989898019334411565}
   CharacterExecuteAnimator: {fileID: 4554080585059559073}
   controls: {fileID: -944628639613478452, guid: a52a20b044e6b8d4293e780047598b63, type: 3}
   characterExecutor: {fileID: 5127517225647073663}
+  skillA: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
+  skillB: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
+  skillC: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
+  skillD: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
   nowState: 0
 --- !u!114 &6903515148748646631
 MonoBehaviour:

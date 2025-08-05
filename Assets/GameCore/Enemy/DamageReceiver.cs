@@ -32,6 +32,4 @@ public class DamageReceiver : MonoBehaviour
             onDamaged?.Invoke(damageAmount);
         }
     }
-    
-    
 }

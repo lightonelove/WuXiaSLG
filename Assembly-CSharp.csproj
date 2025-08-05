@@ -75,6 +75,7 @@
     <Compile Include="Assets\GameCore\Control\CombatAction.cs" />
     <Compile Include="Assets\GameCore\Enemy\DamageDealer.cs" />
     <Compile Include="Assets\GameCore\Control\CombatCore.cs" />
+    <Compile Include="Assets\GameCore\Skill\CombatSkill.cs" />
     <Compile Include="Assets\GameCore\Enemy\DamageReceiver.cs" />
     <Compile Include="Assets\GameCore\Control\ClonedCombatEntity.cs" />
     <Compile Include="Assets\GameCore\Control\AnimationRelativePos.cs" />
@@ -761,38 +762,38 @@
     <Reference Include="UnityEditor.XRModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.28f1\Editor\Data\Managed\UnityEngine\UnityEditor.XRModule.dll</HintPath>
     </Reference>
+    <Reference Include="Sirenix.Reflection.Editor">
+      <HintPath>C:\Users\light\WuXiaSLG_Prototype\Assets\Plugins\Sirenix\Assemblies\Sirenix.Reflection.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
       <HintPath>C:\Users\light\WuXiaSLG_Prototype\Library\PackageCache\com.unity.collections\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>C:\Users\light\WuXiaSLG_Prototype\Library\PackageCache\com.unity.ext.nunit\net40\unity-custom\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>C:\Users\light\WuXiaSLG_Prototype\Library\PackageCache\com.unity.visualscripting\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil">
-      <HintPath>C:\Users\light\WuXiaSLG_Prototype\Library\PackageCache\com.unity.nuget.mono-cecil\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="Sirenix.Reflection.Editor">
-      <HintPath>C:\Users\light\WuXiaSLG_Prototype\Assets\Plugins\Sirenix\Assemblies\Sirenix.Reflection.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Sirenix.OdinInspector.Attributes">
-      <HintPath>C:\Users\light\WuXiaSLG_Prototype\Assets\Plugins\Sirenix\Assemblies\Sirenix.OdinInspector.Attributes.dll</HintPath>
+    <Reference Include="Sirenix.Serialization">
+      <HintPath>C:\Users\light\WuXiaSLG_Prototype\Assets\Plugins\Sirenix\Assemblies\Sirenix.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Sirenix.Serialization.Config">
       <HintPath>C:\Users\light\WuXiaSLG_Prototype\Assets\Plugins\Sirenix\Assemblies\Sirenix.Serialization.Config.dll</HintPath>
     </Reference>
+    <Reference Include="Sirenix.OdinInspector.Editor">
+      <HintPath>C:\Users\light\WuXiaSLG_Prototype\Assets\Plugins\Sirenix\Assemblies\Sirenix.OdinInspector.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Sirenix.OdinInspector.Attributes">
+      <HintPath>C:\Users\light\WuXiaSLG_Prototype\Assets\Plugins\Sirenix\Assemblies\Sirenix.OdinInspector.Attributes.dll</HintPath>
+    </Reference>
     <Reference Include="Sirenix.Utilities">
       <HintPath>C:\Users\light\WuXiaSLG_Prototype\Assets\Plugins\Sirenix\Assemblies\Sirenix.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
+      <HintPath>C:\Users\light\WuXiaSLG_Prototype\Library\PackageCache\com.unity.visualscripting\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Sirenix.Utilities.Editor">
       <HintPath>C:\Users\light\WuXiaSLG_Prototype\Assets\Plugins\Sirenix\Assemblies\Sirenix.Utilities.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Sirenix.OdinInspector.Editor">
-      <HintPath>C:\Users\light\WuXiaSLG_Prototype\Assets\Plugins\Sirenix\Assemblies\Sirenix.OdinInspector.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Sirenix.Serialization">
-      <HintPath>C:\Users\light\WuXiaSLG_Prototype\Assets\Plugins\Sirenix\Assemblies\Sirenix.Serialization.dll</HintPath>
+    <Reference Include="Mono.Cecil">
+      <HintPath>C:\Users\light\WuXiaSLG_Prototype\Library\PackageCache\com.unity.nuget.mono-cecil\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.28f1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>
@@ -1174,6 +1175,10 @@
       <Project>{04c37be7-4df9-2a1f-f3bf-ce45b473b00a}</Project>
       <Name>Unity.InputSystem.ForUI</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Addressables.Editor.csproj">
+      <Project>{2f8eb126-d16f-679c-6737-78696bc3acb5}</Project>
+      <Name>Unity.Addressables.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{eb6d64a6-d903-c70d-59b0-991b4b8fda2f}</Project>
       <Name>UnityEditor.UI</Name>
@@ -1193,10 +1198,6 @@
     <ProjectReference Include="Unity.Transforms.Hybrid.csproj">
       <Project>{69a3a7c9-1f4e-44fa-0915-1accd0166f7a}</Project>
       <Name>Unity.Transforms.Hybrid</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Addressables.Editor.csproj">
-      <Project>{2f8eb126-d16f-679c-6737-78696bc3acb5}</Project>
-      <Name>Unity.Addressables.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipeline.Universal.ShaderLibrary.csproj">
       <Project>{2be18a3f-b449-c35f-b7c0-7cefd48bc7dc}</Project>
@@ -1342,13 +1343,13 @@
       <Project>{3681ad5a-af3a-ebb6-ccc1-946a864709c8}</Project>
       <Name>Unity.Multiplayer.Center.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.AI.Navigation.Updater.csproj">
-      <Project>{055807ff-b957-e443-eaa8-ff577488b14c}</Project>
-      <Name>Unity.AI.Navigation.Updater</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.Mathematics.Extensions.csproj">
       <Project>{c5463000-5331-0c2e-9b6d-fef46172cd2c}</Project>
       <Name>Unity.Mathematics.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.AI.Navigation.Updater.csproj">
+      <Project>{055807ff-b957-e443-eaa8-ff577488b14c}</Project>
+      <Name>Unity.AI.Navigation.Updater</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.csproj">
       <Project>{560676f5-caaa-d8a9-12e3-353a49505420}</Project>
