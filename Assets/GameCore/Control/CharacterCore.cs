@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 using System.Collections.Generic;
 
 
@@ -29,6 +30,9 @@ public class CharacterCore : MonoBehaviour
     public bool isMoving = false;
     private Vector3 targetPosition;
     private bool hasValidTarget = false;
+    
+    [Header("路徑顯示")]
+    public LineRenderer pathLineRenderer;
     
     public Animator CharacterControlAnimator;
     public Animator CharacterExecuteAnimator;
@@ -174,6 +178,9 @@ public class CharacterCore : MonoBehaviour
             navMeshAgent.isStopped = false;
             navMeshAgent.SetDestination(targetPosition);
             
+            // 繪製導航路徑
+            StartCoroutine(DrawNavMeshPath());
+            
             isMoving = true;
             
             // 記錄移動動作
@@ -200,6 +207,13 @@ public class CharacterCore : MonoBehaviour
         
         // 停止動畫
         CharacterControlAnimator.SetBool("isMoving", false);
+        
+        // 清除路徑顯示
+        if (pathLineRenderer != null)
+        {
+            pathLineRenderer.positionCount = 0;
+            pathLineRenderer.enabled = false;
+        }
         
         Debug.Log("停止移動");
     }
@@ -488,6 +502,57 @@ public class CharacterCore : MonoBehaviour
     {
         CombatCore.Instance.ConfirmAction();
         nowState = CharacterCoreState.ExcutionState;
+    }
+    
+    /// <summary>
+    /// 繪製NavMesh路徑
+    /// </summary>
+    private IEnumerator DrawNavMeshPath()
+    {
+        // 等待路徑計算完成
+        yield return new WaitForSeconds(0.1f);
+        
+        if (navMeshAgent == null || pathLineRenderer == null) yield break;
+        
+        // 等待路徑計算完成
+        while (navMeshAgent.pathPending)
+        {
+            yield return null;
+        }
+        
+        // 確認有有效路徑
+        if (navMeshAgent.hasPath)
+        {
+            // 取得路徑角點
+            Vector3[] corners = navMeshAgent.path.corners;
+            
+            if (corners.Length > 0)
+            {
+                // 設定LineRenderer的點數
+                pathLineRenderer.positionCount = corners.Length;
+                
+                // 設定所有路徑點，稍微提高Y座標避免與地面重疊
+                for (int i = 0; i < corners.Length; i++)
+                {
+                    Vector3 cornerPosition = corners[i];
+                    cornerPosition.y += 0.1f; // 稍微提高避免與地面重疊
+                    pathLineRenderer.SetPosition(i, cornerPosition);
+                }
+                
+                // 確保LineRenderer已啟用
+                pathLineRenderer.enabled = true;
+                
+                Debug.Log($"路徑繪製完成，共有 {corners.Length} 個轉角點");
+            }
+        }
+        else
+        {
+            Debug.Log("無有效路徑可繪製");
+            if (pathLineRenderer != null)
+            {
+                pathLineRenderer.enabled = false;
+            }
+        }
     }
 
     
