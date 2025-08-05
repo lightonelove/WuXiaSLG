@@ -163,9 +163,8 @@ public class CombatCore : MonoBehaviour
         
         // 清空之前的行動記錄
         character.RecordedActions.Clear();
-        character.line.positionCount = 0;
         character.points.Clear();
-        character.AddPoint(new Vector3(character.characterController.transform.position.x, 0.1f, character.characterController.transform.position.z));
+        character.AddPoint(new Vector3(character.transform.position.x, 0.1f, character.transform.position.z));
         
         // 等待玩家完成所有操作直到回合結束
         while (character.nowState != CharacterCore.CharacterCoreState.TurnComplete && isCombatActive)

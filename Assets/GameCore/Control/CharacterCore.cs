@@ -1,6 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.AI;
 using System.Collections.Generic;
 
 
@@ -10,7 +10,6 @@ public class CharacterCore : MonoBehaviour
     public float moveSpeed = 20f;
     public Transform cameraTransform;
     public float turnRate = 720;
-    private Vector2 moveAmount;
 
     [Header("資源系統")]
     public float Stamina = 100;
@@ -20,14 +19,16 @@ public class CharacterCore : MonoBehaviour
     public Vector2 lastPosition;
     
     public float pointSpacing = 0.2f; // 每隔幾公尺新增一點
-    public LineRenderer line;
     public List<Vector3> points = new List<Vector3>();
     private Vector3 lastDrawPoint;
     
     public Queue<CombatAction> RecordedActions = new Queue<CombatAction>();
     
-    public CharacterController characterController;
-    public CharacterController characterControllerForExecutor;
+    [Header("NavMesh移動系統")]
+    public NavMeshAgent navMeshAgent;
+    public bool isMoving = false;
+    private Vector3 targetPosition;
+    private bool hasValidTarget = false;
     
     public Animator CharacterControlAnimator;
     public Animator CharacterExecuteAnimator;
@@ -36,8 +37,6 @@ public class CharacterCore : MonoBehaviour
     public AnimationRelativePos executorAnimationRelativePos;
     public AnimationRelativePos controllerAnimationRelativePos;
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public InputActionAsset controls;
     public GameObject characterExecutor;
     
     [Header("技能配置")]
@@ -52,98 +51,187 @@ public class CharacterCore : MonoBehaviour
     
     void Start()
     {
-        line.positionCount = 0;
-        AddPoint(new Vector3(characterController.transform.position.x, 0.1f, characterController.transform.position.z));
-      
+        AddPoint(new Vector3(transform.position.x, 0.1f, transform.position.z));
+        
+        // 初始化NavMeshAgent
+        InitializeNavMeshAgent();
     }
+    private void InitializeNavMeshAgent()
+    {
+        // 取得NavMeshAgent元件
+        if (navMeshAgent == null)
+        {
+            navMeshAgent = GetComponent<NavMeshAgent>();
+        }
+        
+        if (navMeshAgent == null)
+        {
+            Debug.LogError("CharacterCore需要NavMeshAgent元件！");
+            return;
+        }
+        
+        // 設定NavMeshAgent參數
+        navMeshAgent.speed = moveSpeed;
+        navMeshAgent.angularSpeed = turnRate;
+        navMeshAgent.acceleration = 50f;
+        navMeshAgent.stoppingDistance = 0.1f;
+        
+        // 初始狀態下停止NavMeshAgent
+        navMeshAgent.isStopped = true;
+    }
+    
     public void AddPoint(Vector3 flatPos)
     {
         points.Add(flatPos);
-        line.positionCount = points.Count;
-        line.SetPositions(points.ToArray());
         lastDrawPoint = flatPos;
     }
     
     public void ControlUpdate()
     {
-
-        Move();
-        CheckConfirm();
-        lastPosition = new Vector2(characterController.transform.position.x, characterController.transform.position.z);
+        // 更新移動狀態
+        UpdateMovement();
         
-        Vector3 flatCurrentPos = new Vector3(characterController.transform.position.x, 0.1f, characterController.transform.position.z);
+        // 更新路徑追蹤
+        UpdatePathTracking();
+    }
+    
+    private void UpdateMovement()
+    {
+        if (navMeshAgent == null) return;
+        
+        // 檢查是否正在移動
+        if (isMoving && navMeshAgent.hasPath)
+        {
+            // 檢查是否到達目標
+            if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.5f)
+            {
+                // 到達目標，停止移動
+                StopMovement();
+            }
+            else
+            {
+                // 正在移動，消耗體力
+                Vector2 nowPosition = new Vector2(transform.position.x, transform.position.z);
+                float distance = Vector2.Distance(lastPosition, nowPosition);
+                
+                if (distance > 0.01f) // 避免微小移動消耗體力
+                {
+                    Stamina -= distance * 5.0f;
+                    Stamina = Mathf.Max(0, Stamina); // 確保體力不會變負數
+                    
+                    // 更新UI
+                    if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.apBar != null)
+                    {
+                        SLGCoreUI.Instance.apBar.slider.maxValue = MaxStamina;
+                        SLGCoreUI.Instance.apBar.slider.value = Stamina;
+                    }
+                }
+                
+                // 更新動畫
+                CharacterControlAnimator.SetBool("isMoving", true);
+            }
+        }
+        else
+        {
+            // 不在移動，停止動畫
+            CharacterControlAnimator.SetBool("isMoving", false);
+        }
+    }
+    
+    private void UpdatePathTracking()
+    {
+        lastPosition = new Vector2(transform.position.x, transform.position.z);
+        Vector3 flatCurrentPos = new Vector3(transform.position.x, 0.1f, transform.position.z);
 
         if (Vector3.Distance(flatCurrentPos, lastDrawPoint) >= pointSpacing)
         {
             AddPoint(flatCurrentPos);
         }
     }
-    public void Move()
+    /// <summary>
+    /// 移動到指定位置
+    /// </summary>
+    /// <param name="destination">目標位置</param>
+    public void MoveTo(Vector3 destination)
     {
-        moveAmount = FindAction("MoveCharacter").ReadValue<Vector2>();
-
-        if (moveAmount.magnitude < 0.5f)
-        {
-            CharacterControlAnimator.SetBool("isMoving", false);
-            return;
-        }
-
+        if (navMeshAgent == null) return;
+        
+        // 檢查是否有足夠體力
         if (Stamina <= 0)
         {
-            CharacterControlAnimator.SetBool("isMoving", false);
+            Debug.Log("體力不足，無法移動！");
             return;
         }
-
-        Vector2 moveDir = moveAmount.normalized;
-        Vector3 inputDirection = new Vector3(moveDir.x, 0, moveDir.y);
-
-        // 角色轉向（保留你原本的 turnRate 邏輯）
-        if (inputDirection.sqrMagnitude > 0f)
-        {
-            CharacterControlAnimator.SetBool("isMoving", true);
-            Quaternion targetRotation = Quaternion.LookRotation(inputDirection, Vector3.up);
-            float angleDiff = Quaternion.Angle(characterController.transform.rotation, targetRotation);
-
-            float rotationStep = turnRate * Time.deltaTime;
-            float t = Mathf.Min(1f, rotationStep / angleDiff);
-            characterController.transform.rotation = Quaternion.Slerp(characterController.transform.rotation, targetRotation, t);
-        }
-
-
-        // 用 CharacterController 移動
-        Vector3 moveVelocity = inputDirection * moveSpeed;
-        characterController.Move(moveVelocity * Time.deltaTime); //  有考慮碰撞！
         
-        // 計算移動距離（Z 軸）
-        Vector2 nowPosition = new Vector2(characterController.transform.position.x, characterController.transform.position.z);
-        CombatAction tempAction = new CombatAction();
-        tempAction.Position = characterController.transform.position;
-        tempAction.rotation = characterController.transform.rotation;
-        tempAction.type = CombatAction.ActionType.Move;
-        RecordedActions.Enqueue(tempAction);
-        float distance = (lastPosition - nowPosition).magnitude;
-        lastPosition = nowPosition;
-        Stamina -= distance * 5.0f;
-
-        // 更新 UI
-        SLGCoreUI.Instance.apBar.slider.maxValue = MaxStamina;
-        SLGCoreUI.Instance.apBar.slider.value = Stamina;
+        // 檢查目標位置是否在NavMesh上
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(destination, out hit, 2f, NavMesh.AllAreas))
+        {
+            targetPosition = hit.position;
+            hasValidTarget = true;
+            
+            // 設定NavMeshAgent目標
+            navMeshAgent.isStopped = false;
+            navMeshAgent.SetDestination(targetPosition);
+            
+            isMoving = true;
+            
+            // 記錄移動動作
+            RecordMovementAction();
+            
+            Debug.Log($"開始移動到: {targetPosition}");
+        }
+        else
+        {
+            Debug.Log("目標位置無法到達！");
+        }
     }
     
-    public InputAction FindAction(string id)
+    /// <summary>
+    /// 停止移動
+    /// </summary>
+    public void StopMovement()
     {
-        return controls.FindActionMap("CharacterControl").FindAction(id);
+        if (navMeshAgent == null) return;
+        
+        navMeshAgent.isStopped = true;
+        isMoving = false;
+        hasValidTarget = false;
+        
+        // 停止動畫
+        CharacterControlAnimator.SetBool("isMoving", false);
+        
+        Debug.Log("停止移動");
+    }
+    
+    /// <summary>
+    /// 記錄移動動作用於重播
+    /// </summary>
+    private void RecordMovementAction()
+    {
+        CombatAction moveAction = new CombatAction();
+        moveAction.Position = transform.position;
+        moveAction.rotation = transform.rotation;
+        moveAction.type = CombatAction.ActionType.Move;
+        RecordedActions.Enqueue(moveAction);
+    }
+    
+    /// <summary>
+    /// 檢查是否可以移動到指定位置
+    /// </summary>
+    /// <param name="destination">目標位置</param>
+    /// <returns>是否可以移動</returns>
+    public bool CanMoveTo(Vector3 destination)
+    {
+        if (navMeshAgent == null || Stamina <= 0) return false;
+        
+        NavMeshHit hit;
+        return NavMesh.SamplePosition(destination, out hit, 2f, NavMesh.AllAreas);
     }
 
     public bool CheckConfirm()
     {
-        bool confirmPressed = FindAction("Comfirm").WasPressedThisFrame();
-        if (confirmPressed)
-        {
-            Debug.Log("ConfirmPressed");
-            return true;
-        }
-
+        // 確認按鍵將改為滑鼠點擊
         return false;
     }
     
@@ -165,84 +253,9 @@ public class CharacterCore : MonoBehaviour
         if (nowState == CharacterCoreState.ControlState)
         {
             ControlUpdate();
-
-            if (CheckSkillA() || CheckSkillB() || CheckSkillC() || CheckSkillC())
-            {
-                CombatAction tempActionMove = new CombatAction();
-                nowState = CharacterCoreState.UsingSkill;
-                tempActionMove.Position = characterController.transform.position;
-                tempActionMove.rotation = characterController.transform.rotation;
-                tempActionMove.type = CombatAction.ActionType.Move;
-                RecordedActions.Enqueue(tempActionMove);
-                CombatAction tempActionSkill = new CombatAction();
-                
-                // 啟用控制階段的根運動碰撞防護
-                if (controllerAnimationRelativePos != null)
-                {
-                    controllerAnimationRelativePos.SetCollisionProtection(true);
-                }
-                
-                if (CheckSkillA())
-                {
-                    if (skillA != null)
-                    {
-                        CharacterControlAnimator.Play(skillA.AnimationName);
-                        SP -= skillA.SPCost;
-                    }
-                    else
-                    {
-                        CharacterControlAnimator.Play("SkillA");
-                    }
-                    tempActionSkill.type = CombatAction.ActionType.SkillA;
-                }
-                else if (CheckSkillB())
-                {
-                    if (skillB != null)
-                    {
-                        CharacterControlAnimator.Play(skillB.AnimationName);
-                        SP -= skillB.SPCost;
-                    }
-                    else
-                    {
-                        CharacterControlAnimator.Play("SkillB");
-                    }
-                    tempActionSkill.type = CombatAction.ActionType.SkillB;
-                }
-                else if (CheckSkillC())
-                {
-                    if (skillC != null)
-                    {
-                        CharacterControlAnimator.Play(skillC.AnimationName);
-                        SP -= skillC.SPCost;
-                    }
-                    else
-                    {
-                        CharacterControlAnimator.Play("SkillC");
-                    }
-                    tempActionSkill.type = CombatAction.ActionType.SkillC;
-                }
-                else if (CheckSkillD())
-                {
-                    if (skillD != null)
-                    {
-                        CharacterControlAnimator.Play(skillD.AnimationName);
-                        SP -= skillD.SPCost;
-                    }
-                    else
-                    {
-                        CharacterControlAnimator.Play("SkillD");
-                    }
-                    tempActionSkill.type = CombatAction.ActionType.SkillD;
-                }
-                RecordedActions.Enqueue(tempActionSkill);
-            }
-
-            else if (CheckConfirm())
-            {
-                CombatCore.Instance.ConfirmAction();
-                nowState = CharacterCoreState.ExcutionState;
-                return;
-            }
+            
+            // 滑鼠操作邏輯將在這裡實作
+            // 技能使用和確認都將改為滑鼠控制
         }
         else if (nowState == CharacterCoreState.ExcutionState)
         {
@@ -254,7 +267,7 @@ public class CharacterCore : MonoBehaviour
             AnimatorStateInfo stateInfo = CharacterExecuteAnimator.GetCurrentAnimatorStateInfo(0);
             if (stateInfo.normalizedTime >= 1.0f)
             {
-                characterControllerForExecutor.enabled = false;
+                // CharacterControllerForExecutor已移除
                 
                 // 技能執行完成，禁用碰撞防護
                 if (executorAnimationRelativePos != null)
@@ -297,7 +310,7 @@ public class CharacterCore : MonoBehaviour
             else if (tempAction.type == CombatAction.ActionType.SkillA)
             {
                 Debug.Log("SkillA");
-                characterControllerForExecutor.enabled = true;
+                // CharacterControllerForExecutor已移除
                 
                 // 啟用動畫根運動碰撞防護
                 if (executorAnimationRelativePos != null)
@@ -314,7 +327,7 @@ public class CharacterCore : MonoBehaviour
             else if (tempAction.type == CombatAction.ActionType.SkillB)
             {
                 Debug.Log("SkillB");
-                characterControllerForExecutor.enabled = true;
+                // CharacterControllerForExecutor已移除
                 
                 // 啟用動畫根運動碰撞防護
                 if (executorAnimationRelativePos != null)
@@ -331,7 +344,7 @@ public class CharacterCore : MonoBehaviour
             else if (tempAction.type == CombatAction.ActionType.SkillC)
             {
                 Debug.Log("SkillC");
-                characterControllerForExecutor.enabled = true;
+                // CharacterControllerForExecutor已移除
                 
                 // 啟用動畫根運動碰撞防護
                 if (executorAnimationRelativePos != null)
@@ -348,7 +361,7 @@ public class CharacterCore : MonoBehaviour
             else if (tempAction.type == CombatAction.ActionType.SkillD)
             {
                 Debug.Log("SkillD");
-                characterControllerForExecutor.enabled = true;
+                // CharacterControllerForExecutor已移除
                 
                 // 啟用動畫根運動碰撞防護
                 if (executorAnimationRelativePos != null)
@@ -383,8 +396,8 @@ public class CharacterCore : MonoBehaviour
             return characterExecutor.transform.position;
         }
         
-        // 否則使用 CharacterController 的位置
-        return characterController.transform.position;
+        // 否則使用主物件的位置
+        return transform.position;
     }
     
     /// <summary>
@@ -400,68 +413,81 @@ public class CharacterCore : MonoBehaviour
             return characterExecutor.transform;
         }
         
-        // 否則使用 CharacterController 的 transform
-        return characterController.transform;
+        // 否則使用主物件的 transform
+        return transform;
     }
     
     /// <summary>
-    /// 在回合結束時同步位置（將 CharacterCore 位置更新為 CharacterExecutor 的位置）
+    /// 在回合結束時同步位置（將主物件位置更新為 CharacterExecutor 的位置）
     /// </summary>
     public void SyncPositionAfterExecution()
     {
-        if (characterExecutor != null && characterController != null)
+        if (characterExecutor != null)
         {
             // 計算位置差異
             Vector3 executorPos = characterExecutor.transform.position;
-            Vector3 controllerPos = characterController.transform.position;
+            Vector3 mainPos = transform.position;
             
-            Debug.Log($"同步位置: Controller({controllerPos}) -> Executor({executorPos})");
+            Debug.Log($"同步位置: Main({mainPos}) -> Executor({executorPos})");
             
-            // 更新 CharacterController 的位置
-            characterController.transform.position = executorPos;
-            characterController.transform.rotation = characterExecutor.transform.rotation;
-            
-            // 如果 characterExecutor 有子物件，需要保持它們的相對位置
-            // 這裡我們重置 characterExecutor 的位置為與 CharacterController 相同
-            // 這樣下次移動時就會從正確的位置開始
+            // 更新主物件的位置
+            transform.position = executorPos;
+            transform.rotation = characterExecutor.transform.rotation;
         }
     }
 
-    public bool CheckSkillA()
+    // 技能檢查方法將改為滑鼠/UI控制
+    public bool CanUseSkillA()
     {
-        bool confirmPressed = FindAction("SkillA").WasPressedThisFrame();
-        if (confirmPressed && skillA != null)
-        {
-            return SP >= skillA.SPCost;
-        }
-        return confirmPressed;
+        return skillA != null && SP >= skillA.SPCost;
     }
-    public bool CheckSkillB()
+    
+    public bool CanUseSkillB()
     {
-        bool confirmPressed = FindAction("SkillB").WasPressedThisFrame();
-        if (confirmPressed && skillB != null)
-        {
-            return SP >= skillB.SPCost;
-        }
-        return confirmPressed;
+        return skillB != null && SP >= skillB.SPCost;
     }
-    public bool CheckSkillC()
+    
+    public bool CanUseSkillC()
     {
-        bool confirmPressed = FindAction("SkillC").WasPressedThisFrame();
-        if (confirmPressed && skillC != null)
-        {
-            return SP >= skillC.SPCost;
-        }
-        return confirmPressed;
+        return skillC != null && SP >= skillC.SPCost;
     }
-    public bool CheckSkillD()
+    
+    public bool CanUseSkillD()
     {
-        bool confirmPressed = FindAction("SkillD").WasPressedThisFrame();
-        if (confirmPressed && skillD != null)
+        return skillD != null && SP >= skillD.SPCost;
+    }
+    
+    public void UseSkill(CombatSkill skill, CombatAction.ActionType actionType)
+    {
+        if (skill != null && SP >= skill.SPCost)
         {
-            return SP >= skillD.SPCost;
+            CombatAction tempActionMove = new CombatAction();
+            nowState = CharacterCoreState.UsingSkill;
+            tempActionMove.Position = transform.position;
+            tempActionMove.rotation = transform.rotation;
+            tempActionMove.type = CombatAction.ActionType.Move;
+            RecordedActions.Enqueue(tempActionMove);
+            
+            CombatAction tempActionSkill = new CombatAction();
+            tempActionSkill.type = actionType;
+            
+            // 啟用控制階段的根運動碰撞防護
+            if (controllerAnimationRelativePos != null)
+            {
+                controllerAnimationRelativePos.SetCollisionProtection(true);
+            }
+            
+            CharacterControlAnimator.Play(skill.AnimationName);
+            SP -= skill.SPCost;
+            
+            RecordedActions.Enqueue(tempActionSkill);
         }
-        return confirmPressed;
+    }
+    
+    public void ConfirmTurn()
+    {
+        CombatCore.Instance.ConfirmAction();
+        nowState = CharacterCoreState.ExcutionState;
     }
 
     

@@ -53,6 +53,9 @@ public class SLGCoreUI : MonoBehaviour
         {
             UpdateCursorPosition();
         }
+        
+        // 處理滑鼠點擊移動
+        HandleMouseClickMovement();
     }
     
     private void UpdateCursorPosition()
@@ -183,6 +186,58 @@ public class SLGCoreUI : MonoBehaviour
         if (floorMouseIndicator != null)
         {
             floorMouseIndicator.SetFloorLayerMask(layerMask);
+        }
+    }
+    
+    /// <summary>
+    /// 處理滑鼠點擊移動
+    /// </summary>
+    private void HandleMouseClickMovement()
+    {
+        // 檢查是否有戰鬥核心
+        if (CombatCore.Instance == null)
+            return;
+            
+        // 檢查是否為玩家回合
+        if (!CombatCore.Instance.IsPlayerTurn())
+            return;
+            
+        // 取得當前回合實體
+        CombatEntity currentEntity = CombatCore.Instance.GetCurrentTurnEntity();
+        if (currentEntity == null)
+            return;
+            
+        // 檢查是否為玩家角色
+        CharacterCore currentCharacter = currentEntity.GetComponent<CharacterCore>();
+        if (currentCharacter == null)
+            return;
+            
+        // 檢查角色是否在控制狀態
+        if (currentCharacter.nowState != CharacterCore.CharacterCoreState.ControlState)
+            return;
+            
+        // 檢查滑鼠左鍵點擊
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            // 檢查滑鼠是否指向Floor
+            if (IsMouseOverFloor())
+            {
+                // 取得滑鼠在Floor上的位置
+                Vector3 targetPosition = GetMouseFloorPosition();
+                if (targetPosition != Vector3.zero)
+                {
+                    // 讓角色移動到該位置
+                    currentCharacter.MoveTo(targetPosition);
+                    Debug.Log($"玩家點擊移動到: {targetPosition}");
+                }
+            }
+        }
+        
+        // 檢查滑鼠右鍵點擊（確認回合）
+        if (Mouse.current.rightButton.wasPressedThisFrame)
+        {
+            currentCharacter.ConfirmTurn();
+            Debug.Log("玩家確認回合結束");
         }
     }
     
