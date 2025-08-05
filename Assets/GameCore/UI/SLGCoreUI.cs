@@ -215,6 +215,22 @@ public class SLGCoreUI : MonoBehaviour
         // 檢查角色是否在控制狀態
         if (currentCharacter.nowState != CharacterCore.CharacterCoreState.ControlState)
             return;
+        
+        // 滑鼠hover時預覽路徑
+        if (IsMouseOverFloor() && !currentCharacter.isMoving)
+        {
+            Vector3 hoverPosition = GetMouseFloorPosition();
+            if (hoverPosition != Vector3.zero)
+            {
+                // 預覽路徑但不執行移動
+                currentCharacter.PreviewPath(hoverPosition);
+            }
+        }
+        else if (!currentCharacter.isMoving)
+        {
+            // 如果滑鼠不在Floor上或角色正在移動，清除路徑顯示
+            currentCharacter.ClearPathDisplay();
+        }
             
         // 檢查滑鼠左鍵點擊
         if (Mouse.current.leftButton.wasPressedThisFrame)

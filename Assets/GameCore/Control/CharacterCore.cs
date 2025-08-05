@@ -505,7 +505,83 @@ public class CharacterCore : MonoBehaviour
     }
     
     /// <summary>
-    /// 繪製NavMesh路徑
+    /// 預覽到指定位置的路徑（不執行移動）
+    /// </summary>
+    /// <param name="destination">目標位置</param>
+    public void PreviewPath(Vector3 destination)
+    {
+        if (navMeshAgent == null || pathLineRenderer == null) return;
+        
+        // 檢查目標位置是否在NavMesh上
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(destination, out hit, 2f, NavMesh.AllAreas))
+        {
+            // 計算路徑但不移動
+            NavMeshPath path = new NavMeshPath();
+            if (navMeshAgent.CalculatePath(hit.position, path))
+            {
+                // 繪製路徑
+                DrawPath(path);
+            }
+            else
+            {
+                // 無法到達，清除路徑顯示
+                ClearPathDisplay();
+            }
+        }
+        else
+        {
+            // 目標位置不在NavMesh上，清除路徑顯示
+            ClearPathDisplay();
+        }
+    }
+    
+    /// <summary>
+    /// 清除路徑顯示
+    /// </summary>
+    public void ClearPathDisplay()
+    {
+        if (pathLineRenderer != null)
+        {
+            pathLineRenderer.positionCount = 0;
+            pathLineRenderer.enabled = false;
+        }
+    }
+    
+    /// <summary>
+    /// 繪製指定的NavMesh路徑
+    /// </summary>
+    /// <param name="path">要繪製的路徑</param>
+    private void DrawPath(NavMeshPath path)
+    {
+        if (pathLineRenderer == null) return;
+        
+        Vector3[] corners = path.corners;
+        
+        if (corners.Length > 0)
+        {
+            // 設定LineRenderer的點數
+            pathLineRenderer.positionCount = corners.Length;
+            
+            // 設定所有路徑點，稍微提高Y座標避免與地面重疊
+            for (int i = 0; i < corners.Length; i++)
+            {
+                Vector3 cornerPosition = corners[i];
+                cornerPosition.y += 0.1f; // 稍微提高避免與地面重疊
+                pathLineRenderer.SetPosition(i, cornerPosition);
+            }
+            
+            // 確保LineRenderer已啟用
+            pathLineRenderer.enabled = true;
+        }
+        else
+        {
+            ClearPathDisplay();
+        }
+    }
+    
+    /// <summary>
+    /// 繪製NavMesh路徑（用於實際移動時）
     /// </summary>
     private IEnumerator DrawNavMeshPath()
     {
@@ -523,35 +599,12 @@ public class CharacterCore : MonoBehaviour
         // 確認有有效路徑
         if (navMeshAgent.hasPath)
         {
-            // 取得路徑角點
-            Vector3[] corners = navMeshAgent.path.corners;
-            
-            if (corners.Length > 0)
-            {
-                // 設定LineRenderer的點數
-                pathLineRenderer.positionCount = corners.Length;
-                
-                // 設定所有路徑點，稍微提高Y座標避免與地面重疊
-                for (int i = 0; i < corners.Length; i++)
-                {
-                    Vector3 cornerPosition = corners[i];
-                    cornerPosition.y += 0.1f; // 稍微提高避免與地面重疊
-                    pathLineRenderer.SetPosition(i, cornerPosition);
-                }
-                
-                // 確保LineRenderer已啟用
-                pathLineRenderer.enabled = true;
-                
-                Debug.Log($"路徑繪製完成，共有 {corners.Length} 個轉角點");
-            }
+            // 使用新的DrawPath方法
+            DrawPath(navMeshAgent.path);
         }
         else
         {
-            Debug.Log("無有效路徑可繪製");
-            if (pathLineRenderer != null)
-            {
-                pathLineRenderer.enabled = false;
-            }
+            ClearPathDisplay();
         }
     }
 
