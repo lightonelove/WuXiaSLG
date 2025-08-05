@@ -198,9 +198,6 @@ public class CombatCore : MonoBehaviour
         // 同步玩家位置（將 CharacterController 位置更新為 CharacterExecutor 的位置）
         character.SyncPositionAfterExecution();
         
-        // 重置玩家狀態為 ControlState，準備下一回合
-        character.nowState = CharacterCore.CharacterCoreState.ControlState;
-        
         Debug.Log($"Player {character.name} turn completed and reset to ControlState!");
     }
     
@@ -431,7 +428,17 @@ public class CombatCore : MonoBehaviour
     public bool IsPlayerTurn()
     {
         if (currentRoundEntity == null) return false;
-        return currentRoundEntity.GetComponent<CharacterCore>() != null;
+        
+        CharacterCore character = currentRoundEntity.GetComponent<CharacterCore>();
+        if (character == null) return false;
+        
+        // 如果角色已經完成回合，不允許操作
+        if (character.nowState == CharacterCore.CharacterCoreState.TurnComplete)
+        {
+            return false;
+        }
+        
+        return true;
     }
     
     public bool IsEnemyTurn()

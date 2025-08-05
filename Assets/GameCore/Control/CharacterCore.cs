@@ -156,6 +156,12 @@ public class CharacterCore : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 簡單的回合檢查：如果不是玩家回合，不允許任何操作
+        if (CombatCore.Instance != null && !CombatCore.Instance.IsPlayerTurn())
+        {
+            return;
+        }
+        
         if (nowState == CharacterCoreState.ControlState)
         {
             ControlUpdate();
