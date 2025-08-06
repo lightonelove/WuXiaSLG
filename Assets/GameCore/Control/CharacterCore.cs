@@ -19,6 +19,10 @@ public class CharacterCore : MonoBehaviour
     public float MaxSP = 100;
     public Vector2 lastPosition;
     
+    [Header("預覽系統")]
+    private bool isPreviewingPath = false;     // 是否正在預覽路徑
+    private float previewStaminaCost = 0f;     // 預覽的體力消耗量
+    
     public float pointSpacing = 0.2f; // 每隔幾公尺新增一點
     public List<Vector3> points = new List<Vector3>();
     private Vector3 lastDrawPoint;
@@ -125,8 +129,8 @@ public class CharacterCore : MonoBehaviour
                     Stamina -= distance * 5.0f;
                     Stamina = Mathf.Max(0, Stamina); // 確保體力不會變負數
                     
-                    // 更新UI
-                    if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.apBar != null)
+                    // 更新UI（只在非預覽狀態下更新）
+                    if (!isPreviewingPath && SLGCoreUI.Instance != null && SLGCoreUI.Instance.apBar != null)
                     {
                         SLGCoreUI.Instance.apBar.slider.maxValue = MaxStamina;
                         SLGCoreUI.Instance.apBar.slider.value = Stamina;
@@ -188,6 +192,19 @@ public class CharacterCore : MonoBehaviour
                 
                 targetPosition = hit.position;
                 hasValidTarget = true;
+                
+                // 重置預覽狀態，回到顯示實際Stamina值
+                if (isPreviewingPath)
+                {
+                    isPreviewingPath = false;
+                    previewStaminaCost = 0f;
+                    
+                    // 恢復顯示實際的Stamina值
+                    if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.apBar != null)
+                    {
+                        SLGCoreUI.Instance.apBar.slider.value = Stamina;
+                    }
+                }
                 
                 // 設定NavMeshAgent目標
                 navMeshAgent.isStopped = false;
@@ -566,6 +583,18 @@ public class CharacterCore : MonoBehaviour
                 float pathLength = CalculatePathLength(path);
                 float staminaCost = CalculateStaminaCost(pathLength);
                 Debug.Log($"路徑長度: {pathLength:F2}, 體力消耗: {staminaCost:F2}, 當前體力: {Stamina:F2}, 體力{(hasEnoughStamina ? "足夠" : "不足")}");
+                
+                // 設定預覽狀態
+                isPreviewingPath = true;
+                previewStaminaCost = staminaCost;
+                
+                // 使用Proxy值更新UI（顯示預期的剩餘體力）
+                if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.apBar != null)
+                {
+                    float proxyStamina = Mathf.Max(0, Stamina - staminaCost);
+                    SLGCoreUI.Instance.apBar.slider.maxValue = MaxStamina;
+                    SLGCoreUI.Instance.apBar.slider.value = proxyStamina;
+                }
             }
             else
             {
@@ -589,6 +618,19 @@ public class CharacterCore : MonoBehaviour
         {
             pathLineRenderer.positionCount = 0;
             pathLineRenderer.enabled = false;
+        }
+        
+        // 重置預覽狀態
+        if (isPreviewingPath)
+        {
+            isPreviewingPath = false;
+            previewStaminaCost = 0f;
+            
+            // 恢復顯示實際的Stamina值
+            if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.apBar != null)
+            {
+                SLGCoreUI.Instance.apBar.slider.value = Stamina;
+            }
         }
     }
     
