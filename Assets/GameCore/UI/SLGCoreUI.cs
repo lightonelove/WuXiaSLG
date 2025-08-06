@@ -19,6 +19,19 @@ public class SLGCoreUI : MonoBehaviour
     public LayerMask floorLayerMask = -1; // Floor層級遮罩
     public bool enableFloorIndicator = true;
     
+    [Header("Action Buttons")]
+    public GameObject actionButtonsPanel;    // 按鈕面板
+    public Button moveButton;               // 移動按鈕
+    public Button skillAButton;             // 技能A按鈕
+    public Button skillBButton;             // 技能B按鈕
+    public Button skillCButton;             // 技能C按鈕
+    public Button skillDButton;             // 技能D按鈕
+    
+    [Header("Button Colors")]
+    public Color normalButtonColor = Color.white;
+    public Color selectedButtonColor = Color.green;
+    public Color disabledButtonColor = Color.gray;
+    
     public static SLGCoreUI Instance;
     private FloorMouseIndicator floorMouseIndicator;
     
@@ -43,6 +56,9 @@ public class SLGCoreUI : MonoBehaviour
         
         // 初始化Floor指示器
         InitializeFloorIndicator();
+        
+        // 初始化動作按鈕
+        InitializeActionButtons();
     }
 
     // Update is called once per frame
@@ -56,6 +72,9 @@ public class SLGCoreUI : MonoBehaviour
         
         // 處理滑鼠點擊移動
         HandleMouseClickMovement();
+        
+        // 更新按鈕狀態
+        UpdateActionButtons();
     }
     
     private void UpdateCursorPosition()
@@ -216,35 +235,46 @@ public class SLGCoreUI : MonoBehaviour
         if (currentCharacter.nowState != CharacterCore.CharacterCoreState.ControlState)
             return;
         
-        // 滑鼠hover時預覽路徑
-        if (IsMouseOverFloor() && !currentCharacter.isMoving)
+        // 只在Move模式下預覽路徑
+        if (currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.Move)
         {
-            Vector3 hoverPosition = GetMouseFloorPosition();
-            if (hoverPosition != Vector3.zero)
+            if (IsMouseOverFloor() && !currentCharacter.isMoving)
             {
-                // 預覽路徑但不執行移動
-                currentCharacter.PreviewPath(hoverPosition);
+                Vector3 hoverPosition = GetMouseFloorPosition();
+                if (hoverPosition != Vector3.zero)
+                {
+                    // 預覽路徑但不執行移動
+                    currentCharacter.PreviewPath(hoverPosition);
+                }
+            }
+            else if (!currentCharacter.isMoving)
+            {
+                // 如果滑鼠不在Floor上或角色正在移動，清除路徑顯示
+                currentCharacter.ClearPathDisplay();
             }
         }
-        else if (!currentCharacter.isMoving)
+        else
         {
-            // 如果滑鼠不在Floor上或角色正在移動，清除路徑顯示
+            // 不在Move模式，清除任何路徑預覽
             currentCharacter.ClearPathDisplay();
         }
             
-        // 檢查滑鼠左鍵點擊
+        // 檢查滑鼠左鍵點擊（只在對應模式下處理）
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            // 檢查滑鼠是否指向Floor
-            if (IsMouseOverFloor())
+            if (currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.Move)
             {
-                // 取得滑鼠在Floor上的位置
-                Vector3 targetPosition = GetMouseFloorPosition();
-                if (targetPosition != Vector3.zero)
+                // 檢查滑鼠是否指向Floor
+                if (IsMouseOverFloor())
                 {
-                    // 讓角色移動到該位置
-                    currentCharacter.MoveTo(targetPosition);
-                    Debug.Log($"玩家點擊移動到: {targetPosition}");
+                    // 取得滑鼠在Floor上的位置
+                    Vector3 targetPosition = GetMouseFloorPosition();
+                    if (targetPosition != Vector3.zero)
+                    {
+                        // 讓角色移動到該位置
+                        currentCharacter.MoveTo(targetPosition);
+                        Debug.Log($"玩家點擊移動到: {targetPosition}");
+                    }
                 }
             }
         }
@@ -261,5 +291,141 @@ public class SLGCoreUI : MonoBehaviour
     {
         // 确保恢复系统游标
         Cursor.visible = true;
+    }
+    
+    /// <summary>
+    /// 初始化動作按鈕
+    /// </summary>
+    private void InitializeActionButtons()
+    {
+        // 設定按鈕點擊事件
+        if (moveButton != null)
+        {
+            moveButton.onClick.AddListener(() => SetActionMode(CharacterCore.PlayerActionMode.Move));
+        }
+        
+        if (skillAButton != null)
+        {
+            skillAButton.onClick.AddListener(() => SetActionMode(CharacterCore.PlayerActionMode.SkillA));
+        }
+        
+        if (skillBButton != null)
+        {
+            skillBButton.onClick.AddListener(() => SetActionMode(CharacterCore.PlayerActionMode.SkillB));
+        }
+        
+        if (skillCButton != null)
+        {
+            skillCButton.onClick.AddListener(() => SetActionMode(CharacterCore.PlayerActionMode.SkillC));
+        }
+        
+        if (skillDButton != null)
+        {
+            skillDButton.onClick.AddListener(() => SetActionMode(CharacterCore.PlayerActionMode.SkillD));
+        }
+        
+        // 初始隱藏按鈕面板
+        if (actionButtonsPanel != null)
+        {
+            actionButtonsPanel.SetActive(false);
+        }
+    }
+    
+    /// <summary>
+    /// 設定當前玩家的動作模式
+    /// </summary>
+    /// <param name="mode">動作模式</param>
+    private void SetActionMode(CharacterCore.PlayerActionMode mode)
+    {
+        // 檢查是否有戰鬥核心和當前玩家
+        if (CombatCore.Instance == null || !CombatCore.Instance.IsPlayerTurn())
+            return;
+            
+        CombatEntity currentEntity = CombatCore.Instance.GetCurrentTurnEntity();
+        if (currentEntity == null)
+            return;
+            
+        CharacterCore currentCharacter = currentEntity.GetComponent<CharacterCore>();
+        if (currentCharacter == null || currentCharacter.nowState != CharacterCore.CharacterCoreState.ControlState)
+            return;
+        
+        // 設定動作模式
+        currentCharacter.currentActionMode = mode;
+        
+        // 清除任何現有的路徑預覽
+        currentCharacter.ClearPathDisplay();
+        
+        Debug.Log($"設定動作模式為: {mode}");
+    }
+    
+    /// <summary>
+    /// 更新動作按鈕的顯示狀態
+    /// </summary>
+    private void UpdateActionButtons()
+    {
+        // 檢查是否為玩家回合
+        bool isPlayerTurn = CombatCore.Instance != null && CombatCore.Instance.IsPlayerTurn();
+        
+        if (actionButtonsPanel != null)
+        {
+            actionButtonsPanel.SetActive(isPlayerTurn);
+        }
+        
+        if (!isPlayerTurn)
+            return;
+            
+        // 取得當前玩家角色
+        CombatEntity currentEntity = CombatCore.Instance.GetCurrentTurnEntity();
+        if (currentEntity == null)
+            return;
+            
+        CharacterCore currentCharacter = currentEntity.GetComponent<CharacterCore>();
+        if (currentCharacter == null)
+            return;
+        
+        // 更新按鈕顏色根據當前模式
+        UpdateButtonColor(moveButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.Move);
+        UpdateButtonColor(skillAButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillA, currentCharacter.CanUseSkillA());
+        UpdateButtonColor(skillBButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillB, currentCharacter.CanUseSkillB());
+        UpdateButtonColor(skillCButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillC, currentCharacter.CanUseSkillC());
+        UpdateButtonColor(skillDButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillD, currentCharacter.CanUseSkillD());
+    }
+    
+    /// <summary>
+    /// 更新按鈕顏色
+    /// </summary>
+    /// <param name="button">要更新的按鈕</param>
+    /// <param name="isSelected">是否被選中</param>
+    /// <param name="isAvailable">是否可用（技能專用）</param>
+    private void UpdateButtonColor(Button button, bool isSelected, bool isAvailable = true)
+    {
+        if (button == null)
+            return;
+            
+        ColorBlock colors = button.colors;
+        
+        if (!isAvailable)
+        {
+            // 技能不可用時顯示為灰色
+            colors.normalColor = disabledButtonColor;
+            colors.selectedColor = disabledButtonColor;
+            button.interactable = false;
+        }
+        else if (isSelected)
+        {
+            // 被選中時顯示為選中顏色
+            colors.normalColor = selectedButtonColor;
+            colors.selectedColor = selectedButtonColor;
+            button.interactable = true;
+        }
+        else
+        {
+            // 正常狀態
+            colors.normalColor = normalButtonColor;
+            colors.selectedColor = normalButtonColor;
+            button.interactable = true;
+        }
+        
+        button.colors = colors;
     }
 }

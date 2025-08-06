@@ -743,7 +743,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 507542057868587843, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: Stamina
-      value: 1000
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 507542057868587843, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: moveSpeed
@@ -751,7 +751,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 507542057868587843, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: MaxStamina
-      value: 1000
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 610529947170750612, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: wallLayerMask.m_Bits

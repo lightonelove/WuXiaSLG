@@ -64,7 +64,18 @@ public class CharacterCore : MonoBehaviour
 
     public enum CharacterCoreState{ ControlState, ExcutionState, UsingSkill, ExecutingSkill, TurnComplete }
 
+    public enum PlayerActionMode
+    {
+        None,       // 沒有選擇任何動作
+        Move,       // 移動模式
+        SkillA,     // 技能A準備
+        SkillB,     // 技能B準備
+        SkillC,     // 技能C準備
+        SkillD      // 技能D準備
+    }
+
     public CharacterCoreState nowState = CharacterCoreState.ControlState;
+    public PlayerActionMode currentActionMode = PlayerActionMode.None;
     
     void Start()
     {
