@@ -114,7 +114,7 @@ public class CharacterCore : MonoBehaviour
         if (isMoving && navMeshAgent.hasPath)
         {
             // 檢查是否到達目標
-            if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.5f)
+            if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.3f)
             {
                 // 到達目標，停止移動
                 StopMovement();
@@ -125,18 +125,25 @@ public class CharacterCore : MonoBehaviour
                 Vector2 nowPosition = new Vector2(transform.position.x, transform.position.z);
                 float distance = Vector2.Distance(lastPosition, nowPosition);
                 
-                if (distance > 0.01f) // 避免微小移動消耗體力
+
+                Stamina -= distance * 5.0f;
+                Stamina = Mathf.Max(0, Stamina); // 確保體力不會變負數
+                
+                // 如果體力耗盡，立即停止移動
+                if (Stamina <= 0)
                 {
-                    Stamina -= distance * 5.0f;
-                    Stamina = Mathf.Max(0, Stamina); // 確保體力不會變負數
-                    
-                    // 更新UI（只在非預覽狀態下更新）
-                    if (!isPreviewingPath && SLGCoreUI.Instance != null && SLGCoreUI.Instance.apBar != null)
-                    {
-                        SLGCoreUI.Instance.apBar.slider.maxValue = MaxStamina;
-                        SLGCoreUI.Instance.apBar.slider.value = Stamina;
-                    }
+                    Debug.Log("體力耗盡，停止移動！");
+                    StopMovement();
+                    return;
                 }
+                
+                // 更新UI（只在非預覽狀態下更新）
+                if (!isPreviewingPath && SLGCoreUI.Instance != null && SLGCoreUI.Instance.apBar != null)
+                {
+                    SLGCoreUI.Instance.apBar.slider.maxValue = MaxStamina;
+                    SLGCoreUI.Instance.apBar.slider.value = Stamina;
+                }
+                
                 
                 // 更新動畫
                 CharacterControlAnimator.SetBool("isMoving", true);
@@ -182,16 +189,31 @@ public class CharacterCore : MonoBehaviour
             NavMeshPath path = new NavMeshPath();
             if (navMeshAgent.CalculatePath(hit.position, path))
             {
+                Vector3 actualDestination;
+                
                 // 檢查體力是否足夠完成這段路徑
                 if (!HasEnoughStaminaForPath(path))
                 {
-                    float pathLength = CalculatePathLength(path);
-                    float requiredStamina = CalculateStaminaCost(pathLength);
-                    Debug.Log($"體力不足！路徑需要 {requiredStamina:F2} 點體力，但你只有 {Stamina:F2} 點體力。");
-                    return;
+                    // 體力不足，計算最遠能到達的位置
+                    actualDestination = CalculateMaxReachablePosition(path);
+                    
+                    if (Vector3.Distance(transform.position, actualDestination) < 0.5f)
+                    {
+                        // 如果最遠距離太近，就不移動
+                        Debug.Log("體力不足，無法進行有效移動！");
+                        return;
+                    }
+                    
+                    Debug.Log($"體力不足到達目標，移動到最遠可達位置");
+                }
+                else
+                {
+                    // 體力足夠，移動到目標位置
+                    actualDestination = hit.position;
+                    Debug.Log("體力足夠，移動到目標位置");
                 }
                 
-                targetPosition = hit.position;
+                targetPosition = actualDestination;
                 hasValidTarget = true;
                 
                 // 重置預覽狀態，回到顯示實際Stamina值
@@ -860,6 +882,61 @@ public class CharacterCore : MonoBehaviour
         
         // 如果整條路徑都在體力範圍內，invalidPath會是空的
         // 如果體力完全不夠，validPath可能只有起始點附近的部分
+    }
+    
+    /// <summary>
+    /// 計算當前體力能到達的最遠位置
+    /// </summary>
+    /// <param name="path">完整路徑</param>
+    /// <returns>最遠可達位置</returns>
+    private Vector3 CalculateMaxReachablePosition(NavMeshPath path)
+    {
+        Vector3[] corners = path.corners;
+        if (corners.Length == 0) return transform.position;
+        
+        float maxWalkableDistance = Stamina / 5.0f; // 當前體力能走的最大距離
+        float accumulatedDistance = 0f;
+        Vector3 currentPos = transform.position;
+        
+        // 如果體力為0，返回當前位置
+        if (maxWalkableDistance <= 0)
+        {
+            return transform.position;
+        }
+        
+        for (int i = 0; i < corners.Length; i++)
+        {
+            Vector3 corner = corners[i];
+            float segmentDistance = Vector3.Distance(currentPos, corner);
+            
+            if (accumulatedDistance + segmentDistance <= maxWalkableDistance)
+            {
+                // 這個點還在體力範圍內
+                accumulatedDistance += segmentDistance;
+                currentPos = corner;
+            }
+            else
+            {
+                // 找到了切分點，需要在這個線段中間分割
+                float remainingDistance = maxWalkableDistance - accumulatedDistance;
+                
+                if (remainingDistance > 0)
+                {
+                    // 計算最遠可達點的位置
+                    Vector3 direction = (corner - currentPos).normalized;
+                    Vector3 maxReachablePoint = currentPos + direction * remainingDistance;
+                    return maxReachablePoint;
+                }
+                else
+                {
+                    // 沒有剩餘距離，返回上一個位置
+                    return currentPos;
+                }
+            }
+        }
+        
+        // 如果整條路徑都在體力範圍內，返回最後一個點
+        return currentPos;
     }
 
     
