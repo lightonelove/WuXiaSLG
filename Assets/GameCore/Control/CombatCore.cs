@@ -410,7 +410,33 @@ public class CombatCore : MonoBehaviour
             CharacterCore character = currentRoundEntity.GetComponent<CharacterCore>();
             if (character != null)
             {
-                character.nowState = CharacterCore.CharacterCoreState.ExcutionState;
+                // 如果角色正在控制狀態，直接跳過執行階段，結束回合
+                if (character.nowState == CharacterCore.CharacterCoreState.ControlState)
+                {
+                    // 清除任何路徑預覽
+                    character.ClearPathDisplay();
+                    
+                    // 如果沒有記錄任何動作，直接結束回合
+                    if (character.RecordedActions.Count == 0)
+                    {
+                        character.nowState = CharacterCore.CharacterCoreState.TurnComplete;
+                        Debug.Log($"Player {character.name} ended turn without actions.");
+                    }
+                    else
+                    {
+                        // 有記錄的動作，進入執行狀態
+                        character.nowState = CharacterCore.CharacterCoreState.ExcutionState;
+                        Debug.Log($"Player {character.name} moving to execution state.");
+                    }
+                }
+            }
+            
+            EnemyCore enemy = currentRoundEntity.GetComponent<EnemyCore>();
+            if (enemy != null)
+            {
+                // 強制結束敵人回合
+                enemy.SetState(EnemyState.TurnComplete);
+                Debug.Log($"Enemy {enemy.name} turn force ended.");
             }
         }
     }

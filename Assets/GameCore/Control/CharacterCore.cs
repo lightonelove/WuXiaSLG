@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -22,6 +23,11 @@ public class CharacterCore : MonoBehaviour
     [Header("預覽系統")]
     private bool isPreviewingPath = false;     // 是否正在預覽路徑
     private float previewStaminaCost = 0f;     // 預覽的體力消耗量
+    
+    [Header("回合控制")]
+    public float holdTimeToEndTurn = 1.0f;     // 長壓多少秒結束回合
+    private float spaceKeyHoldTime = 0f;       // 空白鍵持續按住時間
+    private bool isHoldingSpace = false;       // 是否正在按住空白鍵
     
     public float pointSpacing = 0.2f; // 每隔幾公尺新增一點
     public List<Vector3> points = new List<Vector3>();
@@ -323,6 +329,9 @@ public class CharacterCore : MonoBehaviour
         if (nowState == CharacterCoreState.ControlState)
         {
             ControlUpdate();
+            
+            // 處理長壓空白鍵結束回合
+            HandleSpaceKeyInput();
             
             // 滑鼠操作邏輯將在這裡實作
             // 技能使用和確認都將改為滑鼠控制
@@ -937,6 +946,85 @@ public class CharacterCore : MonoBehaviour
         
         // 如果整條路徑都在體力範圍內，返回最後一個點
         return currentPos;
+    }
+    
+    /// <summary>
+    /// 處理空白鍵輸入來結束回合
+    /// </summary>
+    private void HandleSpaceKeyInput()
+    {
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard == null) return;
+        
+        // 檢查空白鍵是否被按下
+        if (keyboard.spaceKey.isPressed)
+        {
+            if (!isHoldingSpace)
+            {
+                // 開始長壓
+                isHoldingSpace = true;
+                spaceKeyHoldTime = 0f;
+                Debug.Log("開始長壓空白鍵...");
+            }
+            else
+            {
+                // 持續長壓，累計時間
+                spaceKeyHoldTime += Time.deltaTime;
+                
+                // 檢查是否達到結束回合的時間
+                if (spaceKeyHoldTime >= holdTimeToEndTurn)
+                {
+                    EndTurnBySpaceKey();
+                }
+            }
+        }
+        else
+        {
+            // 空白鍵被釋放
+            if (isHoldingSpace)
+            {
+                isHoldingSpace = false;
+                spaceKeyHoldTime = 0f;
+                Debug.Log("停止長壓空白鍵");
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 通過空白鍵結束回合
+    /// </summary>
+    private void EndTurnBySpaceKey()
+    {
+        Debug.Log("空白鍵長壓結束回合！");
+        
+        // 重置長壓狀態
+        isHoldingSpace = false;
+        spaceKeyHoldTime = 0f;
+        
+        // 結束當前回合
+        if (CombatCore.Instance != null)
+        {
+            CombatCore.Instance.EndCurrentEntityTurn();
+        }
+    }
+    
+    /// <summary>
+    /// 獲取長壓空白鍵的進度（0-1）
+    /// </summary>
+    /// <returns>進度值，0表示未開始，1表示完成</returns>
+    public float GetSpaceKeyHoldProgress()
+    {
+        if (!isHoldingSpace) return 0f;
+        return Mathf.Clamp01(spaceKeyHoldTime / holdTimeToEndTurn);
+    }
+    
+    /// <summary>
+    /// 是否正在長壓空白鍵
+    /// </summary>
+    /// <returns>是否正在長壓</returns>
+    public bool IsHoldingSpaceKey()
+    {
+        return isHoldingSpace;
     }
 
     
