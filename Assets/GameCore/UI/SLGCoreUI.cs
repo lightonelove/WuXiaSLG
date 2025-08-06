@@ -41,6 +41,7 @@ public class SLGCoreUI : MonoBehaviour
     {
         Instance = this;
         
+        Debug.Log("[SLGCoreUI] Start() called - gameObject is active: " + gameObject.activeInHierarchy);
         
         // 初始化cursor相关组件
         if (cursorImage != null)
@@ -310,8 +311,25 @@ public class SLGCoreUI : MonoBehaviour
         }
     }
     
+    void Awake()
+    {
+        Debug.Log("[SLGCoreUI] Awake() called - gameObject is active: " + gameObject.activeInHierarchy);
+    }
+    
+    void OnEnable()
+    {
+        Debug.Log("[SLGCoreUI] OnEnable() called");
+    }
+    
+    void OnDisable()
+    {
+        Debug.Log("[SLGCoreUI] OnDisable() called - Stack Trace:");
+        Debug.Log(System.Environment.StackTrace);
+    }
+    
     void OnDestroy()
     {
+        Debug.Log("[SLGCoreUI] OnDestroy() called");
         // 确保恢复系统游标
         Cursor.visible = true;
     }
