@@ -294,10 +294,19 @@ public class SLGCoreUI : MonoBehaviour
             }
         }
         
-        // 檢查滑鼠右鍵點擊（確認回合）
+        // 檢查滑鼠右鍵點擊
         if (Mouse.current.rightButton.wasPressedThisFrame)
         {
-            currentCharacter.ConfirmTurn();
+            // 如果在Move/Skill狀態，取消回到None狀態
+            if (currentCharacter.currentActionMode != CharacterCore.PlayerActionMode.None)
+            {
+                SetActionMode(CharacterCore.PlayerActionMode.None);
+            }
+            else
+            {
+                // 如果已經是None狀態，則確認回合
+                currentCharacter.ConfirmTurn();
+            }
         }
     }
     
@@ -350,7 +359,7 @@ public class SLGCoreUI : MonoBehaviour
         if (moveButton != null)
         {
             moveButton.onClick.AddListener(() => {
-                SetActionMode(CharacterCore.PlayerActionMode.Move);
+                ToggleActionMode(CharacterCore.PlayerActionMode.Move);
             });
         }
         else
@@ -360,7 +369,7 @@ public class SLGCoreUI : MonoBehaviour
         if (skillAButton != null)
         {
             skillAButton.onClick.AddListener(() => {
-                SetActionMode(CharacterCore.PlayerActionMode.SkillA);
+                ToggleActionMode(CharacterCore.PlayerActionMode.SkillA);
             });
         }
         else
@@ -370,7 +379,7 @@ public class SLGCoreUI : MonoBehaviour
         if (skillBButton != null)
         {
             skillBButton.onClick.AddListener(() => {
-                SetActionMode(CharacterCore.PlayerActionMode.SkillB);
+                ToggleActionMode(CharacterCore.PlayerActionMode.SkillB);
             });
         }
         else
@@ -380,7 +389,7 @@ public class SLGCoreUI : MonoBehaviour
         if (skillCButton != null)
         {
             skillCButton.onClick.AddListener(() => {
-                SetActionMode(CharacterCore.PlayerActionMode.SkillC);
+                ToggleActionMode(CharacterCore.PlayerActionMode.SkillC);
             });
         }
         else
@@ -390,21 +399,45 @@ public class SLGCoreUI : MonoBehaviour
         if (skillDButton != null)
         {
             skillDButton.onClick.AddListener(() => {
-                SetActionMode(CharacterCore.PlayerActionMode.SkillD);
+                ToggleActionMode(CharacterCore.PlayerActionMode.SkillD);
             });
         }
         else
         {
         }
         
-        // 初始隱藏按鈕面板
-        if (actionButtonsPanel != null)
-        {
-            actionButtonsPanel.SetActive(false);
-        }
-        else
-        {
-        }
+    }
+    
+    /// <summary>
+    /// 切換動作模式：如果已經是該模式則取消回到None，否則設定為該模式
+    /// </summary>
+    /// <param name="mode">要切換的動作模式</param>
+    private void ToggleActionMode(CharacterCore.PlayerActionMode mode)
+    {
+        // 檢查是否有戰鬥核心和當前玩家
+        if (CombatCore.Instance == null)
+            return;
+        
+        if (!CombatCore.Instance.IsPlayerTurn())
+            return;
+            
+        CombatEntity currentEntity = CombatCore.Instance.GetCurrentTurnEntity();
+        if (currentEntity == null)
+            return;
+            
+        CharacterCore currentCharacter = currentEntity.GetComponent<CharacterCore>();
+        if (currentCharacter == null)
+            return;
+        
+        if (currentCharacter.nowState != CharacterCore.CharacterCoreState.ControlState)
+            return;
+        
+        // 如果目前已經是該模式，則取消回到None；否則設定為該模式
+        CharacterCore.PlayerActionMode newMode = (currentCharacter.currentActionMode == mode) 
+            ? CharacterCore.PlayerActionMode.None 
+            : mode;
+        
+        SetActionMode(newMode);
     }
     
     /// <summary>
