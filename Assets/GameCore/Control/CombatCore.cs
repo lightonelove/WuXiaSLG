@@ -157,8 +157,8 @@ public class CombatCore : MonoBehaviour
         // 設定角色為控制狀態
         character.nowState = CharacterCore.CharacterCoreState.ControlState;
         
-        // 重置動作模式為 Move（預設狀態）
-        character.currentActionMode = CharacterCore.PlayerActionMode.Move;
+        // 重置動作模式為 None（無動作狀態）
+        character.currentActionMode = CharacterCore.PlayerActionMode.None;
         
         // 重置行動點
         character.Stamina = character.MaxStamina;
