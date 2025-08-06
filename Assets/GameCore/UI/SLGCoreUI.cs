@@ -298,36 +298,83 @@ public class SLGCoreUI : MonoBehaviour
     /// </summary>
     private void InitializeActionButtons()
     {
+        Debug.Log("[SLGCoreUI] InitializeActionButtons called");
+        
         // 設定按鈕點擊事件
         if (moveButton != null)
         {
-            moveButton.onClick.AddListener(() => SetActionMode(CharacterCore.PlayerActionMode.Move));
+            Debug.Log("[SLGCoreUI] Move button found and listener added");
+            moveButton.onClick.AddListener(() => {
+                Debug.Log("[SLGCoreUI] Move button clicked!");
+                SetActionMode(CharacterCore.PlayerActionMode.Move);
+            });
+        }
+        else
+        {
+            Debug.LogWarning("[SLGCoreUI] Move button is null!");
         }
         
         if (skillAButton != null)
         {
-            skillAButton.onClick.AddListener(() => SetActionMode(CharacterCore.PlayerActionMode.SkillA));
+            Debug.Log("[SLGCoreUI] SkillA button found and listener added");
+            skillAButton.onClick.AddListener(() => {
+                Debug.Log("[SLGCoreUI] SkillA button clicked!");
+                SetActionMode(CharacterCore.PlayerActionMode.SkillA);
+            });
+        }
+        else
+        {
+            Debug.LogWarning("[SLGCoreUI] SkillA button is null!");
         }
         
         if (skillBButton != null)
         {
-            skillBButton.onClick.AddListener(() => SetActionMode(CharacterCore.PlayerActionMode.SkillB));
+            Debug.Log("[SLGCoreUI] SkillB button found and listener added");
+            skillBButton.onClick.AddListener(() => {
+                Debug.Log("[SLGCoreUI] SkillB button clicked!");
+                SetActionMode(CharacterCore.PlayerActionMode.SkillB);
+            });
+        }
+        else
+        {
+            Debug.LogWarning("[SLGCoreUI] SkillB button is null!");
         }
         
         if (skillCButton != null)
         {
-            skillCButton.onClick.AddListener(() => SetActionMode(CharacterCore.PlayerActionMode.SkillC));
+            Debug.Log("[SLGCoreUI] SkillC button found and listener added");
+            skillCButton.onClick.AddListener(() => {
+                Debug.Log("[SLGCoreUI] SkillC button clicked!");
+                SetActionMode(CharacterCore.PlayerActionMode.SkillC);
+            });
+        }
+        else
+        {
+            Debug.LogWarning("[SLGCoreUI] SkillC button is null!");
         }
         
         if (skillDButton != null)
         {
-            skillDButton.onClick.AddListener(() => SetActionMode(CharacterCore.PlayerActionMode.SkillD));
+            Debug.Log("[SLGCoreUI] SkillD button found and listener added");
+            skillDButton.onClick.AddListener(() => {
+                Debug.Log("[SLGCoreUI] SkillD button clicked!");
+                SetActionMode(CharacterCore.PlayerActionMode.SkillD);
+            });
+        }
+        else
+        {
+            Debug.LogWarning("[SLGCoreUI] SkillD button is null!");
         }
         
         // 初始隱藏按鈕面板
         if (actionButtonsPanel != null)
         {
+            Debug.Log("[SLGCoreUI] Action buttons panel found and set to inactive");
             actionButtonsPanel.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("[SLGCoreUI] Action buttons panel is null!");
         }
     }
     
@@ -337,17 +384,42 @@ public class SLGCoreUI : MonoBehaviour
     /// <param name="mode">動作模式</param>
     private void SetActionMode(CharacterCore.PlayerActionMode mode)
     {
+        Debug.Log($"[SLGCoreUI] SetActionMode called with mode: {mode}");
+        
         // 檢查是否有戰鬥核心和當前玩家
-        if (CombatCore.Instance == null || !CombatCore.Instance.IsPlayerTurn())
+        if (CombatCore.Instance == null)
+        {
+            Debug.LogWarning("[SLGCoreUI] CombatCore.Instance is null");
             return;
+        }
+        
+        if (!CombatCore.Instance.IsPlayerTurn())
+        {
+            Debug.LogWarning("[SLGCoreUI] Not player turn");
+            return;
+        }
             
         CombatEntity currentEntity = CombatCore.Instance.GetCurrentTurnEntity();
         if (currentEntity == null)
+        {
+            Debug.LogWarning("[SLGCoreUI] Current entity is null");
             return;
+        }
             
         CharacterCore currentCharacter = currentEntity.GetComponent<CharacterCore>();
-        if (currentCharacter == null || currentCharacter.nowState != CharacterCore.CharacterCoreState.ControlState)
+        if (currentCharacter == null)
+        {
+            Debug.LogWarning("[SLGCoreUI] Current character is null");
             return;
+        }
+        
+        if (currentCharacter.nowState != CharacterCore.CharacterCoreState.ControlState)
+        {
+            Debug.LogWarning($"[SLGCoreUI] Character not in control state, current state: {currentCharacter.nowState}");
+            return;
+        }
+        
+        Debug.Log($"[SLGCoreUI] All checks passed, setting action mode from {currentCharacter.currentActionMode} to {mode}");
         
         // 設定動作模式
         currentCharacter.currentActionMode = mode;
@@ -355,7 +427,7 @@ public class SLGCoreUI : MonoBehaviour
         // 清除任何現有的路徑預覽
         currentCharacter.ClearPathDisplay();
         
-        Debug.Log($"設定動作模式為: {mode}");
+        Debug.Log($"[SLGCoreUI] Successfully set action mode to: {mode}");
     }
     
     /// <summary>
@@ -368,7 +440,12 @@ public class SLGCoreUI : MonoBehaviour
         
         if (actionButtonsPanel != null)
         {
+            bool wasActive = actionButtonsPanel.activeSelf;
             actionButtonsPanel.SetActive(isPlayerTurn);
+            if (wasActive != isPlayerTurn)
+            {
+                Debug.Log($"[SLGCoreUI] Action buttons panel visibility changed to: {isPlayerTurn}");
+            }
         }
         
         if (!isPlayerTurn)
