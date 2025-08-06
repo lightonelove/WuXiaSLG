@@ -33,6 +33,8 @@ public class CharacterCore : MonoBehaviour
     
     [Header("路徑顯示")]
     public LineRenderer pathLineRenderer;
+    public Color validPathColor = Color.green;     // 體力足夠時的路徑顏色
+    public Color invalidPathColor = Color.red;     // 體力不足時的路徑顏色
     
     public Animator CharacterControlAnimator;
     public Animator CharacterExecuteAnimator;
@@ -171,22 +173,40 @@ public class CharacterCore : MonoBehaviour
         NavMeshHit hit;
         if (NavMesh.SamplePosition(destination, out hit, 2f, NavMesh.AllAreas))
         {
-            targetPosition = hit.position;
-            hasValidTarget = true;
-            
-            // 設定NavMeshAgent目標
-            navMeshAgent.isStopped = false;
-            navMeshAgent.SetDestination(targetPosition);
-            
-            // 繪製導航路徑
-            StartCoroutine(DrawNavMeshPath());
-            
-            isMoving = true;
-            
-            // 記錄移動動作
-            RecordMovementAction();
-            
-            Debug.Log($"開始移動到: {targetPosition}");
+            // 先計算路徑來檢查體力是否足夠
+            NavMeshPath path = new NavMeshPath();
+            if (navMeshAgent.CalculatePath(hit.position, path))
+            {
+                // 檢查體力是否足夠完成這段路徑
+                if (!HasEnoughStaminaForPath(path))
+                {
+                    float pathLength = CalculatePathLength(path);
+                    float requiredStamina = CalculateStaminaCost(pathLength);
+                    Debug.Log($"體力不足！路徑需要 {requiredStamina:F2} 點體力，但你只有 {Stamina:F2} 點體力。");
+                    return;
+                }
+                
+                targetPosition = hit.position;
+                hasValidTarget = true;
+                
+                // 設定NavMeshAgent目標
+                navMeshAgent.isStopped = false;
+                navMeshAgent.SetDestination(targetPosition);
+                
+                // 繪製導航路徑
+                StartCoroutine(DrawNavMeshPath());
+                
+                isMoving = true;
+                
+                // 記錄移動動作
+                RecordMovementAction();
+                
+                Debug.Log($"開始移動到: {targetPosition}");
+            }
+            else
+            {
+                Debug.Log("無法計算到目標位置的路徑！");
+            }
         }
         else
         {
@@ -520,8 +540,32 @@ public class CharacterCore : MonoBehaviour
             NavMeshPath path = new NavMeshPath();
             if (navMeshAgent.CalculatePath(hit.position, path))
             {
+                // 檢查體力是否足夠
+                bool hasEnoughStamina = HasEnoughStaminaForPath(path);
+                
+                // 根據體力是否足夠設定路徑顏色
+                Color pathColor = hasEnoughStamina ? validPathColor : invalidPathColor;
+                
+                // 設定LineRenderer顏色
+                if (pathLineRenderer.material != null)
+                {
+                    // 使用材質的主要顏色屬性
+                    pathLineRenderer.material.color = pathColor;
+                }
+                else
+                {
+                    // 如果沒有材質，使用startColor和endColor
+                    pathLineRenderer.startColor = pathColor;
+                    pathLineRenderer.endColor = pathColor;
+                }
+                
                 // 繪製路徑
                 DrawPath(path);
+                
+                // 顯示路徑長度和體力消耗的Debug訊息
+                float pathLength = CalculatePathLength(path);
+                float staminaCost = CalculateStaminaCost(pathLength);
+                Debug.Log($"路徑長度: {pathLength:F2}, 體力消耗: {staminaCost:F2}, 當前體力: {Stamina:F2}, 體力{(hasEnoughStamina ? "足夠" : "不足")}");
             }
             else
             {
@@ -552,7 +596,8 @@ public class CharacterCore : MonoBehaviour
     /// 繪製指定的NavMesh路徑
     /// </summary>
     /// <param name="path">要繪製的路徑</param>
-    private void DrawPath(NavMeshPath path)
+    /// <param name="useStaminaColor">是否根據體力設定顏色（預設為false）</param>
+    private void DrawPath(NavMeshPath path, bool useStaminaColor = false)
     {
         if (pathLineRenderer == null) return;
         
@@ -560,6 +605,24 @@ public class CharacterCore : MonoBehaviour
         
         if (corners.Length > 0)
         {
+            // 如果需要根據體力設定顏色
+            if (useStaminaColor)
+            {
+                bool hasEnoughStamina = HasEnoughStaminaForPath(path);
+                Color pathColor = hasEnoughStamina ? validPathColor : invalidPathColor;
+                
+                // 設定LineRenderer顏色
+                if (pathLineRenderer.material != null)
+                {
+                    pathLineRenderer.material.color = pathColor;
+                }
+                else
+                {
+                    pathLineRenderer.startColor = pathColor;
+                    pathLineRenderer.endColor = pathColor;
+                }
+            }
+            
             // 設定LineRenderer的點數
             pathLineRenderer.positionCount = corners.Length;
             
@@ -599,13 +662,60 @@ public class CharacterCore : MonoBehaviour
         // 確認有有效路徑
         if (navMeshAgent.hasPath)
         {
-            // 使用新的DrawPath方法
-            DrawPath(navMeshAgent.path);
+            // 使用新的DrawPath方法，並設定為使用體力顏色（實際移動時路徑應該是綠色，因為已經通過體力檢查）
+            DrawPath(navMeshAgent.path, true);
         }
         else
         {
             ClearPathDisplay();
         }
+    }
+    
+    /// <summary>
+    /// 計算NavMeshPath的總長度
+    /// </summary>
+    /// <param name="path">要計算的路徑</param>
+    /// <returns>路徑總長度</returns>
+    private float CalculatePathLength(NavMeshPath path)
+    {
+        float totalDistance = 0f;
+        Vector3[] corners = path.corners;
+        
+        if (corners.Length < 2) return 0f;
+        
+        // 從當前位置到第一個點的距離
+        totalDistance += Vector3.Distance(transform.position, corners[0]);
+        
+        // 計算路徑中每兩個點之間的距離
+        for (int i = 0; i < corners.Length - 1; i++)
+        {
+            totalDistance += Vector3.Distance(corners[i], corners[i + 1]);
+        }
+        
+        return totalDistance;
+    }
+    
+    /// <summary>
+    /// 計算移動到指定距離所需的體力消耗
+    /// </summary>
+    /// <param name="distance">移動距離</param>
+    /// <returns>所需體力</returns>
+    private float CalculateStaminaCost(float distance)
+    {
+        // 根據UpdateMovement中的邏輯，每單位距離消耗5點體力
+        return distance * 5.0f;
+    }
+    
+    /// <summary>
+    /// 檢查是否有足夠體力到達目標位置
+    /// </summary>
+    /// <param name="path">要檢查的路徑</param>
+    /// <returns>是否有足夠體力</returns>
+    private bool HasEnoughStaminaForPath(NavMeshPath path)
+    {
+        float pathLength = CalculatePathLength(path);
+        float requiredStamina = CalculateStaminaCost(pathLength);
+        return Stamina >= requiredStamina;
     }
 
     
