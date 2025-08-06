@@ -36,7 +36,8 @@ public class CharacterCore : MonoBehaviour
     private bool hasValidTarget = false;
     
     [Header("路徑顯示")]
-    public LineRenderer pathLineRenderer;
+    public LineRenderer pathLineRenderer;          // 主要路徑LineRenderer（綠色部分）
+    public LineRenderer invalidPathLineRenderer;   // 無效路徑LineRenderer（紅色部分）
     public Color validPathColor = Color.green;     // 體力足夠時的路徑顏色
     public Color invalidPathColor = Color.red;     // 體力不足時的路徑顏色
     
@@ -245,12 +246,8 @@ public class CharacterCore : MonoBehaviour
         // 停止動畫
         CharacterControlAnimator.SetBool("isMoving", false);
         
-        // 清除路徑顯示
-        if (pathLineRenderer != null)
-        {
-            pathLineRenderer.positionCount = 0;
-            pathLineRenderer.enabled = false;
-        }
+        // 清除路徑顯示（包括兩個LineRenderer）
+        ClearPathDisplay();
         
         Debug.Log("停止移動");
     }
@@ -560,24 +557,8 @@ public class CharacterCore : MonoBehaviour
                 // 檢查體力是否足夠
                 bool hasEnoughStamina = HasEnoughStaminaForPath(path);
                 
-                // 根據體力是否足夠設定路徑顏色
-                Color pathColor = hasEnoughStamina ? validPathColor : invalidPathColor;
-                
-                // 設定LineRenderer顏色
-                if (pathLineRenderer.material != null)
-                {
-                    // 使用材質的主要顏色屬性
-                    pathLineRenderer.material.color = pathColor;
-                }
-                else
-                {
-                    // 如果沒有材質，使用startColor和endColor
-                    pathLineRenderer.startColor = pathColor;
-                    pathLineRenderer.endColor = pathColor;
-                }
-                
-                // 繪製路徑
-                DrawPath(path);
+                // 繪製分段路徑（綠色+紅色）
+                DrawPath(path, true);
                 
                 // 顯示路徑長度和體力消耗的Debug訊息
                 float pathLength = CalculatePathLength(path);
@@ -614,10 +595,18 @@ public class CharacterCore : MonoBehaviour
     /// </summary>
     public void ClearPathDisplay()
     {
+        // 清除主要路徑LineRenderer（綠色部分）
         if (pathLineRenderer != null)
         {
             pathLineRenderer.positionCount = 0;
             pathLineRenderer.enabled = false;
+        }
+        
+        // 清除無效路徑LineRenderer（紅色部分）
+        if (invalidPathLineRenderer != null)
+        {
+            invalidPathLineRenderer.positionCount = 0;
+            invalidPathLineRenderer.enabled = false;
         }
         
         // 重置預覽狀態
@@ -635,7 +624,7 @@ public class CharacterCore : MonoBehaviour
     }
     
     /// <summary>
-    /// 繪製指定的NavMesh路徑
+    /// 繪製指定的NavMesh路徑（分段顯示綠色和紅色）
     /// </summary>
     /// <param name="path">要繪製的路徑</param>
     /// <param name="useStaminaColor">是否根據體力設定顏色（預設為false）</param>
@@ -647,42 +636,82 @@ public class CharacterCore : MonoBehaviour
         
         if (corners.Length > 0)
         {
-            // 如果需要根據體力設定顏色
             if (useStaminaColor)
             {
-                bool hasEnoughStamina = HasEnoughStaminaForPath(path);
-                Color pathColor = hasEnoughStamina ? validPathColor : invalidPathColor;
+                // 計算路徑分段
+                List<Vector3> validPath, invalidPath;
+                CalculatePathSegments(path, out validPath, out invalidPath);
                 
-                // 設定LineRenderer顏色
-                if (pathLineRenderer.material != null)
+                // 繪製綠色路徑段（體力足夠的部分）
+                DrawPathSegment(pathLineRenderer, validPath, validPathColor);
+                
+                // 繪製紅色路徑段（體力不足的部分）
+                if (invalidPathLineRenderer != null)
                 {
-                    pathLineRenderer.material.color = pathColor;
-                }
-                else
-                {
-                    pathLineRenderer.startColor = pathColor;
-                    pathLineRenderer.endColor = pathColor;
+                    DrawPathSegment(invalidPathLineRenderer, invalidPath, invalidPathColor);
                 }
             }
-            
-            // 設定LineRenderer的點數
-            pathLineRenderer.positionCount = corners.Length;
-            
-            // 設定所有路徑點，稍微提高Y座標避免與地面重疊
-            for (int i = 0; i < corners.Length; i++)
+            else
             {
-                Vector3 cornerPosition = corners[i];
-                cornerPosition.y += 0.1f; // 稍微提高避免與地面重疊
-                pathLineRenderer.SetPosition(i, cornerPosition);
+                // 不使用體力顏色時，使用原有邏輯
+                DrawPathSegment(pathLineRenderer, new List<Vector3>(corners), validPathColor);
+                
+                // 清除紅色路徑
+                if (invalidPathLineRenderer != null)
+                {
+                    invalidPathLineRenderer.enabled = false;
+                    invalidPathLineRenderer.positionCount = 0;
+                }
             }
-            
-            // 確保LineRenderer已啟用
-            pathLineRenderer.enabled = true;
         }
         else
         {
             ClearPathDisplay();
         }
+    }
+    
+    /// <summary>
+    /// 繪製單一路徑段
+    /// </summary>
+    /// <param name="lineRenderer">要使用的LineRenderer</param>
+    /// <param name="pathPoints">路徑點列表</param>
+    /// <param name="color">路徑顏色</param>
+    private void DrawPathSegment(LineRenderer lineRenderer, List<Vector3> pathPoints, Color color)
+    {
+        if (lineRenderer == null || pathPoints.Count == 0)
+        {
+            if (lineRenderer != null)
+            {
+                lineRenderer.enabled = false;
+                lineRenderer.positionCount = 0;
+            }
+            return;
+        }
+        
+        // 設定LineRenderer的點數
+        lineRenderer.positionCount = pathPoints.Count;
+        
+        // 設定顏色
+        if (lineRenderer.material != null)
+        {
+            lineRenderer.material.color = color;
+        }
+        else
+        {
+            lineRenderer.startColor = color;
+            lineRenderer.endColor = color;
+        }
+        
+        // 設定所有路徑點，稍微提高Y座標避免與地面重疊
+        for (int i = 0; i < pathPoints.Count; i++)
+        {
+            Vector3 position = pathPoints[i];
+            position.y += 0.1f; // 稍微提高避免與地面重疊
+            lineRenderer.SetPosition(i, position);
+        }
+        
+        // 確保LineRenderer已啟用
+        lineRenderer.enabled = true;
     }
     
     /// <summary>
@@ -758,6 +787,79 @@ public class CharacterCore : MonoBehaviour
         float pathLength = CalculatePathLength(path);
         float requiredStamina = CalculateStaminaCost(pathLength);
         return Stamina >= requiredStamina;
+    }
+    
+    /// <summary>
+    /// 計算路徑分段點，返回綠色和紅色兩段路徑
+    /// </summary>
+    /// <param name="path">完整路徑</param>
+    /// <param name="validPath">體力足夠的綠色路徑段</param>
+    /// <param name="invalidPath">體力不足的紅色路徑段</param>
+    private void CalculatePathSegments(NavMeshPath path, out List<Vector3> validPath, out List<Vector3> invalidPath)
+    {
+        validPath = new List<Vector3>();
+        invalidPath = new List<Vector3>();
+        
+        Vector3[] corners = path.corners;
+        if (corners.Length == 0) return;
+        
+        float maxWalkableDistance = Stamina / 5.0f; // 當前體力能走的最大距離
+        float accumulatedDistance = 0f;
+        Vector3 currentPos = transform.position;
+        
+        // 如果體力為0，整條路徑都是紅色
+        if (maxWalkableDistance <= 0)
+        {
+            invalidPath.AddRange(corners);
+            return;
+        }
+        
+        bool foundSplitPoint = false;
+        
+        for (int i = 0; i < corners.Length; i++)
+        {
+            Vector3 corner = corners[i];
+            float segmentDistance = Vector3.Distance(currentPos, corner);
+            
+            if (!foundSplitPoint && accumulatedDistance + segmentDistance <= maxWalkableDistance)
+            {
+                // 這個點還在體力範圍內，加入綠色路徑
+                validPath.Add(corner);
+                accumulatedDistance += segmentDistance;
+            }
+            else if (!foundSplitPoint)
+            {
+                // 找到了切分點，需要在這個線段中間分割
+                foundSplitPoint = true;
+                float remainingDistance = maxWalkableDistance - accumulatedDistance;
+                
+                if (remainingDistance > 0)
+                {
+                    // 計算切分點的位置
+                    Vector3 direction = (corner - currentPos).normalized;
+                    Vector3 splitPoint = currentPos + direction * remainingDistance;
+                    
+                    // 添加切分點到綠色路徑
+                    validPath.Add(splitPoint);
+                    
+                    // 從切分點開始紅色路徑
+                    invalidPath.Add(splitPoint);
+                }
+                
+                // 添加當前點到紅色路徑
+                invalidPath.Add(corner);
+            }
+            else
+            {
+                // 已經找到切分點，後續所有點都是紅色
+                invalidPath.Add(corner);
+            }
+            
+            currentPos = corner;
+        }
+        
+        // 如果整條路徑都在體力範圍內，invalidPath會是空的
+        // 如果體力完全不夠，validPath可能只有起始點附近的部分
     }
 
     
