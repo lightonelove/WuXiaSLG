@@ -48,6 +48,9 @@ public class SLGCoreUI : MonoBehaviour
             cursorRectTransform = cursorImage.GetComponent<RectTransform>();
             parentCanvas = GetComponentInParent<Canvas>();
             
+            // 讓CustomCursor不擋住UI按鈕點擊
+            cursorImage.raycastTarget = false;
+            
             // 隐藏系统游标
             if (enableCustomCursor)
             {
@@ -222,6 +225,10 @@ public class SLGCoreUI : MonoBehaviour
     /// </summary>
     private void HandleMouseClickMovement()
     {
+        // 檢查滑鼠是否在UI元素上，如果是則不處理地板點擊
+        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            return;
+            
         // 檢查是否有戰鬥核心
         if (CombatCore.Instance == null)
             return;
