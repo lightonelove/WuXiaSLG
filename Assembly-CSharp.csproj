@@ -68,6 +68,7 @@
     <Compile Include="Assets\Tool\AnimationPathRebinder.cs" />
     <Compile Include="Assets\GameCore\Character\Health.cs" />
     <Compile Include="Assets\GameCore\Enemy\PreviewDealer.cs" />
+    <Compile Include="Assets\ButtonTest.cs" />
     <Compile Include="Assets\GameCore\UI\SLGCoreUI.cs" />
     <Compile Include="Assets\GameCore\UI\APBar.cs" />
     <Compile Include="Assets\GameCore\UI\FloatingUIDamageNumber.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Assets\GameCore\Enemy\DamageReceiver.cs" />
     <Compile Include="Assets\GameCore\Control\ClonedCombatEntity.cs" />
     <Compile Include="Assets\GameCore\Control\AnimationRelativePos.cs" />
+    <Compile Include="Assets\GameCore\UI\FloorMouseIndicator.cs" />
     <Compile Include="Assets\GameCore\Control\CombatEntity.cs" />
     <Compile Include="Assets\GameCore\UI\TurnOrderIcon.cs" />
     <None Include="Library\PackageCache\com.unity.entities\Editor Default Resources\uxml\ProfilerModules\memory-profiler-window.uxml" />

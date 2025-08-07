@@ -12070,6 +12070,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterB
       objectReference: {fileID: 0}
+    - target: {fileID: 7449280019692975245, guid: cf2a4183917391442884c41998698ea9, type: 3}
+      propertyPath: skillB
+      value: 
+      objectReference: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

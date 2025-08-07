@@ -122,8 +122,6 @@ public class CharacterCore : MonoBehaviour
                 controllerAnimationRelativePos.animator = CharacterControlAnimator;
             }
             
-            // 設定合理的碰撞器參數（假設角色高度約2米，半徑約0.5米）
-            controllerAnimationRelativePos.SetColliderParams(0.5f, 2f);
             
             Debug.Log("[CharacterCore] 已初始化AnimationRelativePos，使用Transform根運動模式");
         }
@@ -376,11 +374,6 @@ public class CharacterCore : MonoBehaviour
             AnimatorStateInfo stateInfo = CharacterControlAnimator.GetCurrentAnimatorStateInfo(0);
             if (stateInfo.normalizedTime >= 1.0f)
             {
-                // 技能動畫完成，禁用控制階段的碰撞防護
-                if (controllerAnimationRelativePos != null)
-                {
-                    controllerAnimationRelativePos.SetCollisionProtection(false);
-                }
                 
                 nowState = CharacterCoreState.ControlState;
             }
@@ -454,11 +447,6 @@ public class CharacterCore : MonoBehaviour
             CombatAction tempActionSkill = new CombatAction();
             tempActionSkill.type = actionType;
             
-            // 啟用控制階段的根運動碰撞防護
-            if (controllerAnimationRelativePos != null)
-            {
-                controllerAnimationRelativePos.SetCollisionProtection(true);
-            }
             
             CharacterControlAnimator.Play(skill.AnimationName);
             AP -= skill.SPCost;
@@ -500,11 +488,6 @@ public class CharacterCore : MonoBehaviour
             tempActionSkill.type = actionType;
             tempActionSkill.targetPosition = targetLocation; // 儲存目標位置
             
-            // 啟用控制階段的根運動碰撞防護
-            if (controllerAnimationRelativePos != null)
-            {
-                controllerAnimationRelativePos.SetCollisionProtection(true);
-            }
             
             // 播放技能動畫
             CharacterControlAnimator.Play(skill.AnimationName);

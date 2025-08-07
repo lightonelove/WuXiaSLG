@@ -5,143 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.claude/settings.local.json" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/settings.local.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assembly-CSharp-Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp-Editor.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterAnimatorBase.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterAnimatorBase.controller" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/AnimationRelativePos.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/AnimationRelativePos.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterCore.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CombatCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CombatCore.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/DamageReceiver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/DamageReceiver.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyAnimator.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyAnimator.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Skill/穿腸劍.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Skill/穿腸劍.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PPv2URPConverters.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/PPv2URPConverters.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sirenix.OdinInspector.Modules.Unity.Addressables.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Sirenix.OdinInspector.Modules.Unity.Addressables.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sirenix.OdinInspector.Modules.Unity.Addressables.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Sirenix.OdinInspector.Modules.Unity.Addressables.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sirenix.OdinInspector.Modules.UnityMathematics.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Sirenix.OdinInspector.Modules.UnityMathematics.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.2D.Sprite.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.2D.Sprite.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.AI.Navigation.Editor.ConversionSystem.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.AI.Navigation.Editor.ConversionSystem.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.AI.Navigation.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.AI.Navigation.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.AI.Navigation.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.AI.Navigation.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.AI.Navigation.Updater.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.AI.Navigation.Updater.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.AI.Navigation.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.AI.Navigation.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Addressables.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Addressables.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Addressables.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Addressables.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Addressables.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Addressables.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Burst.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Burst.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.CharacterController.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.CharacterController.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.CharacterController.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.CharacterController.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.CollabProxy.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.CollabProxy.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Collections.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Collections.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Collections.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Collections.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Collections.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Collections.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Deformations.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Deformations.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Deformations.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Deformations.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Entities.Build.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Entities.Build.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Entities.Editor.Properties.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Entities.Editor.Properties.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Entities.Hybrid.HybridComponents.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Entities.Hybrid.HybridComponents.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Entities.Hybrid.HybridComponents.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Entities.Hybrid.HybridComponents.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Entities.Hybrid.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Entities.Hybrid.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Entities.Hybrid.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Entities.Hybrid.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Entities.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Entities.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Entities.UI.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Entities.UI.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Entities.UI.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Entities.UI.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Entities.UI.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Entities.UI.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Entities.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Entities.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.InputSystem.ForUI.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.InputSystem.ForUI.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.InputSystem.ForUI.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.InputSystem.ForUI.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.InputSystem.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.InputSystem.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.InputSystem.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.InputSystem.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.InternalAPIEditorBridge.002.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.InternalAPIEditorBridge.002.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.InternalAPIEngineBridge.002.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.InternalAPIEngineBridge.002.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.InternalAPIEngineBridge.002.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.InternalAPIEngineBridge.002.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Mathematics.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Mathematics.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Mathematics.Extensions.Hybrid.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Mathematics.Extensions.Hybrid.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Mathematics.Extensions.Hybrid.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Mathematics.Extensions.Hybrid.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Mathematics.Extensions.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Mathematics.Extensions.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Mathematics.Extensions.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Mathematics.Extensions.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Mathematics.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Mathematics.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Mathematics.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Mathematics.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Multiplayer.Center.Common.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Multiplayer.Center.Common.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Multiplayer.Center.Common.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Multiplayer.Center.Common.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Multiplayer.Center.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Multiplayer.Center.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Physics.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Physics.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Physics.Hybrid.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Physics.Hybrid.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Physics.Hybrid.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Physics.Hybrid.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Physics.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Physics.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Physics.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Physics.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.PlasticSCM.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.PlasticSCM.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Profiling.Core.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Profiling.Core.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Profiling.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Profiling.Core.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipeline.Universal.ShaderLibrary.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipeline.Universal.ShaderLibrary.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipeline.Universal.ShaderLibrary.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipeline.Universal.ShaderLibrary.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Core.Editor.Shared.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Core.Editor.Shared.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Core.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Core.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Core.Runtime.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Core.Runtime.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Core.Runtime.Shared.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Core.Runtime.Shared.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Core.Runtime.Shared.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Core.Runtime.Shared.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Core.Runtime.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Core.Runtime.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Core.ShaderLibrary.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Core.ShaderLibrary.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Core.ShaderLibrary.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Core.ShaderLibrary.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.GPUDriven.Runtime.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.GPUDriven.Runtime.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.GPUDriven.Runtime.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.GPUDriven.Runtime.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.2D.Runtime.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.2D.Runtime.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.2D.Runtime.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.2D.Runtime.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Config.Runtime.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Config.Runtime.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Config.Runtime.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Config.Runtime.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Runtime.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Runtime.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Runtime.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Runtime.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Shaders.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Shaders.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Shaders.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.RenderPipelines.Universal.Shaders.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Rendering.LightTransport.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Rendering.LightTransport.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Rendering.LightTransport.Runtime.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Rendering.LightTransport.Runtime.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Rendering.LightTransport.Runtime.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Rendering.LightTransport.Runtime.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.ResourceManager.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.ResourceManager.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.ResourceManager.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.ResourceManager.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Scenes.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Scenes.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Scenes.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Scenes.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Scenes.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Scenes.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.ScriptableBuildPipeline.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.ScriptableBuildPipeline.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.ScriptableBuildPipeline.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.ScriptableBuildPipeline.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.ScriptableBuildPipeline.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.ScriptableBuildPipeline.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Searcher.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Searcher.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Serialization.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Serialization.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Serialization.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Serialization.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Serialization.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Serialization.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.ShaderGraph.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.ShaderGraph.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.ShaderGraph.Utilities.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.ShaderGraph.Utilities.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.TextMeshPro.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.TextMeshPro.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.TextMeshPro.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.TextMeshPro.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.TextMeshPro.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.TextMeshPro.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Timeline.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Timeline.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Timeline.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Timeline.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Timeline.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Timeline.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Transforms.Hybrid.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Transforms.Hybrid.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Transforms.Hybrid.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Transforms.Hybrid.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Transforms.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Transforms.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.Transforms.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.Transforms.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.VisualScripting.Core.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.VisualScripting.Core.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.VisualScripting.Core.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.VisualScripting.Core.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.VisualScripting.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.VisualScripting.Core.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.VisualScripting.Flow.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.VisualScripting.Flow.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.VisualScripting.Flow.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.VisualScripting.Flow.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.VisualScripting.Flow.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.VisualScripting.Flow.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.VisualScripting.SettingsProvider.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.VisualScripting.SettingsProvider.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.VisualScripting.Shared.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.VisualScripting.Shared.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.VisualScripting.State.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.VisualScripting.State.Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.VisualScripting.State.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.VisualScripting.State.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.VisualScripting.State.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.VisualScripting.State.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnityEditor.UI.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/UnityEditor.UI.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnityEngine.UI.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/UnityEngine.UI.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnityEngine.UI.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/UnityEngine.UI.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WuXiaSLG_Prototype.sln" beforeDir="false" afterPath="$PROJECT_DIR$/WuXiaSLG_Prototype.sln" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,6 +24,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/ButtonTest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/AnimationRelativePos.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/ClonedCombatEntity.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/CombatAction.cs" root0="FORCE_HIGHLIGHTING" />
@@ -174,7 +47,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;new-operation-approach&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
@@ -258,6 +131,9 @@
       <workItem from="1754369881835" duration="1472000" />
       <workItem from="1754372939675" duration="5000" />
       <workItem from="1754374327761" duration="3188000" />
+      <workItem from="1754405395651" duration="2917000" />
+      <workItem from="1754457626649" duration="15068000" />
+      <workItem from="1754543086089" duration="9720000" />
     </task>
     <servers />
   </component>
