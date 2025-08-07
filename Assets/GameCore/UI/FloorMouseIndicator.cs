@@ -9,6 +9,11 @@ public class FloorMouseIndicator : MonoBehaviour
     public float indicatorOffset = 0.01f; // 指示器與地面的距離偏移
     public bool showIndicator = true; // 是否顯示指示器
     
+    [Header("顏色設定")]
+    public Color normalColor = new Color(0f, 1f, 0.2f, 0.8f); // 正常模式顏色（半透明綠色）
+    public Color targetingColor = new Color(1f, 0.2f, 0f, 0.8f); // 技能目標模式顏色（半透明紅色）
+    public Color noneColor = new Color(0.5f, 0.5f, 0.5f, 0.8f); // None模式顏色（半透明灰色）
+    
     [Header("相機設定")]
     public Camera targetCamera; // 用於Raycast的相機
     
@@ -81,7 +86,7 @@ public class FloorMouseIndicator : MonoBehaviour
         if (renderer != null)
         {
             Material indicatorMaterial = new Material(Shader.Find("Standard"));
-            indicatorMaterial.color = new Color(0f, 1f, 0.2f, 0.8f); // 半透明綠色
+            indicatorMaterial.color = normalColor; // 使用正常模式顏色
             
             // 設定透明渲染
             indicatorMaterial.SetFloat("_Mode", 3); // Transparent mode
@@ -202,6 +207,47 @@ public class FloorMouseIndicator : MonoBehaviour
     public void SetFloorLayerMask(LayerMask layerMask)
     {
         floorLayerMask = layerMask;
+    }
+    
+    /// <summary>
+    /// 設定指示器顏色模式
+    /// </summary>
+    /// <param name="mode">顏色模式：0=灰色(None), 1=綠色(正常), 2=紅色(技能目標)</param>
+    public void SetIndicatorColorMode(int mode)
+    {
+        if (currentIndicator != null)
+        {
+            Renderer renderer = currentIndicator.GetComponent<Renderer>();
+            if (renderer != null && renderer.material != null)
+            {
+                Color newColor;
+                switch (mode)
+                {
+                    case 0: // None模式 - 灰色
+                        newColor = noneColor;
+                        break;
+                    case 1: // Move模式 - 綠色
+                        newColor = normalColor;
+                        break;
+                    case 2: // 技能目標模式 - 紅色
+                        newColor = targetingColor;
+                        break;
+                    default:
+                        newColor = noneColor;
+                        break;
+                }
+                renderer.material.color = newColor;
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 設定指示器顏色模式（向後相容）
+    /// </summary>
+    /// <param name="useTargetingColor">是否使用技能目標模式顏色</param>
+    public void SetIndicatorTargetingMode(bool useTargetingColor)
+    {
+        SetIndicatorColorMode(useTargetingColor ? 2 : 1);
     }
     
     void OnDestroy()

@@ -293,6 +293,22 @@ public class SLGCoreUI : MonoBehaviour
                     }
                 }
             }
+            // 處理技能目標選擇
+            else if (currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillA ||
+                     currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillB ||
+                     currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillC ||
+                     currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillD)
+            {
+                if (IsMouseOverFloor())
+                {
+                    Vector3 targetPosition = GetMouseFloorPosition();
+                    if (targetPosition != Vector3.zero)
+                    {
+                        // 執行對應的技能
+                        ExecuteSkillAtTargetLocation(currentCharacter, targetPosition);
+                    }
+                }
+            }
         }
         
         // 檢查滑鼠右鍵點擊
@@ -510,6 +526,9 @@ public class SLGCoreUI : MonoBehaviour
         // 清除任何現有的路徑預覽
         currentCharacter.ClearPathDisplay();
         
+        // 根據模式更新FloorIndicator顏色
+        UpdateFloorIndicatorForMode(mode);
+        
     }
     
     /// <summary>
@@ -543,10 +562,22 @@ public class SLGCoreUI : MonoBehaviour
         
         // 更新按鈕顏色根據當前模式
         UpdateButtonColor(moveButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.Move);
-        UpdateButtonColor(skillAButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillA, currentCharacter.CanUseSkillA());
-        UpdateButtonColor(skillBButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillB, currentCharacter.CanUseSkillB());
-        UpdateButtonColor(skillCButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillC, currentCharacter.CanUseSkillC());
-        UpdateButtonColor(skillDButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillD, currentCharacter.CanUseSkillD());
+        UpdateButtonColor(skillAButton, 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillA || 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillA, 
+            currentCharacter.CanUseSkillA());
+        UpdateButtonColor(skillBButton, 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillB || 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillB, 
+            currentCharacter.CanUseSkillB());
+        UpdateButtonColor(skillCButton, 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillC || 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillC, 
+            currentCharacter.CanUseSkillC());
+        UpdateButtonColor(skillDButton, 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillD || 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillD, 
+            currentCharacter.CanUseSkillD());
     }
     
     /// <summary>
@@ -588,7 +619,7 @@ public class SLGCoreUI : MonoBehaviour
     }
     
     /// <summary>
-    /// 執行技能動作
+    /// 進入技能選擇目標模式
     /// </summary>
     /// <param name="character">執行技能的角色</param>
     /// <param name="skillMode">技能模式</param>
@@ -600,52 +631,130 @@ public class SLGCoreUI : MonoBehaviour
         // 檢查對應技能是否可用
         bool canUse = false;
         CombatSkill skill = null;
-        CombatAction.ActionType actionType = CombatAction.ActionType.Move;
+        CharacterCore.PlayerActionMode targetingMode = CharacterCore.PlayerActionMode.None;
         
         switch (skillMode)
         {
             case CharacterCore.PlayerActionMode.SkillA:
                 canUse = character.CanUseSkillA();
                 skill = character.skillA;
-                actionType = CombatAction.ActionType.SkillA;
+                targetingMode = CharacterCore.PlayerActionMode.TargetingSkillA;
                 break;
             case CharacterCore.PlayerActionMode.SkillB:
                 canUse = character.CanUseSkillB();
                 skill = character.skillB;
-                actionType = CombatAction.ActionType.SkillB;
+                targetingMode = CharacterCore.PlayerActionMode.TargetingSkillB;
                 break;
             case CharacterCore.PlayerActionMode.SkillC:
                 canUse = character.CanUseSkillC();
                 skill = character.skillC;
-                actionType = CombatAction.ActionType.SkillC;
+                targetingMode = CharacterCore.PlayerActionMode.TargetingSkillC;
                 break;
             case CharacterCore.PlayerActionMode.SkillD:
                 canUse = character.CanUseSkillD();
                 skill = character.skillD;
-                actionType = CombatAction.ActionType.SkillD;
+                targetingMode = CharacterCore.PlayerActionMode.TargetingSkillD;
                 break;
         }
         
-        // 如果技能可用，執行技能
+        // 如果技能可用，進入目標選擇模式
         if (canUse && skill != null)
         {
-            Debug.Log($"執行技能: {skill.SkillName}, 動畫: {skill.AnimationName}");
+            Debug.Log($"進入技能 {skill.SkillName} 的目標選擇模式");
             
-            // 直接播放控制階段的動畫
-            if (character.CharacterControlAnimator != null)
-            {
-                character.CharacterControlAnimator.Play(skill.AnimationName);
-            }
+            // 設定為對應的技能目標選擇模式
+            character.currentActionMode = targetingMode;
             
-            // 使用CharacterCore的UseSkill方法來記錄技能動作
-            character.UseSkill(skill, actionType);
+            // 更新FloorIndicator顏色
+            UpdateFloorIndicatorForMode(targetingMode);
             
-            // 技能執行後，將模式設回None
-            character.currentActionMode = CharacterCore.PlayerActionMode.None;
+            // 可以在這裡添加視覺效果，例如改變游標樣式
+            // SetCursorSprite(skillTargetingCursor);
         }
         else
         {
             Debug.Log($"無法執行技能: AP不足或技能未設定");
         }
+    }
+    
+    /// <summary>
+    /// 在目標位置執行技能
+    /// </summary>
+    /// <param name="character">執行技能的角色</param>
+    /// <param name="targetLocation">目標位置</param>
+    private void ExecuteSkillAtTargetLocation(CharacterCore character, Vector3 targetLocation)
+    {
+        if (character == null)
+            return;
+            
+        CombatSkill skill = null;
+        CombatAction.ActionType actionType = CombatAction.ActionType.Move;
+        
+        // 根據當前的目標選擇模式確定要執行的技能
+        switch (character.currentActionMode)
+        {
+            case CharacterCore.PlayerActionMode.TargetingSkillA:
+                skill = character.skillA;
+                actionType = CombatAction.ActionType.SkillA;
+                break;
+            case CharacterCore.PlayerActionMode.TargetingSkillB:
+                skill = character.skillB;
+                actionType = CombatAction.ActionType.SkillB;
+                break;
+            case CharacterCore.PlayerActionMode.TargetingSkillC:
+                skill = character.skillC;
+                actionType = CombatAction.ActionType.SkillC;
+                break;
+            case CharacterCore.PlayerActionMode.TargetingSkillD:
+                skill = character.skillD;
+                actionType = CombatAction.ActionType.SkillD;
+                break;
+        }
+        
+        if (skill != null)
+        {
+            Debug.Log($"在位置 {targetLocation} 執行技能: {skill.SkillName}");
+            
+            // 呼叫CharacterCore的ExecuteSkillAtLocation方法
+            character.ExecuteSkillAtLocation(targetLocation, skill, actionType);
+            
+            // 技能執行後更新FloorIndicator顏色 (因為CharacterCore已經重置為None狀態)
+            UpdateFloorIndicatorForMode(CharacterCore.PlayerActionMode.None);
+        }
+    }
+    
+    /// <summary>
+    /// 根據動作模式更新FloorIndicator顏色
+    /// </summary>
+    /// <param name="mode">當前動作模式</param>
+    private void UpdateFloorIndicatorForMode(CharacterCore.PlayerActionMode mode)
+    {
+        if (floorMouseIndicator == null) return;
+        
+        int colorMode;
+        
+        // 根據不同模式設定不同顏色
+        if (mode == CharacterCore.PlayerActionMode.None)
+        {
+            colorMode = 0; // 灰色
+        }
+        else if (mode == CharacterCore.PlayerActionMode.Move)
+        {
+            colorMode = 1; // 綠色
+        }
+        else if (mode == CharacterCore.PlayerActionMode.TargetingSkillA ||
+                 mode == CharacterCore.PlayerActionMode.TargetingSkillB ||
+                 mode == CharacterCore.PlayerActionMode.TargetingSkillC ||
+                 mode == CharacterCore.PlayerActionMode.TargetingSkillD)
+        {
+            colorMode = 2; // 紅色
+        }
+        else
+        {
+            colorMode = 0; // 其他情況默認灰色
+        }
+        
+        // 設定指示器顏色
+        floorMouseIndicator.SetIndicatorColorMode(colorMode);
     }
 }
