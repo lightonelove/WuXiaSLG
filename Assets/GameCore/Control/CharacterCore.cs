@@ -49,6 +49,7 @@ public class CharacterCore : MonoBehaviour
     
     [Header("動畫根運動控制")]
     public AnimationRelativePos controllerAnimationRelativePos;
+    public AnimationMoveScaler3D animationMoveScaler3D;
     
     [Header("技能配置")]
     public CombatSkill skillA;
@@ -81,6 +82,9 @@ public class CharacterCore : MonoBehaviour
         
         // 初始化AnimationRelativePos設定
         InitializeAnimationRelativePos();
+        
+        // 初始化AnimationMoveScaler3D設定
+        InitializeAnimationMoveScaler3D();
     }
     private void InitializeNavMeshAgent()
     {
@@ -128,6 +132,30 @@ public class CharacterCore : MonoBehaviour
         else
         {
             Debug.LogWarning("[CharacterCore] 沒有找到AnimationRelativePos組件，技能root motion位移將無法正常工作");
+        }
+    }
+    
+    private void InitializeAnimationMoveScaler3D()
+    {
+        // 檢查是否有AnimationMoveScaler3D組件
+        if (animationMoveScaler3D == null)
+        {
+            animationMoveScaler3D = GetComponent<AnimationMoveScaler3D>();
+        }
+        
+        if (animationMoveScaler3D != null)
+        {
+            // 確保AnimationMoveScaler3D有正確的Animator引用
+            if (animationMoveScaler3D.animator == null)
+            {
+                animationMoveScaler3D.animator = CharacterControlAnimator;
+            }
+            
+            Debug.Log("[CharacterCore] 已初始化AnimationMoveScaler3D，技能位移縮放系統已就緒");
+        }
+        else
+        {
+            Debug.LogWarning("[CharacterCore] 沒有找到AnimationMoveScaler3D組件，技能位移縮放將無法正常工作");
         }
     }
     
@@ -374,6 +402,12 @@ public class CharacterCore : MonoBehaviour
             AnimatorStateInfo stateInfo = CharacterControlAnimator.GetCurrentAnimatorStateInfo(0);
             if (stateInfo.normalizedTime >= 1.0f)
             {
+                // 技能動畫完成，清除AnimationMoveScaler3D狀態
+                if (animationMoveScaler3D != null)
+                {
+                    animationMoveScaler3D.ClearEvaluate();
+                    Debug.Log("[CharacterCore] 技能動畫完成，已清除AnimationMoveScaler3D狀態");
+                }
                 
                 nowState = CharacterCoreState.ControlState;
             }
@@ -473,6 +507,13 @@ public class CharacterCore : MonoBehaviour
             if (lookDirection != Vector3.zero)
             {
                 transform.rotation = Quaternion.LookRotation(lookDirection);
+            }
+            
+            // 設定AnimationMoveScaler3D的目標位置（用於技能動畫位移縮放）
+            if (animationMoveScaler3D != null)
+            {
+                animationMoveScaler3D.SetClickPosition(targetLocation);
+                Debug.Log($"[CharacterCore] 已設定AnimationMoveScaler3D目標位置: {targetLocation}");
             }
             
             // 記錄移動到當前位置
