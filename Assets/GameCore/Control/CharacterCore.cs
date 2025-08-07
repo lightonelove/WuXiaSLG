@@ -65,7 +65,11 @@ public class CharacterCore : MonoBehaviour
         SkillA,     // 技能A準備
         SkillB,     // 技能B準備
         SkillC,     // 技能C準備
-        SkillD      // 技能D準備
+        SkillD,     // 技能D準備
+        TargetingSkillA,  // 正在選擇技能A的目標地點
+        TargetingSkillB,  // 正在選擇技能B的目標地點
+        TargetingSkillC,  // 正在選擇技能C的目標地點
+        TargetingSkillD   // 正在選擇技能D的目標地點
     }
 
     public CharacterCoreState nowState = CharacterCoreState.ControlState;
@@ -433,6 +437,56 @@ public class CharacterCore : MonoBehaviour
             AP -= skill.SPCost;
             
             RecordedActions.Enqueue(tempActionSkill);
+        }
+    }
+    
+    /// <summary>
+    /// 在指定位置執行技能
+    /// </summary>
+    /// <param name="targetLocation">技能目標位置</param>
+    /// <param name="skill">要執行的技能</param>
+    /// <param name="actionType">技能動作類型</param>
+    public void ExecuteSkillAtLocation(Vector3 targetLocation, CombatSkill skill, CombatAction.ActionType actionType)
+    {
+        if (skill != null && AP >= skill.SPCost)
+        {
+            Debug.Log($"執行技能 {skill.SkillName} 於位置: {targetLocation}");
+            
+            // 讓角色面向目標位置
+            Vector3 lookDirection = targetLocation - transform.position;
+            lookDirection.y = 0;
+            if (lookDirection != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(lookDirection);
+            }
+            
+            // 記錄移動到當前位置
+            CombatAction tempActionMove = new CombatAction();
+            nowState = CharacterCoreState.UsingSkill;
+            tempActionMove.Position = transform.position;
+            tempActionMove.rotation = transform.rotation;
+            tempActionMove.type = CombatAction.ActionType.Move;
+            RecordedActions.Enqueue(tempActionMove);
+            
+            // 記錄技能動作
+            CombatAction tempActionSkill = new CombatAction();
+            tempActionSkill.type = actionType;
+            tempActionSkill.targetPosition = targetLocation; // 儲存目標位置
+            
+            // 啟用控制階段的根運動碰撞防護
+            if (controllerAnimationRelativePos != null)
+            {
+                controllerAnimationRelativePos.SetCollisionProtection(true);
+            }
+            
+            // 播放技能動畫
+            CharacterControlAnimator.Play(skill.AnimationName);
+            AP -= skill.SPCost;
+            
+            RecordedActions.Enqueue(tempActionSkill);
+            
+            // 重置動作模式
+            currentActionMode = PlayerActionMode.None;
         }
     }
     
