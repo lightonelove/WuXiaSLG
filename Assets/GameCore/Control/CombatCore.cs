@@ -161,8 +161,7 @@ public class CombatCore : MonoBehaviour
         character.currentActionMode = CharacterCore.PlayerActionMode.None;
         
         // 重置行動點
-        character.Stamina = character.MaxStamina;
-        character.SP = character.MaxSP;
+        character.AP = character.MaxAP;
         
         // 清空之前的行動記錄
         character.RecordedActions.Clear();
@@ -198,7 +197,6 @@ public class CombatCore : MonoBehaviour
         }
         
         // 同步玩家位置（將 CharacterController 位置更新為 CharacterExecutor 的位置）
-        character.SyncPositionAfterExecution();
         
         Debug.Log($"Player {character.name} turn completed and reset to ControlState!");
     }

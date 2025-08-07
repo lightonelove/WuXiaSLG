@@ -14,15 +14,13 @@ public class CharacterCore : MonoBehaviour
     public float turnRate = 720;
 
     [Header("資源系統")]
-    public float Stamina = 100;
-    public float MaxStamina = 100;
-    public float SP = 100;
-    public float MaxSP = 100;
+    public float AP = 100;  // Action Points - 統一的資源系統
+    public float MaxAP = 100;
     public Vector2 lastPosition;
     
     [Header("預覽系統")]
     private bool isPreviewingPath = false;     // 是否正在預覽路徑
-    private float previewStaminaCost = 0f;     // 預覽的體力消耗量
+    private float previewAPCost = 0f;     // 預覽的AP消耗量
     
     [Header("回合控制")]
     public float holdTimeToEndTurn = 1.0f;     // 長壓多少秒結束回合
@@ -48,13 +46,9 @@ public class CharacterCore : MonoBehaviour
     public Color invalidPathColor = Color.red;     // 體力不足時的路徑顏色
     
     public Animator CharacterControlAnimator;
-    public Animator CharacterExecuteAnimator;
     
     [Header("動畫根運動控制")]
-    public AnimationRelativePos executorAnimationRelativePos;
     public AnimationRelativePos controllerAnimationRelativePos;
-    
-    public GameObject characterExecutor;
     
     [Header("技能配置")]
     public CombatSkill skillA;
@@ -143,13 +137,13 @@ public class CharacterCore : MonoBehaviour
                 float distance = Vector2.Distance(lastPosition, nowPosition);
                 
 
-                Stamina -= distance * 5.0f;
-                Stamina = Mathf.Max(0, Stamina); // 確保體力不會變負數
+                AP -= distance * 5.0f;
+                AP = Mathf.Max(0, AP); // 確保AP不會變負數
                 
-                // 如果體力耗盡，立即停止移動
-                if (Stamina <= 0)
+                // 如果AP耗盡，立即停止移動
+                if (AP <= 0)
                 {
-                    Debug.Log("體力耗盡，停止移動！");
+                    Debug.Log("AP耗盡，停止移動！");
                     StopMovement();
                     return;
                 }
@@ -157,8 +151,8 @@ public class CharacterCore : MonoBehaviour
                 // 更新UI（只在非預覽狀態下更新）
                 if (!isPreviewingPath && SLGCoreUI.Instance != null && SLGCoreUI.Instance.apBar != null)
                 {
-                    SLGCoreUI.Instance.apBar.slider.maxValue = MaxStamina;
-                    SLGCoreUI.Instance.apBar.slider.value = Stamina;
+                    SLGCoreUI.Instance.apBar.slider.maxValue = MaxAP;
+                    SLGCoreUI.Instance.apBar.slider.value = AP;
                 }
                 
                 
@@ -191,10 +185,10 @@ public class CharacterCore : MonoBehaviour
     {
         if (navMeshAgent == null) return;
         
-        // 檢查是否有足夠體力
-        if (Stamina <= 0)
+        // 檢查是否有足夠AP
+        if (AP <= 0)
         {
-            Debug.Log("體力不足，無法移動！");
+            Debug.Log("AP不足，無法移動！");
             return;
         }
         
@@ -208,41 +202,41 @@ public class CharacterCore : MonoBehaviour
             {
                 Vector3 actualDestination;
                 
-                // 檢查體力是否足夠完成這段路徑
-                if (!HasEnoughStaminaForPath(path))
+                // 檢查AP是否足夠完成這段路徑
+                if (!HasEnoughAPForPath(path))
                 {
-                    // 體力不足，計算最遠能到達的位置
+                    // AP不足，計算最遠能到達的位置
                     actualDestination = CalculateMaxReachablePosition(path);
                     
                     if (Vector3.Distance(transform.position, actualDestination) < 0.5f)
                     {
                         // 如果最遠距離太近，就不移動
-                        Debug.Log("體力不足，無法進行有效移動！");
+                        Debug.Log("AP不足，無法進行有效移動！");
                         return;
                     }
                     
-                    Debug.Log($"體力不足到達目標，移動到最遠可達位置");
+                    Debug.Log($"AP不足到達目標，移動到最遠可達位置");
                 }
                 else
                 {
-                    // 體力足夠，移動到目標位置
+                    // AP足夠，移動到目標位置
                     actualDestination = hit.position;
-                    Debug.Log("體力足夠，移動到目標位置");
+                    Debug.Log("AP足夠，移動到目標位置");
                 }
                 
                 targetPosition = actualDestination;
                 hasValidTarget = true;
                 
-                // 重置預覽狀態，回到顯示實際Stamina值
+                // 重置預覽狀態，回到顯示實際AP值
                 if (isPreviewingPath)
                 {
                     isPreviewingPath = false;
-                    previewStaminaCost = 0f;
+                    previewAPCost = 0f;
                     
-                    // 恢復顯示實際的Stamina值
+                    // 恢復顯示實際的AP值
                     if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.apBar != null)
                     {
-                        SLGCoreUI.Instance.apBar.slider.value = Stamina;
+                        SLGCoreUI.Instance.apBar.slider.value = AP;
                     }
                 }
                 
@@ -310,7 +304,7 @@ public class CharacterCore : MonoBehaviour
     /// <returns>是否可以移動</returns>
     public bool CanMoveTo(Vector3 destination)
     {
-        if (navMeshAgent == null || Stamina <= 0) return false;
+        if (navMeshAgent == null || AP <= 0) return false;
         
         NavMeshHit hit;
         return NavMesh.SamplePosition(destination, out hit, 2f, NavMesh.AllAreas);
@@ -324,8 +318,7 @@ public class CharacterCore : MonoBehaviour
     
     public void ReFillAP()
     {
-        Stamina = MaxStamina;
-        SP = MaxSP;
+        AP = MaxAP;
     }
     
     // Update is called once per frame
@@ -347,27 +340,6 @@ public class CharacterCore : MonoBehaviour
             // 滑鼠操作邏輯將在這裡實作
             // 技能使用和確認都將改為滑鼠控制
         }
-        else if (nowState == CharacterCoreState.ExcutionState)
-        {
-            ExecutorUpdate();
-            ReFillAP();
-        }
-        else if (nowState == CharacterCoreState.ExecutingSkill)
-        {
-            AnimatorStateInfo stateInfo = CharacterExecuteAnimator.GetCurrentAnimatorStateInfo(0);
-            if (stateInfo.normalizedTime >= 1.0f)
-            {
-                // CharacterControllerForExecutor已移除
-                
-                // 技能執行完成，禁用碰撞防護
-                if (executorAnimationRelativePos != null)
-                {
-                    executorAnimationRelativePos.SetCollisionProtection(false);
-                }
-                
-                nowState = CharacterCoreState.TurnComplete;
-            }
-        }
         else if (nowState == CharacterCoreState.UsingSkill)
         {
             AnimatorStateInfo stateInfo = CharacterControlAnimator.GetCurrentAnimatorStateInfo(0);
@@ -384,94 +356,7 @@ public class CharacterCore : MonoBehaviour
         }
     }
     
-    public void ExecutorUpdate()
-    {
-        if (RecordedActions.Count != 0)
-        {
-            
-            CombatAction tempAction = RecordedActions.Dequeue();
-            if (tempAction.type == CombatAction.ActionType.Move)
-            {
-                Vector3 pos = tempAction.Position;
-                Quaternion rot = tempAction.rotation;
-                characterExecutor.transform.position = pos;
-                characterExecutor.transform.rotation = rot;
-            }
-            else if (tempAction.type == CombatAction.ActionType.SkillA)
-            {
-                Debug.Log("SkillA");
-                // CharacterControllerForExecutor已移除
-                
-                // 啟用動畫根運動碰撞防護
-                if (executorAnimationRelativePos != null)
-                {
-                    executorAnimationRelativePos.SetCollisionProtection(true);
-                }
-                
-                if (skillA != null)
-                    CharacterExecuteAnimator.Play(skillA.AnimationName);
-                else
-                    CharacterExecuteAnimator.Play("SkillA");
-                nowState = CharacterCoreState.ExecutingSkill;
-            }
-            else if (tempAction.type == CombatAction.ActionType.SkillB)
-            {
-                Debug.Log("SkillB");
-                // CharacterControllerForExecutor已移除
-                
-                // 啟用動畫根運動碰撞防護
-                if (executorAnimationRelativePos != null)
-                {
-                    executorAnimationRelativePos.SetCollisionProtection(true);
-                }
-                
-                if (skillB != null)
-                    CharacterExecuteAnimator.Play(skillB.AnimationName);
-                else
-                    CharacterExecuteAnimator.Play("SkillB");
-                nowState = CharacterCoreState.ExecutingSkill;
-            }
-            else if (tempAction.type == CombatAction.ActionType.SkillC)
-            {
-                Debug.Log("SkillC");
-                // CharacterControllerForExecutor已移除
-                
-                // 啟用動畫根運動碰撞防護
-                if (executorAnimationRelativePos != null)
-                {
-                    executorAnimationRelativePos.SetCollisionProtection(true);
-                }
-                
-                if (skillC != null)
-                    CharacterExecuteAnimator.Play(skillC.AnimationName);
-                else
-                    CharacterExecuteAnimator.Play("SkillC");
-                nowState = CharacterCoreState.ExecutingSkill;
-            }
-            else if (tempAction.type == CombatAction.ActionType.SkillD)
-            {
-                Debug.Log("SkillD");
-                // CharacterControllerForExecutor已移除
-                
-                // 啟用動畫根運動碰撞防護
-                if (executorAnimationRelativePos != null)
-                {
-                    executorAnimationRelativePos.SetCollisionProtection(true);
-                }
-                
-                if (skillD != null)
-                    CharacterExecuteAnimator.Play(skillD.AnimationName);
-                else
-                    CharacterExecuteAnimator.Play("SkillD");
-                nowState = CharacterCoreState.ExecutingSkill;
-            }
-        }
-        else
-        {
-            // 執行完成，標記回合結束
-            nowState = CharacterCore.CharacterCoreState.TurnComplete;
-        }
-    }
+    
     
     /// <summary>
     /// 獲取玩家的真實位置（考慮 ExecutionState 時的 CharacterExecutor 位置）
@@ -480,11 +365,7 @@ public class CharacterCore : MonoBehaviour
     public Vector3 GetRealPosition()
     {
         // 如果在執行狀態且有 characterExecutor，使用 executor 的位置
-        if ((nowState == CharacterCoreState.ExcutionState || nowState == CharacterCoreState.ExecutingSkill) 
-            && characterExecutor != null)
-        {
-            return characterExecutor.transform.position;
-        }
+
         
         // 否則使用主物件的位置
         return transform.position;
@@ -497,12 +378,7 @@ public class CharacterCore : MonoBehaviour
     public Transform GetRealTransform()
     {
         // 如果在執行狀態且有 characterExecutor，使用 executor 的 transform
-        if ((nowState == CharacterCoreState.ExcutionState || nowState == CharacterCoreState.ExecutingSkill) 
-            && characterExecutor != null)
-        {
-            return characterExecutor.transform;
-        }
-        
+
         // 否則使用主物件的 transform
         return transform;
     }
@@ -510,46 +386,32 @@ public class CharacterCore : MonoBehaviour
     /// <summary>
     /// 在回合結束時同步位置（將主物件位置更新為 CharacterExecutor 的位置）
     /// </summary>
-    public void SyncPositionAfterExecution()
-    {
-        if (characterExecutor != null)
-        {
-            // 計算位置差異
-            Vector3 executorPos = characterExecutor.transform.position;
-            Vector3 mainPos = transform.position;
-            
-            Debug.Log($"同步位置: Main({mainPos}) -> Executor({executorPos})");
-            
-            // 更新主物件的位置
-            transform.position = executorPos;
-            transform.rotation = characterExecutor.transform.rotation;
-        }
-    }
+
 
     // 技能檢查方法將改為滑鼠/UI控制
     public bool CanUseSkillA()
     {
-        return skillA != null && SP >= skillA.SPCost;
+        return skillA != null && AP >= skillA.SPCost;
     }
     
     public bool CanUseSkillB()
     {
-        return skillB != null && SP >= skillB.SPCost;
+        return skillB != null && AP >= skillB.SPCost;
     }
     
     public bool CanUseSkillC()
     {
-        return skillC != null && SP >= skillC.SPCost;
+        return skillC != null && AP >= skillC.SPCost;
     }
     
     public bool CanUseSkillD()
     {
-        return skillD != null && SP >= skillD.SPCost;
+        return skillD != null && AP >= skillD.SPCost;
     }
     
     public void UseSkill(CombatSkill skill, CombatAction.ActionType actionType)
     {
-        if (skill != null && SP >= skill.SPCost)
+        if (skill != null && AP >= skill.SPCost)
         {
             CombatAction tempActionMove = new CombatAction();
             nowState = CharacterCoreState.UsingSkill;
@@ -568,7 +430,7 @@ public class CharacterCore : MonoBehaviour
             }
             
             CharacterControlAnimator.Play(skill.AnimationName);
-            SP -= skill.SPCost;
+            AP -= skill.SPCost;
             
             RecordedActions.Enqueue(tempActionSkill);
         }
@@ -596,27 +458,27 @@ public class CharacterCore : MonoBehaviour
             NavMeshPath path = new NavMeshPath();
             if (navMeshAgent.CalculatePath(hit.position, path))
             {
-                // 檢查體力是否足夠
-                bool hasEnoughStamina = HasEnoughStaminaForPath(path);
+                // 檢查AP是否足夠
+                bool hasEnoughAP = HasEnoughAPForPath(path);
                 
                 // 繪製分段路徑（綠色+紅色）
                 DrawPath(path, true);
                 
-                // 顯示路徑長度和體力消耗的Debug訊息
+                // 顯示路徑長度和AP消耗的Debug訊息
                 float pathLength = CalculatePathLength(path);
-                float staminaCost = CalculateStaminaCost(pathLength);
-                Debug.Log($"路徑長度: {pathLength:F2}, 體力消耗: {staminaCost:F2}, 當前體力: {Stamina:F2}, 體力{(hasEnoughStamina ? "足夠" : "不足")}");
+                float apCost = CalculateAPCost(pathLength);
+                Debug.Log($"路徑長度: {pathLength:F2}, AP消耗: {apCost:F2}, 當前AP: {AP:F2}, AP{(hasEnoughAP ? "足夠" : "不足")}");
                 
                 // 設定預覽狀態
                 isPreviewingPath = true;
-                previewStaminaCost = staminaCost;
+                previewAPCost = apCost;
                 
-                // 使用Proxy值更新UI（顯示預期的剩餘體力）
+                // 使用Proxy值更新UI（顯示預期的剩餘AP）
                 if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.apBar != null)
                 {
-                    float proxyStamina = Mathf.Max(0, Stamina - staminaCost);
-                    SLGCoreUI.Instance.apBar.slider.maxValue = MaxStamina;
-                    SLGCoreUI.Instance.apBar.slider.value = proxyStamina;
+                    float proxyAP = Mathf.Max(0, AP - apCost);
+                    SLGCoreUI.Instance.apBar.slider.maxValue = MaxAP;
+                    SLGCoreUI.Instance.apBar.slider.value = proxyAP;
                 }
             }
             else
@@ -655,12 +517,12 @@ public class CharacterCore : MonoBehaviour
         if (isPreviewingPath)
         {
             isPreviewingPath = false;
-            previewStaminaCost = 0f;
+            previewAPCost = 0f;
             
-            // 恢復顯示實際的Stamina值
+            // 恢復顯示實際的AP值
             if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.apBar != null)
             {
-                SLGCoreUI.Instance.apBar.slider.value = Stamina;
+                SLGCoreUI.Instance.apBar.slider.value = AP;
             }
         }
     }
@@ -669,8 +531,8 @@ public class CharacterCore : MonoBehaviour
     /// 繪製指定的NavMesh路徑（分段顯示綠色和紅色）
     /// </summary>
     /// <param name="path">要繪製的路徑</param>
-    /// <param name="useStaminaColor">是否根據體力設定顏色（預設為false）</param>
-    private void DrawPath(NavMeshPath path, bool useStaminaColor = false)
+    /// <param name="useAPColor">是否根據AP設定顏色（預設為false）</param>
+    private void DrawPath(NavMeshPath path, bool useAPColor = false)
     {
         if (pathLineRenderer == null) return;
         
@@ -678,7 +540,7 @@ public class CharacterCore : MonoBehaviour
         
         if (corners.Length > 0)
         {
-            if (useStaminaColor)
+            if (useAPColor)
             {
                 // 計算路徑分段
                 List<Vector3> validPath, invalidPath;
@@ -695,7 +557,7 @@ public class CharacterCore : MonoBehaviour
             }
             else
             {
-                // 不使用體力顏色時，使用原有邏輯
+                // 不使用AP顏色時，使用原有邏輯
                 DrawPathSegment(pathLineRenderer, new List<Vector3>(corners), validPathColor);
                 
                 // 清除紅色路徑
@@ -775,7 +637,7 @@ public class CharacterCore : MonoBehaviour
         // 確認有有效路徑
         if (navMeshAgent.hasPath)
         {
-            // 使用新的DrawPath方法，並設定為使用體力顏色（實際移動時路徑應該是綠色，因為已經通過體力檢查）
+            // 使用新的DrawPath方法，並設定為使用AP顏色（實際移動時路徑應該是綠色，因為已經通過AP檢查）
             DrawPath(navMeshAgent.path, true);
         }
         else
@@ -809,26 +671,26 @@ public class CharacterCore : MonoBehaviour
     }
     
     /// <summary>
-    /// 計算移動到指定距離所需的體力消耗
+    /// 計算移動到指定距離所需的AP消耗
     /// </summary>
     /// <param name="distance">移動距離</param>
-    /// <returns>所需體力</returns>
-    private float CalculateStaminaCost(float distance)
+    /// <returns>所需AP</returns>
+    private float CalculateAPCost(float distance)
     {
-        // 根據UpdateMovement中的邏輯，每單位距離消耗5點體力
+        // 根據UpdateMovement中的邏輯，每單位距離消耗5點AP
         return distance * 5.0f;
     }
     
     /// <summary>
-    /// 檢查是否有足夠體力到達目標位置
+    /// 檢查是否有足夠AP到達目標位置
     /// </summary>
     /// <param name="path">要檢查的路徑</param>
-    /// <returns>是否有足夠體力</returns>
-    private bool HasEnoughStaminaForPath(NavMeshPath path)
+    /// <returns>是否有足夠AP</returns>
+    private bool HasEnoughAPForPath(NavMeshPath path)
     {
         float pathLength = CalculatePathLength(path);
-        float requiredStamina = CalculateStaminaCost(pathLength);
-        return Stamina >= requiredStamina;
+        float requiredAP = CalculateAPCost(pathLength);
+        return AP >= requiredAP;
     }
     
     /// <summary>
@@ -845,11 +707,11 @@ public class CharacterCore : MonoBehaviour
         Vector3[] corners = path.corners;
         if (corners.Length == 0) return;
         
-        float maxWalkableDistance = Stamina / 5.0f; // 當前體力能走的最大距離
+        float maxWalkableDistance = AP / 5.0f; // 當前AP能走的最大距離
         float accumulatedDistance = 0f;
         Vector3 currentPos = transform.position;
         
-        // 如果體力為0，整條路徑都是紅色
+        // 如果AP為0，整條路徑都是紅色
         if (maxWalkableDistance <= 0)
         {
             invalidPath.AddRange(corners);
@@ -865,7 +727,7 @@ public class CharacterCore : MonoBehaviour
             
             if (!foundSplitPoint && accumulatedDistance + segmentDistance <= maxWalkableDistance)
             {
-                // 這個點還在體力範圍內，加入綠色路徑
+                // 這個點還在AP範圍內，加入綠色路徑
                 validPath.Add(corner);
                 accumulatedDistance += segmentDistance;
             }
@@ -900,12 +762,12 @@ public class CharacterCore : MonoBehaviour
             currentPos = corner;
         }
         
-        // 如果整條路徑都在體力範圍內，invalidPath會是空的
-        // 如果體力完全不夠，validPath可能只有起始點附近的部分
+        // 如果整條路徑都在AP範圍內，invalidPath會是空的
+        // 如果AP完全不夠，validPath可能只有起始點附近的部分
     }
     
     /// <summary>
-    /// 計算當前體力能到達的最遠位置
+    /// 計算當前AP能到達的最遠位置
     /// </summary>
     /// <param name="path">完整路徑</param>
     /// <returns>最遠可達位置</returns>
@@ -914,11 +776,11 @@ public class CharacterCore : MonoBehaviour
         Vector3[] corners = path.corners;
         if (corners.Length == 0) return transform.position;
         
-        float maxWalkableDistance = Stamina / 5.0f; // 當前體力能走的最大距離
+        float maxWalkableDistance = AP / 5.0f; // 當前AP能走的最大距離
         float accumulatedDistance = 0f;
         Vector3 currentPos = transform.position;
         
-        // 如果體力為0，返回當前位置
+        // 如果AP為0，返回當前位置
         if (maxWalkableDistance <= 0)
         {
             return transform.position;
@@ -931,7 +793,7 @@ public class CharacterCore : MonoBehaviour
             
             if (accumulatedDistance + segmentDistance <= maxWalkableDistance)
             {
-                // 這個點還在體力範圍內
+                // 這個點還在AP範圍內
                 accumulatedDistance += segmentDistance;
                 currentPos = corner;
             }

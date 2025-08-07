@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7b6ee8069332499419f5350bfce317f3, type: 2}
+  - {fileID: 2100000, guid: ca419a97520ca274e89854b60d18a643, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -388,7 +388,7 @@ MonoBehaviour:
   Name: Enemy_A
   Speed: 300
   ActionValue: 0
-  PortraitIcon: {fileID: 0}
+  PortraitIcon: {fileID: 21300000, guid: c637823bad5583c4882c20d78856e562, type: 3}
   CharacterCore: {fileID: 0}
 --- !u!195 &3309778327019055104
 NavMeshAgent:
@@ -601,7 +601,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 7b6ee8069332499419f5350bfce317f3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -829,7 +829,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7b6ee8069332499419f5350bfce317f3, type: 2}
+  - {fileID: 2100000, guid: ca419a97520ca274e89854b60d18a643, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

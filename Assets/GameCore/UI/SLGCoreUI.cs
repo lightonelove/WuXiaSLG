@@ -450,6 +450,16 @@ public class SLGCoreUI : MonoBehaviour
         if (currentCharacter.nowState != CharacterCore.CharacterCoreState.ControlState)
             return;
         
+        // 如果是技能模式，直接執行技能而不是切換模式
+        if (mode == CharacterCore.PlayerActionMode.SkillA || 
+            mode == CharacterCore.PlayerActionMode.SkillB ||
+            mode == CharacterCore.PlayerActionMode.SkillC ||
+            mode == CharacterCore.PlayerActionMode.SkillD)
+        {
+            ExecuteSkill(currentCharacter, mode);
+            return;
+        }
+        
         // 如果目前已經是該模式，則取消回到None；否則設定為該模式
         CharacterCore.PlayerActionMode newMode = (currentCharacter.currentActionMode == mode) 
             ? CharacterCore.PlayerActionMode.None 
@@ -575,5 +585,67 @@ public class SLGCoreUI : MonoBehaviour
         }
         
         button.colors = colors;
+    }
+    
+    /// <summary>
+    /// 執行技能動作
+    /// </summary>
+    /// <param name="character">執行技能的角色</param>
+    /// <param name="skillMode">技能模式</param>
+    private void ExecuteSkill(CharacterCore character, CharacterCore.PlayerActionMode skillMode)
+    {
+        if (character == null)
+            return;
+            
+        // 檢查對應技能是否可用
+        bool canUse = false;
+        CombatSkill skill = null;
+        CombatAction.ActionType actionType = CombatAction.ActionType.Move;
+        
+        switch (skillMode)
+        {
+            case CharacterCore.PlayerActionMode.SkillA:
+                canUse = character.CanUseSkillA();
+                skill = character.skillA;
+                actionType = CombatAction.ActionType.SkillA;
+                break;
+            case CharacterCore.PlayerActionMode.SkillB:
+                canUse = character.CanUseSkillB();
+                skill = character.skillB;
+                actionType = CombatAction.ActionType.SkillB;
+                break;
+            case CharacterCore.PlayerActionMode.SkillC:
+                canUse = character.CanUseSkillC();
+                skill = character.skillC;
+                actionType = CombatAction.ActionType.SkillC;
+                break;
+            case CharacterCore.PlayerActionMode.SkillD:
+                canUse = character.CanUseSkillD();
+                skill = character.skillD;
+                actionType = CombatAction.ActionType.SkillD;
+                break;
+        }
+        
+        // 如果技能可用，執行技能
+        if (canUse && skill != null)
+        {
+            Debug.Log($"執行技能: {skill.SkillName}, 動畫: {skill.AnimationName}");
+            
+            // 直接播放控制階段的動畫
+            if (character.CharacterControlAnimator != null)
+            {
+                character.CharacterControlAnimator.Play(skill.AnimationName);
+            }
+            
+            // 使用CharacterCore的UseSkill方法來記錄技能動作
+            character.UseSkill(skill, actionType);
+            
+            // 技能執行後，將模式設回None
+            character.currentActionMode = CharacterCore.PlayerActionMode.None;
+        }
+        else
+        {
+            Debug.Log($"無法執行技能: AP不足或技能未設定");
+        }
     }
 }
