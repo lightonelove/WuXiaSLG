@@ -5,7 +5,10 @@ public class AnimationRelativePos : MonoBehaviour
 {
     [Header("動畫根運動設定")]
     public Animator animator;
-    public CharacterController characterController;
+    
+    [Header("碰撞器設定")]
+    [SerializeField] private float colliderRadius = 0.5f; // 碰撞檢測半徑
+    [SerializeField] private float colliderHeight = 2f; // 碰撞檢測高度
     
     [Header("碰撞防護設定")]
     [SerializeField] private LayerMask wallLayerMask = -1; // 牆壁圖層遮罩
@@ -28,16 +31,13 @@ public class AnimationRelativePos : MonoBehaviour
     
     void Start()
     {
-        if (characterController != null)
-        {
-            lastSafePosition = transform.position;
-        }
+        lastSafePosition = transform.position;
+        Debug.Log("[AnimationRelativePos] 使用Transform根運動模式");
     }
 
     void OnAnimatorMove()
     {
-        if (animator == null || characterController == null || !characterController.enabled)
-            return;
+        if (animator == null) return;
             
         Vector3 deltaPosition = animator.deltaPosition;
         Quaternion deltaRotation = animator.deltaRotation;
@@ -63,8 +63,10 @@ public class AnimationRelativePos : MonoBehaviour
             }
         }
         
-        // 正常應用根運動
-        characterController.Move(deltaPosition);
+        // 直接操作Transform應用根運動位移
+        transform.position += deltaPosition;
+        
+        // 應用旋轉
         transform.rotation = deltaRotation * transform.rotation;
         
         // 更新安全位置
@@ -78,13 +80,13 @@ public class AnimationRelativePos : MonoBehaviour
     /// <returns>如果會碰撞到牆壁則返回true</returns>
     private bool CheckWallCollision(Vector3 movement)
     {
-        if (characterController == null) return false;
-        
         Vector3 rayDirection = movement.normalized;
+        float radius = colliderRadius;
+        float height = colliderHeight;
         
         // 計算射線起始位置，往移動方向外推避免射到自己
-        float pushOutDistance = characterController.radius + 0.1f; // 外推距離
-        Vector3 rayStart = transform.position + Vector3.up * (characterController.height * 0.2f) + rayDirection * pushOutDistance;
+        float pushOutDistance = radius + 0.1f;
+        Vector3 rayStart = transform.position + Vector3.up * (height * 0.2f) + rayDirection * pushOutDistance;
         
         // 調整射線檢測距離，扣除已經外推的距離
         float rayDistance = movement.magnitude + collisionCheckDistance;
@@ -110,12 +112,12 @@ public class AnimationRelativePos : MonoBehaviour
                 Debug.Log($"射線檢測到碰撞: {hit.collider.name}, 距離: {hit.distance}, 點: {hit.point}");
                 
                 // 進一步檢查：使用膠囊檢測來更精確地判斷碰撞
-                Vector3 capsuleBottom = transform.position + Vector3.up * characterController.radius;
-                Vector3 capsuleTop = transform.position + Vector3.up * (characterController.height - characterController.radius);
+                Vector3 capsuleBottom = transform.position + Vector3.up * radius;
+                Vector3 capsuleTop = transform.position + Vector3.up * (height - radius);
                 
                 // 檢查移動後的位置是否會碰撞
                 Collider[] overlapping = Physics.OverlapCapsule(capsuleBottom + movement, capsuleTop + movement, 
-                    characterController.radius + 0.3f, wallLayerMask);
+                    radius + 0.3f, wallLayerMask);
                 
                 foreach (Collider col in overlapping)
                 {
@@ -147,14 +149,9 @@ public class AnimationRelativePos : MonoBehaviour
     /// </summary>
     public void ResetToSafePosition()
     {
-        if (characterController != null)
-        {
-            characterController.enabled = false;
-            transform.position = lastSafePosition;
-            characterController.enabled = true;
-            rootMotionBlocked = false;
-            Debug.Log("角色位置已重置到安全位置");
-        }
+        transform.position = lastSafePosition;
+        rootMotionBlocked = false;
+        Debug.Log("角色位置已重置到安全位置");
     }
     
     /// <summary>
@@ -240,45 +237,57 @@ public class AnimationRelativePos : MonoBehaviour
     {
         return new List<string>(ignoreTags);
     }
+    
+    /// <summary>
+    /// 設定碰撞器參數
+    /// </summary>
+    /// <param name="radius">碰撞器半徑</param>
+    /// <param name="height">碰撞器高度</param>
+    public void SetColliderParams(float radius, float height)
+    {
+        colliderRadius = radius;
+        colliderHeight = height;
+        Debug.Log($"[AnimationRelativePos] 設定碰撞器參數: 半徑={radius}, 高度={height}");
+    }
 
     void Update()
     {
         // 視覺化調試
         if (enableDebugVisualization)
         {
-            // 繪製角色前方的檢測射線
-            if (characterController != null)
+            // 使用設定的碰撞器參數
+            float radius = colliderRadius;
+            float height = colliderHeight;
+            
+            // 顯示修正後的射線起點和路徑
+            float pushOutDistance = radius + 0.1f;
+            Vector3 rayStart = transform.position + Vector3.up * (height * 0.5f) + transform.forward * pushOutDistance;
+            Vector3 rayEnd = rayStart + transform.forward * collisionCheckDistance;
+            Debug.DrawLine(rayStart, rayEnd, rootMotionBlocked ? Color.red : Color.green);
+            
+            // 繪製從角色中心到射線起點的連線（顯示外推距離）
+            Vector3 centerPoint = transform.position + Vector3.up * (height * 0.5f);
+            Debug.DrawLine(centerPoint, rayStart, Color.yellow);
+            
+            // 繪製角色的膠囊體範圍
+            Vector3 capsuleBottom = transform.position + Vector3.up * radius;
+            Vector3 capsuleTop = transform.position + Vector3.up * (height - radius);
+            Debug.DrawLine(capsuleBottom, capsuleTop, Color.blue);
+            
+            // 繪製角色的半徑範圍（圓形）
+            for (int i = 0; i < 16; i++)
             {
-                // 顯示修正後的射線起點和路徑
-                float pushOutDistance = characterController.radius + 0.1f;
-                Vector3 rayStart = transform.position + Vector3.up * (characterController.height * 0.5f) + transform.forward * pushOutDistance;
-                Vector3 rayEnd = rayStart + transform.forward * collisionCheckDistance;
-                Debug.DrawLine(rayStart, rayEnd, rootMotionBlocked ? Color.red : Color.green);
-                
-                // 繪製從角色中心到射線起點的連線（顯示外推距離）
-                Vector3 centerPoint = transform.position + Vector3.up * (characterController.height * 0.5f);
-                Debug.DrawLine(centerPoint, rayStart, Color.yellow);
-                
-                // 繪製角色的膠囊體範圍
-                Vector3 capsuleBottom = transform.position + Vector3.up * characterController.radius;
-                Vector3 capsuleTop = transform.position + Vector3.up * (characterController.height - characterController.radius);
-                Debug.DrawLine(capsuleBottom, capsuleTop, Color.blue);
-                
-                // 繪製角色的半徑範圍（圓形）
-                for (int i = 0; i < 16; i++)
-                {
-                    float angle1 = (i / 16.0f) * 2 * Mathf.PI;
-                    float angle2 = ((i + 1) / 16.0f) * 2 * Mathf.PI;
-                    Vector3 point1 = transform.position + new Vector3(Mathf.Cos(angle1), 0, Mathf.Sin(angle1)) * characterController.radius;
-                    Vector3 point2 = transform.position + new Vector3(Mathf.Cos(angle2), 0, Mathf.Sin(angle2)) * characterController.radius;
-                    Debug.DrawLine(point1, point2, Color.cyan);
-                }
-                
-                // 如果有碰撞信息，繪製碰撞點的方塊
-                if (hasCollisionDebugInfo)
-                {
-                    DrawDebugCube(lastCollisionPoint, debugCubeSize, debugCollisionColor);
-                }
+                float angle1 = (i / 16.0f) * 2 * Mathf.PI;
+                float angle2 = ((i + 1) / 16.0f) * 2 * Mathf.PI;
+                Vector3 point1 = transform.position + new Vector3(Mathf.Cos(angle1), 0, Mathf.Sin(angle1)) * radius;
+                Vector3 point2 = transform.position + new Vector3(Mathf.Cos(angle2), 0, Mathf.Sin(angle2)) * radius;
+                Debug.DrawLine(point1, point2, Color.cyan);
+            }
+            
+            // 如果有碰撞信息，繪製碰撞點的方塊
+            if (hasCollisionDebugInfo)
+            {
+                DrawDebugCube(lastCollisionPoint, debugCubeSize, debugCollisionColor);
             }
         }
     }

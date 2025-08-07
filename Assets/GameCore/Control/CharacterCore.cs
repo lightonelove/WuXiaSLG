@@ -78,6 +78,9 @@ public class CharacterCore : MonoBehaviour
         
         // 初始化NavMeshAgent
         InitializeNavMeshAgent();
+        
+        // 初始化AnimationRelativePos設定
+        InitializeAnimationRelativePos();
     }
     private void InitializeNavMeshAgent()
     {
@@ -101,6 +104,33 @@ public class CharacterCore : MonoBehaviour
         
         // 初始狀態下停止NavMeshAgent
         navMeshAgent.isStopped = true;
+    }
+    
+    private void InitializeAnimationRelativePos()
+    {
+        // 檢查是否有AnimationRelativePos組件
+        if (controllerAnimationRelativePos == null)
+        {
+            controllerAnimationRelativePos = GetComponent<AnimationRelativePos>();
+        }
+        
+        if (controllerAnimationRelativePos != null)
+        {
+            // 確保AnimationRelativePos有正確的Animator引用
+            if (controllerAnimationRelativePos.animator == null)
+            {
+                controllerAnimationRelativePos.animator = CharacterControlAnimator;
+            }
+            
+            // 設定合理的碰撞器參數（假設角色高度約2米，半徑約0.5米）
+            controllerAnimationRelativePos.SetColliderParams(0.5f, 2f);
+            
+            Debug.Log("[CharacterCore] 已初始化AnimationRelativePos，使用Transform根運動模式");
+        }
+        else
+        {
+            Debug.LogWarning("[CharacterCore] 沒有找到AnimationRelativePos組件，技能root motion位移將無法正常工作");
+        }
     }
     
     public void AddPoint(Vector3 flatPos)
