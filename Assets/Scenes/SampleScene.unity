@@ -12070,6 +12070,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterB
       objectReference: {fileID: 0}
+    - target: {fileID: 5132094348995154949, guid: cf2a4183917391442884c41998698ea9, type: 3}
+      propertyPath: moveMaxScale
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5132094348995154949, guid: cf2a4183917391442884c41998698ea9, type: 3}
+      propertyPath: moveMinScale
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5132094348995154949, guid: cf2a4183917391442884c41998698ea9, type: 3}
+      propertyPath: evaluateOffset
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5132094348995154949, guid: cf2a4183917391442884c41998698ea9, type: 3}
+      propertyPath: referenceDistance
+      value: 2.87
+      objectReference: {fileID: 0}
     - target: {fileID: 7449280019692975245, guid: cf2a4183917391442884c41998698ea9, type: 3}
       propertyPath: skillB
       value: 

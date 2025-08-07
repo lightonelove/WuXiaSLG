@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\u7A7F\u8178\u528D"
   m_EditorClassIdentifier: 
   skillName: "\u7A7F\u8178\u528D"
-  animationName: SkillB
+  animationName: "\u7A7F\u8178\u528D"
   attackMultiplier: 1
   dodgeChance: 0
   defense: 0

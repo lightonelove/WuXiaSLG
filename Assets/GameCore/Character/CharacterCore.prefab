@@ -612,9 +612,9 @@ GameObject:
   - component: {fileID: 507542057868587843}
   - component: {fileID: 6903515148748646631}
   - component: {fileID: 5525503941534339325}
-  - component: {fileID: 69118132119755294}
   - component: {fileID: 6411655993339794702}
   - component: {fileID: 3502313563350019197}
+  - component: {fileID: 2833559091790500811}
   m_Layer: 0
   m_Name: CharacterCore
   m_TagString: Untagged
@@ -669,13 +669,15 @@ MonoBehaviour:
   validPathColor: {r: 0, g: 1, b: 0, a: 1}
   invalidPathColor: {r: 1, g: 0, b: 0, a: 1}
   CharacterControlAnimator: {fileID: 3502313563350019197}
-  controllerAnimationRelativePos: {fileID: 69118132119755294}
+  controllerAnimationRelativePos: {fileID: 0}
+  animationMoveScaler3D: {fileID: 0}
   skillA: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
   skillB: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
   skillC: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
   skillD: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
   nowState: 0
   currentActionMode: 0
+  currentSelectedSkill: {fileID: 0}
 --- !u!114 &6903515148748646631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -716,29 +718,6 @@ MonoBehaviour:
   OnDie:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &69118132119755294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2522113828692673003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7c10b4a312ac8347b6b50ee6ffa5408, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 0}
-  characterController: {fileID: 0}
-  wallLayerMask:
-    serializedVersion: 2
-    m_Bits: 4087
-  collisionCheckDistance: 2
-  enableCollisionProtection: 1
-  enableDebugVisualization: 0
-  debugCollisionColor: {r: 1, g: 0, b: 0, a: 1}
-  debugCubeSize: 0.3
-  ignoreTags: []
 --- !u!195 &6411655993339794702
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -774,7 +753,7 @@ Animator:
   m_Controller: {fileID: 22100000, guid: ddcafdcb493901f48b4e4ef93205be97, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -783,6 +762,31 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2833559091790500811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2522113828692673003}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7490750a9a4c040ae77128ad1ec157, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 3502313563350019197}
+  evaluateType: 2
+  isContinuousUpdate: 0
+  referenceDistance: 5
+  evaluateOffset: -1
+  moveMinScale: 0.5
+  moveMaxScale: 1.5
+  evaluateTarget: {fileID: 0}
+  evaluatePoints: []
+  clickPosition: {x: 0, y: 0, z: 0}
+  currentMoveScale: 1
+  refDistanceRemain: 0
+  targetDirection: {x: 0, y: 0, z: 1}
 --- !u!1 &3221956964958836908
 GameObject:
   m_ObjectHideFlags: 0

@@ -61,6 +61,7 @@
     <Compile Include="Assets\GameCore\Control\CharacterCore.cs" />
     <Compile Include="Assets\GameCore\UI\UIDamageNumberSpawner.cs" />
     <Compile Include="Assets\GameCore\UI\TurnOrderUIController.cs" />
+    <Compile Include="Assets\GameCore\System\AnimationMoveScaler3D.cs" />
     <Compile Include="Assets\GameCore\Enemy\EnemyCore.cs" />
     <Compile Include="Assets\GameCore\Control\PreviewReceiver.cs" />
     <Compile Include="Assets\GameCore\UI\UIFollowWorldObject.cs" />
