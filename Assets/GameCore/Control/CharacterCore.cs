@@ -60,20 +60,17 @@ public class CharacterCore : MonoBehaviour
 
     public enum PlayerActionMode
     {
-        None,       // 沒有選擇任何動作
-        Move,       // 移動模式
-        SkillA,     // 技能A準備
-        SkillB,     // 技能B準備
-        SkillC,     // 技能C準備
-        SkillD,     // 技能D準備
-        TargetingSkillA,  // 正在選擇技能A的目標地點
-        TargetingSkillB,  // 正在選擇技能B的目標地點
-        TargetingSkillC,  // 正在選擇技能C的目標地點
-        TargetingSkillD   // 正在選擇技能D的目標地點
+        None,           // 沒有選擇任何動作
+        Move,           // 移動模式
+        SkillTargeting, // 技能目標選擇模式
+        SkillExecuting  // 技能執行模式
     }
 
     public CharacterCoreState nowState = CharacterCoreState.ControlState;
     public PlayerActionMode currentActionMode = PlayerActionMode.None;
+    
+    [Header("當前選擇的技能")]
+    public CombatSkill currentSelectedSkill; // 當前選擇要執行的技能
     
     void Start()
     {

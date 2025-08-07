@@ -294,10 +294,7 @@ public class SLGCoreUI : MonoBehaviour
                 }
             }
             // 處理技能目標選擇
-            else if (currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillA ||
-                     currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillB ||
-                     currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillC ||
-                     currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillD)
+            else if (currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting)
             {
                 if (IsMouseOverFloor())
                 {
@@ -403,7 +400,7 @@ public class SLGCoreUI : MonoBehaviour
         if (skillAButton != null)
         {
             skillAButton.onClick.AddListener(() => {
-                ToggleActionMode(CharacterCore.PlayerActionMode.SkillA);
+                ExecuteSkillButton('A');
             });
         }
         else
@@ -413,7 +410,7 @@ public class SLGCoreUI : MonoBehaviour
         if (skillBButton != null)
         {
             skillBButton.onClick.AddListener(() => {
-                ToggleActionMode(CharacterCore.PlayerActionMode.SkillB);
+                ExecuteSkillButton('B');
             });
         }
         else
@@ -423,7 +420,7 @@ public class SLGCoreUI : MonoBehaviour
         if (skillCButton != null)
         {
             skillCButton.onClick.AddListener(() => {
-                ToggleActionMode(CharacterCore.PlayerActionMode.SkillC);
+                ExecuteSkillButton('C');
             });
         }
         else
@@ -433,7 +430,7 @@ public class SLGCoreUI : MonoBehaviour
         if (skillDButton != null)
         {
             skillDButton.onClick.AddListener(() => {
-                ToggleActionMode(CharacterCore.PlayerActionMode.SkillD);
+                ExecuteSkillButton('D');
             });
         }
         else
@@ -466,15 +463,7 @@ public class SLGCoreUI : MonoBehaviour
         if (currentCharacter.nowState != CharacterCore.CharacterCoreState.ControlState)
             return;
         
-        // 如果是技能模式，直接執行技能而不是切換模式
-        if (mode == CharacterCore.PlayerActionMode.SkillA || 
-            mode == CharacterCore.PlayerActionMode.SkillB ||
-            mode == CharacterCore.PlayerActionMode.SkillC ||
-            mode == CharacterCore.PlayerActionMode.SkillD)
-        {
-            ExecuteSkill(currentCharacter, mode);
-            return;
-        }
+        // 移除舊的技能模式處理邏輯，因為現在由ExecuteSkillButton處理
         
         // 如果目前已經是該模式，則取消回到None；否則設定為該模式
         CharacterCore.PlayerActionMode newMode = (currentCharacter.currentActionMode == mode) 
@@ -563,20 +552,16 @@ public class SLGCoreUI : MonoBehaviour
         // 更新按鈕顏色根據當前模式
         UpdateButtonColor(moveButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.Move);
         UpdateButtonColor(skillAButton, 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillA || 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillA, 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && currentCharacter.currentSelectedSkill == currentCharacter.skillA, 
             currentCharacter.CanUseSkillA());
         UpdateButtonColor(skillBButton, 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillB || 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillB, 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && currentCharacter.currentSelectedSkill == currentCharacter.skillB, 
             currentCharacter.CanUseSkillB());
         UpdateButtonColor(skillCButton, 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillC || 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillC, 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && currentCharacter.currentSelectedSkill == currentCharacter.skillC, 
             currentCharacter.CanUseSkillC());
         UpdateButtonColor(skillDButton, 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillD || 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.TargetingSkillD, 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && currentCharacter.currentSelectedSkill == currentCharacter.skillD, 
             currentCharacter.CanUseSkillD());
     }
     
@@ -619,41 +604,44 @@ public class SLGCoreUI : MonoBehaviour
     }
     
     /// <summary>
-    /// 進入技能選擇目標模式
+    /// 執行技能按鈕點擊
     /// </summary>
-    /// <param name="character">執行技能的角色</param>
-    /// <param name="skillMode">技能模式</param>
-    private void ExecuteSkill(CharacterCore character, CharacterCore.PlayerActionMode skillMode)
+    /// <param name="skillType">技能類型 ('A', 'B', 'C', 'D')</param>
+    private void ExecuteSkillButton(char skillType)
     {
-        if (character == null)
+        // 檢查是否有戰鬥核心和當前玩家
+        if (CombatCore.Instance == null || !CombatCore.Instance.IsPlayerTurn())
+            return;
+            
+        CombatEntity currentEntity = CombatCore.Instance.GetCurrentTurnEntity();
+        if (currentEntity == null)
+            return;
+            
+        CharacterCore currentCharacter = currentEntity.GetComponent<CharacterCore>();
+        if (currentCharacter == null || currentCharacter.nowState != CharacterCore.CharacterCoreState.ControlState)
             return;
             
         // 檢查對應技能是否可用
         bool canUse = false;
         CombatSkill skill = null;
-        CharacterCore.PlayerActionMode targetingMode = CharacterCore.PlayerActionMode.None;
         
-        switch (skillMode)
+        switch (skillType)
         {
-            case CharacterCore.PlayerActionMode.SkillA:
-                canUse = character.CanUseSkillA();
-                skill = character.skillA;
-                targetingMode = CharacterCore.PlayerActionMode.TargetingSkillA;
+            case 'A':
+                canUse = currentCharacter.CanUseSkillA();
+                skill = currentCharacter.skillA;
                 break;
-            case CharacterCore.PlayerActionMode.SkillB:
-                canUse = character.CanUseSkillB();
-                skill = character.skillB;
-                targetingMode = CharacterCore.PlayerActionMode.TargetingSkillB;
+            case 'B':
+                canUse = currentCharacter.CanUseSkillB();
+                skill = currentCharacter.skillB;
                 break;
-            case CharacterCore.PlayerActionMode.SkillC:
-                canUse = character.CanUseSkillC();
-                skill = character.skillC;
-                targetingMode = CharacterCore.PlayerActionMode.TargetingSkillC;
+            case 'C':
+                canUse = currentCharacter.CanUseSkillC();
+                skill = currentCharacter.skillC;
                 break;
-            case CharacterCore.PlayerActionMode.SkillD:
-                canUse = character.CanUseSkillD();
-                skill = character.skillD;
-                targetingMode = CharacterCore.PlayerActionMode.TargetingSkillD;
+            case 'D':
+                canUse = currentCharacter.CanUseSkillD();
+                skill = currentCharacter.skillD;
                 break;
         }
         
@@ -662,14 +650,12 @@ public class SLGCoreUI : MonoBehaviour
         {
             Debug.Log($"進入技能 {skill.SkillName} 的目標選擇模式");
             
-            // 設定為對應的技能目標選擇模式
-            character.currentActionMode = targetingMode;
+            // 設定當前選擇的技能和目標選擇模式
+            currentCharacter.currentSelectedSkill = skill;
+            currentCharacter.currentActionMode = CharacterCore.PlayerActionMode.SkillTargeting;
             
             // 更新FloorIndicator顏色
-            UpdateFloorIndicatorForMode(targetingMode);
-            
-            // 可以在這裡添加視覺效果，例如改變游標樣式
-            // SetCursorSprite(skillTargetingCursor);
+            UpdateFloorIndicatorForMode(CharacterCore.PlayerActionMode.SkillTargeting);
         }
         else
         {
@@ -684,43 +670,37 @@ public class SLGCoreUI : MonoBehaviour
     /// <param name="targetLocation">目標位置</param>
     private void ExecuteSkillAtTargetLocation(CharacterCore character, Vector3 targetLocation)
     {
-        if (character == null)
+        if (character == null || character.currentSelectedSkill == null)
             return;
             
-        CombatSkill skill = null;
+        CombatSkill skill = character.currentSelectedSkill;
         CombatAction.ActionType actionType = CombatAction.ActionType.Move;
         
-        // 根據當前的目標選擇模式確定要執行的技能
-        switch (character.currentActionMode)
+        // 根據當前選擇的技能確定動作類型
+        if (skill == character.skillA)
         {
-            case CharacterCore.PlayerActionMode.TargetingSkillA:
-                skill = character.skillA;
-                actionType = CombatAction.ActionType.SkillA;
-                break;
-            case CharacterCore.PlayerActionMode.TargetingSkillB:
-                skill = character.skillB;
-                actionType = CombatAction.ActionType.SkillB;
-                break;
-            case CharacterCore.PlayerActionMode.TargetingSkillC:
-                skill = character.skillC;
-                actionType = CombatAction.ActionType.SkillC;
-                break;
-            case CharacterCore.PlayerActionMode.TargetingSkillD:
-                skill = character.skillD;
-                actionType = CombatAction.ActionType.SkillD;
-                break;
+            actionType = CombatAction.ActionType.SkillA;
+        }
+        else if (skill == character.skillB)
+        {
+            actionType = CombatAction.ActionType.SkillB;
+        }
+        else if (skill == character.skillC)
+        {
+            actionType = CombatAction.ActionType.SkillC;
+        }
+        else if (skill == character.skillD)
+        {
+            actionType = CombatAction.ActionType.SkillD;
         }
         
-        if (skill != null)
-        {
-            Debug.Log($"在位置 {targetLocation} 執行技能: {skill.SkillName}");
-            
-            // 呼叫CharacterCore的ExecuteSkillAtLocation方法
-            character.ExecuteSkillAtLocation(targetLocation, skill, actionType);
-            
-            // 技能執行後更新FloorIndicator顏色 (因為CharacterCore已經重置為None狀態)
-            UpdateFloorIndicatorForMode(CharacterCore.PlayerActionMode.None);
-        }
+        Debug.Log($"在位置 {targetLocation} 執行技能: {skill.SkillName}");
+        
+        // 呼叫CharacterCore的ExecuteSkillAtLocation方法
+        character.ExecuteSkillAtLocation(targetLocation, skill, actionType);
+        
+        // 技能執行後更新FloorIndicator顏色 (因為CharacterCore已經重置為None狀態)
+        UpdateFloorIndicatorForMode(CharacterCore.PlayerActionMode.None);
     }
     
     /// <summary>
@@ -742,10 +722,7 @@ public class SLGCoreUI : MonoBehaviour
         {
             colorMode = 1; // 綠色
         }
-        else if (mode == CharacterCore.PlayerActionMode.TargetingSkillA ||
-                 mode == CharacterCore.PlayerActionMode.TargetingSkillB ||
-                 mode == CharacterCore.PlayerActionMode.TargetingSkillC ||
-                 mode == CharacterCore.PlayerActionMode.TargetingSkillD)
+        else if (mode == CharacterCore.PlayerActionMode.SkillTargeting)
         {
             colorMode = 2; // 紅色
         }
