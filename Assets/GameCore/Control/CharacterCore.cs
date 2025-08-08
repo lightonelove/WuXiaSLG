@@ -73,6 +73,16 @@ public class CharacterCore : MonoBehaviour
     [Header("當前選擇的技能")]
     public CombatSkill currentSelectedSkill; // 當前選擇要執行的技能
     
+    [Header("技能瞄準系統")]
+    private Transform straightFrontTargetingAnchor; // 技能瞄準錨點
+    private BoxCollider targetingCollider; // 瞄準用的BoxCollider
+    private bool isSkillTargetValid = true; // 技能目標是否有效（沒有被Floor阻擋）
+    public LayerMask floorLayerMask; // Floor圖層遮罩
+    private Renderer cubeRenderer; // Cube的Renderer組件
+    private Color originalCubeColor; // Cube的原始顏色
+    private readonly Color blockedColor = new Color(0.5f, 0f, 0f, 1f); // 酒紅色
+    public SkillTargetingCollisionDetector collisionDetector; // 碰撞檢測器
+    
     void Start()
     {
         AddPoint(new Vector3(transform.position.x, 0.1f, transform.position.z));
@@ -85,7 +95,75 @@ public class CharacterCore : MonoBehaviour
         
         // 初始化AnimationMoveScaler3D設定
         InitializeAnimationMoveScaler3D();
+        
+        // 初始化技能瞄準系統
+        InitializeSkillTargeting();
     }
+    
+    private void InitializeSkillTargeting()
+    {
+        // 尋找 StraightFrontTargetingAnchor
+        straightFrontTargetingAnchor = transform.Find("StraightFrontTargetingAnchor");
+        
+        if (straightFrontTargetingAnchor != null)
+        {
+            // 尋找其下的 Cube 物件的 BoxCollider
+            Transform cubeTransform = straightFrontTargetingAnchor.Find("Cube");
+            if (cubeTransform != null)
+            {
+                targetingCollider = cubeTransform.GetComponent<BoxCollider>();
+                cubeRenderer = cubeTransform.GetComponent<Renderer>();
+                
+                if (targetingCollider != null)
+                {
+                    // 儲存原始顏色
+                    if (cubeRenderer != null && cubeRenderer.material != null)
+                    {
+                        originalCubeColor = cubeRenderer.material.color;
+                        Debug.Log($"[CharacterCore] 已儲存Cube原始顏色: {originalCubeColor}");
+                    }
+                    
+                    // 初始化碰撞檢測器（已在 prefab 中設定引用）
+                    if (collisionDetector != null)
+                    {
+                        collisionDetector.Initialize(this, floorLayerMask);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[CharacterCore] 碰撞檢測器引用未在 prefab 中設定！");
+                    }
+                    
+                    // 確保初始時是隱藏的
+                    straightFrontTargetingAnchor.gameObject.SetActive(false);
+                    Debug.Log("[CharacterCore] 找到技能瞄準系統 StraightFrontTargetingAnchor 和 BoxCollider");
+                }
+                else
+                {
+                    Debug.LogWarning("[CharacterCore] 找不到 Cube 的 BoxCollider 組件");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("[CharacterCore] 找不到 StraightFrontTargetingAnchor 下的 Cube 物件");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[CharacterCore] 找不到 StraightFrontTargetingAnchor 物件");
+        }
+        
+        // 取得 Floor 圖層遮罩
+        if (SLGCoreUI.Instance != null)
+        {
+            floorLayerMask = SLGCoreUI.Instance.floorLayerMask;
+        }
+        else
+        {
+            // 使用預設的 Floor 圖層
+            floorLayerMask = LayerMask.GetMask("Floor");
+        }
+    }
+    
     private void InitializeNavMeshAgent()
     {
         // 取得NavMeshAgent元件
@@ -394,8 +472,8 @@ public class CharacterCore : MonoBehaviour
             // 處理長壓空白鍵結束回合
             HandleSpaceKeyInput();
             
-            // 滑鼠操作邏輯將在這裡實作
-            // 技能使用和確認都將改為滑鼠控制
+            // 更新技能瞄準系統
+            UpdateSkillTargeting();
         }
         else if (nowState == CharacterCoreState.UsingSkill)
         {
@@ -499,6 +577,13 @@ public class CharacterCore : MonoBehaviour
     {
         if (skill != null && AP >= skill.SPCost)
         {
+            // 檢查技能路徑是否有效（沒有被 Floor 層阻擋）
+            if (!isSkillTargetValid)
+            {
+                Debug.Log($"[CharacterCore] 技能 {skill.SkillName} 無法使用：路徑被 Floor 層阻擋！");
+                return;
+            }
+            
             Debug.Log($"執行技能 {skill.SkillName} 於位置: {targetLocation}");
             
             // 讓角色面向目標位置
@@ -1003,6 +1088,98 @@ public class CharacterCore : MonoBehaviour
     public bool IsHoldingSpaceKey()
     {
         return isHoldingSpace;
+    }
+    
+    /// <summary>
+    /// 更新技能瞄準系統
+    /// </summary>
+    private void UpdateSkillTargeting()
+    {
+        // 只在 SkillTargeting 模式下運作
+        if (currentActionMode != PlayerActionMode.SkillTargeting || straightFrontTargetingAnchor == null)
+        {
+            // 隱藏瞄準系統
+            if (straightFrontTargetingAnchor != null && straightFrontTargetingAnchor.gameObject.activeSelf)
+            {
+                straightFrontTargetingAnchor.gameObject.SetActive(false);
+            }
+            return;
+        }
+        
+        // 顯示瞄準系統
+        if (!straightFrontTargetingAnchor.gameObject.activeSelf)
+        {
+            straightFrontTargetingAnchor.gameObject.SetActive(true);
+        }
+        
+        // 取得滑鼠在地面的位置
+        if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.IsMouseOverFloor())
+        {
+            Vector3 mouseWorldPos = SLGCoreUI.Instance.GetMouseFloorPosition();
+            
+            if (mouseWorldPos != Vector3.zero)
+            {
+                // 計算方向和距離
+                Vector3 direction = mouseWorldPos - transform.position;
+                direction.y = 0; // 保持水平
+                float distance = direction.magnitude;
+                
+                // 旋轉整個 CharacterCore 面向目標
+                if (direction != Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
+                }
+                
+                // 縮放 StraightFrontTargetingAnchor 讓 Collider 延伸到滑鼠位置
+                // Cube 在本地座標 (0, 0, 0.5)，所以縮放 Z 軸
+                // StraightFrontTargetingAnchor 在 (0, 1, 0.43)
+                float baseDistance = 0.93f; // 0.43 + 0.5 = 0.93 (Anchor的z + Cube的z)
+                float scaleZ = distance / baseDistance;
+                
+                // 設定縮放，保持 X 和 Y 不變
+                straightFrontTargetingAnchor.localScale = new Vector3(1f, 1f, scaleZ);
+                
+                // 觸發器系統會自動檢測碰撞，無需手動調用
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 技能瞄準碰撞狀態變化回調（從 SkillTargetingCollisionDetector 調用）
+    /// </summary>
+    /// <param name="collidingObjects">當前碰撞的物件集合</param>
+    public void OnTargetingCollisionChanged(HashSet<Collider> collidingObjects)
+    {
+        bool hasCollision = collidingObjects.Count > 0;
+        bool newTargetValid = !hasCollision;
+        
+        // 只在狀態改變時更新顏色和輸出 Debug
+        if (newTargetValid != isSkillTargetValid)
+        {
+            isSkillTargetValid = newTargetValid;
+            
+            if (hasCollision)
+            {
+                Debug.Log($"[CharacterCore] 技能路徑被 Floor 層阻擋！碰撞物件數量: {collidingObjects.Count}");
+                
+                // 變更Cube顏色為酒紅色
+                if (cubeRenderer != null && cubeRenderer.material != null)
+                {
+                    cubeRenderer.material.color = blockedColor;
+                }
+            }
+            else
+            {
+                Debug.Log("[CharacterCore] 技能路徑暢通，可以使用技能");
+                
+                // 恢復Cube的原始顏色
+                if (cubeRenderer != null && cubeRenderer.material != null)
+                {
+                    cubeRenderer.material.color = originalCubeColor;
+                }
+            }
+        }
     }
 
     
