@@ -559,16 +559,20 @@ public class SLGCoreUI : MonoBehaviour
         // 更新按鈕顏色根據當前模式
         UpdateButtonColor(moveButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.Move);
         UpdateButtonColor(skillAButton, 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && currentCharacter.currentSelectedSkill == currentCharacter.skillA, 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && 
+            currentCharacter.skillsComponent != null && currentCharacter.skillsComponent.currentSelectedSkill == currentCharacter.skillsComponent.skillA, 
             currentCharacter.CanUseSkillA());
         UpdateButtonColor(skillBButton, 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && currentCharacter.currentSelectedSkill == currentCharacter.skillB, 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && 
+            currentCharacter.skillsComponent != null && currentCharacter.skillsComponent.currentSelectedSkill == currentCharacter.skillsComponent.skillB, 
             currentCharacter.CanUseSkillB());
         UpdateButtonColor(skillCButton, 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && currentCharacter.currentSelectedSkill == currentCharacter.skillC, 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && 
+            currentCharacter.skillsComponent != null && currentCharacter.skillsComponent.currentSelectedSkill == currentCharacter.skillsComponent.skillC, 
             currentCharacter.CanUseSkillC());
         UpdateButtonColor(skillDButton, 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && currentCharacter.currentSelectedSkill == currentCharacter.skillD, 
+            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && 
+            currentCharacter.skillsComponent != null && currentCharacter.skillsComponent.currentSelectedSkill == currentCharacter.skillsComponent.skillD, 
             currentCharacter.CanUseSkillD());
     }
     
@@ -636,19 +640,19 @@ public class SLGCoreUI : MonoBehaviour
         {
             case 'A':
                 canUse = currentCharacter.CanUseSkillA();
-                skill = currentCharacter.skillA;
+                skill = currentCharacter.skillsComponent != null ? currentCharacter.skillsComponent.skillA : null;
                 break;
             case 'B':
                 canUse = currentCharacter.CanUseSkillB();
-                skill = currentCharacter.skillB;
+                skill = currentCharacter.skillsComponent != null ? currentCharacter.skillsComponent.skillB : null;
                 break;
             case 'C':
                 canUse = currentCharacter.CanUseSkillC();
-                skill = currentCharacter.skillC;
+                skill = currentCharacter.skillsComponent != null ? currentCharacter.skillsComponent.skillC : null;
                 break;
             case 'D':
                 canUse = currentCharacter.CanUseSkillD();
-                skill = currentCharacter.skillD;
+                skill = currentCharacter.skillsComponent != null ? currentCharacter.skillsComponent.skillD : null;
                 break;
         }
         
@@ -658,7 +662,10 @@ public class SLGCoreUI : MonoBehaviour
             Debug.Log($"進入技能 {skill.SkillName} 的目標選擇模式");
             
             // 設定當前選擇的技能和目標選擇模式
-            currentCharacter.currentSelectedSkill = skill;
+            if (currentCharacter.skillsComponent != null)
+            {
+                currentCharacter.skillsComponent.currentSelectedSkill = skill;
+            }
             currentCharacter.currentActionMode = CharacterCore.PlayerActionMode.SkillTargeting;
             
             // 更新FloorIndicator顏色
@@ -677,10 +684,10 @@ public class SLGCoreUI : MonoBehaviour
     /// <param name="targetLocation">目標位置</param>
     private void ExecuteSkillAtTargetLocation(CharacterCore character, Vector3 targetLocation)
     {
-        if (character == null || character.currentSelectedSkill == null)
+        if (character == null || character.skillsComponent == null || character.skillsComponent.currentSelectedSkill == null)
             return;
             
-        CombatSkill skill = character.currentSelectedSkill;
+        CombatSkill skill = character.skillsComponent.currentSelectedSkill;
         
         Debug.Log($"在位置 {targetLocation} 執行技能: {skill.SkillName}");
         

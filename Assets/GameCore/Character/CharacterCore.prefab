@@ -642,6 +642,7 @@ Transform:
   - {fileID: 6435876193352430536}
   - {fileID: 5531937141200449668}
   - {fileID: 4591550883524543473}
+  - {fileID: 6702055866580083052}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &507542057868587843
@@ -661,21 +662,13 @@ MonoBehaviour:
   turnRate: 1800
   movementComponent: {fileID: 8001629113425933385}
   characterResources: {fileID: 2402614971554661879}
+  skillsComponent: {fileID: 7708165847968784926}
   holdTimeToEndTurn: 1
   CharacterControlAnimator: {fileID: 3502313563350019197}
   controllerAnimationRelativePos: {fileID: 0}
   animationMoveScaler3D: {fileID: 2833559091790500811}
-  skillA: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
-  skillB: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
-  skillC: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
-  skillD: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
   nowState: 0
   currentActionMode: 0
-  currentSelectedSkill: {fileID: 0}
-  floorLayerMask:
-    serializedVersion: 2
-    m_Bits: 2048
-  collisionDetector: {fileID: 5053882652580880437}
 --- !u!114 &6903515148748646631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1314,6 +1307,62 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &5369152389385534939
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6702055866580083052}
+  - component: {fileID: 7708165847968784926}
+  m_Layer: 0
+  m_Name: CharacterSkills
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6702055866580083052
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5369152389385534939}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5355287738686104127}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7708165847968784926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5369152389385534939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84e8bd02c8a1b4d418e625cb9b30825f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillA: {fileID: 11400000, guid: 477c8d8f274bc5b4bb6761b747d49431, type: 2}
+  skillB: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
+  skillC: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
+  skillD: {fileID: 11400000, guid: 477c8d8f274bc5b4bb6761b747d49431, type: 2}
+  currentSelectedSkill: {fileID: 0}
+  straightFrontTargetingAnchor: {fileID: 5531937141200449668}
+  floorLayerMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  collisionDetector: {fileID: 5053882652580880437}
+  characterCore: {fileID: 507542057868587843}
+  characterResources: {fileID: 2402614971554661879}
 --- !u!1 &5394328886506030602
 GameObject:
   m_ObjectHideFlags: 0
