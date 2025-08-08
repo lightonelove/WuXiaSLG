@@ -1069,11 +1069,11 @@ public class CharacterCore : MonoBehaviour
                 Vector3 direction = mouseWorldPos - transform.position;
                 direction.y = 0; // 保持水平
                 
-                // 旋轉整個 CharacterCore 面向目標
+                // 旋轉整個 CharacterCore 面向目標（即時跟隨）
                 if (direction != Vector3.zero)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(direction);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
+                    transform.rotation = targetRotation;
                 }
                 
                 // 計算 StraightFrontTargetingAnchor 到滑鼠位置的距離（用於縮放）
