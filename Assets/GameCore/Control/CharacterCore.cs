@@ -1119,10 +1119,9 @@ public class CharacterCore : MonoBehaviour
             
             if (mouseWorldPos != Vector3.zero)
             {
-                // 計算方向和距離
+                // 計算方向（用於角色旋轉）
                 Vector3 direction = mouseWorldPos - transform.position;
                 direction.y = 0; // 保持水平
-                float distance = direction.magnitude;
                 
                 // 旋轉整個 CharacterCore 面向目標
                 if (direction != Vector3.zero)
@@ -1131,11 +1130,16 @@ public class CharacterCore : MonoBehaviour
                     transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
                 }
                 
-                // 縮放 StraightFrontTargetingAnchor 讓 Collider 延伸到滑鼠位置
-                // Cube 在本地座標 (0, 0, 0.5)，所以縮放 Z 軸
-                // StraightFrontTargetingAnchor 在 (0, 1, 0.43)
-                float baseDistance = 0.93f; // 0.43 + 0.5 = 0.93 (Anchor的z + Cube的z)
-                float scaleZ = distance / baseDistance;
+                // 計算 StraightFrontTargetingAnchor 到滑鼠位置的距離（用於縮放）
+                Vector3 anchorWorldPos = straightFrontTargetingAnchor.position;
+                Vector3 anchorToMouse = mouseWorldPos - anchorWorldPos;
+                anchorToMouse.y = 0; // 保持水平
+                float anchorDistance = anchorToMouse.magnitude;
+                
+                // Cube 在本地座標 (0, 0, 0.5)，表示從 Anchor 中心延伸 0.5 個單位
+                // 所以縮放倍率 = 實際距離 / Cube 的本地 Z 偏移 * 0.5（修正倍率）
+                float cubeLocalOffset = 0.5f; // Cube 在本地座標的 Z 偏移
+                float scaleZ = (anchorDistance / cubeLocalOffset) * 0.5f;
                 
                 // 設定縮放，保持 X 和 Y 不變
                 straightFrontTargetingAnchor.localScale = new Vector3(1f, 1f, scaleZ);
