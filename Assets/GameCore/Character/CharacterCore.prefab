@@ -615,6 +615,7 @@ GameObject:
   - component: {fileID: 6411655993339794702}
   - component: {fileID: 3502313563350019197}
   - component: {fileID: 2833559091790500811}
+  - component: {fileID: 8001629113425933385}
   m_Layer: 0
   m_Name: CharacterCore
   m_TagString: Untagged
@@ -640,6 +641,7 @@ Transform:
   - {fileID: 2155069188692255544}
   - {fileID: 6435876193352430536}
   - {fileID: 5531937141200449668}
+  - {fileID: 4591550883524543473}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &507542057868587843
@@ -657,21 +659,12 @@ MonoBehaviour:
   moveSpeed: 5
   cameraTransform: {fileID: 0}
   turnRate: 1800
-  AP: 100
-  MaxAP: 100
-  lastPosition: {x: 0, y: 0}
+  movementComponent: {fileID: 8001629113425933385}
+  characterResources: {fileID: 2402614971554661879}
   holdTimeToEndTurn: 1
-  pointSpacing: 0.2
-  points: []
-  navMeshAgent: {fileID: 0}
-  isMoving: 0
-  pathLineRenderer: {fileID: 4455222174795399952}
-  invalidPathLineRenderer: {fileID: 7413136488376558437}
-  validPathColor: {r: 0, g: 1, b: 0, a: 1}
-  invalidPathColor: {r: 1, g: 0, b: 0, a: 1}
   CharacterControlAnimator: {fileID: 3502313563350019197}
   controllerAnimationRelativePos: {fileID: 0}
-  animationMoveScaler3D: {fileID: 0}
+  animationMoveScaler3D: {fileID: 2833559091790500811}
   skillA: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
   skillB: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
   skillC: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
@@ -792,6 +785,26 @@ MonoBehaviour:
   currentMoveScale: 1
   refDistanceRemain: 0
   targetDirection: {x: 0, y: 0, z: 1}
+--- !u!114 &8001629113425933385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2522113828692673003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ce303fa0ae8a64409ebd63ad29e9b35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 3.5
+  turnRate: 120
+  navMeshAgent: {fileID: 6411655993339794702}
+  isMoving: 0
+  pathLineRenderer: {fileID: 4455222174795399952}
+  invalidPathLineRenderer: {fileID: 7413136488376558437}
+  validPathColor: {r: 0, g: 1, b: 0, a: 1}
+  invalidPathColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &3221956964958836908
 GameObject:
   m_ObjectHideFlags: 0
@@ -1751,6 +1764,53 @@ Transform:
   - {fileID: 4472163836899609512}
   m_Father: {fileID: 53408048001705717}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8207971771052042299
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4591550883524543473}
+  - component: {fileID: 2402614971554661879}
+  m_Layer: 0
+  m_Name: CharacterResouces
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4591550883524543473
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8207971771052042299}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5355287738686104127}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2402614971554661879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8207971771052042299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f0df4131e7083a47a63b6581c86420e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AP: 100
+  MaxAP: 100
+  lastPosition: {x: 0, y: 0}
 --- !u!1 &9162912869376663710
 GameObject:
   m_ObjectHideFlags: 0

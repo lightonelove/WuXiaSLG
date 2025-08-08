@@ -63,13 +63,14 @@
     <Compile Include="Assets\GameCore\UI\TurnOrderUIController.cs" />
     <Compile Include="Assets\GameCore\System\AnimationMoveScaler3D.cs" />
     <Compile Include="Assets\GameCore\Enemy\EnemyCore.cs" />
+    <Compile Include="Assets\GameCore\Control\CharacterMovement.cs" />
     <Compile Include="Assets\GameCore\Control\PreviewReceiver.cs" />
+    <Compile Include="Assets\GameCore\Control\CharacterResources.cs" />
     <Compile Include="Assets\GameCore\UI\UIFollowWorldObject.cs" />
     <Compile Include="Assets\GameCore\UI\EnemyHealthBarController.cs" />
     <Compile Include="Assets\Tool\AnimationPathRebinder.cs" />
     <Compile Include="Assets\GameCore\Character\Health.cs" />
     <Compile Include="Assets\GameCore\Enemy\PreviewDealer.cs" />
-    <Compile Include="Assets\ButtonTest.cs" />
     <Compile Include="Assets\GameCore\UI\SLGCoreUI.cs" />
     <Compile Include="Assets\GameCore\UI\APBar.cs" />
     <Compile Include="Assets\GameCore\UI\FloatingUIDamageNumber.cs" />

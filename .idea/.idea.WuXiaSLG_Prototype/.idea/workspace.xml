@@ -5,9 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ButtonTest.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ButtonTest.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterCore.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CombatCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CombatCore.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/SkillTargetingCollisionDetector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/SkillTargetingCollisionDetector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/UI/SLGCoreUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/UI/SLGCoreUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,7 +26,6 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/ButtonTest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/AnimationRelativePos.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/ClonedCombatEntity.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/CombatAction.cs" root0="FORCE_HIGHLIGHTING" />
@@ -27,6 +34,8 @@
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Enemy/DamageReceiver.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/UI/UIDamageNumberSpawner.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Plugins/Sirenix/Odin Inspector/Modules/Unity.Addressables/AddressablesInspectors.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -128,6 +137,7 @@
       <workItem from="1754405395651" duration="2917000" />
       <workItem from="1754457626649" duration="15068000" />
       <workItem from="1754543086089" duration="9720000" />
+      <workItem from="1754653296537" duration="5677000" />
     </task>
     <servers />
   </component>

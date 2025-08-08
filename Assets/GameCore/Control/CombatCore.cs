@@ -158,12 +158,11 @@ public class CombatCore : MonoBehaviour
         character.currentActionMode = CharacterCore.PlayerActionMode.None;
         
         // 重置行動點
-        character.AP = character.MaxAP;
+        if (character.characterResources != null)
+        {
+            character.characterResources.RefillAP();
+        }
         
-        // 清空之前的行動記錄
-        character.RecordedActions.Clear();
-        character.points.Clear();
-        character.AddPoint(new Vector3(character.transform.position.x, 0.1f, character.transform.position.z));
         
         // 等待玩家完成所有操作直到回合結束
         while (character.nowState != CharacterCore.CharacterCoreState.TurnComplete && isCombatActive)

@@ -255,7 +255,7 @@ public class SLGCoreUI : MonoBehaviour
         // 只在Move模式下預覽路徑
         if (currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.Move)
         {
-            if (IsMouseOverFloor() && !currentCharacter.isMoving)
+            if (IsMouseOverFloor() && !IsCharacterMoving(currentCharacter))
             {
                 Vector3 hoverPosition = GetMouseFloorPosition();
                 if (hoverPosition != Vector3.zero)
@@ -264,7 +264,7 @@ public class SLGCoreUI : MonoBehaviour
                     currentCharacter.PreviewPath(hoverPosition);
                 }
             }
-            else if (!currentCharacter.isMoving)
+            else if (!IsCharacterMoving(currentCharacter))
             {
                 // 如果滑鼠不在Floor上或角色正在移動，清除路徑顯示
                 currentCharacter.ClearPathDisplay();
@@ -319,7 +319,7 @@ public class SLGCoreUI : MonoBehaviour
             else
             {
                 // 檢查是否正在執行移動或使用技能中，如果是則不能結束回合
-                if (currentCharacter.isMoving || currentCharacter.nowState == CharacterCore.CharacterCoreState.UsingSkill)
+                if (IsCharacterMoving(currentCharacter) || currentCharacter.nowState == CharacterCore.CharacterCoreState.UsingSkill)
                 {
                     return;
                 }
@@ -452,6 +452,7 @@ public class SLGCoreUI : MonoBehaviour
     private void ToggleActionMode(CharacterCore.PlayerActionMode mode)
     {
         // 檢查是否有戰鬥核心和當前玩家
+
         if (CombatCore.Instance == null)
             return;
         
@@ -485,7 +486,7 @@ public class SLGCoreUI : MonoBehaviour
     /// <param name="mode">動作模式</param>
     private void SetActionMode(CharacterCore.PlayerActionMode mode)
     {
-        
+
         // 檢查是否有戰鬥核心和當前玩家
         if (CombatCore.Instance == null)
         {
@@ -520,7 +521,7 @@ public class SLGCoreUI : MonoBehaviour
         
         // 清除任何現有的路徑預覽
         currentCharacter.ClearPathDisplay();
-        
+
         // 根據模式更新FloorIndicator顏色
         UpdateFloorIndicatorForMode(mode);
         
@@ -720,5 +721,18 @@ public class SLGCoreUI : MonoBehaviour
         
         // 設定指示器顏色
         floorMouseIndicator.SetIndicatorColorMode(colorMode);
+    }
+    
+    /// <summary>
+    /// 檢查角色是否正在移動
+    /// </summary>
+    /// <param name="character">要檢查的角色</param>
+    /// <returns>是否正在移動</returns>
+    private bool IsCharacterMoving(CharacterCore character)
+    {
+        if (character == null || character.movementComponent == null)
+            return false;
+            
+        return character.movementComponent.isMoving;
     }
 }
