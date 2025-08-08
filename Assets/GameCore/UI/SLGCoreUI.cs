@@ -318,6 +318,12 @@ public class SLGCoreUI : MonoBehaviour
             }
             else
             {
+                // 檢查是否正在執行移動或使用技能中，如果是則不能結束回合
+                if (currentCharacter.isMoving || currentCharacter.nowState == CharacterCore.CharacterCoreState.UsingSkill)
+                {
+                    return;
+                }
+                
                 // 如果已經是None狀態，則確認回合
                 currentCharacter.ConfirmTurn();
             }

@@ -956,6 +956,19 @@ public class CharacterCore : MonoBehaviour
             return;
         }
         
+        // 檢查是否在執行移動或使用技能中，如果是則不允許結束回合
+        if (isMoving || nowState == CharacterCoreState.UsingSkill)
+        {
+            // 如果正在長壓但現在不允許結束回合，重置長壓狀態
+            if (isHoldingSpace)
+            {
+                isHoldingSpace = false;
+                spaceKeyHoldTime = 0f;
+                hasTriggeredEndTurn = false;
+            }
+            return;
+        }
+        
         // 檢查空白鍵是否被按下
         bool spacePressed = keyboard.spaceKey.isPressed;
         
