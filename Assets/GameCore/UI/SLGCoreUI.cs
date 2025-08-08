@@ -674,30 +674,11 @@ public class SLGCoreUI : MonoBehaviour
             return;
             
         CombatSkill skill = character.currentSelectedSkill;
-        CombatAction.ActionType actionType = CombatAction.ActionType.Move;
-        
-        // 根據當前選擇的技能確定動作類型
-        if (skill == character.skillA)
-        {
-            actionType = CombatAction.ActionType.SkillA;
-        }
-        else if (skill == character.skillB)
-        {
-            actionType = CombatAction.ActionType.SkillB;
-        }
-        else if (skill == character.skillC)
-        {
-            actionType = CombatAction.ActionType.SkillC;
-        }
-        else if (skill == character.skillD)
-        {
-            actionType = CombatAction.ActionType.SkillD;
-        }
         
         Debug.Log($"在位置 {targetLocation} 執行技能: {skill.SkillName}");
         
         // 呼叫CharacterCore的ExecuteSkillAtLocation方法
-        character.ExecuteSkillAtLocation(targetLocation, skill, actionType);
+        character.ExecuteSkillAtLocation(targetLocation, skill);
         
         // 技能執行後更新FloorIndicator顏色 (因為CharacterCore已經重置為None狀態)
         UpdateFloorIndicatorForMode(CharacterCore.PlayerActionMode.None);

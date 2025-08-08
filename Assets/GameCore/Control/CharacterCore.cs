@@ -28,11 +28,6 @@ public class CharacterCore : MonoBehaviour
     private bool isHoldingSpace = false;       // 是否正在按住空白鍵
     private bool hasTriggeredEndTurn = false;  // 是否已經觸發過結束回合
     
-    public float pointSpacing = 0.2f; // 每隔幾公尺新增一點
-    public List<Vector3> points = new List<Vector3>();
-    private Vector3 lastDrawPoint;
-    
-    public Queue<CombatAction> RecordedActions = new Queue<CombatAction>();
     
     [Header("NavMesh移動系統")]
     public NavMeshAgent navMeshAgent;
@@ -86,7 +81,6 @@ public class CharacterCore : MonoBehaviour
     
     void Start()
     {
-        AddPoint(new Vector3(transform.position.x, 0.1f, transform.position.z));
         
         // 初始化NavMeshAgent
         InitializeNavMeshAgent();
@@ -228,19 +222,11 @@ public class CharacterCore : MonoBehaviour
         }
     }
     
-    public void AddPoint(Vector3 flatPos)
-    {
-        points.Add(flatPos);
-        lastDrawPoint = flatPos;
-    }
     
     public void ControlUpdate()
     {
         // 更新移動狀態
         UpdateMovement();
-        
-        // 更新路徑追蹤
-        UpdatePathTracking();
     }
     
     private void UpdateMovement()
@@ -265,10 +251,11 @@ public class CharacterCore : MonoBehaviour
 
                 AP -= distance * 5.0f;
                 AP = Mathf.Max(0, AP); // 確保AP不會變負數
-                
+                Debug.Log("AP:" + AP);
                 // 如果AP耗盡，立即停止移動
                 if (AP <= 0)
                 {
+                    Debug.Log("??????");
                     StopMovement();
                     return;
                 }
@@ -280,6 +267,8 @@ public class CharacterCore : MonoBehaviour
                     SLGCoreUI.Instance.apBar.slider.value = AP;
                 }
                 
+                // 更新lastPosition為當前位置，以便下一幀計算
+                lastPosition = nowPosition;
                 
                 // 更新動畫
                 CharacterControlAnimator.SetBool("isMoving", true);
@@ -292,16 +281,6 @@ public class CharacterCore : MonoBehaviour
         }
     }
     
-    private void UpdatePathTracking()
-    {
-        lastPosition = new Vector2(transform.position.x, transform.position.z);
-        Vector3 flatCurrentPos = new Vector3(transform.position.x, 0.1f, transform.position.z);
-
-        if (Vector3.Distance(flatCurrentPos, lastDrawPoint) >= pointSpacing)
-        {
-            AddPoint(flatCurrentPos);
-        }
-    }
     /// <summary>
     /// 移動到指定位置
     /// </summary>
@@ -368,10 +347,10 @@ public class CharacterCore : MonoBehaviour
                 // 繪製導航路徑
                 StartCoroutine(DrawNavMeshPath());
                 
-                isMoving = true;
+                // 初始化lastPosition為當前位置，用於計算移動消耗的AP
+                lastPosition = new Vector2(transform.position.x, transform.position.z);
                 
-                // 記錄移動動作
-                RecordMovementAction();
+                isMoving = true;
                 
             }
             else
@@ -402,17 +381,6 @@ public class CharacterCore : MonoBehaviour
         
     }
     
-    /// <summary>
-    /// 記錄移動動作用於重播
-    /// </summary>
-    private void RecordMovementAction()
-    {
-        CombatAction moveAction = new CombatAction();
-        moveAction.Position = transform.position;
-        moveAction.rotation = transform.rotation;
-        moveAction.type = CombatAction.ActionType.Move;
-        RecordedActions.Enqueue(moveAction);
-    }
     
     /// <summary>
     /// 檢查是否可以移動到指定位置
@@ -536,25 +504,14 @@ public class CharacterCore : MonoBehaviour
         return skillD != null && AP >= skillD.SPCost;
     }
     
-    public void UseSkill(CombatSkill skill, CombatAction.ActionType actionType)
+    public void UseSkill(CombatSkill skill)
     {
         if (skill != null && AP >= skill.SPCost)
         {
-            CombatAction tempActionMove = new CombatAction();
             nowState = CharacterCoreState.UsingSkill;
-            tempActionMove.Position = transform.position;
-            tempActionMove.rotation = transform.rotation;
-            tempActionMove.type = CombatAction.ActionType.Move;
-            RecordedActions.Enqueue(tempActionMove);
-            
-            CombatAction tempActionSkill = new CombatAction();
-            tempActionSkill.type = actionType;
-            
             
             CharacterControlAnimator.Play(skill.AnimationName);
             AP -= skill.SPCost;
-            
-            RecordedActions.Enqueue(tempActionSkill);
         }
     }
     
@@ -563,8 +520,7 @@ public class CharacterCore : MonoBehaviour
     /// </summary>
     /// <param name="targetLocation">技能目標位置</param>
     /// <param name="skill">要執行的技能</param>
-    /// <param name="actionType">技能動作類型</param>
-    public void ExecuteSkillAtLocation(Vector3 targetLocation, CombatSkill skill, CombatAction.ActionType actionType)
+    public void ExecuteSkillAtLocation(Vector3 targetLocation, CombatSkill skill)
     {
         if (skill != null && AP >= skill.SPCost)
         {
@@ -573,7 +529,6 @@ public class CharacterCore : MonoBehaviour
             {
                 return;
             }
-            
             
             // 讓角色面向目標位置
             Vector3 lookDirection = targetLocation - transform.position;
@@ -589,25 +544,11 @@ public class CharacterCore : MonoBehaviour
                 animationMoveScaler3D.SetClickPosition(targetLocation);
             }
             
-            // 記錄移動到當前位置
-            CombatAction tempActionMove = new CombatAction();
             nowState = CharacterCoreState.UsingSkill;
-            tempActionMove.Position = transform.position;
-            tempActionMove.rotation = transform.rotation;
-            tempActionMove.type = CombatAction.ActionType.Move;
-            RecordedActions.Enqueue(tempActionMove);
-            
-            // 記錄技能動作
-            CombatAction tempActionSkill = new CombatAction();
-            tempActionSkill.type = actionType;
-            tempActionSkill.targetPosition = targetLocation; // 儲存目標位置
-            
             
             // 播放技能動畫
             CharacterControlAnimator.Play(skill.AnimationName);
             AP -= skill.SPCost;
-            
-            RecordedActions.Enqueue(tempActionSkill);
             
             // 隱藏技能瞄準系統
             if (straightFrontTargetingAnchor != null)
