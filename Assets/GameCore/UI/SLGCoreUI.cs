@@ -126,14 +126,6 @@ public class SLGCoreUI : MonoBehaviour
         Cursor.visible = !visible || !enableCustomCursor;
     }
     
-    public void SetCursorSprite(Sprite newSprite)
-    {
-        if (cursorImage != null)
-        {
-            cursorImage.sprite = newSprite;
-        }
-    }
-    
     private void InitializeFloorIndicator()
     {
         // 查找或創建FloorMouseIndicator組件
@@ -315,17 +307,6 @@ public class SLGCoreUI : MonoBehaviour
             if (currentCharacter.currentActionMode != CharacterCore.PlayerActionMode.None)
             {
                 SetActionMode(CharacterCore.PlayerActionMode.None);
-            }
-            else
-            {
-                // 檢查是否正在執行移動或使用技能中，如果是則不能結束回合
-                if (IsCharacterMoving(currentCharacter) || currentCharacter.nowState == CharacterCore.CharacterCoreState.UsingSkill)
-                {
-                    return;
-                }
-                
-                // 如果已經是None狀態，則確認回合
-                currentCharacter.ConfirmTurn();
             }
         }
     }

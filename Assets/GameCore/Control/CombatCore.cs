@@ -371,25 +371,6 @@ public class CombatCore : MonoBehaviour
         return nextActor;
     }
     
-    public void ConfirmAction()
-    {
-        for (int i = 0; i < AllEnemies.Count; i++)
-        {
-            AllEnemies[i].ReturnFromPreview();
-        }
-        
-        // 結束當前玩家的回合
-        if (currentRoundEntity != null)
-        {
-            CharacterCore character = currentRoundEntity.GetComponent<CharacterCore>();
-            if (character != null && character.nowState == CharacterCore.CharacterCoreState.ControlState)
-            {
-                // 改變狀態以結束玩家回合
-                character.nowState = CharacterCore.CharacterCoreState.ExcutionState;
-            }
-        }
-    }
-    
     public void EndCurrentEntityTurn()
     {
         // 強制結束當前實體的回合

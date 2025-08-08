@@ -1,19 +1,9 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.InputSystem;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
-
 
 public class CharacterCore : MonoBehaviour
 {
-    // For Control //
-    public float moveSpeed = 20f;
-    public Transform cameraTransform;
-    public float turnRate = 720;
-
     [Header("組件引用")]
     public CharacterMovement movementComponent;
     public CharacterResources characterResources;
@@ -25,14 +15,10 @@ public class CharacterCore : MonoBehaviour
     private bool isHoldingSpace = false;       // 是否正在按住空白鍵
     private bool hasTriggeredEndTurn = false;  // 是否已經觸發過結束回合
     
-    
-    
     public Animator CharacterControlAnimator;
     
     [Header("動畫根運動控制")]
-    public AnimationRelativePos controllerAnimationRelativePos;
     public AnimationMoveScaler3D animationMoveScaler3D;
-    
 
     public enum CharacterCoreState{ ControlState, ExcutionState, UsingSkill, ExecutingSkill, TurnComplete }
 
@@ -47,11 +33,8 @@ public class CharacterCore : MonoBehaviour
     public CharacterCoreState nowState = CharacterCoreState.ControlState;
     public PlayerActionMode currentActionMode = PlayerActionMode.None;
     
-    
-    
     void Start()
     {
-        
         // 獲取組件引用
         if (movementComponent == null)
             movementComponent = GetComponent<CharacterMovement>();
@@ -60,37 +43,8 @@ public class CharacterCore : MonoBehaviour
         if (skillsComponent == null)
             skillsComponent = GetComponent<CharacterSkills>();
         
-        // 初始化AnimationRelativePos設定
-        InitializeAnimationRelativePos();
-        
         // 初始化AnimationMoveScaler3D設定
         InitializeAnimationMoveScaler3D();
-        
-    }
-    
-    
-    
-    private void InitializeAnimationRelativePos()
-    {
-        // 檢查是否有AnimationRelativePos組件
-        if (controllerAnimationRelativePos == null)
-        {
-            controllerAnimationRelativePos = GetComponent<AnimationRelativePos>();
-        }
-        
-        if (controllerAnimationRelativePos != null)
-        {
-            // 確保AnimationRelativePos有正確的Animator引用
-            if (controllerAnimationRelativePos.animator == null)
-            {
-                controllerAnimationRelativePos.animator = CharacterControlAnimator;
-            }
-            
-            
-        }
-        else
-        {
-        }
     }
     
     private void InitializeAnimationMoveScaler3D()
@@ -108,13 +62,8 @@ public class CharacterCore : MonoBehaviour
             {
                 animationMoveScaler3D.animator = CharacterControlAnimator;
             }
-            
-        }
-        else
-        {
         }
     }
-    
     
     public void ControlUpdate()
     {
@@ -124,7 +73,6 @@ public class CharacterCore : MonoBehaviour
             movementComponent.UpdateMovement();
         }
     }
-    
     
     /// <summary>
     /// 移動到指定位置
@@ -138,46 +86,6 @@ public class CharacterCore : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// 停止移動
-    /// </summary>
-    public void StopMovement()
-    {
-        if (movementComponent != null)
-        {
-            movementComponent.StopMovement();
-        }
-    }
-    
-    
-    /// <summary>
-    /// 檢查是否可以移動到指定位置
-    /// </summary>
-    /// <param name="destination">目標位置</param>
-    /// <returns>是否可以移動</returns>
-    public bool CanMoveTo(Vector3 destination)
-    {
-        if (movementComponent != null)
-        {
-            return movementComponent.CanMoveTo(destination);
-        }
-        return false;
-    }
-
-    public bool CheckConfirm()
-    {
-        // 確認按鍵將改為滑鼠點擊
-        return false;
-    }
-    
-    public void ReFillAP()
-    {
-        if (characterResources != null)
-        {
-            characterResources.RefillAP();
-        }
-    }
-    
     // Update is called once per frame
     void Update()
     {
@@ -186,7 +94,6 @@ public class CharacterCore : MonoBehaviour
         {
             return;
         }
-        
         
         if (nowState == CharacterCoreState.ControlState)
         {
@@ -220,13 +127,7 @@ public class CharacterCore : MonoBehaviour
                 nowState = CharacterCoreState.ControlState;
             }
         }
-        else
-        {
-            // 如果不在ControlState或ExcutionState，記錄原因
-        }
     }
-    
-    
     
     /// <summary>
     /// 獲取玩家的真實位置（考慮 ExecutionState 時的 CharacterExecutor 位置）
@@ -234,10 +135,6 @@ public class CharacterCore : MonoBehaviour
     /// <returns>玩家的真實世界位置</returns>
     public Vector3 GetRealPosition()
     {
-        // 如果在執行狀態且有 characterExecutor，使用 executor 的位置
-
-        
-        // 否則使用主物件的位置
         return transform.position;
     }
     
@@ -247,17 +144,9 @@ public class CharacterCore : MonoBehaviour
     /// <returns>玩家的真實 Transform</returns>
     public Transform GetRealTransform()
     {
-        // 如果在執行狀態且有 characterExecutor，使用 executor 的 transform
-
-        // 否則使用主物件的 transform
         return transform;
     }
     
-    /// <summary>
-    /// 在回合結束時同步位置（將主物件位置更新為 CharacterExecutor 的位置）
-    /// </summary>
-
-
     // 技能檢查方法 - 委託給 CharacterSkills 組件
     public bool CanUseSkillA()
     {
@@ -279,14 +168,6 @@ public class CharacterCore : MonoBehaviour
         return skillsComponent != null && skillsComponent.CanUseSkillD();
     }
     
-    public void UseSkill(CombatSkill skill)
-    {
-        if (skillsComponent != null)
-        {
-            skillsComponent.UseSkill(skill);
-        }
-    }
-    
     /// <summary>
     /// 在指定位置執行技能
     /// </summary>
@@ -298,12 +179,6 @@ public class CharacterCore : MonoBehaviour
         {
             skillsComponent.ExecuteSkillAtLocation(targetLocation, skill);
         }
-    }
-    
-    public void ConfirmTurn()
-    {
-        CombatCore.Instance.ConfirmAction();
-        nowState = CharacterCoreState.ExcutionState;
     }
     
     /// <summary>
@@ -364,14 +239,6 @@ public class CharacterCore : MonoBehaviour
                 // 開始長壓
                 isHoldingSpace = true;
                 spaceKeyHoldTime = 0f;
-                
-                // Print當前戰鬥狀態信息
-                string currentCombatEntityName = "None";
-                if (CombatCore.Instance != null && CombatCore.Instance.currentRoundEntity != null)
-                {
-                    currentCombatEntityName = CombatCore.Instance.currentRoundEntity.Name;
-                }
-                
             }
             else if (!hasTriggeredEndTurn)  // 只有在還沒觸發過的情況下才繼續處理
             {
@@ -403,7 +270,6 @@ public class CharacterCore : MonoBehaviour
     /// </summary>
     private void EndTurnBySpaceKey()
     {
-        
         // 重置長壓狀態
         isHoldingSpace = false;
         spaceKeyHoldTime = 0f;
@@ -413,25 +279,6 @@ public class CharacterCore : MonoBehaviour
         {
             CombatCore.Instance.EndCurrentEntityTurn();
         }
-    }
-    
-    /// <summary>
-    /// 獲取長壓空白鍵的進度（0-1）
-    /// </summary>
-    /// <returns>進度值，0表示未開始，1表示完成</returns>
-    public float GetSpaceKeyHoldProgress()
-    {
-        if (!isHoldingSpace) return 0f;
-        return Mathf.Clamp01(spaceKeyHoldTime / holdTimeToEndTurn);
-    }
-    
-    /// <summary>
-    /// 是否正在長壓空白鍵
-    /// </summary>
-    /// <returns>是否正在長壓</returns>
-    public bool IsHoldingSpaceKey()
-    {
-        return isHoldingSpace;
     }
     
     /// <summary>
@@ -445,6 +292,4 @@ public class CharacterCore : MonoBehaviour
             skillsComponent.OnTargetingCollisionChanged(collidingObjects);
         }
     }
-
-    
 }
