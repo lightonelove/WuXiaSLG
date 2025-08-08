@@ -621,6 +621,13 @@ public class CharacterCore : MonoBehaviour
             
             RecordedActions.Enqueue(tempActionSkill);
             
+            // 隱藏技能瞄準系統
+            if (straightFrontTargetingAnchor != null)
+            {
+                straightFrontTargetingAnchor.gameObject.SetActive(false);
+                Debug.Log("[CharacterCore] 技能確認使用，已隱藏瞄準系統");
+            }
+            
             // 重置動作模式
             currentActionMode = PlayerActionMode.None;
         }
