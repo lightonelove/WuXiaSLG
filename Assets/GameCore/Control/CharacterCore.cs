@@ -1134,7 +1134,7 @@ public class CharacterCore : MonoBehaviour
                 Vector3 anchorWorldPos = straightFrontTargetingAnchor.position;
                 Vector3 anchorToMouse = mouseWorldPos - anchorWorldPos;
                 anchorToMouse.y = 0; // 保持水平
-                float anchorDistance = anchorToMouse.magnitude;
+                float anchorDistance = anchorToMouse.magnitude + 0.5f;
                 
                 // Cube 在本地座標 (0, 0, 0.5)，表示從 Anchor 中心延伸 0.5 個單位
                 // 所以縮放倍率 = 實際距離 / Cube 的本地 Z 偏移 * 0.5（修正倍率）
