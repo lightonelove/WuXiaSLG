@@ -465,6 +465,9 @@ public class CharacterCore : MonoBehaviour
             return;
         }
         
+        // Debug狀態追蹤
+        //Debug.Log($"[Update] nowState: {nowState}, currentActionMode: {currentActionMode}");
+        
         if (nowState == CharacterCoreState.ControlState)
         {
             ControlUpdate();
@@ -474,6 +477,11 @@ public class CharacterCore : MonoBehaviour
             
             // 更新技能瞄準系統
             UpdateSkillTargeting();
+        }
+        else if (nowState == CharacterCoreState.ExcutionState)
+        {
+            // 在執行狀態下也應該可以用空白鍵強制結束回合
+            HandleSpaceKeyInput();
         }
         else if (nowState == CharacterCoreState.UsingSkill)
         {
@@ -488,7 +496,13 @@ public class CharacterCore : MonoBehaviour
                 }
                 
                 nowState = CharacterCoreState.ControlState;
+                Debug.Log("[CharacterCore] 回到ControlState");
             }
+        }
+        else
+        {
+            // 如果不在ControlState或ExcutionState，記錄原因
+            Debug.Log($"[CharacterCore] 當前狀態: {nowState}，跳過HandleSpaceKeyInput");
         }
     }
     
@@ -664,7 +678,6 @@ public class CharacterCore : MonoBehaviour
                 // 顯示路徑長度和AP消耗的Debug訊息
                 float pathLength = CalculatePathLength(path);
                 float apCost = CalculateAPCost(pathLength);
-                Debug.Log($"路徑長度: {pathLength:F2}, AP消耗: {apCost:F2}, 當前AP: {AP:F2}, AP{(hasEnoughAP ? "足夠" : "不足")}");
                 
                 // 設定預覽狀態
                 isPreviewingPath = true;
@@ -1024,17 +1037,33 @@ public class CharacterCore : MonoBehaviour
     private void HandleSpaceKeyInput()
     {
         Keyboard keyboard = Keyboard.current;
-        if (keyboard == null) return;
+        if (keyboard == null) 
+        {
+            Debug.LogWarning("[CharacterCore] Keyboard.current is null!");
+            return;
+        }
         
         // 檢查空白鍵是否被按下
-        if (keyboard.spaceKey.isPressed)
+        bool spacePressed = keyboard.spaceKey.isPressed;
+        //Debug.Log($"[SpaceKey Debug] Space key pressed: {spacePressed}, isHolding: {isHoldingSpace}, holdTime: {spaceKeyHoldTime:F2}");
+        
+        if (spacePressed)
         {
             if (!isHoldingSpace)
             {
                 // 開始長壓
                 isHoldingSpace = true;
                 spaceKeyHoldTime = 0f;
-                Debug.Log("開始長壓空白鍵...");
+                
+                // Print當前戰鬥狀態信息
+                string currentCombatEntityName = "None";
+                if (CombatCore.Instance != null && CombatCore.Instance.currentRoundEntity != null)
+                {
+                    currentCombatEntityName = CombatCore.Instance.currentRoundEntity.Name;
+                }
+                
+                Debug.Log($"[SpaceKey Pressed] Combat Entity: {currentCombatEntityName}, PlayerActionMode: {currentActionMode}, CharacterCore State: {nowState}");
+                Debug.Log("[CharacterCore] 開始長壓空白鍵...");
             }
             else
             {
@@ -1044,6 +1073,7 @@ public class CharacterCore : MonoBehaviour
                 // 檢查是否達到結束回合的時間
                 if (spaceKeyHoldTime >= holdTimeToEndTurn)
                 {
+                    Debug.Log($"[CharacterCore] 長壓時間達到 {holdTimeToEndTurn}，準備結束回合");
                     EndTurnBySpaceKey();
                 }
             }
@@ -1055,7 +1085,7 @@ public class CharacterCore : MonoBehaviour
             {
                 isHoldingSpace = false;
                 spaceKeyHoldTime = 0f;
-                Debug.Log("停止長壓空白鍵");
+                Debug.Log("[CharacterCore] 停止長壓空白鍵");
             }
         }
     }

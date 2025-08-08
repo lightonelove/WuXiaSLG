@@ -415,20 +415,13 @@ public class CombatCore : MonoBehaviour
                 if (character.nowState == CharacterCore.CharacterCoreState.ControlState)
                 {
                     // 清除任何路徑預覽
+                    Debug.Log($"Test2");
                     character.ClearPathDisplay();
                     
                     // 如果沒有記錄任何動作，直接結束回合
-                    if (character.RecordedActions.Count == 0)
-                    {
-                        character.nowState = CharacterCore.CharacterCoreState.TurnComplete;
-                        Debug.Log($"Player {character.name} ended turn without actions.");
-                    }
-                    else
-                    {
-                        // 有記錄的動作，進入執行狀態
-                        character.nowState = CharacterCore.CharacterCoreState.ExcutionState;
-                        Debug.Log($"Player {character.name} moving to execution state.");
-                    }
+
+                    character.nowState = CharacterCore.CharacterCoreState.TurnComplete;
+                    Debug.Log($"Player {character.name} ended turn without actions.");
                 }
             }
             
@@ -437,7 +430,7 @@ public class CombatCore : MonoBehaviour
             {
                 // 強制結束敵人回合
                 enemy.SetState(EnemyState.TurnComplete);
-                Debug.Log($"Enemy {enemy.name} turn force ended.");
+                //Debug.Log($"Enemy {enemy.name} turn force ended.");
             }
         }
     }

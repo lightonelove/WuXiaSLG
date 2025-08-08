@@ -126,7 +126,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6903515148748646631, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: Name
-      value: MainCharacter_B
+      value: Summer
       objectReference: {fileID: 0}
     - target: {fileID: 6903515148748646631, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: Speed
