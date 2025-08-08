@@ -27,11 +27,9 @@ public class SkillTargetingCollisionDetector : MonoBehaviour
         // 檢查是否為Floor層的物件
         if (IsInLayerMask(other.gameObject, floorLayerMask))
         {
-            Debug.Log(other.name);
             // 添加到碰撞列表
             if (collidingObjects.Add(other))
             {
-                Debug.Log($"[SkillTargeting] 進入碰撞: {other.gameObject.name}");
                 
                 // 通知Character Core更新狀態
                 if (characterCore != null)
@@ -50,7 +48,6 @@ public class SkillTargetingCollisionDetector : MonoBehaviour
             // 從碰撞列表移除
             if (collidingObjects.Remove(other))
             {
-                Debug.Log($"[SkillTargeting] 退出碰撞: {other.gameObject.name}");
                 
                 // 通知Character Core更新狀態
                 if (characterCore != null)

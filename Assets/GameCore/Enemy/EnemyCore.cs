@@ -370,8 +370,6 @@ public class EnemyCore : MonoBehaviour
     /// </summary>
     bool MoveWithNavMesh()
     {
-        Debug.Log("navAgent.pathPending:" + navAgent.pathPending);
-        Debug.Log("navAgent.remainingDistance:" + navAgent.remainingDistance);
         if (!navAgent.pathPending && navAgent.remainingDistance > 0.1f)
         {
             // 計算這一幀要移動的距離

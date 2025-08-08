@@ -120,7 +120,6 @@ public class CharacterCore : MonoBehaviour
                     if (cubeRenderer != null && cubeRenderer.material != null)
                     {
                         originalCubeColor = cubeRenderer.material.color;
-                        Debug.Log($"[CharacterCore] 已儲存Cube原始顏色: {originalCubeColor}");
                     }
                     
                     // 初始化碰撞檢測器（已在 prefab 中設定引用）
@@ -130,26 +129,21 @@ public class CharacterCore : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning("[CharacterCore] 碰撞檢測器引用未在 prefab 中設定！");
                     }
                     
                     // 確保初始時是隱藏的
                     straightFrontTargetingAnchor.gameObject.SetActive(false);
-                    Debug.Log("[CharacterCore] 找到技能瞄準系統 StraightFrontTargetingAnchor 和 BoxCollider");
                 }
                 else
                 {
-                    Debug.LogWarning("[CharacterCore] 找不到 Cube 的 BoxCollider 組件");
                 }
             }
             else
             {
-                Debug.LogWarning("[CharacterCore] 找不到 StraightFrontTargetingAnchor 下的 Cube 物件");
             }
         }
         else
         {
-            Debug.LogWarning("[CharacterCore] 找不到 StraightFrontTargetingAnchor 物件");
         }
         
         // 取得 Floor 圖層遮罩
@@ -205,11 +199,9 @@ public class CharacterCore : MonoBehaviour
             }
             
             
-            Debug.Log("[CharacterCore] 已初始化AnimationRelativePos，使用Transform根運動模式");
         }
         else
         {
-            Debug.LogWarning("[CharacterCore] 沒有找到AnimationRelativePos組件，技能root motion位移將無法正常工作");
         }
     }
     
@@ -229,11 +221,9 @@ public class CharacterCore : MonoBehaviour
                 animationMoveScaler3D.animator = CharacterControlAnimator;
             }
             
-            Debug.Log("[CharacterCore] 已初始化AnimationMoveScaler3D，技能位移縮放系統已就緒");
         }
         else
         {
-            Debug.LogWarning("[CharacterCore] 沒有找到AnimationMoveScaler3D組件，技能位移縮放將無法正常工作");
         }
     }
     
@@ -278,7 +268,6 @@ public class CharacterCore : MonoBehaviour
                 // 如果AP耗盡，立即停止移動
                 if (AP <= 0)
                 {
-                    Debug.Log("AP耗盡，停止移動！");
                     StopMovement();
                     return;
                 }
@@ -323,7 +312,6 @@ public class CharacterCore : MonoBehaviour
         // 檢查是否有足夠AP
         if (AP <= 0)
         {
-            Debug.Log("AP不足，無法移動！");
             return;
         }
         
@@ -346,17 +334,14 @@ public class CharacterCore : MonoBehaviour
                     if (Vector3.Distance(transform.position, actualDestination) < 0.5f)
                     {
                         // 如果最遠距離太近，就不移動
-                        Debug.Log("AP不足，無法進行有效移動！");
                         return;
                     }
                     
-                    Debug.Log($"AP不足到達目標，移動到最遠可達位置");
                 }
                 else
                 {
                     // AP足夠，移動到目標位置
                     actualDestination = hit.position;
-                    Debug.Log("AP足夠，移動到目標位置");
                 }
                 
                 targetPosition = actualDestination;
@@ -387,16 +372,13 @@ public class CharacterCore : MonoBehaviour
                 // 記錄移動動作
                 RecordMovementAction();
                 
-                Debug.Log($"開始移動到: {targetPosition}");
             }
             else
             {
-                Debug.Log("無法計算到目標位置的路徑！");
             }
         }
         else
         {
-            Debug.Log("目標位置無法到達！");
         }
     }
     
@@ -417,7 +399,6 @@ public class CharacterCore : MonoBehaviour
         // 清除路徑顯示（包括兩個LineRenderer）
         ClearPathDisplay();
         
-        Debug.Log("停止移動");
     }
     
     /// <summary>
@@ -465,8 +446,6 @@ public class CharacterCore : MonoBehaviour
             return;
         }
         
-        // Debug狀態追蹤
-        //Debug.Log($"[Update] nowState: {nowState}, currentActionMode: {currentActionMode}");
         
         if (nowState == CharacterCoreState.ControlState)
         {
@@ -492,17 +471,14 @@ public class CharacterCore : MonoBehaviour
                 if (animationMoveScaler3D != null)
                 {
                     animationMoveScaler3D.ClearEvaluate();
-                    Debug.Log("[CharacterCore] 技能動畫完成，已清除AnimationMoveScaler3D狀態");
                 }
                 
                 nowState = CharacterCoreState.ControlState;
-                Debug.Log("[CharacterCore] 回到ControlState");
             }
         }
         else
         {
             // 如果不在ControlState或ExcutionState，記錄原因
-            Debug.Log($"[CharacterCore] 當前狀態: {nowState}，跳過HandleSpaceKeyInput");
         }
     }
     
@@ -594,11 +570,9 @@ public class CharacterCore : MonoBehaviour
             // 檢查技能路徑是否有效（沒有被 Floor 層阻擋）
             if (!isSkillTargetValid)
             {
-                Debug.Log($"[CharacterCore] 技能 {skill.SkillName} 無法使用：路徑被 Floor 層阻擋！");
                 return;
             }
             
-            Debug.Log($"執行技能 {skill.SkillName} 於位置: {targetLocation}");
             
             // 讓角色面向目標位置
             Vector3 lookDirection = targetLocation - transform.position;
@@ -612,7 +586,6 @@ public class CharacterCore : MonoBehaviour
             if (animationMoveScaler3D != null)
             {
                 animationMoveScaler3D.SetClickPosition(targetLocation);
-                Debug.Log($"[CharacterCore] 已設定AnimationMoveScaler3D目標位置: {targetLocation}");
             }
             
             // 記錄移動到當前位置
@@ -639,7 +612,6 @@ public class CharacterCore : MonoBehaviour
             if (straightFrontTargetingAnchor != null)
             {
                 straightFrontTargetingAnchor.gameObject.SetActive(false);
-                Debug.Log("[CharacterCore] 技能確認使用，已隱藏瞄準系統");
             }
             
             // 重置動作模式
@@ -1039,13 +1011,11 @@ public class CharacterCore : MonoBehaviour
         Keyboard keyboard = Keyboard.current;
         if (keyboard == null) 
         {
-            Debug.LogWarning("[CharacterCore] Keyboard.current is null!");
             return;
         }
         
         // 檢查空白鍵是否被按下
         bool spacePressed = keyboard.spaceKey.isPressed;
-        //Debug.Log($"[SpaceKey Debug] Space key pressed: {spacePressed}, isHolding: {isHoldingSpace}, holdTime: {spaceKeyHoldTime:F2}");
         
         if (spacePressed)
         {
@@ -1062,8 +1032,6 @@ public class CharacterCore : MonoBehaviour
                     currentCombatEntityName = CombatCore.Instance.currentRoundEntity.Name;
                 }
                 
-                Debug.Log($"[SpaceKey Pressed] Combat Entity: {currentCombatEntityName}, PlayerActionMode: {currentActionMode}, CharacterCore State: {nowState}");
-                Debug.Log("[CharacterCore] 開始長壓空白鍵...");
             }
             else
             {
@@ -1073,7 +1041,6 @@ public class CharacterCore : MonoBehaviour
                 // 檢查是否達到結束回合的時間
                 if (spaceKeyHoldTime >= holdTimeToEndTurn)
                 {
-                    Debug.Log($"[CharacterCore] 長壓時間達到 {holdTimeToEndTurn}，準備結束回合");
                     EndTurnBySpaceKey();
                 }
             }
@@ -1085,7 +1052,6 @@ public class CharacterCore : MonoBehaviour
             {
                 isHoldingSpace = false;
                 spaceKeyHoldTime = 0f;
-                Debug.Log("[CharacterCore] 停止長壓空白鍵");
             }
         }
     }
@@ -1095,7 +1061,6 @@ public class CharacterCore : MonoBehaviour
     /// </summary>
     private void EndTurnBySpaceKey()
     {
-        Debug.Log("空白鍵長壓結束回合！");
         
         // 重置長壓狀態
         isHoldingSpace = false;
@@ -1202,7 +1167,6 @@ public class CharacterCore : MonoBehaviour
             
             if (hasCollision)
             {
-                Debug.Log($"[CharacterCore] 技能路徑被 Floor 層阻擋！碰撞物件數量: {collidingObjects.Count}");
                 
                 // 變更Cube顏色為酒紅色
                 if (cubeRenderer != null && cubeRenderer.material != null)
@@ -1212,7 +1176,6 @@ public class CharacterCore : MonoBehaviour
             }
             else
             {
-                Debug.Log("[CharacterCore] 技能路徑暢通，可以使用技能");
                 
                 // 恢復Cube的原始顏色
                 if (cubeRenderer != null && cubeRenderer.material != null)

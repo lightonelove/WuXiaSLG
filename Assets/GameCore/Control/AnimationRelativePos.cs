@@ -8,7 +8,6 @@ public class AnimationRelativePos : MonoBehaviour
     
     void Start()
     {
-        Debug.Log("[AnimationRelativePos] 使用Transform根運動模式");
     }
 
     void OnAnimatorMove()

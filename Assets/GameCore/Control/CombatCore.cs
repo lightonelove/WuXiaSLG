@@ -99,7 +99,6 @@ public class CombatCore : MonoBehaviour
             
             if (nextEntity == null)
             {
-                Debug.LogWarning("No valid entity for next turn!");
                 yield break;
             }
             
@@ -129,7 +128,6 @@ public class CombatCore : MonoBehaviour
         currentCombatState = CombatState.EntityTurn;
         isProcessingTurn = true;
         
-        Debug.Log($"Turn {currentTurnNumber}: {entity.Name}'s turn starts!");
         
         // 判斷是玩家角色還是敵人
         CharacterCore character = entity.GetComponent<CharacterCore>();
@@ -152,7 +150,6 @@ public class CombatCore : MonoBehaviour
     
     IEnumerator ProcessPlayerTurn(CharacterCore character)
     {
-        Debug.Log($"Waiting for player {character.name} action...");
         
         // 設定角色為控制狀態
         character.nowState = CharacterCore.CharacterCoreState.ControlState;
@@ -185,12 +182,10 @@ public class CombatCore : MonoBehaviour
             else if (character.nowState == CharacterCore.CharacterCoreState.ExcutionState)
             {
                 // 正在執行記錄的動作
-                //Debug.Log($"Player {character.name} is executing actions...");
             }
             else if (character.nowState == CharacterCore.CharacterCoreState.ExecutingSkill)
             {
                 // 正在執行技能動作
-                //Debug.Log($"Player {character.name} is executing skill...");
             }
             
             yield return null;
@@ -198,12 +193,10 @@ public class CombatCore : MonoBehaviour
         
         // 同步玩家位置（將 CharacterController 位置更新為 CharacterExecutor 的位置）
         
-        Debug.Log($"Player {character.name} turn completed and reset to ControlState!");
     }
     
     IEnumerator ProcessEnemyTurn(EnemyCore enemy)
     {
-        Debug.Log($"Enemy {enemy.name} is taking action...");
         
         currentCombatState = CombatState.ProcessingAction;
         
@@ -225,7 +218,6 @@ public class CombatCore : MonoBehaviour
         // 重置敵人狀態為 Idle，準備下一回合
         enemy.SetState(EnemyState.Idle);
         
-        Debug.Log($"Enemy {enemy.name} turn completed and reset to Idle!");
     }
     
     CombatEntity CalculateNextActorFromActual()
@@ -295,7 +287,6 @@ public class CombatCore : MonoBehaviour
         
         if (allEnemiesDefeated)
         {
-            Debug.Log("Victory! All enemies defeated!");
             return true;
         }
         
@@ -314,7 +305,6 @@ public class CombatCore : MonoBehaviour
         
         if (allPlayersDefeated)
         {
-            Debug.Log("Defeat! All characters defeated!");
             return true;
         }
         
@@ -406,7 +396,6 @@ public class CombatCore : MonoBehaviour
         // 強制結束當前實體的回合
         if (currentRoundEntity != null)
         {
-            Debug.Log($"Ending turn for {currentRoundEntity.Name}");
             
             CharacterCore character = currentRoundEntity.GetComponent<CharacterCore>();
             if (character != null)
@@ -415,13 +404,11 @@ public class CombatCore : MonoBehaviour
                 if (character.nowState == CharacterCore.CharacterCoreState.ControlState)
                 {
                     // 清除任何路徑預覽
-                    Debug.Log($"Test2");
                     character.ClearPathDisplay();
                     
                     // 如果沒有記錄任何動作，直接結束回合
 
                     character.nowState = CharacterCore.CharacterCoreState.TurnComplete;
-                    Debug.Log($"Player {character.name} ended turn without actions.");
                 }
             }
             
@@ -430,7 +417,6 @@ public class CombatCore : MonoBehaviour
             {
                 // 強制結束敵人回合
                 enemy.SetState(EnemyState.TurnComplete);
-                //Debug.Log($"Enemy {enemy.name} turn force ended.");
             }
         }
     }
