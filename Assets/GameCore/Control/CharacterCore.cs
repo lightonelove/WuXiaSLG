@@ -26,6 +26,7 @@ public class CharacterCore : MonoBehaviour
     public float holdTimeToEndTurn = 1.0f;     // 長壓多少秒結束回合
     private float spaceKeyHoldTime = 0f;       // 空白鍵持續按住時間
     private bool isHoldingSpace = false;       // 是否正在按住空白鍵
+    private bool hasTriggeredEndTurn = false;  // 是否已經觸發過結束回合
     
     public float pointSpacing = 0.2f; // 每隔幾公尺新增一點
     public List<Vector3> points = new List<Vector3>();
@@ -1033,7 +1034,7 @@ public class CharacterCore : MonoBehaviour
                 }
                 
             }
-            else
+            else if (!hasTriggeredEndTurn)  // 只有在還沒觸發過的情況下才繼續處理
             {
                 // 持續長壓，累計時間
                 spaceKeyHoldTime += Time.deltaTime;
@@ -1042,6 +1043,7 @@ public class CharacterCore : MonoBehaviour
                 if (spaceKeyHoldTime >= holdTimeToEndTurn)
                 {
                     EndTurnBySpaceKey();
+                    hasTriggeredEndTurn = true;  // 標記已經觸發過
                 }
             }
         }
@@ -1052,6 +1054,7 @@ public class CharacterCore : MonoBehaviour
             {
                 isHoldingSpace = false;
                 spaceKeyHoldTime = 0f;
+                hasTriggeredEndTurn = false;  // 釋放時重置觸發標記
             }
         }
     }
