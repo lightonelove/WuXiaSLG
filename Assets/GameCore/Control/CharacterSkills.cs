@@ -325,6 +325,13 @@ public class CharacterSkills : MonoBehaviour
         {
             standStillTargetingAnchor.SetVisible(true);
             
+            // 使用當前技能的角度和距離參數設定扇形
+            if (currentSelectedSkill != null)
+            {
+                standStillTargetingAnchor.SetAngle(currentSelectedSkill.SkillAngle);
+                standStillTargetingAnchor.SetRadius(currentSelectedSkill.SkillRange);
+            }
+            
             // 取得滑鼠在地面的位置，用於旋轉扇形朝向
             if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.IsMouseOverFloor())
             {
@@ -345,7 +352,7 @@ public class CharacterSkills : MonoBehaviour
             }
         }
         
-        Debug.Log("StandStill targeting mode - sector mesh enabled");
+        Debug.Log($"StandStill targeting mode - Angle: {currentSelectedSkill?.SkillAngle}, Range: {currentSelectedSkill?.SkillRange}");
     }
     
     /// <summary>
