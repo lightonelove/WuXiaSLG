@@ -23,7 +23,9 @@ public class CharacterSkills : MonoBehaviour
     private Renderer cubeRenderer; // Cube的Renderer組件
     private Color originalCubeColor; // Cube的原始顏色
     private readonly Color blockedColor = new Color(0.5f, 0f, 0f, 1f); // 酒紅色
-    public SkillTargetingCollisionDetector collisionDetector; // 碰撞檢測器
+    public SkillTargetingCollisionDetector collisionDetector; // 碰撞檢測
+    public SectorMeshGenerator standStillTargetingAnchor;
+
     
     // 對其他組件的引用
     public CharacterCore characterCore;
@@ -69,6 +71,13 @@ public class CharacterSkills : MonoBehaviour
                     straightFrontTargetingAnchor.gameObject.SetActive(false);
                 }
             }
+        }
+        
+        // 初始化 StandStill 扇形瞄準器
+        if (standStillTargetingAnchor != null)
+        {
+            // 確保初始時是隱藏的
+            standStillTargetingAnchor.SetVisible(false);
         }
         
         // 取得 Floor 圖層遮罩
@@ -181,10 +190,14 @@ public class CharacterSkills : MonoBehaviour
                 }
                 characterResources.ConsumeAP(skill.SPCost);
                 
-                // 隱藏技能瞄準系統
+                // 隱藏所有技能瞄準系統
                 if (straightFrontTargetingAnchor != null)
                 {
                     straightFrontTargetingAnchor.gameObject.SetActive(false);
+                }
+                if (standStillTargetingAnchor != null)
+                {
+                    standStillTargetingAnchor.SetVisible(false);
                 }
                 
                 // 重置動作模式
@@ -205,10 +218,14 @@ public class CharacterSkills : MonoBehaviour
         Debug.Log("Targeting0");
         if (characterCore.currentActionMode != CharacterCore.PlayerActionMode.SkillTargeting)
         {
-            // 隱藏瞄準系統
-            if (straightFrontTargetingAnchor.gameObject.activeSelf)
+            // 隱藏所有瞄準系統
+            if (straightFrontTargetingAnchor != null && straightFrontTargetingAnchor.gameObject.activeSelf)
             {
                 straightFrontTargetingAnchor.gameObject.SetActive(false);
+            }
+            if (standStillTargetingAnchor != null)
+            {
+                standStillTargetingAnchor.SetVisible(false);
             }
             return;
         }
@@ -241,7 +258,13 @@ public class CharacterSkills : MonoBehaviour
     /// </summary>
     private void UpdateFrontDashTargeting()
     {
-        // 顯示瞄準系統
+        // 隱藏 StandStill 瞄準器
+        if (standStillTargetingAnchor != null)
+        {
+            standStillTargetingAnchor.SetVisible(false);
+        }
+        
+        // 顯示 FrontDash 瞄準系統
         if (!straightFrontTargetingAnchor.gameObject.activeSelf)
         {
             straightFrontTargetingAnchor.gameObject.SetActive(true);
@@ -291,13 +314,38 @@ public class CharacterSkills : MonoBehaviour
     /// </summary>
     private void UpdateStandStillTargeting()
     {
-        // TODO: 實作 StandStill 瞄準模式
-        // 這個模式下，角色原地施放技能，不需要移動到目標位置
-        // 可能需要不同的瞄準視覺效果
-        Debug.Log("StandStill targeting mode - to be implemented");
+        // 隱藏 FrontDash 瞄準器
+        if (straightFrontTargetingAnchor != null && straightFrontTargetingAnchor.gameObject.activeSelf)
+        {
+            straightFrontTargetingAnchor.gameObject.SetActive(false);
+        }
         
-        // 暫時使用 FrontDash 的邏輯作為佔位符
-        UpdateFrontDashTargeting();
+        // 顯示 StandStill 扇形瞄準器
+        if (standStillTargetingAnchor != null)
+        {
+            standStillTargetingAnchor.SetVisible(true);
+            
+            // 取得滑鼠在地面的位置，用於旋轉扇形朝向
+            if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.IsMouseOverFloor())
+            {
+                Vector3 mouseWorldPos = SLGCoreUI.Instance.GetMouseFloorPosition();
+                if (mouseWorldPos != Vector3.zero)
+                {
+                    // 計算方向（用於角色和扇形旋轉）
+                    Vector3 direction = mouseWorldPos - characterCore.transform.position;
+                    direction.y = 0; // 保持水平
+                    
+                    // 旋轉整個 CharacterCore 面向目標（即時跟隨）
+                    if (direction != Vector3.zero)
+                    {
+                        Quaternion targetRotation = Quaternion.LookRotation(direction);
+                        characterCore.transform.rotation = targetRotation;
+                    }
+                }
+            }
+        }
+        
+        Debug.Log("StandStill targeting mode - sector mesh enabled");
     }
     
     /// <summary>
