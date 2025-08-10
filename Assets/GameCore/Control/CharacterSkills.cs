@@ -213,6 +213,34 @@ public class CharacterSkills : MonoBehaviour
             return;
         }
         
+        // 根據當前選擇的技能瞄準模式來更新
+        if (currentSelectedSkill != null)
+        {
+            switch (currentSelectedSkill.TargetingMode)
+            {
+                case SkillTargetingMode.FrontDash:
+                    UpdateFrontDashTargeting();
+                    break;
+                case SkillTargetingMode.StandStill:
+                    UpdateStandStillTargeting();
+                    break;
+                default:
+                    UpdateFrontDashTargeting(); // 預設使用 FrontDash
+                    break;
+            }
+        }
+        else
+        {
+            // 如果沒有選擇技能，使用預設的 FrontDash 瞄準
+            UpdateFrontDashTargeting();
+        }
+    }
+    
+    /// <summary>
+    /// 更新 FrontDash 瞄準模式（前方衝刺）
+    /// </summary>
+    private void UpdateFrontDashTargeting()
+    {
         // 顯示瞄準系統
         if (!straightFrontTargetingAnchor.gameObject.activeSelf)
         {
@@ -256,6 +284,20 @@ public class CharacterSkills : MonoBehaviour
                 // 觸發器系統會自動檢測碰撞，無需手動調用
             }
         }
+    }
+    
+    /// <summary>
+    /// 更新 StandStill 瞄準模式（原地施放）
+    /// </summary>
+    private void UpdateStandStillTargeting()
+    {
+        // TODO: 實作 StandStill 瞄準模式
+        // 這個模式下，角色原地施放技能，不需要移動到目標位置
+        // 可能需要不同的瞄準視覺效果
+        Debug.Log("StandStill targeting mode - to be implemented");
+        
+        // 暫時使用 FrontDash 的邏輯作為佔位符
+        UpdateFrontDashTargeting();
     }
     
     /// <summary>
