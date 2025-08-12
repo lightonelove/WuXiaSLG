@@ -753,16 +753,26 @@ public class CharacterSkills : MonoBehaviour
     private void UpdateSkillTargetValidity()
     {
         bool hasFloorCollision = FloorCollidingObjects.Count > 0;
-        bool newTargetValid = !hasFloorCollision;
+        
+        // 扇型瞄準模式（StandStill）不受 Floor 碰撞影響
+        bool newTargetValid;
+        if (currentSelectedSkill != null && currentSelectedSkill.TargetingMode == SkillTargetingMode.StandStill)
+        {
+            newTargetValid = true; // 扇型模式始終有效
+        }
+        else
+        {
+            newTargetValid = !hasFloorCollision; // 其他模式需要檢查 Floor 碰撞
+        }
         
         // 只在狀態改變時更新顏色和輸出 Debug
         if (newTargetValid != isSkillTargetValid)
         {
             isSkillTargetValid = newTargetValid;
             
-            if (hasFloorCollision)
+            if (hasFloorCollision && currentSelectedSkill != null && currentSelectedSkill.TargetingMode != SkillTargetingMode.StandStill)
             {
-                // 變更Cube顏色為酒紅色
+                // 變更Cube顏色為酒紅色（僅對非扇型模式）
                 if (cubeRenderer != null && cubeRenderer.material != null)
                 {
                     cubeRenderer.material.color = blockedColor;
@@ -776,7 +786,15 @@ public class CharacterSkills : MonoBehaviour
                 {
                     cubeRenderer.material.color = originalCubeColor;
                 }
-                Debug.Log($"[CharacterSkill] Skill target is now valid");
+                
+                if (hasFloorCollision && currentSelectedSkill != null && currentSelectedSkill.TargetingMode == SkillTargetingMode.StandStill)
+                {
+                    Debug.Log($"[CharacterSkill] Skill target valid (StandStill mode ignores Floor collision)");
+                }
+                else
+                {
+                    Debug.Log($"[CharacterSkill] Skill target is now valid");
+                }
             }
         }
     }
