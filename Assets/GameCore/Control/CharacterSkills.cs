@@ -76,7 +76,7 @@ public class CharacterSkills : MonoBehaviour
     public CharacterResources characterResources;
     
     // 碰撞類型枚舉
-    private enum CollisionType { Enter, Stay, Exit }
+    private enum CollisionType { Enter, Exit }
     
     void Start()
     {
@@ -490,9 +490,6 @@ public class CharacterSkills : MonoBehaviour
                 UpdateSkillTargetValidity();
                 Debug.Log($"[CharacterSkill] Floor object entered: {other.name}");
                 break;
-            case CollisionType.Stay:
-                // Floor 碰撞在 Stay 時不需要特別處理
-                break;
             case CollisionType.Exit:
                 FloorCollidingObjects.Remove(other);
                 UpdateSkillTargetValidity();
@@ -514,14 +511,6 @@ public class CharacterSkills : MonoBehaviour
                 TargetingCollidingObjects.Add(other);
                 ProcessTargetIndicator(other, true);
                 LogEntityCollision(other, "entered");
-                break;
-            case CollisionType.Stay:
-                if (!TargetingCollidingObjects.Contains(other))
-                {
-                    TargetingCollidingObjects.Add(other);
-                    ProcessTargetIndicator(other, true);
-                    LogEntityCollision(other, "entered (stay)");
-                }
                 break;
             case CollisionType.Exit:
                 TargetingCollidingObjects.Remove(other);
@@ -596,15 +585,6 @@ public class CharacterSkills : MonoBehaviour
     public void OnTargetingTriggerEnter(Collider other)
     {
         HandleTargetCollision(other, CollisionType.Enter);
-    }
-    
-    /// <summary>
-    /// 技能碰撞檢測：當有物件停留在 Trigger 時
-    /// </summary>
-    /// <param name="other">停留的物件</param>
-    public void OnTargetingTriggerStay(Collider other)
-    {
-        HandleTargetCollision(other, CollisionType.Stay);
     }
     
     /// <summary>
@@ -858,20 +838,16 @@ public class CharacterSkills : MonoBehaviour
             
             // 清除舊的 UnityEvent 連接（包括持久和運行時監聽者）
             receiver.OnTriggerEnterEvent.RemoveAllListeners();
-            receiver.OnTriggerStayEvent.RemoveAllListeners();
             receiver.OnTriggerExitEvent.RemoveAllListeners();
             
             // 清除舊的持久監聽者
             for (int i = receiver.OnTriggerEnterEvent.GetPersistentEventCount() - 1; i >= 0; i--)
                 UnityEventTools.RemovePersistentListener(receiver.OnTriggerEnterEvent, i);
-            for (int i = receiver.OnTriggerStayEvent.GetPersistentEventCount() - 1; i >= 0; i--)
-                UnityEventTools.RemovePersistentListener(receiver.OnTriggerStayEvent, i);
             for (int i = receiver.OnTriggerExitEvent.GetPersistentEventCount() - 1; i >= 0; i--)
                 UnityEventTools.RemovePersistentListener(receiver.OnTriggerExitEvent, i);
             
             // 添加新的持久監聽者（會被保存到場景文件中）
             UnityEventTools.AddPersistentListener(receiver.OnTriggerEnterEvent, OnTargetingTriggerEnter);
-            UnityEventTools.AddPersistentListener(receiver.OnTriggerStayEvent, OnTargetingTriggerStay);
             UnityEventTools.AddPersistentListener(receiver.OnTriggerExitEvent, OnTargetingTriggerExit);
             
             // 啟用 Trigger 事件，關閉 Collision 事件（通常技能系統只需要 Trigger）
