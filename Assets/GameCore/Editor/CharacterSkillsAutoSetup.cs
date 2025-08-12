@@ -13,12 +13,9 @@ public class CharacterSkillsAutoSetup
     static CharacterSkillsAutoSetup()
     {
         // 訂閱 Prefab 編輯模式的事件
-        UnityEditor.SceneManagement.PrefabStage.prefabSaving += OnPrefabSaving;
-        UnityEditor.SceneManagement.PrefabStage.prefabSaved += OnPrefabSaved;
+        PrefabStage.prefabSaving += OnPrefabSaving;
+        PrefabStage.prefabSaved += OnPrefabSaved;
         
-        // 保留場景存檔事件以支援場景中的 CharacterSkills
-        EditorSceneManager.sceneSaving += OnSceneSaving;
-        EditorSceneManager.sceneSaved += OnSceneSaved;
     }
     
     /// <summary>
@@ -74,48 +71,6 @@ public class CharacterSkillsAutoSetup
         }
     }
     
-    /// <summary>
-    /// 場景存檔前執行
-    /// </summary>
-    /// <param name="scene">正在存檔的場景</param>
-    /// <param name="path">場景路徑</param>
-    private static void OnSceneSaving(UnityEngine.SceneManagement.Scene scene, string path)
-    {
-        // 只在非播放模式下執行
-        if (Application.isPlaying)
-            return;
-            
-        Debug.Log($"[CharacterSkillsAutoSetup] Scene saving: {scene.name}, auto-setting up ColliderEventReceivers...");
-        
-        // 找出所有場景中的 CharacterSkills 組件
-        CharacterSkills[] characterSkills = Object.FindObjectsOfType<CharacterSkills>();
-        
-        int totalSetupCount = 0;
-        
-        foreach (CharacterSkills skills in characterSkills)
-        {
-            if (skills != null)
-            {
-                // 自動設定每個 CharacterSkills 的 ColliderEventReceiver
-                skills.AutoSetupColliderEventReceivers();
-                totalSetupCount++;
-            }
-        }
-        
-        if (totalSetupCount > 0)
-        {
-            Debug.Log($"[CharacterSkillsAutoSetup] Auto setup completed for {totalSetupCount} CharacterSkills component(s) before scene save.");
-        }
-    }
-    
-    /// <summary>
-    /// 場景存檔後執行
-    /// </summary>
-    /// <param name="scene">已存檔的場景</param>
-    private static void OnSceneSaved(UnityEngine.SceneManagement.Scene scene)
-    {
-        Debug.Log($"[CharacterSkillsAutoSetup] Scene saved: {scene.name}");
-    }
 }
 
 /// <summary>
