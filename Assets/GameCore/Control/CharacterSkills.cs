@@ -441,6 +441,13 @@ public class CharacterSkills : MonoBehaviour
     /// <param name="other">進入的物件</param>
     public void OnTargetingTriggerEnter(Collider other)
     {
+        // 檢查是否碰撞到自己（通過 CombatEntity 判斷）
+        if (IsSelfEntity(other))
+        {
+            Debug.Log($"[CharacterSkill] Ignoring self collision: {other.name}");
+            return;
+        }
+        
         TargetingCollidingObjects.Add(other);
         
         // 尋找 TargetedIndicator 組件並檢查陣營
@@ -486,6 +493,12 @@ public class CharacterSkills : MonoBehaviour
     /// <param name="other">停留的物件</param>
     public void OnTargetingTriggerStay(Collider other)
     {
+        // 檢查是否碰撞到自己（通過 CombatEntity 判斷）
+        if (IsSelfEntity(other))
+        {
+            return;
+        }
+        
         if (!TargetingCollidingObjects.Contains(other))
         {
             TargetingCollidingObjects.Add(other);
@@ -530,6 +543,12 @@ public class CharacterSkills : MonoBehaviour
     /// <param name="other">離開的物件</param>
     public void OnTargetingTriggerExit(Collider other)
     {
+        // 檢查是否碰撞到自己（通過 CombatEntity 判斷）
+        if (IsSelfEntity(other))
+        {
+            return;
+        }
+        
         TargetingCollidingObjects.Remove(other);
         
         // 尋找 TargetedIndicator 組件並取消瞄準標記
@@ -603,6 +622,72 @@ public class CharacterSkills : MonoBehaviour
             return false;
             
         return currentSelectedSkill.CanTargetFaction(entity.Faction);
+    }
+    
+    /// <summary>
+    /// 檢查碰撞物件是否為自己（通過比較 CombatEntity）
+    /// </summary>
+    /// <param name="other">碰撞的 Collider</param>
+    /// <returns>是否為自己</returns>
+    private bool IsSelfEntity(Collider other)
+    {
+        if (other == null) return false;
+        
+        // 取得自己的 CombatEntity
+        CombatEntity selfEntity = null;
+        if (characterCore != null)
+        {
+            selfEntity = characterCore.GetComponent<CombatEntity>();
+        }
+        
+        // 如果自己沒有 CombatEntity，則回退到檢查 Transform 層級
+        if (selfEntity == null)
+        {
+            return IsChildOfSelf(other.transform);
+        }
+        
+        // 取得碰撞物件的 CombatEntity
+        CombatEntity otherEntity = other.GetComponentInParent<CombatEntity>();
+        
+        // 比較是否為同一個 CombatEntity
+        return selfEntity == otherEntity;
+    }
+    
+    /// <summary>
+    /// 檢查指定的 Transform 是否為自己或自己的子物件（備用方法）
+    /// </summary>
+    /// <param name="target">要檢查的 Transform</param>
+    /// <returns>是否為自己的子物件</returns>
+    private bool IsChildOfSelf(Transform target)
+    {
+        if (target == null) return false;
+        
+        // 檢查是否為 CharacterCore 的子物件
+        if (characterCore != null)
+        {
+            Transform current = target;
+            while (current != null)
+            {
+                if (current == characterCore.transform)
+                {
+                    return true;
+                }
+                current = current.parent;
+            }
+        }
+        
+        // 也檢查是否為 CharacterSkills 本身的子物件
+        Transform currentCheck = target;
+        while (currentCheck != null)
+        {
+            if (currentCheck == transform)
+            {
+                return true;
+            }
+            currentCheck = currentCheck.parent;
+        }
+        
+        return false;
     }
     
 #if UNITY_EDITOR
