@@ -17,6 +17,7 @@ MonoBehaviour:
   targetingMode: 0
   skillAngle: 60
   skillRange: 5
+  targetableFactions: 4
   attackMultiplier: 1
   dodgeChance: 0
   defense: 0
