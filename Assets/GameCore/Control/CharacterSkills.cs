@@ -11,10 +11,41 @@ using UnityEditor.Events;
 public class CharacterSkills : MonoBehaviour
 {
     [Header("技能配置")]
-    public CombatSkill skillA;
-    public CombatSkill skillB;
-    public CombatSkill skillC;
-    public CombatSkill skillD;
+    [SerializeField] private List<CombatSkill> skills = new List<CombatSkill>(4);
+    
+    /// <summary>
+    /// 獲取指定索引的技能
+    /// </summary>
+    /// <param name="index">技能索引 (0-3)</param>
+    /// <returns>技能，如果索引無效則返回 null</returns>
+    public CombatSkill GetSkill(int index)
+    {
+        return (index >= 0 && index < skills.Count) ? skills[index] : null;
+    }
+    
+    /// <summary>
+    /// 設定指定索引的技能
+    /// </summary>
+    /// <param name="index">技能索引</param>
+    /// <param name="skill">要設定的技能</param>
+    public void SetSkill(int index, CombatSkill skill)
+    {
+        // 確保 List 有足夠的空間
+        while (skills.Count <= index)
+        {
+            skills.Add(null);
+        }
+        
+        if (index >= 0 && index < skills.Count)
+        {
+            skills[index] = skill;
+        }
+    }
+    
+    /// <summary>
+    /// 獲取所有技能
+    /// </summary>
+    public List<CombatSkill> Skills => skills;
     
     [Header("當前選擇的技能")]
     public CombatSkill currentSelectedSkill; // 當前選擇要執行的技能
@@ -101,40 +132,22 @@ public class CharacterSkills : MonoBehaviour
     }
     
     /// <summary>
-    /// 檢查是否可以使用技能A
+    /// 檢查是否可以使用指定技能
     /// </summary>
+    /// <param name="skill">要檢查的技能</param>
     /// <returns>是否可以使用</returns>
-    public bool CanUseSkillA()
+    public bool CanUseSkill(CombatSkill skill)
     {
-        return skillA != null && characterResources != null && characterResources.HasEnoughAP(skillA.SPCost);
+        return skill != null && characterResources != null && characterResources.HasEnoughAP(skill.SPCost);
     }
     
     /// <summary>
-    /// 檢查是否可以使用技能B
+    /// 檢查指定索引的技能是否可以使用
     /// </summary>
+    /// <param name="index">技能索引 (0-3)</param>
     /// <returns>是否可以使用</returns>
-    public bool CanUseSkillB()
-    {
-        return skillB != null && characterResources != null && characterResources.HasEnoughAP(skillB.SPCost);
-    }
+    public bool CanUseSkillByIndex(int index) => CanUseSkill(GetSkill(index));
     
-    /// <summary>
-    /// 檢查是否可以使用技能C
-    /// </summary>
-    /// <returns>是否可以使用</returns>
-    public bool CanUseSkillC()
-    {
-        return skillC != null && characterResources != null && characterResources.HasEnoughAP(skillC.SPCost);
-    }
-    
-    /// <summary>
-    /// 檢查是否可以使用技能D
-    /// </summary>
-    /// <returns>是否可以使用</returns>
-    public bool CanUseSkillD()
-    {
-        return skillD != null && characterResources != null && characterResources.HasEnoughAP(skillD.SPCost);
-    }
     
     /// <summary>
     /// 使用技能

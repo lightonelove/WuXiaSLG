@@ -2020,10 +2020,11 @@ MonoBehaviour:
   enableFloorIndicator: 1
   actionButtonsPanel: {fileID: 6372266622700683087}
   moveButton: {fileID: 9121609084510505676}
-  skillAButton: {fileID: 2868392471847750724}
-  skillBButton: {fileID: 7268342868613355041}
-  skillCButton: {fileID: 3229233000964311072}
-  skillDButton: {fileID: 4530191586750122285}
+  skillButtons:
+  - {fileID: 2868392471847750724}
+  - {fileID: 7268342868613355041}
+  - {fileID: 3229233000964311072}
+  - {fileID: 4530191586750122285}
   normalButtonColor: {r: 1, g: 1, b: 1, a: 1}
   selectedButtonColor: {r: 0, g: 1, b: 0, a: 1}
   disabledButtonColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

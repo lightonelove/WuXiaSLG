@@ -1654,10 +1654,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84e8bd02c8a1b4d418e625cb9b30825f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillA: {fileID: 11400000, guid: 477c8d8f274bc5b4bb6761b747d49431, type: 2}
-  skillB: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
-  skillC: {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
-  skillD: {fileID: 11400000, guid: 477c8d8f274bc5b4bb6761b747d49431, type: 2}
+  skills:
+  - {fileID: 11400000, guid: 477c8d8f274bc5b4bb6761b747d49431, type: 2}
+  - {fileID: 11400000, guid: 8de77dadff5f2d0418ff2a9f7690c411, type: 2}
   currentSelectedSkill: {fileID: 0}
   straightFrontTargetingAnchor: {fileID: 5531937141200449668}
   floorLayerMask:

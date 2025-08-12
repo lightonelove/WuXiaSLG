@@ -150,22 +150,22 @@ public class CharacterCore : MonoBehaviour
     // 技能檢查方法 - 委託給 CharacterSkills 組件
     public bool CanUseSkillA()
     {
-        return skillsComponent != null && skillsComponent.CanUseSkillA();
+        return skillsComponent != null && skillsComponent.CanUseSkillByIndex(0);
     }
     
     public bool CanUseSkillB()
     {
-        return skillsComponent != null && skillsComponent.CanUseSkillB();
+        return skillsComponent != null && skillsComponent.CanUseSkillByIndex(1);
     }
     
     public bool CanUseSkillC()
     {
-        return skillsComponent != null && skillsComponent.CanUseSkillC();
+        return skillsComponent != null && skillsComponent.CanUseSkillByIndex(2);
     }
     
     public bool CanUseSkillD()
     {
-        return skillsComponent != null && skillsComponent.CanUseSkillD();
+        return skillsComponent != null && skillsComponent.CanUseSkillByIndex(3);
     }
     
     /// <summary>

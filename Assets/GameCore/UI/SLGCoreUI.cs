@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
@@ -22,10 +23,8 @@ public class SLGCoreUI : MonoBehaviour
     [Header("Action Buttons")]
     public GameObject actionButtonsPanel;    // 按鈕面板
     public Button moveButton;               // 移動按鈕
-    public Button skillAButton;             // 技能A按鈕
-    public Button skillBButton;             // 技能B按鈕
-    public Button skillCButton;             // 技能C按鈕
-    public Button skillDButton;             // 技能D按鈕
+    [Header("技能按鈕")]
+    public List<Button> skillButtons;  // 技能按鈕列表 (A/B/C/D)
     
     [Header("Button Colors")]
     public Color normalButtonColor = Color.white;
@@ -384,44 +383,16 @@ public class SLGCoreUI : MonoBehaviour
         {
         }
         
-        if (skillAButton != null)
+        // 設定技能按鈕事件
+        for (int i = 0; i < skillButtons.Count; i++)
         {
-            skillAButton.onClick.AddListener(() => {
-                ExecuteSkillButton('A');
-            });
-        }
-        else
-        {
-        }
-        
-        if (skillBButton != null)
-        {
-            skillBButton.onClick.AddListener(() => {
-                ExecuteSkillButton('B');
-            });
-        }
-        else
-        {
-        }
-        
-        if (skillCButton != null)
-        {
-            skillCButton.onClick.AddListener(() => {
-                ExecuteSkillButton('C');
-            });
-        }
-        else
-        {
-        }
-        
-        if (skillDButton != null)
-        {
-            skillDButton.onClick.AddListener(() => {
-                ExecuteSkillButton('D');
-            });
-        }
-        else
-        {
+            if (skillButtons[i] != null)
+            {
+                int index = i; // 捕獲迴圈變數
+                skillButtons[i].onClick.AddListener(() => {
+                    ExecuteSkillButton(index);
+                });
+            }
         }
         
     }
@@ -539,22 +510,19 @@ public class SLGCoreUI : MonoBehaviour
         
         // 更新按鈕顏色根據當前模式
         UpdateButtonColor(moveButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.Move);
-        UpdateButtonColor(skillAButton, 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && 
-            currentCharacter.skillsComponent != null && currentCharacter.skillsComponent.currentSelectedSkill == currentCharacter.skillsComponent.skillA, 
-            currentCharacter.CanUseSkillA());
-        UpdateButtonColor(skillBButton, 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && 
-            currentCharacter.skillsComponent != null && currentCharacter.skillsComponent.currentSelectedSkill == currentCharacter.skillsComponent.skillB, 
-            currentCharacter.CanUseSkillB());
-        UpdateButtonColor(skillCButton, 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && 
-            currentCharacter.skillsComponent != null && currentCharacter.skillsComponent.currentSelectedSkill == currentCharacter.skillsComponent.skillC, 
-            currentCharacter.CanUseSkillC());
-        UpdateButtonColor(skillDButton, 
-            currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && 
-            currentCharacter.skillsComponent != null && currentCharacter.skillsComponent.currentSelectedSkill == currentCharacter.skillsComponent.skillD, 
-            currentCharacter.CanUseSkillD());
+        
+        // 更新技能按鈕顏色
+        for (int i = 0; i < skillButtons.Count && i < 4; i++)
+        {
+            if (skillButtons[i] != null)
+            {
+                bool isSelected = currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.SkillTargeting && 
+                                currentCharacter.skillsComponent != null && 
+                                currentCharacter.skillsComponent.currentSelectedSkill == currentCharacter.skillsComponent.GetSkill(i);
+                bool canUse = currentCharacter.skillsComponent != null && currentCharacter.skillsComponent.CanUseSkillByIndex(i);
+                UpdateButtonColor(skillButtons[i], isSelected, canUse);
+            }
+        }
     }
     
     /// <summary>
@@ -598,8 +566,8 @@ public class SLGCoreUI : MonoBehaviour
     /// <summary>
     /// 執行技能按鈕點擊
     /// </summary>
-    /// <param name="skillType">技能類型 ('A', 'B', 'C', 'D')</param>
-    private void ExecuteSkillButton(char skillType)
+    /// <param name="skillIndex">技能索引 (0-3)</param>
+    private void ExecuteSkillButton(int skillIndex)
     {
         // 檢查是否有戰鬥核心和當前玩家
         if (CombatCore.Instance == null || !CombatCore.Instance.IsPlayerTurn())
@@ -614,28 +582,8 @@ public class SLGCoreUI : MonoBehaviour
             return;
             
         // 檢查對應技能是否可用
-        bool canUse = false;
-        CombatSkill skill = null;
-        
-        switch (skillType)
-        {
-            case 'A':
-                canUse = currentCharacter.CanUseSkillA();
-                skill = currentCharacter.skillsComponent != null ? currentCharacter.skillsComponent.skillA : null;
-                break;
-            case 'B':
-                canUse = currentCharacter.CanUseSkillB();
-                skill = currentCharacter.skillsComponent != null ? currentCharacter.skillsComponent.skillB : null;
-                break;
-            case 'C':
-                canUse = currentCharacter.CanUseSkillC();
-                skill = currentCharacter.skillsComponent != null ? currentCharacter.skillsComponent.skillC : null;
-                break;
-            case 'D':
-                canUse = currentCharacter.CanUseSkillD();
-                skill = currentCharacter.skillsComponent != null ? currentCharacter.skillsComponent.skillD : null;
-                break;
-        }
+        bool canUse = currentCharacter.skillsComponent != null && currentCharacter.skillsComponent.CanUseSkillByIndex(skillIndex);
+        CombatSkill skill = currentCharacter.skillsComponent != null ? currentCharacter.skillsComponent.GetSkill(skillIndex) : null;
         
         // 如果技能可用，進入目標選擇模式
         if (canUse && skill != null)
