@@ -204,7 +204,6 @@ public class CharacterSkills : MonoBehaviour
             if (characterCore != null && characterCore.animationMoveScaler3D != null)
             {
                 characterCore.animationMoveScaler3D.SetClickPosition(adjustedTargetLocation);
-                Debug.Log($"[CharacterSkill] Animation target set to: {adjustedTargetLocation} (original: {targetLocation})");
             }
             
             if (characterCore != null)
@@ -341,7 +340,6 @@ public class CharacterSkills : MonoBehaviour
             
             // 設定固定縮放
             straightFrontTargetingAnchor.localScale = new Vector3(1f, 1f, scaleZ);
-            Debug.Log($"[CharacterSkill] Fixed range mode set: {targetDistance:F2}");
         }
         
         // 取得滑鼠在地面的位置
@@ -488,12 +486,10 @@ public class CharacterSkills : MonoBehaviour
             case CollisionType.Enter:
                 FloorCollidingObjects.Add(other);
                 UpdateSkillTargetValidity();
-                Debug.Log($"[CharacterSkill] Floor object entered: {other.name}");
                 break;
             case CollisionType.Exit:
                 FloorCollidingObjects.Remove(other);
                 UpdateSkillTargetValidity();
-                Debug.Log($"[CharacterSkill] Floor object exited: {other.name}");
                 break;
         }
     }
@@ -510,12 +506,10 @@ public class CharacterSkills : MonoBehaviour
             case CollisionType.Enter:
                 TargetingCollidingObjects.Add(other);
                 ProcessTargetIndicator(other, true);
-                LogEntityCollision(other, "entered");
                 break;
             case CollisionType.Exit:
                 TargetingCollidingObjects.Remove(other);
                 ProcessTargetIndicator(other, false);
-                LogEntityCollision(other, "exited");
                 break;
         }
     }
@@ -537,46 +531,16 @@ public class CharacterSkills : MonoBehaviour
                 {
                     targetIndicator.OnTargeted();
                     currentTargets.Add(targetIndicator);
-                    Debug.Log($"[CharacterSkill] TargetedIndicator marked on: {targetIndicator.gameObject.name}");
-                }
-                else
-                {
-                    Debug.Log($"[CharacterSkill] TargetedIndicator skipped (faction not targetable): {targetIndicator.gameObject.name}");
                 }
             }
             else if (currentTargets.Contains(targetIndicator))
             {
                 targetIndicator.OnUntargeted();
                 currentTargets.Remove(targetIndicator);
-                Debug.Log($"[CharacterSkill] TargetedIndicator unmarked on: {targetIndicator.gameObject.name}");
             }
         }
     }
     
-    /// <summary>
-    /// 記錄實體碰撞的 Debug 訊息
-    /// </summary>
-    /// <param name="other">碰撞的 Collider</param>
-    /// <param name="action">動作描述</param>
-    private void LogEntityCollision(Collider other, string action)
-    {
-        CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
-        if (combatEntity != null)
-        {
-            if (CanTargetEntity(combatEntity))
-            {
-                Debug.Log($"[CharacterSkill] CombatEntity {action}: {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
-            }
-            else
-            {
-                Debug.Log($"[CharacterSkill] CombatEntity {action} but ignored (faction not targetable): {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
-            }
-        }
-        else
-        {
-            Debug.Log($"[CharacterSkill] Object {action} (no CombatEntity): {other.name}");
-        }
-    }
     
     /// <summary>
     /// 技能碰撞檢測：當有物件進入 Trigger 時
@@ -632,7 +596,6 @@ public class CharacterSkills : MonoBehaviour
             }
         }
         currentTargets.Clear();
-        Debug.Log($"[CharacterSkill] Cleared {clearedCount} target indicators");
     }
     
     /// <summary>
@@ -744,7 +707,6 @@ public class CharacterSkills : MonoBehaviour
                 {
                     cubeRenderer.material.color = blockedColor;
                 }
-                Debug.Log($"[CharacterSkill] Skill target blocked by Floor collision");
             }
             else
             {
@@ -754,14 +716,6 @@ public class CharacterSkills : MonoBehaviour
                     cubeRenderer.material.color = originalCubeColor;
                 }
                 
-                if (hasFloorCollision && currentSelectedSkill != null && currentSelectedSkill.TargetingMode == SkillTargetingMode.StandStill)
-                {
-                    Debug.Log($"[CharacterSkill] Skill target valid (StandStill mode ignores Floor collision)");
-                }
-                else
-                {
-                    Debug.Log($"[CharacterSkill] Skill target is now valid");
-                }
             }
         }
     }
@@ -804,20 +758,17 @@ public class CharacterSkills : MonoBehaviour
             {
                 // 固定距離模式：始終使用技能設定的距離
                 Vector3 adjustedTarget = characterPos + direction.normalized * maxRange;
-                Debug.Log($"[CharacterSkill] Fixed range adjustment - Original: {originalDistance:F2}, Fixed: {maxRange:F2}");
                 return adjustedTarget;
             }
             else if (originalDistance > maxRange)
             {
                 // 跟隨滑鼠模式但超過最大距離：限制到最大距離
                 Vector3 adjustedTarget = characterPos + direction.normalized * maxRange;
-                Debug.Log($"[CharacterSkill] Range limited adjustment - Original: {originalDistance:F2}, Limited: {maxRange:F2}");
                 return adjustedTarget;
             }
         }
         
         // 其他情況使用原始目標位置
-        Debug.Log($"[CharacterSkill] No range adjustment needed - Distance: {originalDistance:F2}, Max: {maxRange:F2}");
         return originalTarget;
     }
     
@@ -856,10 +807,8 @@ public class CharacterSkills : MonoBehaviour
             
             connectedCount++;
             
-            Debug.Log($"[CharacterSkills] Connected ColliderEventReceiver on {receiver.gameObject.name}");
         }
         
-        Debug.Log($"[CharacterSkills] Auto setup completed. Connected {connectedCount} ColliderEventReceiver(s).");
         
         // 標記場景為已修改
         if (!Application.isPlaying)
