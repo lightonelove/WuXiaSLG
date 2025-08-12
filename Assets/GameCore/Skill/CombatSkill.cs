@@ -19,6 +19,7 @@ public class CombatSkill : ScriptableObject
     [Header("技能範圍參數")]
     [SerializeField] [Range(1f, 360f)] private float skillAngle = 60f; // 技能角度（扇形範圍）
     [SerializeField] [Range(0.5f, 20f)] private float skillRange = 5f; // 技能距離（半徑）
+    [SerializeField] private bool isFixedRange = false; // 是否固定距離（不跟隨滑鼠）
     
     [Header("目標設定")]
     [SerializeField] private CombatEntityFaction targetableFactions = CombatEntityFaction.Hostile; // 可瞄準的陣營
@@ -36,6 +37,7 @@ public class CombatSkill : ScriptableObject
     public SkillTargetingMode TargetingMode => targetingMode;
     public float SkillAngle => skillAngle;
     public float SkillRange => skillRange;
+    public bool IsFixedRange => isFixedRange;
     public CombatEntityFaction TargetableFactions => targetableFactions;
     public float AttackMultiplier => attackMultiplier;
     public float DodgeChance => dodgeChance;

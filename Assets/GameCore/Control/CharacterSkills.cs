@@ -312,6 +312,18 @@ public class CharacterSkills : MonoBehaviour
             straightFrontTargetingAnchor.gameObject.SetActive(true);
         }
         
+        // 如果是固定距離模式，只在模式或技能改變時設定一次 Collider 大小
+        if (currentSelectedSkill != null && currentSelectedSkill.IsFixedRange && needsClearCollision)
+        {
+            float targetDistance = currentSelectedSkill.SkillRange;
+            float cubeLocalOffset = 0.5f; // Cube 在本地座標的 Z 偏移
+            float scaleZ = (targetDistance / cubeLocalOffset) * 0.5f;
+            
+            // 設定固定縮放
+            straightFrontTargetingAnchor.localScale = new Vector3(1f, 1f, scaleZ);
+            Debug.Log($"[CharacterSkill] Fixed range mode set: {targetDistance:F2}");
+        }
+        
         // 取得滑鼠在地面的位置
         if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.IsMouseOverFloor())
         {
@@ -328,19 +340,25 @@ public class CharacterSkills : MonoBehaviour
                     characterCore.transform.rotation = targetRotation;
                 }
                 
-                // 計算 StraightFrontTargetingAnchor 到滑鼠位置的距離（用於縮放）
-                Vector3 anchorWorldPos = straightFrontTargetingAnchor.position;
-                Vector3 anchorToMouse = mouseWorldPos - anchorWorldPos;
-                anchorToMouse.y = 0; // 保持水平
-                float anchorDistance = anchorToMouse.magnitude + 0.5f;
-                
-                // Cube 在本地座標 (0, 0, 0.5)，表示從 Anchor 中心延伸 0.5 個單位
-                // 所以縮放倍率 = 實際距離 / Cube 的本地 Z 偏移 * 0.5（修正倍率）
-                float cubeLocalOffset = 0.5f; // Cube 在本地座標的 Z 偏移
-                float scaleZ = (anchorDistance / cubeLocalOffset) * 0.5f;
-                
-                // 設定縮放，保持 X 和 Y 不變
-                straightFrontTargetingAnchor.localScale = new Vector3(1f, 1f, scaleZ);
+                // 只有在非固定距離模式下才更新 Collider 大小
+                if (currentSelectedSkill == null || !currentSelectedSkill.IsFixedRange)
+                {
+                    // 跟隨滑鼠模式：計算滑鼠距離並限制最大值
+                    Vector3 characterPos = characterCore.transform.position;
+                    Vector3 toMouse = mouseWorldPos - characterPos;
+                    toMouse.y = 0; // 保持水平
+                    float mouseDistance = toMouse.magnitude;
+                    
+                    float maxRange = (currentSelectedSkill != null) ? currentSelectedSkill.SkillRange : 5f;
+                    float targetDistance = Mathf.Min(mouseDistance, maxRange);
+                    
+                    // 計算 Anchor 的縮放（Cube 在本地座標 (0, 0, 0.5)）
+                    float cubeLocalOffset = 0.5f; // Cube 在本地座標的 Z 偏移
+                    float scaleZ = (targetDistance / cubeLocalOffset) * 0.5f;
+                    
+                    // 設定縮放，保持 X 和 Y 不變
+                    straightFrontTargetingAnchor.localScale = new Vector3(1f, 1f, scaleZ);
+                }
                 // 觸發器系統會自動檢測碰撞，無需手動調用
             }
         }
