@@ -808,27 +808,7 @@ public class CharacterSkills : MonoBehaviour
             connectedCount++;
             
         }
-        
-        
-        // 標記場景為已修改
-        if (!Application.isPlaying)
-        {
-            UnityEditor.EditorUtility.SetDirty(this);
-            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
-        }
     }
     
-    /// <summary>
-    /// Unity Editor 中當物件被修改時自動調用
-    /// </summary>
-    void OnValidate()
-    {
-        // 只在非播放模式下執行，避免運行時干擾
-        if (!Application.isPlaying && this != null && gameObject != null)
-        {
-            // 延遲執行以避免在 OnValidate 中直接修改物件
-            UnityEditor.EditorApplication.delayCall += AutoSetupColliderEventReceivers;
-        }
-    }
 #endif
 }

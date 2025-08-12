@@ -15,8 +15,9 @@ MonoBehaviour:
   skillName: SkillA
   animationName: SkillA
   targetingMode: 1
+  skillRange: 9.94
+  isFixedRange: 0
   skillAngle: 120
-  skillRange: 13.1
   targetableFactions: 5
   attackMultiplier: 1
   dodgeChance: 0

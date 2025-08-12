@@ -237,9 +237,9 @@ public class ColliderEventReceiver : MonoBehaviour
     public void ClearAllEventSubscriptions()
     {
         // 清除 UnityEvent
-        OnTriggerEnterEvent?.RemoveAllListeners();
-        OnTriggerStayEvent?.RemoveAllListeners();
-        OnTriggerExitEvent?.RemoveAllListeners();
+        //OnTriggerEnterEvent?.RemoveAllListeners();
+        //OnTriggerStayEvent?.RemoveAllListeners();
+        //OnTriggerExitEvent?.RemoveAllListeners();
         OnCollisionEnterEvent?.RemoveAllListeners();
         OnCollisionStayEvent?.RemoveAllListeners();
         OnCollisionExitEvent?.RemoveAllListeners();
@@ -256,6 +256,6 @@ public class ColliderEventReceiver : MonoBehaviour
     void OnDestroy()
     {
         // 組件銷毀時清除所有事件訂閱
-        ClearAllEventSubscriptions();
+        //ClearAllEventSubscriptions();
     }
 }
