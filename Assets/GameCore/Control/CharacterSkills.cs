@@ -173,8 +173,11 @@ public class CharacterSkills : MonoBehaviour
                 return;
             }
             
+            // 計算考慮距離限制的實際目標位置
+            Vector3 adjustedTargetLocation = CalculateAdjustedTargetLocation(targetLocation, skill);
+            
             // 讓角色面向目標位置
-            Vector3 lookDirection = targetLocation - transform.position;
+            Vector3 lookDirection = adjustedTargetLocation - transform.position;
             lookDirection.y = 0;
             if (lookDirection != Vector3.zero)
             {
@@ -184,7 +187,8 @@ public class CharacterSkills : MonoBehaviour
             // 設定AnimationMoveScaler3D的目標位置（用於技能動畫位移縮放）
             if (characterCore != null && characterCore.animationMoveScaler3D != null)
             {
-                characterCore.animationMoveScaler3D.SetClickPosition(targetLocation);
+                characterCore.animationMoveScaler3D.SetClickPosition(adjustedTargetLocation);
+                Debug.Log($"[CharacterSkill] Animation target set to: {adjustedTargetLocation} (original: {targetLocation})");
             }
             
             if (characterCore != null)
@@ -773,6 +777,50 @@ public class CharacterSkills : MonoBehaviour
     private bool IsInLayerMask(GameObject obj, LayerMask layerMask)
     {
         return ((layerMask.value & (1 << obj.layer)) > 0);
+    }
+    
+    /// <summary>
+    /// 計算考慮技能距離限制的調整後目標位置
+    /// </summary>
+    /// <param name="originalTarget">原始目標位置</param>
+    /// <param name="skill">技能資料</param>
+    /// <returns>調整後的目標位置</returns>
+    private Vector3 CalculateAdjustedTargetLocation(Vector3 originalTarget, CombatSkill skill)
+    {
+        if (skill == null)
+        {
+            return originalTarget;
+        }
+        
+        Vector3 characterPos = transform.position;
+        Vector3 direction = originalTarget - characterPos;
+        direction.y = 0; // 保持水平
+        
+        float originalDistance = direction.magnitude;
+        float maxRange = skill.SkillRange;
+        
+        // 如果是 FrontDash 模式且需要限制距離
+        if (skill.TargetingMode == SkillTargetingMode.FrontDash)
+        {
+            if (skill.IsFixedRange)
+            {
+                // 固定距離模式：始終使用技能設定的距離
+                Vector3 adjustedTarget = characterPos + direction.normalized * maxRange;
+                Debug.Log($"[CharacterSkill] Fixed range adjustment - Original: {originalDistance:F2}, Fixed: {maxRange:F2}");
+                return adjustedTarget;
+            }
+            else if (originalDistance > maxRange)
+            {
+                // 跟隨滑鼠模式但超過最大距離：限制到最大距離
+                Vector3 adjustedTarget = characterPos + direction.normalized * maxRange;
+                Debug.Log($"[CharacterSkill] Range limited adjustment - Original: {originalDistance:F2}, Limited: {maxRange:F2}");
+                return adjustedTarget;
+            }
+        }
+        
+        // 其他情況使用原始目標位置
+        Debug.Log($"[CharacterSkill] No range adjustment needed - Distance: {originalDistance:F2}, Max: {maxRange:F2}");
+        return originalTarget;
     }
     
 #if UNITY_EDITOR
