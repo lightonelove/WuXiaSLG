@@ -35,6 +35,9 @@ public class CharacterSkills : MonoBehaviour
     private CombatSkill lastSelectedSkill = null; // 上次選擇的技能
     private System.Collections.Generic.HashSet<Collider> TargetingCollidingObjects = new System.Collections.Generic.HashSet<Collider>();
     
+    // 追蹤已被標記為瞄準目標的 TargetedIndicator
+    private System.Collections.Generic.HashSet<TargetedIndicator> currentTargets = new System.Collections.Generic.HashSet<TargetedIndicator>();
+    
     // 對其他組件的引用
     public CharacterCore characterCore;
     public CharacterResources characterResources;
@@ -237,6 +240,9 @@ public class CharacterSkills : MonoBehaviour
             // 重置狀態追蹤（當退出瞄準模式時）
             lastTargetingMode = null;
             lastSelectedSkill = null;
+            
+            // 清除所有目標指示器
+            ClearAllTargetIndicators();
             return;
         }
         
@@ -426,6 +432,15 @@ public class CharacterSkills : MonoBehaviour
     {
         TargetingCollidingObjects.Add(other);
         
+        // 尋找 TargetedIndicator 組件並標記為被瞄準
+        TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
+        if (targetIndicator != null)
+        {
+            targetIndicator.OnTargeted();
+            currentTargets.Add(targetIndicator);
+            Debug.Log($"[CharacterSkill] TargetedIndicator marked on: {targetIndicator.gameObject.name}");
+        }
+        
         // 尋找有 CombatEntity 組件的父物件
         CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
         if (combatEntity != null)
@@ -449,6 +464,15 @@ public class CharacterSkills : MonoBehaviour
         {
             TargetingCollidingObjects.Add(other);
             
+            // 尋找 TargetedIndicator 組件並標記為被瞄準（如果還沒被標記）
+            TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
+            if (targetIndicator != null && !currentTargets.Contains(targetIndicator))
+            {
+                targetIndicator.OnTargeted();
+                currentTargets.Add(targetIndicator);
+                Debug.Log($"[CharacterSkill] TargetedIndicator marked on (stay): {targetIndicator.gameObject.name}");
+            }
+            
             // 尋找有 CombatEntity 組件的父物件
             CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
             if (combatEntity != null)
@@ -465,8 +489,16 @@ public class CharacterSkills : MonoBehaviour
     /// <param name="other">離開的物件</param>
     public void OnTargetingTriggerExit(Collider other)
     {
-        // 使用 LayerMask 檢測是否為目標圖層
         TargetingCollidingObjects.Remove(other);
+        
+        // 尋找 TargetedIndicator 組件並取消瞄準標記
+        TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
+        if (targetIndicator != null && currentTargets.Contains(targetIndicator))
+        {
+            targetIndicator.OnUntargeted();
+            currentTargets.Remove(targetIndicator);
+            Debug.Log($"[CharacterSkill] TargetedIndicator unmarked on: {targetIndicator.gameObject.name}");
+        }
         
         // 尋找有 CombatEntity 組件的父物件
         CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
@@ -497,6 +529,26 @@ public class CharacterSkills : MonoBehaviour
     public void ClearStandStillCollidingObjects()
     {
         TargetingCollidingObjects.Clear();
+        
+        // 同時清空所有瞄準目標指示器
+        ClearAllTargetIndicators();
+    }
+    
+    /// <summary>
+    /// 清空所有目標指示器
+    /// </summary>
+    private void ClearAllTargetIndicators()
+    {
+        int clearedCount = currentTargets.Count;
+        foreach (TargetedIndicator target in currentTargets)
+        {
+            if (target != null)
+            {
+                target.OnUntargeted();
+            }
+        }
+        currentTargets.Clear();
+        Debug.Log($"[CharacterSkill] Cleared {clearedCount} target indicators");
     }
     
 #if UNITY_EDITOR

@@ -735,6 +735,18 @@ PrefabInstance:
       propertyPath: m_TagString
       value: CombatController
       objectReference: {fileID: 0}
+    - target: {fileID: 1852086606040174731, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: OnTriggerExitEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1852086606040174731, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: OnTriggerStayEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1852086606040174731, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: OnTriggerEnterEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1996408480484655463, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_TagString
       value: CombatController
@@ -862,6 +874,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1727198852497152677, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: useNavMesh
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2952278509770769901, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: affectChildMeshRenderers
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7146826614908490065, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
