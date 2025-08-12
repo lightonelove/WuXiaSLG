@@ -606,26 +606,6 @@ public class CharacterSkills : MonoBehaviour
     }
     
     /// <summary>
-    /// 清空 StandStill 技能碰撞物件列表
-    /// </summary>
-    public void ClearStandStillCollidingObjects()
-    {
-        TargetingCollidingObjects.Clear();
-        
-        // 同時清空所有瞄準目標指示器
-        ClearAllTargetIndicators();
-    }
-    
-    /// <summary>
-    /// 清空 FrontDash 技能 Floor 碰撞物件列表
-    /// </summary>
-    public void ClearFrontDashFloorCollisions()
-    {
-        FloorCollidingObjects.Clear();
-        UpdateSkillTargetValidity();
-    }
-    
-    /// <summary>
     /// 清空所有碰撞物件列表
     /// </summary>
     public void ClearAllCollidingObjects()
