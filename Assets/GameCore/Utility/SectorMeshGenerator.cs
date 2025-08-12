@@ -23,6 +23,7 @@ public class SectorMeshGenerator : MonoBehaviour
     private Mesh colliderMesh;
     
     [Header("碰撞檢測")]
+    [SerializeField] public LayerMask targetLayerMask = -1; // 要檢測碰撞的圖層遮罩
     private System.Collections.Generic.HashSet<Collider> collidingObjects = new System.Collections.Generic.HashSet<Collider>();
     
     void Awake()
@@ -438,11 +439,21 @@ public class SectorMeshGenerator : MonoBehaviour
     /// </summary>
     void OnTriggerEnter(Collider other)
     {
-        // 過濾掉自身和 Floor 層
-        if (other.gameObject != gameObject && other.gameObject.layer != LayerMask.NameToLayer("Floor"))
+        // 使用 LayerMask 檢測是否為目標圖層
+        if (((1 << other.gameObject.layer) & targetLayerMask) != 0)
         {
             collidingObjects.Add(other);
-            Debug.Log($"[SectorMesh] Object entered: {other.name}, Total: {collidingObjects.Count}");
+            
+            // 尋找有 CombatEntity 組件的父物件
+            CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
+            if (combatEntity != null)
+            {
+                Debug.Log($"[SectorMesh] CombatEntity detected: {combatEntity.gameObject.name}");
+            }
+            else
+            {
+                Debug.Log($"[SectorMesh] Object entered (no CombatEntity): {other.name}");
+            }
         }
     }
     
@@ -451,12 +462,19 @@ public class SectorMeshGenerator : MonoBehaviour
     /// </summary>
     void OnTriggerStay(Collider other)
     {
-        // 確保物件在集合中（防止遺漏）
-        if (other.gameObject != gameObject && other.gameObject.layer != LayerMask.NameToLayer("Floor"))
+        // 使用 LayerMask 檢測是否為目標圖層
+        if (((1 << other.gameObject.layer) & targetLayerMask) != 0)
         {
             if (!collidingObjects.Contains(other))
             {
                 collidingObjects.Add(other);
+                
+                // 尋找有 CombatEntity 組件的父物件
+                CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
+                if (combatEntity != null)
+                {
+                    Debug.Log($"[SectorMesh] CombatEntity staying: {combatEntity.gameObject.name}");
+                }
             }
         }
     }
@@ -466,8 +484,22 @@ public class SectorMeshGenerator : MonoBehaviour
     /// </summary>
     void OnTriggerExit(Collider other)
     {
-        collidingObjects.Remove(other);
-        Debug.Log($"[SectorMesh] Object exited: {other.name}, Total: {collidingObjects.Count}");
+        // 使用 LayerMask 檢測是否為目標圖層
+        if (((1 << other.gameObject.layer) & targetLayerMask) != 0)
+        {
+            collidingObjects.Remove(other);
+            
+            // 尋找有 CombatEntity 組件的父物件
+            CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
+            if (combatEntity != null)
+            {
+                Debug.Log($"[SectorMesh] CombatEntity exited: {combatEntity.gameObject.name}");
+            }
+            else
+            {
+                Debug.Log($"[SectorMesh] Object exited (no CombatEntity): {other.name}");
+            }
+        }
     }
     
     /// <summary>

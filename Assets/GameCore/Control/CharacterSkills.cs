@@ -25,6 +25,10 @@ public class CharacterSkills : MonoBehaviour
     private readonly Color blockedColor = new Color(0.5f, 0f, 0f, 1f); // 酒紅色
     public SkillTargetingCollisionDetector collisionDetector; // 碰撞檢測
     public SectorMeshGenerator standStillTargetingAnchor;
+    
+    // 瞄準模式狀態追蹤（避免重複生成）
+    private SkillTargetingMode? lastTargetingMode = null; // 上次的瞄準模式
+    private CombatSkill lastSelectedSkill = null; // 上次選擇的技能
 
     
     // 對其他組件的引用
@@ -211,11 +215,9 @@ public class CharacterSkills : MonoBehaviour
     /// </summary>
     public void UpdateSkillTargeting()
     {
-        Debug.Log("Targeting!");
         if (characterCore == null) return;
         
         // 只在 SkillTargeting 模式下運作
-        Debug.Log("Targeting0");
         if (characterCore.currentActionMode != CharacterCore.PlayerActionMode.SkillTargeting)
         {
             // 隱藏所有瞄準系統
@@ -227,6 +229,10 @@ public class CharacterSkills : MonoBehaviour
             {
                 standStillTargetingAnchor.SetVisible(false);
             }
+            
+            // 重置狀態追蹤（當退出瞄準模式時）
+            lastTargetingMode = null;
+            lastSelectedSkill = null;
             return;
         }
         
@@ -258,6 +264,10 @@ public class CharacterSkills : MonoBehaviour
     /// </summary>
     private void UpdateFrontDashTargeting()
     {
+        // 更新狀態追蹤
+        lastTargetingMode = SkillTargetingMode.FrontDash;
+        lastSelectedSkill = currentSelectedSkill;
+        
         // 隱藏 StandStill 瞄準器
         if (standStillTargetingAnchor != null)
         {
@@ -320,19 +330,28 @@ public class CharacterSkills : MonoBehaviour
             straightFrontTargetingAnchor.gameObject.SetActive(false);
         }
         
+        // 檢查是否需要重新生成扇形（只在模式或技能改變時才生成）
+        bool targetingModeChanged = lastTargetingMode != SkillTargetingMode.StandStill;
+        bool skillChanged = lastSelectedSkill != currentSelectedSkill;
+        bool needsRegeneration = targetingModeChanged || skillChanged;
+        
+        // 更新狀態追蹤
+        lastTargetingMode = SkillTargetingMode.StandStill;
+        lastSelectedSkill = currentSelectedSkill;
+        
         // 顯示 StandStill 扇形瞄準器
         if (standStillTargetingAnchor != null)
         {
             standStillTargetingAnchor.SetVisible(true);
             
-            // 使用當前技能的角度和距離參數設定扇形
-            if (currentSelectedSkill != null)
+            // 只在需要重新生成時才設定角度和距離參數（避免每 frame 重新生成 mesh）
+            if (needsRegeneration && currentSelectedSkill != null)
             {
                 standStillTargetingAnchor.SetAngle(currentSelectedSkill.SkillAngle);
                 standStillTargetingAnchor.SetRadius(currentSelectedSkill.SkillRange);
             }
             
-            // 取得滑鼠在地面的位置，用於旋轉扇形朝向
+            // 取得滑鼠在地面的位置，用於旋轉扇形朝向（這部分仍需要每 frame 更新）
             if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.IsMouseOverFloor())
             {
                 Vector3 mouseWorldPos = SLGCoreUI.Instance.GetMouseFloorPosition();
@@ -351,8 +370,6 @@ public class CharacterSkills : MonoBehaviour
                 }
             }
         }
-        
-        Debug.Log($"StandStill targeting mode - Angle: {currentSelectedSkill?.SkillAngle}, Range: {currentSelectedSkill?.SkillRange}");
     }
     
     /// <summary>
