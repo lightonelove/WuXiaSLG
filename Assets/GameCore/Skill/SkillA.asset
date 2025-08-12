@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: SkillA
   animationName: SkillA
+  targetingMode: 1
+  skillAngle: 229
+  skillRange: 13.1
   attackMultiplier: 1
   dodgeChance: 0
   defense: 0

@@ -643,6 +643,7 @@ Transform:
   - {fileID: 5531937141200449668}
   - {fileID: 4591550883524543473}
   - {fileID: 6702055866580083052}
+  - {fileID: 7466886703227529184}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &507542057868587843
@@ -657,15 +658,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f08a1463d1573774b9b4a39a0048f437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  cameraTransform: {fileID: 0}
-  turnRate: 1800
   movementComponent: {fileID: 8001629113425933385}
   characterResources: {fileID: 2402614971554661879}
   skillsComponent: {fileID: 7708165847968784926}
   holdTimeToEndTurn: 1
   CharacterControlAnimator: {fileID: 3502313563350019197}
-  controllerAnimationRelativePos: {fileID: 0}
   animationMoveScaler3D: {fileID: 2833559091790500811}
   nowState: 0
   currentActionMode: 0
@@ -798,6 +795,110 @@ MonoBehaviour:
   invalidPathLineRenderer: {fileID: 7413136488376558437}
   validPathColor: {r: 0, g: 1, b: 0, a: 1}
   invalidPathColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!1 &3219256200211436899
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7466886703227529184}
+  - component: {fileID: 8636847848775124046}
+  - component: {fileID: 6880428878329873524}
+  - component: {fileID: 5584972262798546852}
+  m_Layer: 0
+  m_Name: StandStillTargetingAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7466886703227529184
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3219256200211436899}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.01, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5355287738686104127}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &8636847848775124046
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3219256200211436899}
+  m_Mesh: {fileID: 0}
+--- !u!23 &6880428878329873524
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3219256200211436899}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 694b302e33269134ebe791da5c167a3d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5584972262798546852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3219256200211436899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ec893ebfc0debf4da48f85848b7d6ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  angle: 60
+  radius: 5
+  segments: 20
+  sectorMaterial: {fileID: 0}
+  sectorColor: {r: 1, g: 1, b: 0, a: 0.3}
 --- !u!1 &3221956964958836908
 GameObject:
   m_ObjectHideFlags: 0
@@ -1361,6 +1462,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   collisionDetector: {fileID: 5053882652580880437}
+  standStillTargetingAnchor: {fileID: 5584972262798546852}
   characterCore: {fileID: 507542057868587843}
   characterResources: {fileID: 2402614971554661879}
 --- !u!1 &5394328886506030602

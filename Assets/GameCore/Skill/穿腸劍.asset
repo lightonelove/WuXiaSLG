@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: "\u7A7F\u8178\u528D"
   animationName: "\u7A7F\u8178\u528D"
+  targetingMode: 0
+  skillAngle: 60
+  skillRange: 5
   attackMultiplier: 1
   dodgeChance: 0
   defense: 0

@@ -1142,6 +1142,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PreviewReceiver
       objectReference: {fileID: 0}
+    - target: {fileID: 5542385482261672483, guid: 6ff13f6a0f149644e83fa7b1f34147e8, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8273502352418655736, guid: 6ff13f6a0f149644e83fa7b1f34147e8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
