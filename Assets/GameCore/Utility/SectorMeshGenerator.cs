@@ -22,9 +22,6 @@ public class SectorMeshGenerator : MonoBehaviour
     private Mesh sectorMesh;
     private Mesh colliderMesh;
     
-    [Header("碰撞檢測")]
-    [SerializeField] public LayerMask targetLayerMask = -1; // 要檢測碰撞的圖層遮罩
-    private System.Collections.Generic.HashSet<Collider> collidingObjects = new System.Collections.Generic.HashSet<Collider>();
     
     void Awake()
     {
@@ -434,90 +431,4 @@ public class SectorMeshGenerator : MonoBehaviour
         Gizmos.DrawLine(transform.position, rightEdge);
     }
     
-    /// <summary>
-    /// 當有物件進入 Trigger 時
-    /// </summary>
-    void OnTriggerEnter(Collider other)
-    {
-        // 使用 LayerMask 檢測是否為目標圖層
-        if (((1 << other.gameObject.layer) & targetLayerMask) != 0)
-        {
-            collidingObjects.Add(other);
-            
-            // 尋找有 CombatEntity 組件的父物件
-            CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
-            if (combatEntity != null)
-            {
-                Debug.Log($"[SectorMesh] CombatEntity detected: {combatEntity.gameObject.name}");
-            }
-            else
-            {
-                Debug.Log($"[SectorMesh] Object entered (no CombatEntity): {other.name}");
-            }
-        }
-    }
-    
-    /// <summary>
-    /// 當有物件停留在 Trigger 時
-    /// </summary>
-    void OnTriggerStay(Collider other)
-    {
-        // 使用 LayerMask 檢測是否為目標圖層
-        if (((1 << other.gameObject.layer) & targetLayerMask) != 0)
-        {
-            if (!collidingObjects.Contains(other))
-            {
-                collidingObjects.Add(other);
-                
-                // 尋找有 CombatEntity 組件的父物件
-                CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
-                if (combatEntity != null)
-                {
-                    Debug.Log($"[SectorMesh] CombatEntity staying: {combatEntity.gameObject.name}");
-                }
-            }
-        }
-    }
-    
-    /// <summary>
-    /// 當有物件離開 Trigger 時
-    /// </summary>
-    void OnTriggerExit(Collider other)
-    {
-        // 使用 LayerMask 檢測是否為目標圖層
-        if (((1 << other.gameObject.layer) & targetLayerMask) != 0)
-        {
-            collidingObjects.Remove(other);
-            
-            // 尋找有 CombatEntity 組件的父物件
-            CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
-            if (combatEntity != null)
-            {
-                Debug.Log($"[SectorMesh] CombatEntity exited: {combatEntity.gameObject.name}");
-            }
-            else
-            {
-                Debug.Log($"[SectorMesh] Object exited (no CombatEntity): {other.name}");
-            }
-        }
-    }
-    
-    /// <summary>
-    /// 獲取當前在扇形範圍內的所有碰撞物件
-    /// </summary>
-    /// <returns>碰撞物件集合</returns>
-    public System.Collections.Generic.HashSet<Collider> GetCollidingObjects()
-    {
-        // 清理已被銷毀的物件
-        collidingObjects.RemoveWhere(c => c == null);
-        return new System.Collections.Generic.HashSet<Collider>(collidingObjects);
-    }
-    
-    /// <summary>
-    /// 清空碰撞物件列表
-    /// </summary>
-    public void ClearCollidingObjects()
-    {
-        collidingObjects.Clear();
-    }
 }

@@ -87,6 +87,7 @@
     <Compile Include="Assets\GameCore\Control\ClonedCombatEntity.cs" />
     <Compile Include="Assets\GameCore\Control\AnimationRelativePos.cs" />
     <Compile Include="Assets\GameCore\UI\FloorMouseIndicator.cs" />
+    <Compile Include="Assets\GameCore\System\ColliderEventReceiver.cs" />
     <Compile Include="Assets\GameCore\Control\CombatEntity.cs" />
     <Compile Include="Assets\GameCore\UI\TurnOrderIcon.cs" />
     <Reference Include="UnityEngine">

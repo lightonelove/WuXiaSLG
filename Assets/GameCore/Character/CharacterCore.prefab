@@ -640,10 +640,8 @@ Transform:
   - {fileID: 53408048001705717}
   - {fileID: 2155069188692255544}
   - {fileID: 6435876193352430536}
-  - {fileID: 5531937141200449668}
   - {fileID: 4591550883524543473}
   - {fileID: 6702055866580083052}
-  - {fileID: 7466886703227529184}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &507542057868587843
@@ -809,6 +807,7 @@ GameObject:
   - component: {fileID: 5584972262798546852}
   - component: {fileID: 8524580307678118184}
   - component: {fileID: 6306361816979156770}
+  - component: {fileID: 1852086606040174731}
   m_Layer: 10
   m_Name: StandStillTargetingAnchor
   m_TagString: Untagged
@@ -829,7 +828,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5355287738686104127}
+  m_Father: {fileID: 6702055866580083052}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8636847848775124046
 MeshFilter:
@@ -902,9 +901,6 @@ MonoBehaviour:
   colliderHeight: 1
   sectorMaterial: {fileID: 0}
   sectorColor: {r: 1, g: 1, b: 0, a: 0.3}
-  targetLayerMask:
-    serializedVersion: 2
-    m_Bits: 1024
 --- !u!64 &8524580307678118184
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -954,6 +950,78 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1852086606040174731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3219256200211436899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd908bfba26463c4fa3b69b269a2df7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableTriggerEvents: 1
+  enableCollisionEvents: 0
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 4087
+  enableDebugLog: 0
+  OnTriggerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7708165847968784926}
+        m_TargetAssemblyTypeName: CharacterSkills, Assembly-CSharp
+        m_MethodName: OnTargetingTriggerEnter
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnTriggerStayEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7708165847968784926}
+        m_TargetAssemblyTypeName: CharacterSkills, Assembly-CSharp
+        m_MethodName: OnTargetingTriggerStay
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnTriggerExitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7708165847968784926}
+        m_TargetAssemblyTypeName: CharacterSkills, Assembly-CSharp
+        m_MethodName: OnTargetingTriggerExit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnCollisionEnterEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCollisionStayEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCollisionExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3221956964958836908
 GameObject:
   m_ObjectHideFlags: 0
@@ -1492,7 +1560,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7466886703227529184}
+  - {fileID: 5531937141200449668}
   m_Father: {fileID: 5355287738686104127}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7708165847968784926
@@ -1683,13 +1753,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6461288826716407059}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1017096983790824390}
-  m_Father: {fileID: 5355287738686104127}
+  m_Father: {fileID: 6702055866580083052}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7654942276711548786
 GameObject:

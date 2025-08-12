@@ -1,5 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.Events;
+#endif
 
 /// <summary>
 /// 角色技能系統 - 負責技能管理、瞄準系統、技能執行
@@ -29,7 +33,7 @@ public class CharacterSkills : MonoBehaviour
     // 瞄準模式狀態追蹤（避免重複生成）
     private SkillTargetingMode? lastTargetingMode = null; // 上次的瞄準模式
     private CombatSkill lastSelectedSkill = null; // 上次選擇的技能
-
+    private System.Collections.Generic.HashSet<Collider> TargetingCollidingObjects = new System.Collections.Generic.HashSet<Collider>();
     
     // 對其他組件的引用
     public CharacterCore characterCore;
@@ -413,4 +417,151 @@ public class CharacterSkills : MonoBehaviour
     {
         return isSkillTargetValid;
     }
+    
+    /// <summary>
+    /// StandStill 技能碰撞檢測：當有物件進入 SectorMesh Trigger 時
+    /// </summary>
+    /// <param name="other">進入的物件</param>
+    public void OnTargetingTriggerEnter(Collider other)
+    {
+        TargetingCollidingObjects.Add(other);
+        
+        // 尋找有 CombatEntity 組件的父物件
+        CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
+        if (combatEntity != null)
+        {
+            Debug.Log($"[CharacterSkill] StandStill CombatEntity detected: {combatEntity.gameObject.name}");
+        }
+        else
+        {
+            Debug.Log($"[CharacterSkill] StandStill Object entered (no CombatEntity): {other.name}");
+        }
+        
+    }
+    
+    /// <summary>
+    /// StandStill 技能碰撞檢測：當有物件停留在 SectorMesh Trigger 時
+    /// </summary>
+    /// <param name="other">停留的物件</param>
+    public void OnTargetingTriggerStay(Collider other)
+    {
+        if (!TargetingCollidingObjects.Contains(other))
+        {
+            TargetingCollidingObjects.Add(other);
+            
+            // 尋找有 CombatEntity 組件的父物件
+            CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
+            if (combatEntity != null)
+            {
+                Debug.Log($"[CharacterSkill] StandStill CombatEntity staying: {combatEntity.gameObject.name}");
+            }
+        }
+        
+    }
+    
+    /// <summary>
+    /// StandStill 技能碰撞檢測：當有物件離開 SectorMesh Trigger 時
+    /// </summary>
+    /// <param name="other">離開的物件</param>
+    public void OnTargetingTriggerExit(Collider other)
+    {
+        // 使用 LayerMask 檢測是否為目標圖層
+        TargetingCollidingObjects.Remove(other);
+        
+        // 尋找有 CombatEntity 組件的父物件
+        CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
+        if (combatEntity != null)
+        {
+            Debug.Log($"[CharacterSkill] StandStill CombatEntity exited: {combatEntity.gameObject.name}");
+        }
+        else
+        {
+            Debug.Log($"[CharacterSkill] StandStill Object exited (no CombatEntity): {other.name}");
+        }
+    }
+    
+    /// <summary>
+    /// 獲取當前在 StandStill 技能扇形範圍內的所有碰撞物件
+    /// </summary>
+    /// <returns>碰撞物件集合</returns>
+    public System.Collections.Generic.HashSet<Collider> GetStandStillCollidingObjects()
+    {
+        // 清理已被銷毀的物件
+        TargetingCollidingObjects.RemoveWhere(c => c == null);
+        return new System.Collections.Generic.HashSet<Collider>(TargetingCollidingObjects);
+    }
+    
+    /// <summary>
+    /// 清空 StandStill 技能碰撞物件列表
+    /// </summary>
+    public void ClearStandStillCollidingObjects()
+    {
+        TargetingCollidingObjects.Clear();
+    }
+    
+#if UNITY_EDITOR
+    /// <summary>
+    /// 自動設定所有子物件的 ColliderEventReceiver - 在 Unity Editor 中自動調用
+    /// </summary>
+    [ContextMenu("Auto Setup ColliderEventReceivers")]
+    public void AutoSetupColliderEventReceivers()
+    {
+        // 搜尋所有子物件中的 ColliderEventReceiver
+        ColliderEventReceiver[] receivers = GetComponentsInChildren<ColliderEventReceiver>(true);
+        
+        int connectedCount = 0;
+        
+        foreach (ColliderEventReceiver receiver in receivers)
+        {
+            
+            // 清除舊的 UnityEvent 連接（包括持久和運行時監聽者）
+            receiver.OnTriggerEnterEvent.RemoveAllListeners();
+            receiver.OnTriggerStayEvent.RemoveAllListeners();
+            receiver.OnTriggerExitEvent.RemoveAllListeners();
+            
+            // 清除舊的持久監聽者
+            for (int i = receiver.OnTriggerEnterEvent.GetPersistentEventCount() - 1; i >= 0; i--)
+                UnityEventTools.RemovePersistentListener(receiver.OnTriggerEnterEvent, i);
+            for (int i = receiver.OnTriggerStayEvent.GetPersistentEventCount() - 1; i >= 0; i--)
+                UnityEventTools.RemovePersistentListener(receiver.OnTriggerStayEvent, i);
+            for (int i = receiver.OnTriggerExitEvent.GetPersistentEventCount() - 1; i >= 0; i--)
+                UnityEventTools.RemovePersistentListener(receiver.OnTriggerExitEvent, i);
+            
+            // 添加新的持久監聽者（會被保存到場景文件中）
+            UnityEventTools.AddPersistentListener(receiver.OnTriggerEnterEvent, OnTargetingTriggerEnter);
+            UnityEventTools.AddPersistentListener(receiver.OnTriggerStayEvent, OnTargetingTriggerStay);
+            UnityEventTools.AddPersistentListener(receiver.OnTriggerExitEvent, OnTargetingTriggerExit);
+            
+            // 啟用 Trigger 事件，關閉 Collision 事件（通常技能系統只需要 Trigger）
+            receiver.SetTriggerEventsEnabled(true);
+            receiver.SetCollisionEventsEnabled(false);
+            
+            connectedCount++;
+            
+            Debug.Log($"[CharacterSkills] Connected ColliderEventReceiver on {receiver.gameObject.name}");
+        }
+        
+        Debug.Log($"[CharacterSkills] Auto setup completed. Connected {connectedCount} ColliderEventReceiver(s).");
+        
+        // 標記場景為已修改
+        if (!Application.isPlaying)
+        {
+            UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
+        }
+    }
+    
+    /// <summary>
+    /// Unity Editor 中當物件被修改時自動調用
+    /// </summary>
+    void OnValidate()
+    {
+        // 只在非播放模式下執行，避免運行時干擾
+        if (!Application.isPlaying && this != null && gameObject != null)
+        {
+            // 延遲執行以避免在 OnValidate 中直接修改物件
+            UnityEditor.EditorApplication.delayCall += AutoSetupColliderEventReceivers;
+        }
+    }
+#endif
 }
