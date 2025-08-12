@@ -75,6 +75,9 @@ public class CharacterSkills : MonoBehaviour
     public CharacterCore characterCore;
     public CharacterResources characterResources;
     
+    // 碰撞類型枚舉
+    private enum CollisionType { Enter, Stay, Exit }
+    
     void Start()
     {
         // 初始化技能瞄準系統
@@ -451,36 +454,94 @@ public class CharacterSkills : MonoBehaviour
     }
     
     /// <summary>
-    /// 技能碰撞檢測：當有物件進入 Trigger 時
+    /// 統一的碰撞處理入口方法
     /// </summary>
-    /// <param name="other">進入的物件</param>
-    public void OnTargetingTriggerEnter(Collider other)
+    /// <param name="other">碰撞的 Collider</param>
+    /// <param name="type">碰撞類型</param>
+    private void HandleTargetCollision(Collider other, CollisionType type)
     {
-        // 檢查是否碰撞到自己（通過 CombatEntity 判斷）
+        // 檢查是否為自己的碰撞器，如果是則忽略
         if (IsSelfEntity(other))
         {
-            Debug.Log($"[CharacterSkill] Ignoring self collision: {other.name}");
             return;
         }
         
-        // 檢查是否為 Floor 層物件
-        bool isFloorObject = IsInLayerMask(other.gameObject, floorLayerMask);
-        
-        if (isFloorObject)
+        if (IsInLayerMask(other.gameObject, floorLayerMask))
         {
-            // Floor 層碰撞處理（影響 FrontDash 模式的有效性）
-            FloorCollidingObjects.Add(other);
-            UpdateSkillTargetValidity();
-            Debug.Log($"[CharacterSkill] Floor object entered: {other.name}");
+            HandleFloorCollision(other, type);
         }
         else
         {
-            // 一般目標碰撞處理（StandStill 模式）
-            TargetingCollidingObjects.Add(other);
-            
-            // 尋找 TargetedIndicator 組件並檢查陣營
-            TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
-            if (targetIndicator != null)
+            HandleEntityCollision(other, type);
+        }
+    }
+    
+    /// <summary>
+    /// 處理 Floor 層的碰撞
+    /// </summary>
+    /// <param name="other">碰撞的 Collider</param>
+    /// <param name="type">碰撞類型</param>
+    private void HandleFloorCollision(Collider other, CollisionType type)
+    {
+        switch (type)
+        {
+            case CollisionType.Enter:
+                FloorCollidingObjects.Add(other);
+                UpdateSkillTargetValidity();
+                Debug.Log($"[CharacterSkill] Floor object entered: {other.name}");
+                break;
+            case CollisionType.Stay:
+                // Floor 碰撞在 Stay 時不需要特別處理
+                break;
+            case CollisionType.Exit:
+                FloorCollidingObjects.Remove(other);
+                UpdateSkillTargetValidity();
+                Debug.Log($"[CharacterSkill] Floor object exited: {other.name}");
+                break;
+        }
+    }
+    
+    /// <summary>
+    /// 處理一般實體的碰撞
+    /// </summary>
+    /// <param name="other">碰撞的 Collider</param>
+    /// <param name="type">碰撞類型</param>
+    private void HandleEntityCollision(Collider other, CollisionType type)
+    {
+        switch (type)
+        {
+            case CollisionType.Enter:
+                TargetingCollidingObjects.Add(other);
+                ProcessTargetIndicator(other, true);
+                LogEntityCollision(other, "entered");
+                break;
+            case CollisionType.Stay:
+                if (!TargetingCollidingObjects.Contains(other))
+                {
+                    TargetingCollidingObjects.Add(other);
+                    ProcessTargetIndicator(other, true);
+                    LogEntityCollision(other, "entered (stay)");
+                }
+                break;
+            case CollisionType.Exit:
+                TargetingCollidingObjects.Remove(other);
+                ProcessTargetIndicator(other, false);
+                LogEntityCollision(other, "exited");
+                break;
+        }
+    }
+    
+    /// <summary>
+    /// 處理 TargetedIndicator 的標記和取消標記
+    /// </summary>
+    /// <param name="other">碰撞的 Collider</param>
+    /// <param name="isEntering">是否為進入碰撞</param>
+    private void ProcessTargetIndicator(Collider other, bool isEntering)
+    {
+        TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
+        if (targetIndicator != null)
+        {
+            if (isEntering)
             {
                 // 檢查技能是否可以瞄準此陣營
                 if (CanTargetEntity(targetIndicator.GetCombatEntity()))
@@ -494,25 +555,47 @@ public class CharacterSkills : MonoBehaviour
                     Debug.Log($"[CharacterSkill] TargetedIndicator skipped (faction not targetable): {targetIndicator.gameObject.name}");
                 }
             }
-            
-            // 尋找有 CombatEntity 組件的父物件
-            CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
-            if (combatEntity != null)
+            else if (currentTargets.Contains(targetIndicator))
             {
-                if (CanTargetEntity(combatEntity))
-                {
-                    Debug.Log($"[CharacterSkill] CombatEntity detected: {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
-                }
-                else
-                {
-                    Debug.Log($"[CharacterSkill] CombatEntity ignored (faction not targetable): {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
-                }
+                targetIndicator.OnUntargeted();
+                currentTargets.Remove(targetIndicator);
+                Debug.Log($"[CharacterSkill] TargetedIndicator unmarked on: {targetIndicator.gameObject.name}");
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 記錄實體碰撞的 Debug 訊息
+    /// </summary>
+    /// <param name="other">碰撞的 Collider</param>
+    /// <param name="action">動作描述</param>
+    private void LogEntityCollision(Collider other, string action)
+    {
+        CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
+        if (combatEntity != null)
+        {
+            if (CanTargetEntity(combatEntity))
+            {
+                Debug.Log($"[CharacterSkill] CombatEntity {action}: {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
             }
             else
             {
-                Debug.Log($"[CharacterSkill] Object entered (no CombatEntity): {other.name}");
+                Debug.Log($"[CharacterSkill] CombatEntity {action} but ignored (faction not targetable): {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
             }
         }
+        else
+        {
+            Debug.Log($"[CharacterSkill] Object {action} (no CombatEntity): {other.name}");
+        }
+    }
+    
+    /// <summary>
+    /// 技能碰撞檢測：當有物件進入 Trigger 時
+    /// </summary>
+    /// <param name="other">進入的物件</param>
+    public void OnTargetingTriggerEnter(Collider other)
+    {
+        HandleTargetCollision(other, CollisionType.Enter);
     }
     
     /// <summary>
@@ -521,63 +604,7 @@ public class CharacterSkills : MonoBehaviour
     /// <param name="other">停留的物件</param>
     public void OnTargetingTriggerStay(Collider other)
     {
-        // 檢查是否碰撞到自己（通過 CombatEntity 判斷）
-        if (IsSelfEntity(other))
-        {
-            return;
-        }
-        
-        // 檢查是否為 Floor 層物件
-        bool isFloorObject = IsInLayerMask(other.gameObject, floorLayerMask);
-        
-        if (isFloorObject)
-        {
-            // Floor 層碰撞處理
-            if (!FloorCollidingObjects.Contains(other))
-            {
-                FloorCollidingObjects.Add(other);
-                UpdateSkillTargetValidity();
-            }
-        }
-        else
-        {
-            // 一般目標碰撞處理（StandStill 模式）
-            if (!TargetingCollidingObjects.Contains(other))
-            {
-                TargetingCollidingObjects.Add(other);
-                
-                // 尋找 TargetedIndicator 組件並檢查陣營（如果還沒被標記）
-                TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
-                if (targetIndicator != null && !currentTargets.Contains(targetIndicator))
-                {
-                    // 檢查技能是否可以瞄準此陣營
-                    if (CanTargetEntity(targetIndicator.GetCombatEntity()))
-                    {
-                        targetIndicator.OnTargeted();
-                        currentTargets.Add(targetIndicator);
-                        Debug.Log($"[CharacterSkill] TargetedIndicator marked on (stay): {targetIndicator.gameObject.name}");
-                    }
-                    else
-                    {
-                        Debug.Log($"[CharacterSkill] TargetedIndicator skipped (stay, faction not targetable): {targetIndicator.gameObject.name}");
-                    }
-                }
-                
-                // 尋找有 CombatEntity 組件的父物件
-                CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
-                if (combatEntity != null)
-                {
-                    if (CanTargetEntity(combatEntity))
-                    {
-                        Debug.Log($"[CharacterSkill] CombatEntity staying: {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
-                    }
-                    else
-                    {
-                        Debug.Log($"[CharacterSkill] CombatEntity staying but ignored (faction not targetable): {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
-                    }
-                }
-            }
-        }
+        HandleTargetCollision(other, CollisionType.Stay);
     }
     
     /// <summary>
@@ -586,47 +613,7 @@ public class CharacterSkills : MonoBehaviour
     /// <param name="other">離開的物件</param>
     public void OnTargetingTriggerExit(Collider other)
     {
-        // 檢查是否碰撞到自己（通過 CombatEntity 判斷）
-        if (IsSelfEntity(other))
-        {
-            return;
-        }
-        
-        // 檢查是否為 Floor 層物件
-        bool isFloorObject = IsInLayerMask(other.gameObject, floorLayerMask);
-        
-        if (isFloorObject)
-        {
-            // Floor 層碰撞處理
-            FloorCollidingObjects.Remove(other);
-            UpdateSkillTargetValidity();
-            Debug.Log($"[CharacterSkill] Floor object exited: {other.name}");
-        }
-        else
-        {
-            // 一般目標碰撞處理（StandStill 模式）
-            TargetingCollidingObjects.Remove(other);
-            
-            // 尋找 TargetedIndicator 組件並取消瞄準標記
-            TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
-            if (targetIndicator != null && currentTargets.Contains(targetIndicator))
-            {
-                targetIndicator.OnUntargeted();
-                currentTargets.Remove(targetIndicator);
-                Debug.Log($"[CharacterSkill] TargetedIndicator unmarked on: {targetIndicator.gameObject.name}");
-            }
-            
-            // 尋找有 CombatEntity 組件的父物件
-            CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
-            if (combatEntity != null)
-            {
-                Debug.Log($"[CharacterSkill] CombatEntity exited: {combatEntity.gameObject.name}");
-            }
-            else
-            {
-                Debug.Log($"[CharacterSkill] Object exited (no CombatEntity): {other.name}");
-            }
-        }
+        HandleTargetCollision(other, CollisionType.Exit);
     }
     
     /// <summary>
