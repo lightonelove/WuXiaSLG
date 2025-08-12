@@ -217,6 +217,9 @@ public class CharacterSkills : MonoBehaviour
         }
     }
     
+    // 追蹤上次的動作模式，避免重複清除
+    private CharacterCore.PlayerActionMode? lastActionMode = null;
+    
     /// <summary>
     /// 更新技能瞄準系統
     /// </summary>
@@ -224,25 +227,33 @@ public class CharacterSkills : MonoBehaviour
     {
         if (characterCore == null) return;
         
+        // 檢查動作模式是否改變
+        bool actionModeChanged = lastActionMode != characterCore.currentActionMode;
+        lastActionMode = characterCore.currentActionMode;
+        
         // 只在 SkillTargeting 模式下運作
         if (characterCore.currentActionMode != CharacterCore.PlayerActionMode.SkillTargeting)
         {
-            // 隱藏所有瞄準系統
-            if (straightFrontTargetingAnchor != null && straightFrontTargetingAnchor.gameObject.activeSelf)
+            // 只在模式改變時才執行清除操作（避免每 frame 重複執行）
+            if (actionModeChanged)
             {
-                straightFrontTargetingAnchor.gameObject.SetActive(false);
+                // 隱藏所有瞄準系統
+                if (straightFrontTargetingAnchor != null && straightFrontTargetingAnchor.gameObject.activeSelf)
+                {
+                    straightFrontTargetingAnchor.gameObject.SetActive(false);
+                }
+                if (standStillTargetingAnchor != null)
+                {
+                    standStillTargetingAnchor.SetVisible(false);
+                }
+                
+                // 重置狀態追蹤（當退出瞄準模式時）
+                lastTargetingMode = null;
+                lastSelectedSkill = null;
+                
+                // 清除所有目標指示器（只在退出瞄準模式時執行一次）
+                ClearAllTargetIndicators();
             }
-            if (standStillTargetingAnchor != null)
-            {
-                standStillTargetingAnchor.SetVisible(false);
-            }
-            
-            // 重置狀態追蹤（當退出瞄準模式時）
-            lastTargetingMode = null;
-            lastSelectedSkill = null;
-            
-            // 清除所有目標指示器
-            ClearAllTargetIndicators();
             return;
         }
         
@@ -432,20 +443,35 @@ public class CharacterSkills : MonoBehaviour
     {
         TargetingCollidingObjects.Add(other);
         
-        // 尋找 TargetedIndicator 組件並標記為被瞄準
+        // 尋找 TargetedIndicator 組件並檢查陣營
         TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
         if (targetIndicator != null)
         {
-            targetIndicator.OnTargeted();
-            currentTargets.Add(targetIndicator);
-            Debug.Log($"[CharacterSkill] TargetedIndicator marked on: {targetIndicator.gameObject.name}");
+            // 檢查技能是否可以瞄準此陣營
+            if (CanTargetEntity(targetIndicator.GetCombatEntity()))
+            {
+                targetIndicator.OnTargeted();
+                currentTargets.Add(targetIndicator);
+                Debug.Log($"[CharacterSkill] TargetedIndicator marked on: {targetIndicator.gameObject.name}");
+            }
+            else
+            {
+                Debug.Log($"[CharacterSkill] TargetedIndicator skipped (faction not targetable): {targetIndicator.gameObject.name}");
+            }
         }
         
         // 尋找有 CombatEntity 組件的父物件
         CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
         if (combatEntity != null)
         {
-            Debug.Log($"[CharacterSkill] StandStill CombatEntity detected: {combatEntity.gameObject.name}");
+            if (CanTargetEntity(combatEntity))
+            {
+                Debug.Log($"[CharacterSkill] StandStill CombatEntity detected: {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
+            }
+            else
+            {
+                Debug.Log($"[CharacterSkill] StandStill CombatEntity ignored (faction not targetable): {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
+            }
         }
         else
         {
@@ -464,20 +490,35 @@ public class CharacterSkills : MonoBehaviour
         {
             TargetingCollidingObjects.Add(other);
             
-            // 尋找 TargetedIndicator 組件並標記為被瞄準（如果還沒被標記）
+            // 尋找 TargetedIndicator 組件並檢查陣營（如果還沒被標記）
             TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
             if (targetIndicator != null && !currentTargets.Contains(targetIndicator))
             {
-                targetIndicator.OnTargeted();
-                currentTargets.Add(targetIndicator);
-                Debug.Log($"[CharacterSkill] TargetedIndicator marked on (stay): {targetIndicator.gameObject.name}");
+                // 檢查技能是否可以瞄準此陣營
+                if (CanTargetEntity(targetIndicator.GetCombatEntity()))
+                {
+                    targetIndicator.OnTargeted();
+                    currentTargets.Add(targetIndicator);
+                    Debug.Log($"[CharacterSkill] TargetedIndicator marked on (stay): {targetIndicator.gameObject.name}");
+                }
+                else
+                {
+                    Debug.Log($"[CharacterSkill] TargetedIndicator skipped (stay, faction not targetable): {targetIndicator.gameObject.name}");
+                }
             }
             
             // 尋找有 CombatEntity 組件的父物件
             CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
             if (combatEntity != null)
             {
-                Debug.Log($"[CharacterSkill] StandStill CombatEntity staying: {combatEntity.gameObject.name}");
+                if (CanTargetEntity(combatEntity))
+                {
+                    Debug.Log($"[CharacterSkill] StandStill CombatEntity staying: {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
+                }
+                else
+                {
+                    Debug.Log($"[CharacterSkill] StandStill CombatEntity staying but ignored (faction not targetable): {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
+                }
             }
         }
         
@@ -549,6 +590,19 @@ public class CharacterSkills : MonoBehaviour
         }
         currentTargets.Clear();
         Debug.Log($"[CharacterSkill] Cleared {clearedCount} target indicators");
+    }
+    
+    /// <summary>
+    /// 檢查是否可以瞄準指定的 CombatEntity
+    /// </summary>
+    /// <param name="entity">要檢查的 CombatEntity</param>
+    /// <returns>是否可以瞄準</returns>
+    private bool CanTargetEntity(CombatEntity entity)
+    {
+        if (entity == null || currentSelectedSkill == null)
+            return false;
+            
+        return currentSelectedSkill.CanTargetFaction(entity.Faction);
     }
     
 #if UNITY_EDITOR

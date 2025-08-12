@@ -4,11 +4,14 @@ using UnityEngine.UI;
 /// <summary>
 /// 戰鬥實體陣營類型
 /// </summary>
+[System.Flags]
 public enum CombatEntityFaction
 {
-    Ally,       // 友軍
-    Neutral,    // 中立
-    Hostile     // 敵對
+    None = 0,
+    Ally = 1 << 0,      // 1 (二進制: 001) - 友軍
+    Neutral = 1 << 1,   // 2 (二進制: 010) - 中立
+    Hostile = 1 << 2,   // 4 (二進制: 100) - 敵對
+    All = Ally | Neutral | Hostile  // 7 (二進制: 111) - 所有陣營
 }
 
 public class CombatEntity : MonoBehaviour
