@@ -682,6 +682,7 @@ MonoBehaviour:
   ActionValue: 0
   PortraitIcon: {fileID: 21300000, guid: 89817706038921b46844f6d454f03aa6, type: 3}
   CharacterCore: {fileID: 0}
+  Faction: 0
 --- !u!114 &5525503941534339325
 MonoBehaviour:
   m_ObjectHideFlags: 0

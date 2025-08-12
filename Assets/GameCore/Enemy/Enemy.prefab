@@ -391,6 +391,7 @@ MonoBehaviour:
   ActionValue: 0
   PortraitIcon: {fileID: 21300000, guid: c637823bad5583c4882c20d78856e562, type: 3}
   CharacterCore: {fileID: 0}
+  Faction: 4
 --- !u!195 &3309778327019055104
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -425,6 +426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91234567890123456789012345678901, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  combatEntity: {fileID: 670760991645550886}
   targetedColor: {r: 1, g: 1, b: 1, a: 1}
   affectChildMeshRenderers: 0
   enableDebugLog: 0
