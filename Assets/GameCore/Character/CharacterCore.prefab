@@ -616,6 +616,7 @@ GameObject:
   - component: {fileID: 3502313563350019197}
   - component: {fileID: 2833559091790500811}
   - component: {fileID: 8001629113425933385}
+  - component: {fileID: 2180760925152422446}
   m_Layer: 0
   m_Name: CharacterCore
   m_TagString: Untagged
@@ -793,6 +794,22 @@ MonoBehaviour:
   invalidPathLineRenderer: {fileID: 7413136488376558437}
   validPathColor: {r: 0, g: 1, b: 0, a: 1}
   invalidPathColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &2180760925152422446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2522113828692673003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91234567890123456789012345678901, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  combatEntity: {fileID: 6903515148748646631}
+  targetedColor: {r: 1, g: 1, b: 1, a: 1}
+  affectChildMeshRenderers: 1
+  enableDebugLog: 0
 --- !u!1 &3219256200211436899
 GameObject:
   m_ObjectHideFlags: 0

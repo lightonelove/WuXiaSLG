@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Assets\TutorialInfo\Scripts\Editor\ReadmeEditor.cs" />
     <Compile Include="Assets\GameCore\Editor\CharacterSkillsAutoSetup.cs" />
+    <Compile Include="Assets\GameCore\Editor\TargetedIndicatorAutoSetup.cs" />
     <None Include="Library\PackageCache\com.unity.collab-proxy\Lib\Editor\Localization\differences.ja.txt" />
     <None Include="Library\PackageCache\com.unity.collab-proxy\Lib\Editor\Localization\cm-help.ko.txt" />
     <None Include="Library\PackageCache\com.unity.collab-proxy\Lib\Editor\Localization\semantic.es.txt" />

@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 /// <summary>
 /// 目標指示器 - 當物件被技能瞄準時提供視覺回饋
@@ -7,6 +10,9 @@ using System.Collections.Generic;
 /// </summary>
 public class TargetedIndicator : MonoBehaviour
 {
+    [Header("組件引用")]
+    [SerializeField] private CombatEntity combatEntity; // 自動找到的 CombatEntity 引用
+    
     [Header("指示器設定")]
     [SerializeField] private Color targetedColor = Color.white; // 被瞄準時的顏色
     [SerializeField] private bool affectChildMeshRenderers = true; // 是否影響子物件的 MeshRenderer
@@ -217,6 +223,15 @@ public class TargetedIndicator : MonoBehaviour
     }
     
     /// <summary>
+    /// 獲取關聯的 CombatEntity
+    /// </summary>
+    /// <returns>CombatEntity 引用</returns>
+    public CombatEntity GetCombatEntity()
+    {
+        return combatEntity;
+    }
+    
+    /// <summary>
     /// 設定目標顏色
     /// </summary>
     /// <param name="color">新的目標顏色</param>
@@ -286,5 +301,86 @@ public class TargetedIndicator : MonoBehaviour
                 ApplyTargetedEffect();
             }
         }
+#if UNITY_EDITOR
+        else
+        {
+        }
+#endif
     }
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// 自動搜尋並設定 CombatEntity 引用
+    /// </summary>
+    [ContextMenu("Auto Find CombatEntity")]
+    public void AutoFindCombatEntity()
+    {
+        if (combatEntity == null)
+        {
+            // 先在自己身上找
+            combatEntity = GetComponent<CombatEntity>();
+            
+            // 如果自己身上沒有，向上搜尋父物件
+            if (combatEntity == null)
+            {
+                combatEntity = GetComponentInParent<CombatEntity>();
+            }
+            
+            // 如果父物件也沒有，向下搜尋子物件
+            if (combatEntity == null)
+            {
+                combatEntity = GetComponentInChildren<CombatEntity>();
+            }
+            
+            if (combatEntity != null)
+            {
+                Debug.Log($"[TargetedIndicator] Auto found CombatEntity on {combatEntity.gameObject.name} for {gameObject.name}");
+                
+                // 標記為已修改，讓 Unity 知道要保存這個變更
+                EditorUtility.SetDirty(this);
+            }
+            else
+            {
+                Debug.LogWarning($"[TargetedIndicator] Could not find CombatEntity for {gameObject.name}");
+            }
+        }
+        else
+        {
+            Debug.Log($"[TargetedIndicator] CombatEntity already assigned for {gameObject.name}");
+        }
+    }
+    
+    /// <summary>
+    /// 清除 CombatEntity 引用
+    /// </summary>
+    [ContextMenu("Clear CombatEntity")]
+    public void ClearCombatEntity()
+    {
+        combatEntity = null;
+        EditorUtility.SetDirty(this);
+        Debug.Log($"[TargetedIndicator] Cleared CombatEntity reference for {gameObject.name}");
+    }
+    
+    /// <summary>
+    /// 驗證 CombatEntity 引用是否有效
+    /// </summary>
+    [ContextMenu("Validate CombatEntity")]
+    public void ValidateCombatEntity()
+    {
+        if (combatEntity == null)
+        {
+            Debug.LogWarning($"[TargetedIndicator] No CombatEntity assigned for {gameObject.name}");
+        }
+        else if (combatEntity.gameObject == null)
+        {
+            Debug.LogError($"[TargetedIndicator] CombatEntity reference is broken for {gameObject.name}");
+            combatEntity = null;
+            EditorUtility.SetDirty(this);
+        }
+        else
+        {
+            Debug.Log($"[TargetedIndicator] CombatEntity is valid: {combatEntity.gameObject.name} for {gameObject.name}");
+        }
+    }
+#endif
 }
