@@ -81,7 +81,6 @@
     <Compile Include="Assets\GameCore\Skill\CombatSkill.cs" />
     <Compile Include="Assets\GameCore\Control\CharacterSkills.cs" />
     <Compile Include="Assets\GameCore\Enemy\DamageReceiver.cs" />
-    <Compile Include="Assets\GameCore\Control\SkillTargetingCollisionDetector.cs" />
     <Compile Include="Assets\GameCore\Utility\SectorMeshTest.cs" />
     <Compile Include="Assets\GameCore\Control\ClonedCombatEntity.cs" />
     <Compile Include="Assets\GameCore\Control\AnimationRelativePos.cs" />

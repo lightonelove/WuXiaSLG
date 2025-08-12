@@ -280,16 +280,4 @@ public class CharacterCore : MonoBehaviour
             CombatCore.Instance.EndCurrentEntityTurn();
         }
     }
-    
-    /// <summary>
-    /// 技能瞄準碰撞狀態變化回調（委託給 CharacterSkills 組件處理）
-    /// </summary>
-    /// <param name="collidingObjects">當前碰撞的物件集合</param>
-    public void OnTargetingCollisionChanged(HashSet<Collider> collidingObjects)
-    {
-        if (skillsComponent != null)
-        {
-            skillsComponent.OnTargetingCollisionChanged(collidingObjects);
-        }
-    }
 }

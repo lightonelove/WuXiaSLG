@@ -27,13 +27,15 @@ public class CharacterSkills : MonoBehaviour
     private Renderer cubeRenderer; // Cube的Renderer組件
     private Color originalCubeColor; // Cube的原始顏色
     private readonly Color blockedColor = new Color(0.5f, 0f, 0f, 1f); // 酒紅色
-    public SkillTargetingCollisionDetector collisionDetector; // 碰撞檢測
     public SectorMeshGenerator standStillTargetingAnchor;
     
     // 瞄準模式狀態追蹤（避免重複生成）
     private SkillTargetingMode? lastTargetingMode = null; // 上次的瞄準模式
     private CombatSkill lastSelectedSkill = null; // 上次選擇的技能
     private System.Collections.Generic.HashSet<Collider> TargetingCollidingObjects = new System.Collections.Generic.HashSet<Collider>();
+    
+    // Floor 層碰撞檢測（用於 FrontDash 模式）
+    private System.Collections.Generic.HashSet<Collider> FloorCollidingObjects = new System.Collections.Generic.HashSet<Collider>();
     
     // 追蹤已被標記為瞄準目標的 TargetedIndicator
     private System.Collections.Generic.HashSet<TargetedIndicator> currentTargets = new System.Collections.Generic.HashSet<TargetedIndicator>();
@@ -72,11 +74,6 @@ public class CharacterSkills : MonoBehaviour
                         originalCubeColor = cubeRenderer.material.color;
                     }
                     
-                    // 初始化碰撞檢測器（已在 prefab 中設定引用）
-                    if (collisionDetector != null)
-                    {
-                        collisionDetector.Initialize(characterCore, floorLayerMask);
-                    }
                     
                     // 確保初始時是隱藏的
                     straightFrontTargetingAnchor.gameObject.SetActive(false);
@@ -253,6 +250,9 @@ public class CharacterSkills : MonoBehaviour
                 
                 // 清除所有目標指示器（只在退出瞄準模式時執行一次）
                 ClearAllTargetIndicators();
+                
+                // 清除所有碰撞狀態（包括 Floor 碰撞和目標碰撞）
+                ClearAllCollidingObjects();
             }
             return;
         }
@@ -285,9 +285,20 @@ public class CharacterSkills : MonoBehaviour
     /// </summary>
     private void UpdateFrontDashTargeting()
     {
+        // 檢查是否需要清空碰撞狀態（模式或技能改變時）
+        bool targetingModeChanged = lastTargetingMode != SkillTargetingMode.FrontDash;
+        bool skillChanged = lastSelectedSkill != currentSelectedSkill;
+        bool needsClearCollision = targetingModeChanged || skillChanged;
+        
         // 更新狀態追蹤
         lastTargetingMode = SkillTargetingMode.FrontDash;
         lastSelectedSkill = currentSelectedSkill;
+        
+        // 如果模式或技能改變，清空之前的碰撞狀態
+        if (needsClearCollision)
+        {
+            ClearAllCollidingObjects();
+        }
         
         // 隱藏 StandStill 瞄準器
         if (standStillTargetingAnchor != null)
@@ -302,23 +313,19 @@ public class CharacterSkills : MonoBehaviour
         }
         
         // 取得滑鼠在地面的位置
-        Debug.Log("Targeting1");
         if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.IsMouseOverFloor())
         {
             Vector3 mouseWorldPos = SLGCoreUI.Instance.GetMouseFloorPosition();
-            Debug.Log("Targeting2");
             if (mouseWorldPos != Vector3.zero)
             {
                 // 計算方向（用於角色旋轉）
                 Vector3 direction = mouseWorldPos - characterCore.transform.position;
                 direction.y = 0; // 保持水平
-                Debug.Log("Targeting3");
                 // 旋轉整個 CharacterCore 面向目標（即時跟隨）
                 if (direction != Vector3.zero)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(direction);
                     characterCore.transform.rotation = targetRotation;
-                    Debug.Log("Targeting4");
                 }
                 
                 // 計算 StraightFrontTargetingAnchor 到滑鼠位置的距離（用於縮放）
@@ -334,7 +341,6 @@ public class CharacterSkills : MonoBehaviour
                 
                 // 設定縮放，保持 X 和 Y 不變
                 straightFrontTargetingAnchor.localScale = new Vector3(1f, 1f, scaleZ);
-                Debug.Log("Targeting5");
                 // 觸發器系統會自動檢測碰撞，無需手動調用
             }
         }
@@ -355,6 +361,12 @@ public class CharacterSkills : MonoBehaviour
         bool targetingModeChanged = lastTargetingMode != SkillTargetingMode.StandStill;
         bool skillChanged = lastSelectedSkill != currentSelectedSkill;
         bool needsRegeneration = targetingModeChanged || skillChanged;
+        
+        // 如果模式或技能改變，清空之前的碰撞狀態
+        if (needsRegeneration)
+        {
+            ClearAllCollidingObjects();
+        }
         
         // 更新狀態追蹤
         lastTargetingMode = SkillTargetingMode.StandStill;
@@ -393,38 +405,6 @@ public class CharacterSkills : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// 技能瞄準碰撞狀態變化回調（從 SkillTargetingCollisionDetector 調用）
-    /// </summary>
-    /// <param name="collidingObjects">當前碰撞的物件集合</param>
-    public void OnTargetingCollisionChanged(HashSet<Collider> collidingObjects)
-    {
-        bool hasCollision = collidingObjects.Count > 0;
-        bool newTargetValid = !hasCollision;
-        
-        // 只在狀態改變時更新顏色和輸出 Debug
-        if (newTargetValid != isSkillTargetValid)
-        {
-            isSkillTargetValid = newTargetValid;
-            
-            if (hasCollision)
-            {
-                // 變更Cube顏色為酒紅色
-                if (cubeRenderer != null && cubeRenderer.material != null)
-                {
-                    cubeRenderer.material.color = blockedColor;
-                }
-            }
-            else
-            {
-                // 恢復Cube的原始顏色
-                if (cubeRenderer != null && cubeRenderer.material != null)
-                {
-                    cubeRenderer.material.color = originalCubeColor;
-                }
-            }
-        }
-    }
     
     /// <summary>
     /// 獲取技能目標是否有效
@@ -436,7 +416,7 @@ public class CharacterSkills : MonoBehaviour
     }
     
     /// <summary>
-    /// StandStill 技能碰撞檢測：當有物件進入 SectorMesh Trigger 時
+    /// 技能碰撞檢測：當有物件進入 Trigger 時
     /// </summary>
     /// <param name="other">進入的物件</param>
     public void OnTargetingTriggerEnter(Collider other)
@@ -448,47 +428,60 @@ public class CharacterSkills : MonoBehaviour
             return;
         }
         
-        TargetingCollidingObjects.Add(other);
+        // 檢查是否為 Floor 層物件
+        bool isFloorObject = IsInLayerMask(other.gameObject, floorLayerMask);
         
-        // 尋找 TargetedIndicator 組件並檢查陣營
-        TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
-        if (targetIndicator != null)
+        if (isFloorObject)
         {
-            // 檢查技能是否可以瞄準此陣營
-            if (CanTargetEntity(targetIndicator.GetCombatEntity()))
-            {
-                targetIndicator.OnTargeted();
-                currentTargets.Add(targetIndicator);
-                Debug.Log($"[CharacterSkill] TargetedIndicator marked on: {targetIndicator.gameObject.name}");
-            }
-            else
-            {
-                Debug.Log($"[CharacterSkill] TargetedIndicator skipped (faction not targetable): {targetIndicator.gameObject.name}");
-            }
-        }
-        
-        // 尋找有 CombatEntity 組件的父物件
-        CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
-        if (combatEntity != null)
-        {
-            if (CanTargetEntity(combatEntity))
-            {
-                Debug.Log($"[CharacterSkill] StandStill CombatEntity detected: {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
-            }
-            else
-            {
-                Debug.Log($"[CharacterSkill] StandStill CombatEntity ignored (faction not targetable): {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
-            }
+            // Floor 層碰撞處理（影響 FrontDash 模式的有效性）
+            FloorCollidingObjects.Add(other);
+            UpdateSkillTargetValidity();
+            Debug.Log($"[CharacterSkill] Floor object entered: {other.name}");
         }
         else
         {
-            Debug.Log($"[CharacterSkill] StandStill Object entered (no CombatEntity): {other.name}");
+            // 一般目標碰撞處理（StandStill 模式）
+            TargetingCollidingObjects.Add(other);
+            
+            // 尋找 TargetedIndicator 組件並檢查陣營
+            TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
+            if (targetIndicator != null)
+            {
+                // 檢查技能是否可以瞄準此陣營
+                if (CanTargetEntity(targetIndicator.GetCombatEntity()))
+                {
+                    targetIndicator.OnTargeted();
+                    currentTargets.Add(targetIndicator);
+                    Debug.Log($"[CharacterSkill] TargetedIndicator marked on: {targetIndicator.gameObject.name}");
+                }
+                else
+                {
+                    Debug.Log($"[CharacterSkill] TargetedIndicator skipped (faction not targetable): {targetIndicator.gameObject.name}");
+                }
+            }
+            
+            // 尋找有 CombatEntity 組件的父物件
+            CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
+            if (combatEntity != null)
+            {
+                if (CanTargetEntity(combatEntity))
+                {
+                    Debug.Log($"[CharacterSkill] CombatEntity detected: {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
+                }
+                else
+                {
+                    Debug.Log($"[CharacterSkill] CombatEntity ignored (faction not targetable): {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
+                }
+            }
+            else
+            {
+                Debug.Log($"[CharacterSkill] Object entered (no CombatEntity): {other.name}");
+            }
         }
-        
     }
     
     /// <summary>
-    /// StandStill 技能碰撞檢測：當有物件停留在 SectorMesh Trigger 時
+    /// 技能碰撞檢測：當有物件停留在 Trigger 時
     /// </summary>
     /// <param name="other">停留的物件</param>
     public void OnTargetingTriggerStay(Collider other)
@@ -499,46 +492,61 @@ public class CharacterSkills : MonoBehaviour
             return;
         }
         
-        if (!TargetingCollidingObjects.Contains(other))
+        // 檢查是否為 Floor 層物件
+        bool isFloorObject = IsInLayerMask(other.gameObject, floorLayerMask);
+        
+        if (isFloorObject)
         {
-            TargetingCollidingObjects.Add(other);
-            
-            // 尋找 TargetedIndicator 組件並檢查陣營（如果還沒被標記）
-            TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
-            if (targetIndicator != null && !currentTargets.Contains(targetIndicator))
+            // Floor 層碰撞處理
+            if (!FloorCollidingObjects.Contains(other))
             {
-                // 檢查技能是否可以瞄準此陣營
-                if (CanTargetEntity(targetIndicator.GetCombatEntity()))
-                {
-                    targetIndicator.OnTargeted();
-                    currentTargets.Add(targetIndicator);
-                    Debug.Log($"[CharacterSkill] TargetedIndicator marked on (stay): {targetIndicator.gameObject.name}");
-                }
-                else
-                {
-                    Debug.Log($"[CharacterSkill] TargetedIndicator skipped (stay, faction not targetable): {targetIndicator.gameObject.name}");
-                }
+                FloorCollidingObjects.Add(other);
+                UpdateSkillTargetValidity();
             }
-            
-            // 尋找有 CombatEntity 組件的父物件
-            CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
-            if (combatEntity != null)
+        }
+        else
+        {
+            // 一般目標碰撞處理（StandStill 模式）
+            if (!TargetingCollidingObjects.Contains(other))
             {
-                if (CanTargetEntity(combatEntity))
+                TargetingCollidingObjects.Add(other);
+                
+                // 尋找 TargetedIndicator 組件並檢查陣營（如果還沒被標記）
+                TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
+                if (targetIndicator != null && !currentTargets.Contains(targetIndicator))
                 {
-                    Debug.Log($"[CharacterSkill] StandStill CombatEntity staying: {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
+                    // 檢查技能是否可以瞄準此陣營
+                    if (CanTargetEntity(targetIndicator.GetCombatEntity()))
+                    {
+                        targetIndicator.OnTargeted();
+                        currentTargets.Add(targetIndicator);
+                        Debug.Log($"[CharacterSkill] TargetedIndicator marked on (stay): {targetIndicator.gameObject.name}");
+                    }
+                    else
+                    {
+                        Debug.Log($"[CharacterSkill] TargetedIndicator skipped (stay, faction not targetable): {targetIndicator.gameObject.name}");
+                    }
                 }
-                else
+                
+                // 尋找有 CombatEntity 組件的父物件
+                CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
+                if (combatEntity != null)
                 {
-                    Debug.Log($"[CharacterSkill] StandStill CombatEntity staying but ignored (faction not targetable): {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
+                    if (CanTargetEntity(combatEntity))
+                    {
+                        Debug.Log($"[CharacterSkill] CombatEntity staying: {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
+                    }
+                    else
+                    {
+                        Debug.Log($"[CharacterSkill] CombatEntity staying but ignored (faction not targetable): {combatEntity.gameObject.name} (Faction: {combatEntity.Faction})");
+                    }
                 }
             }
         }
-        
     }
     
     /// <summary>
-    /// StandStill 技能碰撞檢測：當有物件離開 SectorMesh Trigger 時
+    /// 技能碰撞檢測：當有物件離開 Trigger 時
     /// </summary>
     /// <param name="other">離開的物件</param>
     public void OnTargetingTriggerExit(Collider other)
@@ -549,26 +557,40 @@ public class CharacterSkills : MonoBehaviour
             return;
         }
         
-        TargetingCollidingObjects.Remove(other);
+        // 檢查是否為 Floor 層物件
+        bool isFloorObject = IsInLayerMask(other.gameObject, floorLayerMask);
         
-        // 尋找 TargetedIndicator 組件並取消瞄準標記
-        TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
-        if (targetIndicator != null && currentTargets.Contains(targetIndicator))
+        if (isFloorObject)
         {
-            targetIndicator.OnUntargeted();
-            currentTargets.Remove(targetIndicator);
-            Debug.Log($"[CharacterSkill] TargetedIndicator unmarked on: {targetIndicator.gameObject.name}");
-        }
-        
-        // 尋找有 CombatEntity 組件的父物件
-        CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
-        if (combatEntity != null)
-        {
-            Debug.Log($"[CharacterSkill] StandStill CombatEntity exited: {combatEntity.gameObject.name}");
+            // Floor 層碰撞處理
+            FloorCollidingObjects.Remove(other);
+            UpdateSkillTargetValidity();
+            Debug.Log($"[CharacterSkill] Floor object exited: {other.name}");
         }
         else
         {
-            Debug.Log($"[CharacterSkill] StandStill Object exited (no CombatEntity): {other.name}");
+            // 一般目標碰撞處理（StandStill 模式）
+            TargetingCollidingObjects.Remove(other);
+            
+            // 尋找 TargetedIndicator 組件並取消瞄準標記
+            TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
+            if (targetIndicator != null && currentTargets.Contains(targetIndicator))
+            {
+                targetIndicator.OnUntargeted();
+                currentTargets.Remove(targetIndicator);
+                Debug.Log($"[CharacterSkill] TargetedIndicator unmarked on: {targetIndicator.gameObject.name}");
+            }
+            
+            // 尋找有 CombatEntity 組件的父物件
+            CombatEntity combatEntity = other.GetComponentInParent<CombatEntity>();
+            if (combatEntity != null)
+            {
+                Debug.Log($"[CharacterSkill] CombatEntity exited: {combatEntity.gameObject.name}");
+            }
+            else
+            {
+                Debug.Log($"[CharacterSkill] Object exited (no CombatEntity): {other.name}");
+            }
         }
     }
     
@@ -591,6 +613,26 @@ public class CharacterSkills : MonoBehaviour
         TargetingCollidingObjects.Clear();
         
         // 同時清空所有瞄準目標指示器
+        ClearAllTargetIndicators();
+    }
+    
+    /// <summary>
+    /// 清空 FrontDash 技能 Floor 碰撞物件列表
+    /// </summary>
+    public void ClearFrontDashFloorCollisions()
+    {
+        FloorCollidingObjects.Clear();
+        UpdateSkillTargetValidity();
+    }
+    
+    /// <summary>
+    /// 清空所有碰撞物件列表
+    /// </summary>
+    public void ClearAllCollidingObjects()
+    {
+        TargetingCollidingObjects.Clear();
+        FloorCollidingObjects.Clear();
+        UpdateSkillTargetValidity();
         ClearAllTargetIndicators();
     }
     
@@ -688,6 +730,51 @@ public class CharacterSkills : MonoBehaviour
         }
         
         return false;
+    }
+    
+    /// <summary>
+    /// 更新技能目標有效性（基於 Floor 層碰撞）
+    /// </summary>
+    private void UpdateSkillTargetValidity()
+    {
+        bool hasFloorCollision = FloorCollidingObjects.Count > 0;
+        bool newTargetValid = !hasFloorCollision;
+        
+        // 只在狀態改變時更新顏色和輸出 Debug
+        if (newTargetValid != isSkillTargetValid)
+        {
+            isSkillTargetValid = newTargetValid;
+            
+            if (hasFloorCollision)
+            {
+                // 變更Cube顏色為酒紅色
+                if (cubeRenderer != null && cubeRenderer.material != null)
+                {
+                    cubeRenderer.material.color = blockedColor;
+                }
+                Debug.Log($"[CharacterSkill] Skill target blocked by Floor collision");
+            }
+            else
+            {
+                // 恢復Cube的原始顏色
+                if (cubeRenderer != null && cubeRenderer.material != null)
+                {
+                    cubeRenderer.material.color = originalCubeColor;
+                }
+                Debug.Log($"[CharacterSkill] Skill target is now valid");
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 檢查物件是否在指定的Layer Mask中
+    /// </summary>
+    /// <param name="obj">要檢查的物件</param>
+    /// <param name="layerMask">Layer Mask</param>
+    /// <returns>是否在Layer Mask中</returns>
+    private bool IsInLayerMask(GameObject obj, LayerMask layerMask)
+    {
+        return ((layerMask.value & (1 << obj.layer)) > 0);
     }
     
 #if UNITY_EDITOR

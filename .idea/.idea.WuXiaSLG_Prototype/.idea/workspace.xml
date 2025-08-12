@@ -9,14 +9,12 @@
       <change beforePath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/PreviewReceiver.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/PreviewReceiver.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/PreviewDealer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/PreviewDealer.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/PreviewReceiver.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/PreviewReceiver.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Skill/穿腸劍.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Skill/穿腸劍.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterCore.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterSkills.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterSkills.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/SkillTargetingCollisionDetector.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/SkillTargetingCollisionDetector.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Skill/SkillA.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Skill/SkillA.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/DynamicsManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/DynamicsManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +51,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Utility/SectorMeshGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Utility/SectorMeshTest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Plugins/Sirenix/Odin Inspector/Modules/Unity.Addressables/AddressablesInspectors.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -157,7 +156,7 @@
       <workItem from="1754653296537" duration="12600000" />
       <workItem from="1754823845755" duration="5391000" />
       <workItem from="1754977434576" duration="11783000" />
-      <workItem from="1755003142976" duration="551000" />
+      <workItem from="1755003142976" duration="4550000" />
     </task>
     <servers />
   </component>

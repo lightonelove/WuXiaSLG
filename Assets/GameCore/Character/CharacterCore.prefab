@@ -455,9 +455,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2026052727069364250}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74e3b8a02aaf9c346b67fe765620e9b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f917cc3a12caed47ad3b4b3d65fc9f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 25
+  destroyOnDealDamage: 1
 --- !u!1 &2037464825203265334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1302,7 +1304,7 @@ GameObject:
   - component: {fileID: 3662257382632212776}
   - component: {fileID: 4458822167453045086}
   - component: {fileID: 7512643677400551962}
-  - component: {fileID: 5053882652580880437}
+  - component: {fileID: 7333867140921524281}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1426,7 +1428,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5053882652580880437
+--- !u!114 &7333867140921524281
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1435,13 +1437,69 @@ MonoBehaviour:
   m_GameObject: {fileID: 4395293793166031803}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdeb7f5e4963928429bd7c4566380915, type: 3}
+  m_Script: {fileID: 11500000, guid: bd908bfba26463c4fa3b69b269a2df7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterCore: {fileID: 507542057868587843}
-  floorLayerMask:
+  enableTriggerEvents: 1
+  enableCollisionEvents: 0
+  targetLayerMask:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 4087
+  enableDebugLog: 0
+  OnTriggerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7708165847968784926}
+        m_TargetAssemblyTypeName: CharacterSkills, Assembly-CSharp
+        m_MethodName: OnTargetingTriggerEnter
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnTriggerStayEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7708165847968784926}
+        m_TargetAssemblyTypeName: CharacterSkills, Assembly-CSharp
+        m_MethodName: OnTargetingTriggerStay
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnTriggerExitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7708165847968784926}
+        m_TargetAssemblyTypeName: CharacterSkills, Assembly-CSharp
+        m_MethodName: OnTargetingTriggerExit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnCollisionEnterEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCollisionStayEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCollisionExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4585917144084893723
 GameObject:
   m_ObjectHideFlags: 0
@@ -1605,7 +1663,6 @@ MonoBehaviour:
   floorLayerMask:
     serializedVersion: 2
     m_Bits: 2048
-  collisionDetector: {fileID: 5053882652580880437}
   standStillTargetingAnchor: {fileID: 5584972262798546852}
   characterCore: {fileID: 507542057868587843}
   characterResources: {fileID: 2402614971554661879}
