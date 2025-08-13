@@ -99,3 +99,4 @@ Key Unity packages (from manifest.json):
 3. **Inspector Debugging**: Use public fields or [SerializeField] for runtime value inspection
 4. **Version Control**: .meta files are crucial for Unity - always commit them with their associated assets
 5. **Performance**: Use Unity Profiler (Window > Analysis > Profiler) for optimization
+- 有編譯錯誤的話繼續做
