@@ -48,9 +48,10 @@ namespace Wuxia.GameCore
         public float stoppingDistance = 2f; // 停止追蹤的距離
         public float apCostPerMeter = 5f; // 每公尺消耗的AP
         
-        [Header("AI尋路")]
+        [Header("AI相關")]
         public NavMeshAgent navAgent;
         public bool useNavMesh = true; // 是否使用NavMesh尋路
+        public EnemyAISystem enemyAISystem;
         
         [Header("目標追蹤")]
         public Transform currentTarget; // 當前追蹤的目標

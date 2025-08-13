@@ -6,6 +6,7 @@ namespace Wuxia.GameCore
 {
     public interface IEnemyAction
     {
+        void InitializeAction(EnemyCore enemy);
         IEnumerator Execute(EnemyCore enemy);
         string GetActionName();
         bool CanExecute(EnemyCore enemy);
@@ -16,6 +17,11 @@ namespace Wuxia.GameCore
     {
         [SerializeField] public List<BaseCondition> Condition;
         
+        public virtual void InitializeAction(EnemyCore enemy)
+        {
+            // 基本的初始化邏輯，子類別可以覆寫
+            Debug.Log($"[AI] Initializing action: {GetActionName()} for {enemy.gameObject.name}");
+        }
 
         public virtual bool CanExecute(EnemyCore enemy)
         {

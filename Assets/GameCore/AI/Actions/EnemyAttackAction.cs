@@ -12,6 +12,26 @@ namespace Wuxia.GameCore
         [SerializeField] private float attackDuration = 1f;
         [SerializeField] private string attackAnimationTrigger = "Attack";
         
+        public override void InitializeAction(EnemyCore enemy)
+        {
+            base.InitializeAction(enemy);
+            
+            // EnemyAttackAction 特定的初始化邏輯
+            Animator animator = enemy.GetComponent<Animator>();
+            if (animator == null)
+            {
+                Debug.LogWarning($"[AI] {enemy.gameObject.name} 的 EnemyAttackAction 需要 Animator 但找不到該元件");
+            }
+            else if (string.IsNullOrEmpty(attackAnimationTrigger))
+            {
+                Debug.LogWarning($"[AI] {enemy.gameObject.name} 的 EnemyAttackAction 未設定攻擊動畫觸發器");
+            }
+            else
+            {
+                Debug.Log($"[AI] {enemy.gameObject.name} Attack animation trigger '{attackAnimationTrigger}' 已準備就緒");
+            }
+        }
+        
         protected override bool CanExecuteInternal(EnemyCore enemy)
         {
             if (enemy.CurrentActionPoints < apCost)
