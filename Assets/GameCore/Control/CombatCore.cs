@@ -24,7 +24,6 @@ namespace Wuxia.GameCore
         public List<CombatEntity> AllCombatEntity;
         public List<CombatEntity> CurrentCombatEntityQueue;
         
-        public const float ACTION_THRESHOLD = 500;
         public CombatEntity currentRoundEntity;
         
         [Header("Combat State Management")]
@@ -32,8 +31,6 @@ namespace Wuxia.GameCore
         public bool isCombatActive = false;
         public int currentTurnNumber = 0;
         
-        [Header("Turn Management")]
-        public float turnTransitionDelay = 0.5f; // 回合轉換間的延遲時間
         private bool isProcessingTurn = false;
         
         
@@ -115,7 +112,7 @@ namespace Wuxia.GameCore
                 yield return StartCoroutine(ProcessEntityTurn(nextEntity));
                 
                 // 回合間的短暫延遲
-                yield return new WaitForSeconds(turnTransitionDelay);
+                yield return new WaitForSeconds(CombatConfig.Instance.turnTransitionDelay);
                 
                 // 檢查戰鬥是否結束
                 if (CheckCombatEnd())
@@ -230,7 +227,7 @@ namespace Wuxia.GameCore
             {
                 if (entity.Speed <= 0) continue;
                 
-                float remainingValue = ACTION_THRESHOLD - entity.ActionValue;
+                float remainingValue = CombatConfig.Instance.ACTION_THRESHOLD - entity.ActionValue;
                 float timeToAct = remainingValue / entity.Speed;
                 
                 if (timeToAct < minTimeToAct)
@@ -249,7 +246,7 @@ namespace Wuxia.GameCore
             }
             
             // 處理行動完的實體的行動值
-            nextActor.ActionValue -= ACTION_THRESHOLD;
+            nextActor.ActionValue -= CombatConfig.Instance.ACTION_THRESHOLD ;
             
             return nextActor;
         }
@@ -349,7 +346,7 @@ namespace Wuxia.GameCore
             foreach (var character in characterList)
             {
                 if (character.Speed <= 0) continue;
-                float remainingValue = ACTION_THRESHOLD - character.ActionValue;
+                float remainingValue = CombatConfig.Instance.ACTION_THRESHOLD  - character.ActionValue;
                 float timeToAct = remainingValue / character.Speed;
                 
                 if (timeToAct < minTimeToAct)
@@ -368,7 +365,7 @@ namespace Wuxia.GameCore
             }
 
             // 處理行動完的角色的行動值
-            nextActor.ActionValue -= ACTION_THRESHOLD;
+            nextActor.ActionValue -= CombatConfig.Instance.ACTION_THRESHOLD ;
 
             return nextActor;
         }

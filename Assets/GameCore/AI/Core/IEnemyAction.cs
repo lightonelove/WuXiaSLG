@@ -1,31 +1,29 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Wuxia.GameCore
 {
     public interface IEnemyAction
     {
-        ICondition Condition { get; set; }
         IEnumerator Execute(EnemyCore enemy);
         string GetActionName();
         bool CanExecute(EnemyCore enemy);
     }
     
     [System.Serializable]
-    public abstract class BaseEnemyAction : IEnemyAction
+    public abstract class BaseEnemyAction : MonoBehaviour, IEnemyAction
     {
-        [SerializeField] protected BaseCondition condition;
+        [SerializeField] public List<BaseCondition> Condition;
         
-        public ICondition Condition 
-        { 
-            get => condition; 
-            set => condition = value as BaseCondition; 
-        }
-        
+
         public virtual bool CanExecute(EnemyCore enemy)
         {
-            if (condition != null && !condition.Evaluate(enemy))
-                return false;
+            for (int i = 0; i < Condition.Count; i++)
+            {
+                if (!Condition[i].Evaluate(enemy))
+                    return false;
+            }
             
             return CanExecuteInternal(enemy);
         }

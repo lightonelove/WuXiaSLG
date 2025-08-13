@@ -9,7 +9,7 @@ namespace Wuxia.GameCore
     }
     
     [System.Serializable]
-    public abstract class BaseCondition : ICondition
+    public abstract class BaseCondition : MonoBehaviour, ICondition
     {
         [SerializeField] protected bool invert = false;
         

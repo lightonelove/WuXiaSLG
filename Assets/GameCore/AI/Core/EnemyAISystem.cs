@@ -13,7 +13,7 @@ namespace Wuxia.GameCore
         [SerializeField] private bool useRandomSelection = true;
         [SerializeField] private float randomSelectionWeight = 0.5f;
         
-        private EnemyCore enemy;
+        public EnemyCore enemy;
         private EnemyStrategy currentStrategy;
         private Coroutine currentExecutionCoroutine;
         

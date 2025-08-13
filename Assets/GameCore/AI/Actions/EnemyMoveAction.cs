@@ -17,13 +17,12 @@ namespace Wuxia.GameCore
         
         [SerializeField] private MoveTargetType moveType = MoveTargetType.ToPlayer;
         [SerializeField] private float moveDistance = 5f;
-        [SerializeField] private float apCostPerUnit = 10f;
         [SerializeField] private Vector3 targetPosition;
         [SerializeField] private float randomRadius = 10f;
         
         protected override bool CanExecuteInternal(EnemyCore enemy)
         {
-            if (enemy.CurrentActionPoints < apCostPerUnit)
+            if (enemy.CurrentActionPoints < CombatConfig.Instance.APCostPerMeter)
                 return false;
             
             return true; // 簡單檢查，可以加入更複雜的邏輯
@@ -33,13 +32,13 @@ namespace Wuxia.GameCore
         {
             Vector3 destination = CalculateDestination(enemy);
             float distanceToMove = Vector3.Distance(enemy.transform.position, destination);
-            float apCost = distanceToMove * apCostPerUnit;
+            float apCost = distanceToMove * CombatConfig.Instance.APCostPerMeter;
             
             // 檢查AP是否足夠
             if (enemy.CurrentActionPoints < apCost)
             {
                 // 只移動能負擔的距離
-                distanceToMove = enemy.CurrentActionPoints / apCostPerUnit;
+                distanceToMove = enemy.CurrentActionPoints / CombatConfig.Instance.APCostPerMeter;
                 Vector3 direction = (destination - enemy.transform.position).normalized;
                 destination = enemy.transform.position + direction * distanceToMove;
                 apCost = enemy.CurrentActionPoints;

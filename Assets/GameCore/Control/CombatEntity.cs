@@ -26,8 +26,8 @@ namespace Wuxia.GameCore
         public CharacterCore CharacterCore;
 
         [Header("陣營設定")] public CombatEntityFaction Faction = CombatEntityFaction.Neutral;
-
-
+        
+        
         // 提供一個方法來推進此角色的行動值
         public void AdvanceActionValue(float time)
         {
