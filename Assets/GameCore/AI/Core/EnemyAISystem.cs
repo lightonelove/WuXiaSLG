@@ -20,15 +20,6 @@ namespace Wuxia.GameCore
         public EnemyStrategy CurrentStrategy => currentStrategy;
         public bool IsExecuting => currentExecutionCoroutine != null;
         
-        private void Awake()
-        {
-            enemy = GetComponent<EnemyCore>();
-            if (enemy == null)
-            {
-                Debug.LogError("[AI] EnemyAISystem requires EnemyCore component!");
-            }
-        }
-        
         public EnemyStrategy SelectStrategy()
         {
             if (strategies == null || strategies.Count == 0)

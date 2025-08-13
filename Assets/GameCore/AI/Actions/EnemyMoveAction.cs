@@ -49,6 +49,7 @@ namespace Wuxia.GameCore
                 
                 // 一次性尋找目標並初始化 NavMesh
                 cachedTarget = FindClosestPlayer(enemy);
+                Debug.Log("cachedTarget:" + cachedTarget);
                 if (cachedTarget != null)
                 {
                     // 初始化 NavMesh
@@ -307,7 +308,9 @@ namespace Wuxia.GameCore
             // 統一使用NavMeshAgent移動
             if (enemy.navAgent != null && enemy.navAgent.enabled)
             {
-                return MoveWithNavMesh(enemy, target);
+                bool result = MoveWithNavMesh(enemy, target);
+                Debug.Log("wwwwww+:" + result);
+                return result;
             }
             
             Debug.Log($"[AI] {enemy.gameObject.name} NavMeshAgent 未啟用或不存在");
@@ -320,36 +323,39 @@ namespace Wuxia.GameCore
         private bool MoveWithNavMesh(EnemyCore enemy, Transform target)
         {
             // 更新目標位置
-            enemy.navAgent.SetDestination(target.position);
             
-            if (!enemy.navAgent.pathPending && enemy.navAgent.remainingDistance > 0.1f)
+            Debug.Log("enemy.navAgent.remainingDistance:" + enemy.navAgent.remainingDistance);
+
+            // 計算這一幀要移動的距離
+            Debug.Log("wwwwww1");
+            float frameDistance = enemy.moveSpeed * Time.deltaTime;
+            float apCost = frameDistance * CombatConfig.Instance.APCostPerMeter;
+            Debug.Log("wwwwww2");
+            // 檢查AP是否足夠
+            if (enemy.CurrentActionPoints < apCost)
             {
-                // 計算這一幀要移動的距離
-                float frameDistance = enemy.moveSpeed * Time.deltaTime;
-                float apCost = frameDistance * CombatConfig.Instance.APCostPerMeter;
+                frameDistance = enemy.CurrentActionPoints / CombatConfig.Instance.APCostPerMeter;
+                apCost = enemy.CurrentActionPoints;
                 
-                // 檢查AP是否足夠
-                if (enemy.CurrentActionPoints < apCost)
-                {
-                    frameDistance = enemy.CurrentActionPoints / CombatConfig.Instance.APCostPerMeter;
-                    apCost = enemy.CurrentActionPoints;
-                }
+                Debug.Log("wwwwww3");
+            }
+            
+            if (frameDistance > 0)
+            {
+                Debug.Log("wwwwww4");
+                // 設定NavMeshAgent的速度來控制移動
+                enemy.navAgent.speed = frameDistance / Time.deltaTime;
                 
-                if (frameDistance > 0)
+                // 消耗AP
+                enemy.SpendActionPoints(apCost);
+                
+                if (enemy.animator != null)
                 {
-                    // 設定NavMeshAgent的速度來控制移動
-                    enemy.navAgent.speed = frameDistance / Time.deltaTime;
-                    
-                    // 消耗AP
-                    enemy.SpendActionPoints(apCost);
-                    
-                    if (enemy.animator != null)
-                    {
-                        enemy.animator.SetBool("isMoving", true);
-                    }
-                    
-                    return true;
+                    Debug.Log("wwwwww5");
+                    enemy.animator.SetBool("isMoving", true);
                 }
+                Debug.Log("wwwwww6");
+                return true;
             }
             
             return false;

@@ -354,7 +354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackPower: 15
   speed: 10
-  maxActionPoints: 40
+  maxActionPoints: 100
   currentActionPoints: 0
   currentState: 0
   characterController: {fileID: 0}
@@ -362,9 +362,9 @@ MonoBehaviour:
   turnRate: 360
   stoppingDistance: 2
   apCostPerMeter: 5
-  navAgent: {fileID: 0}
+  navAgent: {fileID: 3309778327019055104}
   useNavMesh: 0
-  currentTarget: {fileID: 0}
+  enemyAISystem: {fileID: 2213449209274314099}
   damageReceiver: {fileID: 1181071552201193841}
   health: {fileID: 7697422947043063634}
   animator: {fileID: 494543029378924733}
@@ -511,6 +511,9 @@ MonoBehaviour:
   moveDistance: 5
   targetPosition: {x: 0, y: 0, z: 0}
   randomRadius: 0
+  stoppingDistance: 1.5
+  stoppingRemainingAP: 30
+  useNavMesh: 1
 --- !u!1 &2136123735653131465
 GameObject:
   m_ObjectHideFlags: 0
@@ -825,7 +828,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Condition: []
-  Actions: []
+  Actions:
+  - {fileID: 1732624960756659377}
   strategyName: 
   priority: 0
 --- !u!1 &4936464210962526008
@@ -1162,7 +1166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45c97a0854f47cc4eae7caff0d6f0256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strategies: []
+  strategies:
+  - {fileID: 2458074102862914687}
   useRandomSelection: 1
   randomSelectionWeight: 0.5
   enemy: {fileID: 1727198852497152677}
