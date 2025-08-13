@@ -8,807 +8,823 @@ using UnityEditor.Events;
 /// <summary>
 /// 角色技能系統 - 負責技能管理、瞄準系統、技能執行
 /// </summary>
-public class CharacterSkills : MonoBehaviour
+namespace Wuxia.GameCore
 {
-    [Header("技能配置")]
-    [SerializeField] private List<CombatSkill> skills = new List<CombatSkill>(4);
-    
-    /// <summary>
-    /// 獲取指定索引的技能
-    /// </summary>
-    /// <param name="index">技能索引 (0-3)</param>
-    /// <returns>技能，如果索引無效則返回 null</returns>
-    public CombatSkill GetSkill(int index)
+    public class CharacterSkills : MonoBehaviour
     {
-        return (index >= 0 && index < skills.Count) ? skills[index] : null;
-    }
-    
-    /// <summary>
-    /// 設定指定索引的技能
-    /// </summary>
-    /// <param name="index">技能索引</param>
-    /// <param name="skill">要設定的技能</param>
-    public void SetSkill(int index, CombatSkill skill)
-    {
-        // 確保 List 有足夠的空間
-        while (skills.Count <= index)
+        [Header("技能配置")] [SerializeField] private List<CombatSkill> skills = new List<CombatSkill>(4);
+
+        /// <summary>
+        /// 獲取指定索引的技能
+        /// </summary>
+        /// <param name="index">技能索引 (0-3)</param>
+        /// <returns>技能，如果索引無效則返回 null</returns>
+        public CombatSkill GetSkill(int index)
         {
-            skills.Add(null);
+            return (index >= 0 && index < skills.Count) ? skills[index] : null;
         }
-        
-        if (index >= 0 && index < skills.Count)
+
+        /// <summary>
+        /// 設定指定索引的技能
+        /// </summary>
+        /// <param name="index">技能索引</param>
+        /// <param name="skill">要設定的技能</param>
+        public void SetSkill(int index, CombatSkill skill)
         {
-            skills[index] = skill;
-        }
-    }
-    
-    /// <summary>
-    /// 獲取所有技能
-    /// </summary>
-    public List<CombatSkill> Skills => skills;
-    
-    [Header("當前選擇的技能")]
-    public CombatSkill currentSelectedSkill; // 當前選擇要執行的技能
-    
-    [Header("技能瞄準系統")]
-    public Transform straightFrontTargetingAnchor; // 技能瞄準錨點
-    private BoxCollider targetingCollider; // 瞄準用的BoxCollider
-    private bool isSkillTargetValid = true; // 技能目標是否有效（沒有被Floor阻擋）
-    public LayerMask floorLayerMask; // Floor圖層遮罩
-    private Renderer cubeRenderer; // Cube的Renderer組件
-    private Color originalCubeColor; // Cube的原始顏色
-    private readonly Color blockedColor = new Color(0.5f, 0f, 0f, 1f); // 酒紅色
-    public SectorMeshGenerator standStillTargetingAnchor;
-    
-    // 瞄準模式狀態追蹤（避免重複生成）
-    private SkillTargetingMode? lastTargetingMode = null; // 上次的瞄準模式
-    private CombatSkill lastSelectedSkill = null; // 上次選擇的技能
-    private System.Collections.Generic.HashSet<Collider> TargetingCollidingObjects = new System.Collections.Generic.HashSet<Collider>();
-    
-    // Floor 層碰撞檢測（用於 FrontDash 模式）
-    private System.Collections.Generic.HashSet<Collider> FloorCollidingObjects = new System.Collections.Generic.HashSet<Collider>();
-    
-    // 追蹤已被標記為瞄準目標的 TargetedIndicator
-    private System.Collections.Generic.HashSet<TargetedIndicator> currentTargets = new System.Collections.Generic.HashSet<TargetedIndicator>();
-    
-    // 對其他組件的引用
-    public CharacterCore characterCore;
-    public CharacterResources characterResources;
-    
-    // 碰撞類型枚舉
-    private enum CollisionType { Enter, Exit }
-    
-    void Start()
-    {
-        // 初始化技能瞄準系統
-        InitializeSkillTargeting();
-    }
-    
-    /// <summary>
-    /// 初始化技能瞄準系統
-    /// </summary>
-    private void InitializeSkillTargeting()
-    {
-        // 尋找 StraightFrontTargetingAnchor
-        
-        if (straightFrontTargetingAnchor != null)
-        {
-            // 尋找其下的 Cube 物件的 BoxCollider
-            Transform cubeTransform = straightFrontTargetingAnchor.Find("Cube");
-            if (cubeTransform != null)
+            // 確保 List 有足夠的空間
+            while (skills.Count <= index)
             {
-                targetingCollider = cubeTransform.GetComponent<BoxCollider>();
-                cubeRenderer = cubeTransform.GetComponent<Renderer>();
-                
-                if (targetingCollider != null)
+                skills.Add(null);
+            }
+
+            if (index >= 0 && index < skills.Count)
+            {
+                skills[index] = skill;
+            }
+        }
+
+        /// <summary>
+        /// 獲取所有技能
+        /// </summary>
+        public List<CombatSkill> Skills => skills;
+
+        [Header("當前選擇的技能")] public CombatSkill currentSelectedSkill; // 當前選擇要執行的技能
+
+        [Header("技能瞄準系統")] public Transform straightFrontTargetingAnchor; // 技能瞄準錨點
+        private BoxCollider targetingCollider; // 瞄準用的BoxCollider
+        private bool isSkillTargetValid = true; // 技能目標是否有效（沒有被Floor阻擋）
+        public LayerMask floorLayerMask; // Floor圖層遮罩
+        private Renderer cubeRenderer; // Cube的Renderer組件
+        private Color originalCubeColor; // Cube的原始顏色
+        private readonly Color blockedColor = new Color(0.5f, 0f, 0f, 1f); // 酒紅色
+        public SectorMeshGenerator standStillTargetingAnchor;
+
+        // 瞄準模式狀態追蹤（避免重複生成）
+        private SkillTargetingMode? lastTargetingMode = null; // 上次的瞄準模式
+        private CombatSkill lastSelectedSkill = null; // 上次選擇的技能
+
+        private System.Collections.Generic.HashSet<Collider> TargetingCollidingObjects =
+            new System.Collections.Generic.HashSet<Collider>();
+
+        // Floor 層碰撞檢測（用於 FrontDash 模式）
+        private System.Collections.Generic.HashSet<Collider> FloorCollidingObjects =
+            new System.Collections.Generic.HashSet<Collider>();
+
+        // 追蹤已被標記為瞄準目標的 TargetedIndicator
+        private System.Collections.Generic.HashSet<TargetedIndicator> currentTargets =
+            new System.Collections.Generic.HashSet<TargetedIndicator>();
+
+        // 對其他組件的引用
+        public CharacterCore characterCore;
+        public CharacterResources characterResources;
+
+        // 碰撞類型枚舉
+        private enum CollisionType
+        {
+            Enter,
+            Exit
+        }
+
+        void Start()
+        {
+            // 初始化技能瞄準系統
+            InitializeSkillTargeting();
+        }
+
+        /// <summary>
+        /// 初始化技能瞄準系統
+        /// </summary>
+        private void InitializeSkillTargeting()
+        {
+            // 尋找 StraightFrontTargetingAnchor
+
+            if (straightFrontTargetingAnchor != null)
+            {
+                // 尋找其下的 Cube 物件的 BoxCollider
+                Transform cubeTransform = straightFrontTargetingAnchor.Find("Cube");
+                if (cubeTransform != null)
                 {
-                    // 儲存原始顏色
-                    if (cubeRenderer != null && cubeRenderer.material != null)
+                    targetingCollider = cubeTransform.GetComponent<BoxCollider>();
+                    cubeRenderer = cubeTransform.GetComponent<Renderer>();
+
+                    if (targetingCollider != null)
                     {
-                        originalCubeColor = cubeRenderer.material.color;
+                        // 儲存原始顏色
+                        if (cubeRenderer != null && cubeRenderer.material != null)
+                        {
+                            originalCubeColor = cubeRenderer.material.color;
+                        }
+
+
+                        // 確保初始時是隱藏的
+                        straightFrontTargetingAnchor.gameObject.SetActive(false);
                     }
-                    
-                    
-                    // 確保初始時是隱藏的
-                    straightFrontTargetingAnchor.gameObject.SetActive(false);
                 }
             }
-        }
-        
-        // 初始化 StandStill 扇形瞄準器
-        if (standStillTargetingAnchor != null)
-        {
-            // 確保初始時是隱藏的
-            standStillTargetingAnchor.SetVisible(false);
-        }
-        
-        // 取得 Floor 圖層遮罩
-        if (SLGCoreUI.Instance != null)
-        {
-            floorLayerMask = SLGCoreUI.Instance.floorLayerMask;
-        }
-        else
-        {
-            // 使用預設的 Floor 圖層
-            floorLayerMask = LayerMask.GetMask("Floor");
-        }
-    }
-    
-    /// <summary>
-    /// 檢查是否可以使用指定技能
-    /// </summary>
-    /// <param name="skill">要檢查的技能</param>
-    /// <returns>是否可以使用</returns>
-    public bool CanUseSkill(CombatSkill skill)
-    {
-        return skill != null && characterResources != null && characterResources.HasEnoughAP(skill.SPCost);
-    }
-    
-    /// <summary>
-    /// 檢查指定索引的技能是否可以使用
-    /// </summary>
-    /// <param name="index">技能索引 (0-3)</param>
-    /// <returns>是否可以使用</returns>
-    public bool CanUseSkillByIndex(int index) => CanUseSkill(GetSkill(index));
-    
-    
-    /// <summary>
-    /// 使用技能
-    /// </summary>
-    /// <param name="skill">要使用的技能</param>
-    public void UseSkill(CombatSkill skill)
-    {
-        if (skill != null && characterResources != null && characterResources.HasEnoughAP(skill.SPCost))
-        {
-            if (characterCore != null)
+
+            // 初始化 StandStill 扇形瞄準器
+            if (standStillTargetingAnchor != null)
             {
-                characterCore.nowState = CharacterCore.CharacterCoreState.UsingSkill;
-                
-                if (characterCore.CharacterControlAnimator != null)
+                // 確保初始時是隱藏的
+                standStillTargetingAnchor.SetVisible(false);
+            }
+
+            // 取得 Floor 圖層遮罩
+            if (SLGCoreUI.Instance != null)
+            {
+                floorLayerMask = SLGCoreUI.Instance.floorLayerMask;
+            }
+            else
+            {
+                // 使用預設的 Floor 圖層
+                floorLayerMask = LayerMask.GetMask("Floor");
+            }
+        }
+
+        /// <summary>
+        /// 檢查是否可以使用指定技能
+        /// </summary>
+        /// <param name="skill">要檢查的技能</param>
+        /// <returns>是否可以使用</returns>
+        public bool CanUseSkill(CombatSkill skill)
+        {
+            return skill != null && characterResources != null && characterResources.HasEnoughAP(skill.SPCost);
+        }
+
+        /// <summary>
+        /// 檢查指定索引的技能是否可以使用
+        /// </summary>
+        /// <param name="index">技能索引 (0-3)</param>
+        /// <returns>是否可以使用</returns>
+        public bool CanUseSkillByIndex(int index) => CanUseSkill(GetSkill(index));
+
+
+        /// <summary>
+        /// 使用技能
+        /// </summary>
+        /// <param name="skill">要使用的技能</param>
+        public void UseSkill(CombatSkill skill)
+        {
+            if (skill != null && characterResources != null && characterResources.HasEnoughAP(skill.SPCost))
+            {
+                if (characterCore != null)
                 {
-                    characterCore.CharacterControlAnimator.Play(skill.AnimationName);
+                    characterCore.nowState = CharacterCore.CharacterCoreState.UsingSkill;
+
+                    if (characterCore.CharacterControlAnimator != null)
+                    {
+                        characterCore.CharacterControlAnimator.Play(skill.AnimationName);
+                    }
+
+                    characterResources.ConsumeAP(skill.SPCost);
                 }
-                
-                characterResources.ConsumeAP(skill.SPCost);
             }
         }
-    }
-    
-    /// <summary>
-    /// 在指定位置執行技能
-    /// </summary>
-    /// <param name="targetLocation">技能目標位置</param>
-    /// <param name="skill">要執行的技能</param>
-    public void ExecuteSkillAtLocation(Vector3 targetLocation, CombatSkill skill)
-    {
-        if (skill != null && characterResources != null && characterResources.HasEnoughAP(skill.SPCost))
+
+        /// <summary>
+        /// 在指定位置執行技能
+        /// </summary>
+        /// <param name="targetLocation">技能目標位置</param>
+        /// <param name="skill">要執行的技能</param>
+        public void ExecuteSkillAtLocation(Vector3 targetLocation, CombatSkill skill)
         {
-            // 檢查技能路徑是否有效（沒有被 Floor 層阻擋）
-            if (!isSkillTargetValid)
+            if (skill != null && characterResources != null && characterResources.HasEnoughAP(skill.SPCost))
             {
+                // 檢查技能路徑是否有效（沒有被 Floor 層阻擋）
+                if (!isSkillTargetValid)
+                {
+                    return;
+                }
+
+                // 計算考慮距離限制的實際目標位置
+                Vector3 adjustedTargetLocation = CalculateAdjustedTargetLocation(targetLocation, skill);
+
+                // 讓角色面向目標位置
+                Vector3 lookDirection = adjustedTargetLocation - transform.position;
+                lookDirection.y = 0;
+                if (lookDirection != Vector3.zero)
+                {
+                    transform.rotation = Quaternion.LookRotation(lookDirection);
+                }
+
+                // 設定AnimationMoveScaler3D的目標位置（用於技能動畫位移縮放）
+                if (characterCore != null && characterCore.animationMoveScaler3D != null)
+                {
+                    characterCore.animationMoveScaler3D.SetClickPosition(adjustedTargetLocation);
+                }
+
+                if (characterCore != null)
+                {
+                    characterCore.nowState = CharacterCore.CharacterCoreState.UsingSkill;
+
+                    // 播放技能動畫
+                    if (characterCore.CharacterControlAnimator != null)
+                    {
+                        characterCore.CharacterControlAnimator.Play(skill.AnimationName);
+                    }
+
+                    characterResources.ConsumeAP(skill.SPCost);
+
+                    // 隱藏所有技能瞄準系統
+                    if (straightFrontTargetingAnchor != null)
+                    {
+                        straightFrontTargetingAnchor.gameObject.SetActive(false);
+                    }
+
+                    if (standStillTargetingAnchor != null)
+                    {
+                        standStillTargetingAnchor.SetVisible(false);
+                    }
+
+                    // 重置動作模式
+                    characterCore.currentActionMode = CharacterCore.PlayerActionMode.None;
+                }
+            }
+        }
+
+        // 追蹤上次的動作模式，避免重複清除
+        private CharacterCore.PlayerActionMode? lastActionMode = null;
+
+        /// <summary>
+        /// 更新技能瞄準系統
+        /// </summary>
+        public void UpdateSkillTargeting()
+        {
+            if (characterCore == null) return;
+
+            // 檢查動作模式是否改變
+            bool actionModeChanged = lastActionMode != characterCore.currentActionMode;
+            lastActionMode = characterCore.currentActionMode;
+
+            // 只在 SkillTargeting 模式下運作
+            if (characterCore.currentActionMode != CharacterCore.PlayerActionMode.SkillTargeting)
+            {
+                // 只在模式改變時才執行清除操作（避免每 frame 重複執行）
+                if (actionModeChanged)
+                {
+                    // 隱藏所有瞄準系統
+                    if (straightFrontTargetingAnchor != null && straightFrontTargetingAnchor.gameObject.activeSelf)
+                    {
+                        straightFrontTargetingAnchor.gameObject.SetActive(false);
+                    }
+
+                    if (standStillTargetingAnchor != null)
+                    {
+                        standStillTargetingAnchor.SetVisible(false);
+                    }
+
+                    // 重置狀態追蹤（當退出瞄準模式時）
+                    lastTargetingMode = null;
+                    lastSelectedSkill = null;
+
+                    // 清除所有目標指示器（只在退出瞄準模式時執行一次）
+                    ClearAllTargetIndicators();
+
+                    // 清除所有碰撞狀態（包括 Floor 碰撞和目標碰撞）
+                    ClearAllCollidingObjects();
+                }
+
                 return;
             }
-            
-            // 計算考慮距離限制的實際目標位置
-            Vector3 adjustedTargetLocation = CalculateAdjustedTargetLocation(targetLocation, skill);
-            
-            // 讓角色面向目標位置
-            Vector3 lookDirection = adjustedTargetLocation - transform.position;
-            lookDirection.y = 0;
-            if (lookDirection != Vector3.zero)
+
+            // 根據當前選擇的技能瞄準模式來更新
+            if (currentSelectedSkill != null)
             {
-                transform.rotation = Quaternion.LookRotation(lookDirection);
+                switch (currentSelectedSkill.TargetingMode)
+                {
+                    case SkillTargetingMode.FrontDash:
+                        UpdateFrontDashTargeting();
+                        break;
+                    case SkillTargetingMode.StandStill:
+                        UpdateStandStillTargeting();
+                        break;
+                    default:
+                        UpdateFrontDashTargeting(); // 預設使用 FrontDash
+                        break;
+                }
             }
-            
-            // 設定AnimationMoveScaler3D的目標位置（用於技能動畫位移縮放）
-            if (characterCore != null && characterCore.animationMoveScaler3D != null)
+            else
             {
-                characterCore.animationMoveScaler3D.SetClickPosition(adjustedTargetLocation);
-            }
-            
-            if (characterCore != null)
-            {
-                characterCore.nowState = CharacterCore.CharacterCoreState.UsingSkill;
-                
-                // 播放技能動畫
-                if (characterCore.CharacterControlAnimator != null)
-                {
-                    characterCore.CharacterControlAnimator.Play(skill.AnimationName);
-                }
-                characterResources.ConsumeAP(skill.SPCost);
-                
-                // 隱藏所有技能瞄準系統
-                if (straightFrontTargetingAnchor != null)
-                {
-                    straightFrontTargetingAnchor.gameObject.SetActive(false);
-                }
-                if (standStillTargetingAnchor != null)
-                {
-                    standStillTargetingAnchor.SetVisible(false);
-                }
-                
-                // 重置動作模式
-                characterCore.currentActionMode = CharacterCore.PlayerActionMode.None;
+                // 如果沒有選擇技能，使用預設的 FrontDash 瞄準
+                UpdateFrontDashTargeting();
             }
         }
-    }
-    
-    // 追蹤上次的動作模式，避免重複清除
-    private CharacterCore.PlayerActionMode? lastActionMode = null;
-    
-    /// <summary>
-    /// 更新技能瞄準系統
-    /// </summary>
-    public void UpdateSkillTargeting()
-    {
-        if (characterCore == null) return;
-        
-        // 檢查動作模式是否改變
-        bool actionModeChanged = lastActionMode != characterCore.currentActionMode;
-        lastActionMode = characterCore.currentActionMode;
-        
-        // 只在 SkillTargeting 模式下運作
-        if (characterCore.currentActionMode != CharacterCore.PlayerActionMode.SkillTargeting)
+
+        /// <summary>
+        /// 更新 FrontDash 瞄準模式（前方衝刺）
+        /// </summary>
+        private void UpdateFrontDashTargeting()
         {
-            // 只在模式改變時才執行清除操作（避免每 frame 重複執行）
-            if (actionModeChanged)
+            // 檢查是否需要清空碰撞狀態（模式或技能改變時）
+            bool targetingModeChanged = lastTargetingMode != SkillTargetingMode.FrontDash;
+            bool skillChanged = lastSelectedSkill != currentSelectedSkill;
+            bool needsClearCollision = targetingModeChanged || skillChanged;
+
+            // 更新狀態追蹤
+            lastTargetingMode = SkillTargetingMode.FrontDash;
+            lastSelectedSkill = currentSelectedSkill;
+
+            // 如果模式或技能改變，清空之前的碰撞狀態
+            if (needsClearCollision)
             {
-                // 隱藏所有瞄準系統
-                if (straightFrontTargetingAnchor != null && straightFrontTargetingAnchor.gameObject.activeSelf)
-                {
-                    straightFrontTargetingAnchor.gameObject.SetActive(false);
-                }
-                if (standStillTargetingAnchor != null)
-                {
-                    standStillTargetingAnchor.SetVisible(false);
-                }
-                
-                // 重置狀態追蹤（當退出瞄準模式時）
-                lastTargetingMode = null;
-                lastSelectedSkill = null;
-                
-                // 清除所有目標指示器（只在退出瞄準模式時執行一次）
-                ClearAllTargetIndicators();
-                
-                // 清除所有碰撞狀態（包括 Floor 碰撞和目標碰撞）
                 ClearAllCollidingObjects();
             }
-            return;
-        }
-        
-        // 根據當前選擇的技能瞄準模式來更新
-        if (currentSelectedSkill != null)
-        {
-            switch (currentSelectedSkill.TargetingMode)
+
+            // 隱藏 StandStill 瞄準器
+            if (standStillTargetingAnchor != null)
             {
-                case SkillTargetingMode.FrontDash:
-                    UpdateFrontDashTargeting();
-                    break;
-                case SkillTargetingMode.StandStill:
-                    UpdateStandStillTargeting();
-                    break;
-                default:
-                    UpdateFrontDashTargeting(); // 預設使用 FrontDash
-                    break;
+                standStillTargetingAnchor.SetVisible(false);
             }
-        }
-        else
-        {
-            // 如果沒有選擇技能，使用預設的 FrontDash 瞄準
-            UpdateFrontDashTargeting();
-        }
-    }
-    
-    /// <summary>
-    /// 更新 FrontDash 瞄準模式（前方衝刺）
-    /// </summary>
-    private void UpdateFrontDashTargeting()
-    {
-        // 檢查是否需要清空碰撞狀態（模式或技能改變時）
-        bool targetingModeChanged = lastTargetingMode != SkillTargetingMode.FrontDash;
-        bool skillChanged = lastSelectedSkill != currentSelectedSkill;
-        bool needsClearCollision = targetingModeChanged || skillChanged;
-        
-        // 更新狀態追蹤
-        lastTargetingMode = SkillTargetingMode.FrontDash;
-        lastSelectedSkill = currentSelectedSkill;
-        
-        // 如果模式或技能改變，清空之前的碰撞狀態
-        if (needsClearCollision)
-        {
-            ClearAllCollidingObjects();
-        }
-        
-        // 隱藏 StandStill 瞄準器
-        if (standStillTargetingAnchor != null)
-        {
-            standStillTargetingAnchor.SetVisible(false);
-        }
-        
-        // 顯示 FrontDash 瞄準系統
-        if (!straightFrontTargetingAnchor.gameObject.activeSelf)
-        {
-            straightFrontTargetingAnchor.gameObject.SetActive(true);
-        }
-        
-        // 如果是固定距離模式，只在模式或技能改變時設定一次 Collider 大小
-        if (currentSelectedSkill != null && currentSelectedSkill.IsFixedRange && needsClearCollision)
-        {
-            float targetDistance = currentSelectedSkill.SkillRange;
-            float cubeLocalOffset = 0.5f; // Cube 在本地座標的 Z 偏移
-            float scaleZ = (targetDistance / cubeLocalOffset) * 0.5f;
-            
-            // 設定固定縮放
-            straightFrontTargetingAnchor.localScale = new Vector3(1f, 1f, scaleZ);
-        }
-        
-        // 取得滑鼠在地面的位置
-        if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.IsMouseOverFloor())
-        {
-            Vector3 mouseWorldPos = SLGCoreUI.Instance.GetMouseFloorPosition();
-            if (mouseWorldPos != Vector3.zero)
+
+            // 顯示 FrontDash 瞄準系統
+            if (!straightFrontTargetingAnchor.gameObject.activeSelf)
             {
-                // 計算方向（用於角色旋轉）
-                Vector3 direction = mouseWorldPos - characterCore.transform.position;
-                direction.y = 0; // 保持水平
-                // 旋轉整個 CharacterCore 面向目標（即時跟隨）
-                if (direction != Vector3.zero)
-                {
-                    Quaternion targetRotation = Quaternion.LookRotation(direction);
-                    characterCore.transform.rotation = targetRotation;
-                }
-                
-                // 只有在非固定距離模式下才更新 Collider 大小
-                if (currentSelectedSkill == null || !currentSelectedSkill.IsFixedRange)
-                {
-                    // 跟隨滑鼠模式：計算滑鼠距離並限制最大值
-                    Vector3 characterPos = characterCore.transform.position;
-                    Vector3 toMouse = mouseWorldPos - characterPos;
-                    toMouse.y = 0; // 保持水平
-                    float mouseDistance = toMouse.magnitude;
-                    
-                    float maxRange = (currentSelectedSkill != null) ? currentSelectedSkill.SkillRange : 5f;
-                    float targetDistance = Mathf.Min(mouseDistance, maxRange);
-                    
-                    // 計算 Anchor 的縮放（Cube 在本地座標 (0, 0, 0.5)）
-                    float cubeLocalOffset = 0.5f; // Cube 在本地座標的 Z 偏移
-                    float scaleZ = (targetDistance / cubeLocalOffset) * 0.5f;
-                    
-                    // 設定縮放，保持 X 和 Y 不變
-                    straightFrontTargetingAnchor.localScale = new Vector3(1f, 1f, scaleZ);
-                }
-                // 觸發器系統會自動檢測碰撞，無需手動調用
+                straightFrontTargetingAnchor.gameObject.SetActive(true);
             }
-        }
-    }
-    
-    /// <summary>
-    /// 更新 StandStill 瞄準模式（原地施放）
-    /// </summary>
-    private void UpdateStandStillTargeting()
-    {
-        // 隱藏 FrontDash 瞄準器
-        if (straightFrontTargetingAnchor != null && straightFrontTargetingAnchor.gameObject.activeSelf)
-        {
-            straightFrontTargetingAnchor.gameObject.SetActive(false);
-        }
-        
-        // 檢查是否需要重新生成扇形（只在模式或技能改變時才生成）
-        bool targetingModeChanged = lastTargetingMode != SkillTargetingMode.StandStill;
-        bool skillChanged = lastSelectedSkill != currentSelectedSkill;
-        bool needsRegeneration = targetingModeChanged || skillChanged;
-        
-        // 如果模式或技能改變，清空之前的碰撞狀態
-        if (needsRegeneration)
-        {
-            ClearAllCollidingObjects();
-        }
-        
-        // 更新狀態追蹤
-        lastTargetingMode = SkillTargetingMode.StandStill;
-        lastSelectedSkill = currentSelectedSkill;
-        
-        // 顯示 StandStill 扇形瞄準器
-        if (standStillTargetingAnchor != null)
-        {
-            standStillTargetingAnchor.SetVisible(true);
-            
-            // 只在需要重新生成時才設定角度和距離參數（避免每 frame 重新生成 mesh）
-            if (needsRegeneration && currentSelectedSkill != null)
+
+            // 如果是固定距離模式，只在模式或技能改變時設定一次 Collider 大小
+            if (currentSelectedSkill != null && currentSelectedSkill.IsFixedRange && needsClearCollision)
             {
-                standStillTargetingAnchor.SetAngle(currentSelectedSkill.SkillAngle);
-                standStillTargetingAnchor.SetRadius(currentSelectedSkill.SkillRange);
+                float targetDistance = currentSelectedSkill.SkillRange;
+                float cubeLocalOffset = 0.5f; // Cube 在本地座標的 Z 偏移
+                float scaleZ = (targetDistance / cubeLocalOffset) * 0.5f;
+
+                // 設定固定縮放
+                straightFrontTargetingAnchor.localScale = new Vector3(1f, 1f, scaleZ);
             }
-            
-            // 取得滑鼠在地面的位置，用於旋轉扇形朝向（這部分仍需要每 frame 更新）
+
+            // 取得滑鼠在地面的位置
             if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.IsMouseOverFloor())
             {
                 Vector3 mouseWorldPos = SLGCoreUI.Instance.GetMouseFloorPosition();
                 if (mouseWorldPos != Vector3.zero)
                 {
-                    // 計算方向（用於角色和扇形旋轉）
+                    // 計算方向（用於角色旋轉）
                     Vector3 direction = mouseWorldPos - characterCore.transform.position;
                     direction.y = 0; // 保持水平
-                    
                     // 旋轉整個 CharacterCore 面向目標（即時跟隨）
                     if (direction != Vector3.zero)
                     {
                         Quaternion targetRotation = Quaternion.LookRotation(direction);
                         characterCore.transform.rotation = targetRotation;
                     }
+
+                    // 只有在非固定距離模式下才更新 Collider 大小
+                    if (currentSelectedSkill == null || !currentSelectedSkill.IsFixedRange)
+                    {
+                        // 跟隨滑鼠模式：計算滑鼠距離並限制最大值
+                        Vector3 characterPos = characterCore.transform.position;
+                        Vector3 toMouse = mouseWorldPos - characterPos;
+                        toMouse.y = 0; // 保持水平
+                        float mouseDistance = toMouse.magnitude;
+
+                        float maxRange = (currentSelectedSkill != null) ? currentSelectedSkill.SkillRange : 5f;
+                        float targetDistance = Mathf.Min(mouseDistance, maxRange);
+
+                        // 計算 Anchor 的縮放（Cube 在本地座標 (0, 0, 0.5)）
+                        float cubeLocalOffset = 0.5f; // Cube 在本地座標的 Z 偏移
+                        float scaleZ = (targetDistance / cubeLocalOffset) * 0.5f;
+
+                        // 設定縮放，保持 X 和 Y 不變
+                        straightFrontTargetingAnchor.localScale = new Vector3(1f, 1f, scaleZ);
+                    }
+                    // 觸發器系統會自動檢測碰撞，無需手動調用
                 }
             }
         }
-    }
-    
-    
-    /// <summary>
-    /// 獲取技能目標是否有效
-    /// </summary>
-    /// <returns>技能目標是否有效</returns>
-    public bool IsSkillTargetValid()
-    {
-        return isSkillTargetValid;
-    }
-    
-    /// <summary>
-    /// 統一的碰撞處理入口方法
-    /// </summary>
-    /// <param name="other">碰撞的 Collider</param>
-    /// <param name="type">碰撞類型</param>
-    private void HandleTargetCollision(Collider other, CollisionType type)
-    {
-        // 檢查是否為自己的碰撞器，如果是則忽略
-        if (IsSelfEntity(other))
+
+        /// <summary>
+        /// 更新 StandStill 瞄準模式（原地施放）
+        /// </summary>
+        private void UpdateStandStillTargeting()
         {
-            return;
-        }
-        
-        if (IsInLayerMask(other.gameObject, floorLayerMask))
-        {
-            HandleFloorCollision(other, type);
-        }
-        else
-        {
-            HandleEntityCollision(other, type);
-        }
-    }
-    
-    /// <summary>
-    /// 處理 Floor 層的碰撞
-    /// </summary>
-    /// <param name="other">碰撞的 Collider</param>
-    /// <param name="type">碰撞類型</param>
-    private void HandleFloorCollision(Collider other, CollisionType type)
-    {
-        switch (type)
-        {
-            case CollisionType.Enter:
-                FloorCollidingObjects.Add(other);
-                UpdateSkillTargetValidity();
-                break;
-            case CollisionType.Exit:
-                FloorCollidingObjects.Remove(other);
-                UpdateSkillTargetValidity();
-                break;
-        }
-    }
-    
-    /// <summary>
-    /// 處理一般實體的碰撞
-    /// </summary>
-    /// <param name="other">碰撞的 Collider</param>
-    /// <param name="type">碰撞類型</param>
-    private void HandleEntityCollision(Collider other, CollisionType type)
-    {
-        switch (type)
-        {
-            case CollisionType.Enter:
-                TargetingCollidingObjects.Add(other);
-                ProcessTargetIndicator(other, true);
-                break;
-            case CollisionType.Exit:
-                TargetingCollidingObjects.Remove(other);
-                ProcessTargetIndicator(other, false);
-                break;
-        }
-    }
-    
-    /// <summary>
-    /// 處理 TargetedIndicator 的標記和取消標記
-    /// </summary>
-    /// <param name="other">碰撞的 Collider</param>
-    /// <param name="isEntering">是否為進入碰撞</param>
-    private void ProcessTargetIndicator(Collider other, bool isEntering)
-    {
-        TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
-        if (targetIndicator != null)
-        {
-            if (isEntering)
+            // 隱藏 FrontDash 瞄準器
+            if (straightFrontTargetingAnchor != null && straightFrontTargetingAnchor.gameObject.activeSelf)
             {
-                // 檢查技能是否可以瞄準此陣營
-                if (CanTargetEntity(targetIndicator.GetCombatEntity()))
+                straightFrontTargetingAnchor.gameObject.SetActive(false);
+            }
+
+            // 檢查是否需要重新生成扇形（只在模式或技能改變時才生成）
+            bool targetingModeChanged = lastTargetingMode != SkillTargetingMode.StandStill;
+            bool skillChanged = lastSelectedSkill != currentSelectedSkill;
+            bool needsRegeneration = targetingModeChanged || skillChanged;
+
+            // 如果模式或技能改變，清空之前的碰撞狀態
+            if (needsRegeneration)
+            {
+                ClearAllCollidingObjects();
+            }
+
+            // 更新狀態追蹤
+            lastTargetingMode = SkillTargetingMode.StandStill;
+            lastSelectedSkill = currentSelectedSkill;
+
+            // 顯示 StandStill 扇形瞄準器
+            if (standStillTargetingAnchor != null)
+            {
+                standStillTargetingAnchor.SetVisible(true);
+
+                // 只在需要重新生成時才設定角度和距離參數（避免每 frame 重新生成 mesh）
+                if (needsRegeneration && currentSelectedSkill != null)
                 {
-                    targetIndicator.OnTargeted();
-                    currentTargets.Add(targetIndicator);
+                    standStillTargetingAnchor.SetAngle(currentSelectedSkill.SkillAngle);
+                    standStillTargetingAnchor.SetRadius(currentSelectedSkill.SkillRange);
                 }
-            }
-            else if (currentTargets.Contains(targetIndicator))
-            {
-                targetIndicator.OnUntargeted();
-                currentTargets.Remove(targetIndicator);
-            }
-        }
-    }
-    
-    
-    /// <summary>
-    /// 技能碰撞檢測：當有物件進入 Trigger 時
-    /// </summary>
-    /// <param name="other">進入的物件</param>
-    public void OnTargetingTriggerEnter(Collider other)
-    {
-        HandleTargetCollision(other, CollisionType.Enter);
-    }
-    
-    /// <summary>
-    /// 技能碰撞檢測：當有物件離開 Trigger 時
-    /// </summary>
-    /// <param name="other">離開的物件</param>
-    public void OnTargetingTriggerExit(Collider other)
-    {
-        HandleTargetCollision(other, CollisionType.Exit);
-    }
-    
-    /// <summary>
-    /// 獲取當前在 StandStill 技能扇形範圍內的所有碰撞物件
-    /// </summary>
-    /// <returns>碰撞物件集合</returns>
-    public System.Collections.Generic.HashSet<Collider> GetStandStillCollidingObjects()
-    {
-        // 清理已被銷毀的物件
-        TargetingCollidingObjects.RemoveWhere(c => c == null);
-        return new System.Collections.Generic.HashSet<Collider>(TargetingCollidingObjects);
-    }
-    
-    /// <summary>
-    /// 清空所有碰撞物件列表
-    /// </summary>
-    public void ClearAllCollidingObjects()
-    {
-        TargetingCollidingObjects.Clear();
-        FloorCollidingObjects.Clear();
-        UpdateSkillTargetValidity();
-        ClearAllTargetIndicators();
-    }
-    
-    /// <summary>
-    /// 清空所有目標指示器
-    /// </summary>
-    private void ClearAllTargetIndicators()
-    {
-        int clearedCount = currentTargets.Count;
-        foreach (TargetedIndicator target in currentTargets)
-        {
-            if (target != null)
-            {
-                target.OnUntargeted();
-            }
-        }
-        currentTargets.Clear();
-    }
-    
-    /// <summary>
-    /// 檢查是否可以瞄準指定的 CombatEntity
-    /// </summary>
-    /// <param name="entity">要檢查的 CombatEntity</param>
-    /// <returns>是否可以瞄準</returns>
-    private bool CanTargetEntity(CombatEntity entity)
-    {
-        if (entity == null || currentSelectedSkill == null)
-            return false;
-            
-        return currentSelectedSkill.CanTargetFaction(entity.Faction);
-    }
-    
-    /// <summary>
-    /// 檢查碰撞物件是否為自己（通過比較 CombatEntity）
-    /// </summary>
-    /// <param name="other">碰撞的 Collider</param>
-    /// <returns>是否為自己</returns>
-    private bool IsSelfEntity(Collider other)
-    {
-        if (other == null) return false;
-        
-        // 取得自己的 CombatEntity
-        CombatEntity selfEntity = null;
-        if (characterCore != null)
-        {
-            selfEntity = characterCore.GetComponent<CombatEntity>();
-        }
-        
-        // 如果自己沒有 CombatEntity，則回退到檢查 Transform 層級
-        if (selfEntity == null)
-        {
-            return IsChildOfSelf(other.transform);
-        }
-        
-        // 取得碰撞物件的 CombatEntity
-        CombatEntity otherEntity = other.GetComponentInParent<CombatEntity>();
-        
-        // 比較是否為同一個 CombatEntity
-        return selfEntity == otherEntity;
-    }
-    
-    /// <summary>
-    /// 檢查指定的 Transform 是否為自己或自己的子物件（備用方法）
-    /// </summary>
-    /// <param name="target">要檢查的 Transform</param>
-    /// <returns>是否為自己的子物件</returns>
-    private bool IsChildOfSelf(Transform target)
-    {
-        if (target == null) return false;
-        
-        // 檢查是否為 CharacterCore 的子物件
-        if (characterCore != null)
-        {
-            Transform current = target;
-            while (current != null)
-            {
-                if (current == characterCore.transform)
+
+                // 取得滑鼠在地面的位置，用於旋轉扇形朝向（這部分仍需要每 frame 更新）
+                if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.IsMouseOverFloor())
                 {
-                    return true;
+                    Vector3 mouseWorldPos = SLGCoreUI.Instance.GetMouseFloorPosition();
+                    if (mouseWorldPos != Vector3.zero)
+                    {
+                        // 計算方向（用於角色和扇形旋轉）
+                        Vector3 direction = mouseWorldPos - characterCore.transform.position;
+                        direction.y = 0; // 保持水平
+
+                        // 旋轉整個 CharacterCore 面向目標（即時跟隨）
+                        if (direction != Vector3.zero)
+                        {
+                            Quaternion targetRotation = Quaternion.LookRotation(direction);
+                            characterCore.transform.rotation = targetRotation;
+                        }
+                    }
                 }
-                current = current.parent;
             }
         }
-        
-        // 也檢查是否為 CharacterSkills 本身的子物件
-        Transform currentCheck = target;
-        while (currentCheck != null)
+
+
+        /// <summary>
+        /// 獲取技能目標是否有效
+        /// </summary>
+        /// <returns>技能目標是否有效</returns>
+        public bool IsSkillTargetValid()
         {
-            if (currentCheck == transform)
+            return isSkillTargetValid;
+        }
+
+        /// <summary>
+        /// 統一的碰撞處理入口方法
+        /// </summary>
+        /// <param name="other">碰撞的 Collider</param>
+        /// <param name="type">碰撞類型</param>
+        private void HandleTargetCollision(Collider other, CollisionType type)
+        {
+            // 檢查是否為自己的碰撞器，如果是則忽略
+            if (IsSelfEntity(other))
             {
-                return true;
+                return;
             }
-            currentCheck = currentCheck.parent;
-        }
-        
-        return false;
-    }
-    
-    /// <summary>
-    /// 更新技能目標有效性（基於 Floor 層碰撞）
-    /// </summary>
-    private void UpdateSkillTargetValidity()
-    {
-        bool hasFloorCollision = FloorCollidingObjects.Count > 0;
-        
-        // 扇型瞄準模式（StandStill）不受 Floor 碰撞影響
-        bool newTargetValid;
-        if (currentSelectedSkill != null && currentSelectedSkill.TargetingMode == SkillTargetingMode.StandStill)
-        {
-            newTargetValid = true; // 扇型模式始終有效
-        }
-        else
-        {
-            newTargetValid = !hasFloorCollision; // 其他模式需要檢查 Floor 碰撞
-        }
-        
-        // 只在狀態改變時更新顏色和輸出 Debug
-        if (newTargetValid != isSkillTargetValid)
-        {
-            isSkillTargetValid = newTargetValid;
-            
-            if (hasFloorCollision && currentSelectedSkill != null && currentSelectedSkill.TargetingMode != SkillTargetingMode.StandStill)
+
+            if (IsInLayerMask(other.gameObject, floorLayerMask))
             {
-                // 變更Cube顏色為酒紅色（僅對非扇型模式）
-                if (cubeRenderer != null && cubeRenderer.material != null)
-                {
-                    cubeRenderer.material.color = blockedColor;
-                }
+                HandleFloorCollision(other, type);
             }
             else
             {
-                // 恢復Cube的原始顏色
-                if (cubeRenderer != null && cubeRenderer.material != null)
-                {
-                    cubeRenderer.material.color = originalCubeColor;
-                }
-                
+                HandleEntityCollision(other, type);
             }
         }
-    }
-    
-    /// <summary>
-    /// 檢查物件是否在指定的Layer Mask中
-    /// </summary>
-    /// <param name="obj">要檢查的物件</param>
-    /// <param name="layerMask">Layer Mask</param>
-    /// <returns>是否在Layer Mask中</returns>
-    private bool IsInLayerMask(GameObject obj, LayerMask layerMask)
-    {
-        return ((layerMask.value & (1 << obj.layer)) > 0);
-    }
-    
-    /// <summary>
-    /// 計算考慮技能距離限制的調整後目標位置
-    /// </summary>
-    /// <param name="originalTarget">原始目標位置</param>
-    /// <param name="skill">技能資料</param>
-    /// <returns>調整後的目標位置</returns>
-    private Vector3 CalculateAdjustedTargetLocation(Vector3 originalTarget, CombatSkill skill)
-    {
-        if (skill == null)
+
+        /// <summary>
+        /// 處理 Floor 層的碰撞
+        /// </summary>
+        /// <param name="other">碰撞的 Collider</param>
+        /// <param name="type">碰撞類型</param>
+        private void HandleFloorCollision(Collider other, CollisionType type)
         {
+            switch (type)
+            {
+                case CollisionType.Enter:
+                    FloorCollidingObjects.Add(other);
+                    UpdateSkillTargetValidity();
+                    break;
+                case CollisionType.Exit:
+                    FloorCollidingObjects.Remove(other);
+                    UpdateSkillTargetValidity();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 處理一般實體的碰撞
+        /// </summary>
+        /// <param name="other">碰撞的 Collider</param>
+        /// <param name="type">碰撞類型</param>
+        private void HandleEntityCollision(Collider other, CollisionType type)
+        {
+            switch (type)
+            {
+                case CollisionType.Enter:
+                    TargetingCollidingObjects.Add(other);
+                    ProcessTargetIndicator(other, true);
+                    break;
+                case CollisionType.Exit:
+                    TargetingCollidingObjects.Remove(other);
+                    ProcessTargetIndicator(other, false);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 處理 TargetedIndicator 的標記和取消標記
+        /// </summary>
+        /// <param name="other">碰撞的 Collider</param>
+        /// <param name="isEntering">是否為進入碰撞</param>
+        private void ProcessTargetIndicator(Collider other, bool isEntering)
+        {
+            TargetedIndicator targetIndicator = other.GetComponentInParent<TargetedIndicator>();
+            if (targetIndicator != null)
+            {
+                if (isEntering)
+                {
+                    // 檢查技能是否可以瞄準此陣營
+                    if (CanTargetEntity(targetIndicator.GetCombatEntity()))
+                    {
+                        targetIndicator.OnTargeted();
+                        currentTargets.Add(targetIndicator);
+                    }
+                }
+                else if (currentTargets.Contains(targetIndicator))
+                {
+                    targetIndicator.OnUntargeted();
+                    currentTargets.Remove(targetIndicator);
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// 技能碰撞檢測：當有物件進入 Trigger 時
+        /// </summary>
+        /// <param name="other">進入的物件</param>
+        public void OnTargetingTriggerEnter(Collider other)
+        {
+            HandleTargetCollision(other, CollisionType.Enter);
+        }
+
+        /// <summary>
+        /// 技能碰撞檢測：當有物件離開 Trigger 時
+        /// </summary>
+        /// <param name="other">離開的物件</param>
+        public void OnTargetingTriggerExit(Collider other)
+        {
+            HandleTargetCollision(other, CollisionType.Exit);
+        }
+
+        /// <summary>
+        /// 獲取當前在 StandStill 技能扇形範圍內的所有碰撞物件
+        /// </summary>
+        /// <returns>碰撞物件集合</returns>
+        public System.Collections.Generic.HashSet<Collider> GetStandStillCollidingObjects()
+        {
+            // 清理已被銷毀的物件
+            TargetingCollidingObjects.RemoveWhere(c => c == null);
+            return new System.Collections.Generic.HashSet<Collider>(TargetingCollidingObjects);
+        }
+
+        /// <summary>
+        /// 清空所有碰撞物件列表
+        /// </summary>
+        public void ClearAllCollidingObjects()
+        {
+            TargetingCollidingObjects.Clear();
+            FloorCollidingObjects.Clear();
+            UpdateSkillTargetValidity();
+            ClearAllTargetIndicators();
+        }
+
+        /// <summary>
+        /// 清空所有目標指示器
+        /// </summary>
+        private void ClearAllTargetIndicators()
+        {
+            int clearedCount = currentTargets.Count;
+            foreach (TargetedIndicator target in currentTargets)
+            {
+                if (target != null)
+                {
+                    target.OnUntargeted();
+                }
+            }
+
+            currentTargets.Clear();
+        }
+
+        /// <summary>
+        /// 檢查是否可以瞄準指定的 CombatEntity
+        /// </summary>
+        /// <param name="entity">要檢查的 CombatEntity</param>
+        /// <returns>是否可以瞄準</returns>
+        private bool CanTargetEntity(CombatEntity entity)
+        {
+            if (entity == null || currentSelectedSkill == null)
+                return false;
+
+            return currentSelectedSkill.CanTargetFaction(entity.Faction);
+        }
+
+        /// <summary>
+        /// 檢查碰撞物件是否為自己（通過比較 CombatEntity）
+        /// </summary>
+        /// <param name="other">碰撞的 Collider</param>
+        /// <returns>是否為自己</returns>
+        private bool IsSelfEntity(Collider other)
+        {
+            if (other == null) return false;
+
+            // 取得自己的 CombatEntity
+            CombatEntity selfEntity = null;
+            if (characterCore != null)
+            {
+                selfEntity = characterCore.GetComponent<CombatEntity>();
+            }
+
+            // 如果自己沒有 CombatEntity，則回退到檢查 Transform 層級
+            if (selfEntity == null)
+            {
+                return IsChildOfSelf(other.transform);
+            }
+
+            // 取得碰撞物件的 CombatEntity
+            CombatEntity otherEntity = other.GetComponentInParent<CombatEntity>();
+
+            // 比較是否為同一個 CombatEntity
+            return selfEntity == otherEntity;
+        }
+
+        /// <summary>
+        /// 檢查指定的 Transform 是否為自己或自己的子物件（備用方法）
+        /// </summary>
+        /// <param name="target">要檢查的 Transform</param>
+        /// <returns>是否為自己的子物件</returns>
+        private bool IsChildOfSelf(Transform target)
+        {
+            if (target == null) return false;
+
+            // 檢查是否為 CharacterCore 的子物件
+            if (characterCore != null)
+            {
+                Transform current = target;
+                while (current != null)
+                {
+                    if (current == characterCore.transform)
+                    {
+                        return true;
+                    }
+
+                    current = current.parent;
+                }
+            }
+
+            // 也檢查是否為 CharacterSkills 本身的子物件
+            Transform currentCheck = target;
+            while (currentCheck != null)
+            {
+                if (currentCheck == transform)
+                {
+                    return true;
+                }
+
+                currentCheck = currentCheck.parent;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 更新技能目標有效性（基於 Floor 層碰撞）
+        /// </summary>
+        private void UpdateSkillTargetValidity()
+        {
+            bool hasFloorCollision = FloorCollidingObjects.Count > 0;
+
+            // 扇型瞄準模式（StandStill）不受 Floor 碰撞影響
+            bool newTargetValid;
+            if (currentSelectedSkill != null && currentSelectedSkill.TargetingMode == SkillTargetingMode.StandStill)
+            {
+                newTargetValid = true; // 扇型模式始終有效
+            }
+            else
+            {
+                newTargetValid = !hasFloorCollision; // 其他模式需要檢查 Floor 碰撞
+            }
+
+            // 只在狀態改變時更新顏色和輸出 Debug
+            if (newTargetValid != isSkillTargetValid)
+            {
+                isSkillTargetValid = newTargetValid;
+
+                if (hasFloorCollision && currentSelectedSkill != null &&
+                    currentSelectedSkill.TargetingMode != SkillTargetingMode.StandStill)
+                {
+                    // 變更Cube顏色為酒紅色（僅對非扇型模式）
+                    if (cubeRenderer != null && cubeRenderer.material != null)
+                    {
+                        cubeRenderer.material.color = blockedColor;
+                    }
+                }
+                else
+                {
+                    // 恢復Cube的原始顏色
+                    if (cubeRenderer != null && cubeRenderer.material != null)
+                    {
+                        cubeRenderer.material.color = originalCubeColor;
+                    }
+
+                }
+            }
+        }
+
+        /// <summary>
+        /// 檢查物件是否在指定的Layer Mask中
+        /// </summary>
+        /// <param name="obj">要檢查的物件</param>
+        /// <param name="layerMask">Layer Mask</param>
+        /// <returns>是否在Layer Mask中</returns>
+        private bool IsInLayerMask(GameObject obj, LayerMask layerMask)
+        {
+            return ((layerMask.value & (1 << obj.layer)) > 0);
+        }
+
+        /// <summary>
+        /// 計算考慮技能距離限制的調整後目標位置
+        /// </summary>
+        /// <param name="originalTarget">原始目標位置</param>
+        /// <param name="skill">技能資料</param>
+        /// <returns>調整後的目標位置</returns>
+        private Vector3 CalculateAdjustedTargetLocation(Vector3 originalTarget, CombatSkill skill)
+        {
+            if (skill == null)
+            {
+                return originalTarget;
+            }
+
+            Vector3 characterPos = transform.position;
+            Vector3 direction = originalTarget - characterPos;
+            direction.y = 0; // 保持水平
+
+            float originalDistance = direction.magnitude;
+            float maxRange = skill.SkillRange;
+
+            // 如果是 FrontDash 模式且需要限制距離
+            if (skill.TargetingMode == SkillTargetingMode.FrontDash)
+            {
+                if (skill.IsFixedRange)
+                {
+                    // 固定距離模式：始終使用技能設定的距離
+                    Vector3 adjustedTarget = characterPos + direction.normalized * maxRange;
+                    return adjustedTarget;
+                }
+                else if (originalDistance > maxRange)
+                {
+                    // 跟隨滑鼠模式但超過最大距離：限制到最大距離
+                    Vector3 adjustedTarget = characterPos + direction.normalized * maxRange;
+                    return adjustedTarget;
+                }
+            }
+
+            // 其他情況使用原始目標位置
             return originalTarget;
         }
-        
-        Vector3 characterPos = transform.position;
-        Vector3 direction = originalTarget - characterPos;
-        direction.y = 0; // 保持水平
-        
-        float originalDistance = direction.magnitude;
-        float maxRange = skill.SkillRange;
-        
-        // 如果是 FrontDash 模式且需要限制距離
-        if (skill.TargetingMode == SkillTargetingMode.FrontDash)
-        {
-            if (skill.IsFixedRange)
-            {
-                // 固定距離模式：始終使用技能設定的距離
-                Vector3 adjustedTarget = characterPos + direction.normalized * maxRange;
-                return adjustedTarget;
-            }
-            else if (originalDistance > maxRange)
-            {
-                // 跟隨滑鼠模式但超過最大距離：限制到最大距離
-                Vector3 adjustedTarget = characterPos + direction.normalized * maxRange;
-                return adjustedTarget;
-            }
-        }
-        
-        // 其他情況使用原始目標位置
-        return originalTarget;
-    }
-    
+
 #if UNITY_EDITOR
-    /// <summary>
-    /// 自動設定所有子物件的 ColliderEventReceiver - 在 Unity Editor 中自動調用
-    /// </summary>
-    [ContextMenu("Auto Setup ColliderEventReceivers")]
-    public void AutoSetupColliderEventReceivers()
-    {
-        // 搜尋所有子物件中的 ColliderEventReceiver
-        ColliderEventReceiver[] receivers = GetComponentsInChildren<ColliderEventReceiver>(true);
-        
-        int connectedCount = 0;
-        
-        foreach (ColliderEventReceiver receiver in receivers)
+        /// <summary>
+        /// 自動設定所有子物件的 ColliderEventReceiver - 在 Unity Editor 中自動調用
+        /// </summary>
+        [ContextMenu("Auto Setup ColliderEventReceivers")]
+        public void AutoSetupColliderEventReceivers()
         {
-            
-            // 清除舊的 UnityEvent 連接（包括持久和運行時監聽者）
-            receiver.OnTriggerEnterEvent.RemoveAllListeners();
-            receiver.OnTriggerExitEvent.RemoveAllListeners();
-            
-            // 清除舊的持久監聽者
-            for (int i = receiver.OnTriggerEnterEvent.GetPersistentEventCount() - 1; i >= 0; i--)
-                UnityEventTools.RemovePersistentListener(receiver.OnTriggerEnterEvent, i);
-            for (int i = receiver.OnTriggerExitEvent.GetPersistentEventCount() - 1; i >= 0; i--)
-                UnityEventTools.RemovePersistentListener(receiver.OnTriggerExitEvent, i);
-            
-            // 添加新的持久監聽者（會被保存到場景文件中）
-            UnityEventTools.AddPersistentListener(receiver.OnTriggerEnterEvent, OnTargetingTriggerEnter);
-            UnityEventTools.AddPersistentListener(receiver.OnTriggerExitEvent, OnTargetingTriggerExit);
-            
-            // 啟用 Trigger 事件，關閉 Collision 事件（通常技能系統只需要 Trigger）
-            receiver.SetTriggerEventsEnabled(true);
-            receiver.SetCollisionEventsEnabled(false);
-            
-            connectedCount++;
-            
+            // 搜尋所有子物件中的 ColliderEventReceiver
+            ColliderEventReceiver[] receivers = GetComponentsInChildren<ColliderEventReceiver>(true);
+
+            int connectedCount = 0;
+
+            foreach (ColliderEventReceiver receiver in receivers)
+            {
+
+                // 清除舊的 UnityEvent 連接（包括持久和運行時監聽者）
+                receiver.OnTriggerEnterEvent.RemoveAllListeners();
+                receiver.OnTriggerExitEvent.RemoveAllListeners();
+
+                // 清除舊的持久監聽者
+                for (int i = receiver.OnTriggerEnterEvent.GetPersistentEventCount() - 1; i >= 0; i--)
+                    UnityEventTools.RemovePersistentListener(receiver.OnTriggerEnterEvent, i);
+                for (int i = receiver.OnTriggerExitEvent.GetPersistentEventCount() - 1; i >= 0; i--)
+                    UnityEventTools.RemovePersistentListener(receiver.OnTriggerExitEvent, i);
+
+                // 添加新的持久監聽者（會被保存到場景文件中）
+                UnityEventTools.AddPersistentListener(receiver.OnTriggerEnterEvent, OnTargetingTriggerEnter);
+                UnityEventTools.AddPersistentListener(receiver.OnTriggerExitEvent, OnTargetingTriggerExit);
+
+                // 啟用 Trigger 事件，關閉 Collision 事件（通常技能系統只需要 Trigger）
+                receiver.SetTriggerEventsEnabled(true);
+                receiver.SetCollisionEventsEnabled(false);
+
+                connectedCount++;
+
+            }
         }
-    }
-    
+
 #endif
+    }
 }

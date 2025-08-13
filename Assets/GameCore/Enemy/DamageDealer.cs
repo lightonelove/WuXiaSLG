@@ -1,6 +1,8 @@
 using UnityEngine;
 
-public class DamageDealer : MonoBehaviour
+namespace Wuxia.GameCore
+{
+    public class DamageDealer : MonoBehaviour
 {
     [SerializeField]
     private float damage = 25f;
@@ -29,4 +31,5 @@ public class DamageDealer : MonoBehaviour
             }
         }
     }
+}
 }
