@@ -310,8 +310,8 @@ GameObject:
   - component: {fileID: 7146826614908490065}
   - component: {fileID: 1727198852497152677}
   - component: {fileID: 7697422947043063634}
-  - component: {fileID: 518237636265674845}
   - component: {fileID: 670760991645550886}
+  - component: {fileID: 8048363198152953007}
   - component: {fileID: 3309778327019055104}
   - component: {fileID: 2952278509770769901}
   m_Layer: 0
@@ -391,21 +391,6 @@ MonoBehaviour:
   OnDie:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &518237636265674845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1588288096788536482}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13e93aff1a226b0439f78f2765d09171, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthBarPrefab: {fileID: 1919692162533371824, guid: 6050aad88e8c73543a5dd58362fed6f1, type: 3}
-  anchor: {fileID: 4467518771117506341}
-  health: {fileID: 7697422947043063634}
 --- !u!114 &670760991645550886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,6 +409,24 @@ MonoBehaviour:
   PortraitIcon: {fileID: 21300000, guid: c637823bad5583c4882c20d78856e562, type: 3}
   CharacterCore: {fileID: 0}
   Faction: 4
+--- !u!114 &8048363198152953007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588288096788536482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 137ba595c1ca89646b7953be9c0ca4e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarPrefab: {fileID: 1919692162533371824, guid: 6050aad88e8c73543a5dd58362fed6f1, type: 3}
+  anchor: {fileID: 4467518771117506341}
+  autoFindHealth: 0
+  healthBarOffset: {x: 0, y: 50, z: 0}
+  showHealthBar: 1
+  health: {fileID: 7697422947043063634}
 --- !u!195 &3309778327019055104
 NavMeshAgent:
   m_ObjectHideFlags: 0

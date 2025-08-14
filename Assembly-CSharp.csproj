@@ -64,12 +64,12 @@
     <Compile Include="Assets\GameCore\UI\TurnOrderUIController.cs" />
     <Compile Include="Assets\GameCore\System\AnimationMoveScaler3D.cs" />
     <Compile Include="Assets\GameCore\Enemy\EnemyCore.cs" />
+    <Compile Include="Assets\GameCore\UI\HealthBarController.cs" />
     <Compile Include="Assets\GameCore\AI\Core\IEnemyAction.cs" />
     <Compile Include="Assets\GameCore\Control\CharacterMovement.cs" />
     <Compile Include="Assets\GameCore\AI\Core\ICondition.cs" />
     <Compile Include="Assets\GameCore\Control\CharacterResources.cs" />
     <Compile Include="Assets\GameCore\UI\UIFollowWorldObject.cs" />
-    <Compile Include="Assets\GameCore\UI\EnemyHealthBarController.cs" />
     <Compile Include="Assets\GameCore\AI\Actions\EnemyWaitAction.cs" />
     <Compile Include="Assets\Tool\AnimationPathRebinder.cs" />
     <Compile Include="Assets\GameCore\Character\Health.cs" />

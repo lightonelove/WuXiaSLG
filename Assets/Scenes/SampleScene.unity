@@ -1397,6 +1397,10 @@ PrefabInstance:
       propertyPath: targetLayerMask.m_Bits
       value: 4087
       objectReference: {fileID: 0}
+    - target: {fileID: 3595991799834754161, guid: cf2a4183917391442884c41998698ea9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4857791147700307493, guid: cf2a4183917391442884c41998698ea9, type: 3}
       propertyPath: m_Name
       value: CharacterB
