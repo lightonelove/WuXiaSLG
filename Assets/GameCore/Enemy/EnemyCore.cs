@@ -198,19 +198,18 @@ namespace Wuxia.GameCore
             
             Debug.Log($"{gameObject.name} 選擇策略: {selectedStrategy.StrategyName}");
             
-            // 初始化所有 Action
+            // 按順序執行 Action 直到完成或無法繼續執行
             foreach (var action in selectedStrategy.Actions)
             {
                 if (action != null)
                 {
                     action.InitializeAction(this);
                 }
-            }
-            
-            // 按順序執行 Action 直到完成或無法繼續執行
-            foreach (var action in selectedStrategy.Actions)
-            {
-                if (action != null && action.CanExecute(this))
+                else
+                {
+                    break;
+                }
+                if (action.CanExecute(this))
                 {
                     Debug.Log($"{gameObject.name} 執行行動: {action.GetActionName()}");
                     yield return action.Execute(this);
