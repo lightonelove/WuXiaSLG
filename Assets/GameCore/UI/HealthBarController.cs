@@ -17,16 +17,11 @@ namespace Wuxia.GameCore
         [Tooltip("自動尋找 Health 組件（如果未設定）")] 
         public bool autoFindHealth = true;
         
-        [Tooltip("血條相對於錨點的偏移量")] 
-        public Vector3 healthBarOffset = Vector3.zero;
-        
         [Tooltip("是否顯示血條（可動態控制）")] 
         public bool showHealthBar = true;
 
         public Health health;
-
-
-
+        
         // --- 私有變數 ---
         private GameObject healthBarInstance;
         private UIFollowWorldObject followScript;
