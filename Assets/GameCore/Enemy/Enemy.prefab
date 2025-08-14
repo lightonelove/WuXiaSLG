@@ -314,6 +314,7 @@ GameObject:
   - component: {fileID: 8048363198152953007}
   - component: {fileID: 3309778327019055104}
   - component: {fileID: 2952278509770769901}
+  - component: {fileID: 5207808132746345017}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -425,7 +426,6 @@ MonoBehaviour:
   healthBarPrefab: {fileID: 1919692162533371824, guid: 6050aad88e8c73543a5dd58362fed6f1, type: 3}
   anchor: {fileID: 4467518771117506341}
   autoFindHealth: 0
-  healthBarOffset: {x: 0, y: 50, z: 0}
   showHealthBar: 1
   health: {fileID: 7697422947043063634}
 --- !u!195 &3309778327019055104
@@ -466,6 +466,21 @@ MonoBehaviour:
   targetedColor: {r: 1, g: 1, b: 1, a: 1}
   affectChildMeshRenderers: 0
   enableDebugLog: 0
+--- !u!114 &5207808132746345017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588288096788536482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdbc36e79b7a22d46a779c1fca388500, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiDamageNumberPrefab: {fileID: 654962155742320905, guid: 88b85777e6860d64594e05e0e66c369f, type: 3}
+  spawnOffset: {x: 0, y: 1.5, z: 0}
+  targetCanvas: {fileID: 0}
 --- !u!1 &1645170805765397387
 GameObject:
   m_ObjectHideFlags: 0
