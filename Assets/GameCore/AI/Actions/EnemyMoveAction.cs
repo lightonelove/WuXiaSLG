@@ -309,7 +309,6 @@ namespace Wuxia.GameCore
             if (enemy.navAgent != null && enemy.navAgent.enabled)
             {
                 bool result = MoveWithNavMesh(enemy, target);
-                Debug.Log("wwwwww+:" + result);
                 return result;
             }
             
@@ -322,27 +321,18 @@ namespace Wuxia.GameCore
         /// </summary>
         private bool MoveWithNavMesh(EnemyCore enemy, Transform target)
         {
-            // 更新目標位置
-            
-            Debug.Log("enemy.navAgent.remainingDistance:" + enemy.navAgent.remainingDistance);
-
             // 計算這一幀要移動的距離
-            Debug.Log("wwwwww1");
             float frameDistance = enemy.moveSpeed * Time.deltaTime;
             float apCost = frameDistance * CombatConfig.Instance.APCostPerMeter;
-            Debug.Log("wwwwww2");
             // 檢查AP是否足夠
             if (enemy.CurrentActionPoints < apCost)
             {
                 frameDistance = enemy.CurrentActionPoints / CombatConfig.Instance.APCostPerMeter;
                 apCost = enemy.CurrentActionPoints;
-                
-                Debug.Log("wwwwww3");
             }
             
             if (frameDistance > 0)
             {
-                Debug.Log("wwwwww4");
                 // 設定NavMeshAgent的速度來控制移動
                 enemy.navAgent.speed = frameDistance / Time.deltaTime;
                 
@@ -351,13 +341,10 @@ namespace Wuxia.GameCore
                 
                 if (enemy.animator != null)
                 {
-                    Debug.Log("wwwwww5");
                     enemy.animator.SetBool("isMoving", true);
                 }
-                Debug.Log("wwwwww6");
                 return true;
             }
-            
             return false;
         }
     }

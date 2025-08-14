@@ -100,3 +100,4 @@ Key Unity packages (from manifest.json):
 4. **Version Control**: .meta files are crucial for Unity - always commit them with their associated assets
 5. **Performance**: Use Unity Profiler (Window > Analysis > Profiler) for optimization
 - 有編譯錯誤的話繼續做
+- 都用繁體中文跟我溝通

@@ -228,8 +228,7 @@ namespace Wuxia.GameCore
         {
 
             if (navMeshAgent == null || pathLineRenderer == null || characterResources == null) return;
-
-            Debug.Log("PreviewPathing");
+            
             // 檢查目標位置是否在NavMesh上
             NavMeshHit hit;
             if (NavMesh.SamplePosition(destination, out hit, 2f, NavMesh.AllAreas))

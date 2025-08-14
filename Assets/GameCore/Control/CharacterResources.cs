@@ -25,8 +25,6 @@ namespace Wuxia.GameCore
         {
             AP -= amount;
             AP = Mathf.Max(0, AP); // 確保AP不會變負數
-            Debug.Log("AP:" + AP);
-
             // 更新UI
             UpdateAPDisplay();
         }

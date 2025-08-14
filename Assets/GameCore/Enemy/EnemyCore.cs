@@ -109,12 +109,10 @@ namespace Wuxia.GameCore
             if (currentActionPoints >= cost)
             {
                 currentActionPoints -= cost;
-                Debug.Log(gameObject.name + " 消耗了 " + cost + " AP, 剩餘AP: " + currentActionPoints);
                 return true;
             }
             else
             {
-                Debug.Log(gameObject.name + " AP不足，無法行動!");
                 return false;
             }
         }
