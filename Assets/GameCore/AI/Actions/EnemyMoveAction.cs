@@ -28,6 +28,7 @@ namespace Wuxia.GameCore
         // 快取的目標和初始化狀態
         private Transform cachedTarget;
         private bool isInitialized;
+        private CombatEntity enemyCombatEntity; // 快取敵人的 CombatEntity
         
         public override void InitializeAction(EnemyCore enemy)
         {
@@ -36,6 +37,14 @@ namespace Wuxia.GameCore
             // 重置初始化狀態和快取
             isInitialized = false;
             cachedTarget = null;
+            
+            // 快取敵人的 CombatEntity
+            enemyCombatEntity = enemy.GetComponent<CombatEntity>();
+            if (enemyCombatEntity == null)
+            {
+                Debug.LogError($"[AI] {enemy.gameObject.name} 沒有 CombatEntity 組件！");
+                return;
+            }
             
             // EnemyMoveAction 特定的初始化邏輯
             if (moveType == MoveTargetType.ToPlayer)
@@ -197,19 +206,21 @@ namespace Wuxia.GameCore
             switch (moveType)
             {
                 case MoveTargetType.ToPlayer:
-                    CharacterCore player = GameObject.FindObjectOfType<CharacterCore>();
-                    if (player != null)
+                    // 使用 CombatEntity 系統尋找最近的敵對目標
+                    CombatEntity closestHostile = FindClosestHostileEntity(enemy);
+                    if (closestHostile != null)
                     {
-                        Vector3 direction = (player.transform.position - enemyPosition).normalized;
+                        Vector3 direction = (closestHostile.transform.position - enemyPosition).normalized;
                         return enemyPosition + direction * moveDistance;
                     }
                     break;
                     
                 case MoveTargetType.AwayFromPlayer:
-                    player = GameObject.FindObjectOfType<CharacterCore>();
-                    if (player != null)
+                    // 使用 CombatEntity 系統尋找最近的敵對目標並遠離
+                    closestHostile = FindClosestHostileEntity(enemy);
+                    if (closestHostile != null)
                     {
-                        Vector3 direction = (enemyPosition - player.transform.position).normalized;
+                        Vector3 direction = (enemyPosition - closestHostile.transform.position).normalized;
                         return enemyPosition + direction * moveDistance;
                     }
                     break;
@@ -225,49 +236,106 @@ namespace Wuxia.GameCore
             return enemyPosition;
         }
         
+        /// <summary>
+        /// 尋找最近的敵對實體
+        /// </summary>
+        private CombatEntity FindClosestHostileEntity(EnemyCore enemy)
+        {
+            float closestDistance = float.MaxValue;
+            CombatEntity closestTarget = null;
+            
+            if (CombatCore.Instance != null && enemyCombatEntity != null)
+            {
+                foreach (var entity in CombatCore.Instance.AllCombatEntity)
+                {
+                    if (entity != null && entity.gameObject.activeInHierarchy)
+                    {
+                        if (IsHostileTarget(entity))
+                        {
+                            float distance = Vector3.Distance(enemy.transform.position, entity.transform.position);
+                            if (distance < closestDistance)
+                            {
+                                closestDistance = distance;
+                                closestTarget = entity;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            return closestTarget;
+        }
+        
         public override string GetActionName()
         {
             return $"Move {moveType}";
         }
         
         /// <summary>
-        /// 尋找最近的玩家 (從 EnemyCore.FindClosestPlayer 移植)
+        /// 尋找最近的敵對目標 (使用 CombatEntity 和 Faction)
         /// </summary>
         private Transform FindClosestPlayer(EnemyCore enemy)
         {
             float closestDistance = float.MaxValue;
-            CharacterCore closestCharacter = null;
+            CombatEntity closestTarget = null;
             
-            // 從CombatCore獲取所有玩家角色
-            if (CombatCore.Instance != null)
+            // 從 CombatCore 獲取所有戰鬥實體
+            if (CombatCore.Instance != null && enemyCombatEntity != null)
             {
-                foreach (var character in CombatCore.Instance.AllCharacters)
+                foreach (var entity in CombatCore.Instance.AllCombatEntity)
                 {
-                    if (character != null && character.gameObject.activeInHierarchy)
+                    if (entity != null && entity.gameObject.activeInHierarchy)
                     {
-                        // 使用角色的真實位置計算距離
-                        Vector3 playerRealPos = character.GetRealPosition();
-                        float distance = Vector3.Distance(enemy.transform.position, playerRealPos);
-                        
-                        if (distance < closestDistance)
+                        // 檢查陣營 - 只移動向敵對目標
+                        if (IsHostileTarget(entity))
                         {
-                            closestDistance = distance;
-                            closestCharacter = character;
+                            float distance = Vector3.Distance(enemy.transform.position, entity.transform.position);
+                            Debug.Log($"[AI] 檢查移動目標 {entity.Name}, 陣營: {entity.Faction}, 距離: {distance}");
+                            
+                            if (distance < closestDistance)
+                            {
+                                closestDistance = distance;
+                                closestTarget = entity;
+                            }
                         }
                     }
                 }
             }
             
-            // 設定目標為最近角色的真實 Transform
-            if (closestCharacter != null)
+            // 返回最近敵對目標的 Transform
+            if (closestTarget != null)
             {
-                Transform target = closestCharacter.GetRealTransform();
-                Debug.Log($"[AI] {enemy.gameObject.name} 鎖定目標: {closestCharacter.name} (真實位置: {closestCharacter.GetRealPosition()})");
-                return target;
+                Debug.Log($"[AI] {enemy.gameObject.name} 鎖定移動目標: {closestTarget.Name} (陣營: {closestTarget.Faction}, 距離: {closestDistance})");
+                return closestTarget.transform;
             }
             
-            Debug.Log($"[AI] {enemy.gameObject.name} 沒有找到目標");
+            Debug.Log($"[AI] {enemy.gameObject.name} 沒有找到敵對目標");
             return null;
+        }
+        
+        /// <summary>
+        /// 判斷目標是否為敵對陣營
+        /// </summary>
+        private bool IsHostileTarget(CombatEntity target)
+        {
+            // 如果自己是敵對陣營，追逐友軍和中立
+            if (enemyCombatEntity.Faction == CombatEntityFaction.Hostile)
+            {
+                return target.Faction == CombatEntityFaction.Ally || 
+                       target.Faction == CombatEntityFaction.Neutral;
+            }
+            // 如果自己是友軍，追逐敵對
+            else if (enemyCombatEntity.Faction == CombatEntityFaction.Ally)
+            {
+                return target.Faction == CombatEntityFaction.Hostile;
+            }
+            // 如果自己是中立，通常不主動追逐
+            else if (enemyCombatEntity.Faction == CombatEntityFaction.Neutral)
+            {
+                return false;
+            }
+            
+            return false;
         }
         
         

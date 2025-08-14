@@ -27,10 +27,11 @@ namespace Wuxia.GameCore
         
         
         // 快取的目標和元件
-        private CharacterCore cachedTarget;
+        private CombatEntity cachedTarget;
         private Animator cachedAnimator;
         private bool isInitialized;
-        private List<CharacterCore> availableTargets = new List<CharacterCore>();
+        private List<CombatEntity> availableTargets = new List<CombatEntity>();
+        private CombatEntity enemyCombatEntity; // 快取敵人的 CombatEntity
         
         public override void InitializeAction(EnemyCore enemy)
         {
@@ -40,7 +41,15 @@ namespace Wuxia.GameCore
             isInitialized = false;
             cachedTarget = null;
             cachedAnimator = null;
-            availableTargets = new List<CharacterCore>();
+            availableTargets = new List<CombatEntity>();
+            
+            // 快取敵人的 CombatEntity
+            enemyCombatEntity = enemy.GetComponent<CombatEntity>();
+            if (enemyCombatEntity == null)
+            {
+                Debug.LogError($"[AI] {enemy.gameObject.name} 沒有 CombatEntity 組件！");
+                return;
+            }
             
             // 快取 Animator
             cachedAnimator = enemy.animator;
@@ -77,19 +86,24 @@ namespace Wuxia.GameCore
         {
             availableTargets.Clear();
             
-            if (CombatCore.Instance != null)
+            if (CombatCore.Instance != null && enemyCombatEntity != null)
             {
-                foreach (var character in CombatCore.Instance.AllCharacters)
+                // 使用 CombatEntity 列表來尋找目標
+                foreach (var entity in CombatCore.Instance.AllCombatEntity)
                 {
-                    if (character != null && character.gameObject.activeInHierarchy)
+                    if (entity != null && entity.gameObject.activeInHierarchy)
                     {
-                        // 檢查目標是否在攻擊範圍內
-                        Vector3 playerRealPos = character.GetRealPosition();
-                        float distance = Vector3.Distance(enemy.transform.position, playerRealPos);
-                        Debug.Log("distance:" + distance);
-                        if (distance <= attackRange)
+                        // 檢查陣營 - 只攻擊不同陣營的目標
+                        if (IsHostileFaction(entity))
                         {
-                            availableTargets.Add(character);
+                            // 檢查目標是否在攻擊範圍內
+                            float distance = Vector3.Distance(enemy.transform.position, entity.transform.position);
+                            Debug.Log($"[AI] 檢查目標 {entity.Name}, 陣營: {entity.Faction}, 距離: {distance}");
+                            
+                            if (distance <= attackRange)
+                            {
+                                availableTargets.Add(entity);
+                            }
                         }
                     }
                 }
@@ -99,14 +113,39 @@ namespace Wuxia.GameCore
         }
         
         /// <summary>
+        /// 判斷目標是否為敵對陣營
+        /// </summary>
+        private bool IsHostileFaction(CombatEntity target)
+        {
+            // 如果自己是敵對陣營，攻擊友軍和中立
+            if (enemyCombatEntity.Faction == CombatEntityFaction.Hostile)
+            {
+                return target.Faction == CombatEntityFaction.Ally || 
+                       target.Faction == CombatEntityFaction.Neutral;
+            }
+            // 如果自己是友軍，攻擊敵對
+            else if (enemyCombatEntity.Faction == CombatEntityFaction.Ally)
+            {
+                return target.Faction == CombatEntityFaction.Hostile;
+            }
+            // 如果自己是中立，通常不主動攻擊
+            else if (enemyCombatEntity.Faction == CombatEntityFaction.Neutral)
+            {
+                return false;
+            }
+            
+            return false;
+        }
+        
+        /// <summary>
         /// 根據攻擊目標類型選擇目標
         /// </summary>
-        private CharacterCore SelectTarget(EnemyCore enemy)
+        private CombatEntity SelectTarget(EnemyCore enemy)
         {
             if (availableTargets.Count == 0)
                 return null;
             
-            CharacterCore selectedTarget = null;
+            CombatEntity selectedTarget = null;
             
             switch (targetType)
             {
@@ -114,7 +153,7 @@ namespace Wuxia.GameCore
                     float closestDistance = float.MaxValue;
                     foreach (var target in availableTargets)
                     {
-                        float distance = Vector3.Distance(enemy.transform.position, target.GetRealPosition());
+                        float distance = Vector3.Distance(enemy.transform.position, target.transform.position);
                         if (distance < closestDistance)
                         {
                             closestDistance = distance;
@@ -171,7 +210,7 @@ namespace Wuxia.GameCore
                 }
                 
                 // 檢查距離是否仍在攻擊範圍內
-                float distance = Vector3.Distance(enemy.transform.position, cachedTarget.GetRealPosition());
+                float distance = Vector3.Distance(enemy.transform.position, cachedTarget.transform.position);
                 if (distance > attackRange)
                 {
                     Debug.Log($"[AI] {enemy.gameObject.name} 的目標超出攻擊範圍 (距離: {distance}, 範圍: {attackRange})");
@@ -205,7 +244,7 @@ namespace Wuxia.GameCore
             Debug.Log($"[AI] {enemy.gameObject.name} 開始攻擊 {cachedTarget.name}, AP: {enemy.CurrentActionPoints}");
             
             // 面向目標
-            Vector3 lookDirection = cachedTarget.GetRealPosition() - enemy.transform.position;
+            Vector3 lookDirection = cachedTarget.transform.position - enemy.transform.position;
             lookDirection.y = 0;
             if (lookDirection != Vector3.zero)
             {
