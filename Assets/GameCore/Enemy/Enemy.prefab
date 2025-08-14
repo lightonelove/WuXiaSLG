@@ -382,6 +382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
+  ownerEntity: {fileID: 670760991645550886}
   OnDamageTaken:
     m_PersistentCalls:
       m_Calls: []
@@ -1394,6 +1395,10 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4574451190531000145, guid: fded1ae414bd2bc49bbc20d054643357, type: 3}
+      propertyPath: ownerEntity
+      value: 
+      objectReference: {fileID: 670760991645550886}
+    - target: {fileID: 4574451190531000145, guid: fded1ae414bd2bc49bbc20d054643357, type: 3}
       propertyPath: healthComponent
       value: 
       objectReference: {fileID: 7697422947043063634}
@@ -1450,6 +1455,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4958067651250390014, guid: 15adc3e6781301a45b00568d5f37ba88, type: 3}
+      propertyPath: sourceCombatEntity
+      value: 
+      objectReference: {fileID: 670760991645550886}
     - target: {fileID: 6757962225525224555, guid: 15adc3e6781301a45b00568d5f37ba88, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

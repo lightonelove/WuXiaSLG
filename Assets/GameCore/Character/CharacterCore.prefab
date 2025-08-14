@@ -459,7 +459,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 25
-  destroyOnDealDamage: 1
+  destroyOnDealDamage: 0
+  sourceCombatEntity: {fileID: 6903515148748646631}
+  enableFactionCheck: 1
+  autoFindSourceEntity: 1
 --- !u!1 &2037464825203265334
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,6 +704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
+  ownerEntity: {fileID: 6903515148748646631}
   OnDamageTaken:
     m_PersistentCalls:
       m_Calls: []
@@ -2361,6 +2365,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DamageReceiver
       objectReference: {fileID: 0}
+    - target: {fileID: 4574451190531000145, guid: fded1ae414bd2bc49bbc20d054643357, type: 3}
+      propertyPath: ownerEntity
+      value: 
+      objectReference: {fileID: 6903515148748646631}
     - target: {fileID: 4574451190531000145, guid: fded1ae414bd2bc49bbc20d054643357, type: 3}
       propertyPath: healthComponent
       value: 

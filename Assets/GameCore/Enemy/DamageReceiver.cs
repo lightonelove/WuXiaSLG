@@ -14,6 +14,7 @@ namespace Wuxia.GameCore
         [System.Serializable]
         public class DamageEvent : UnityEvent<float> { }
         public DamageEvent onDamaged;
+        public CombatEntity ownerEntity;
         private void Awake()
         {
             // 在初始時，自動獲取掛在同一個物件上的 Health 元件
@@ -27,11 +28,25 @@ namespace Wuxia.GameCore
             // 如果對方是個 DamageDealer
             if (dealer != null)
             {
+                if (!dealer.CanDamageTarget(ownerEntity))
+                {
+                    Debug.Log($"[DamageReceiver] {other.transform.parent.name} 的陣營檢查失敗，不接受傷害");
+                    return;
+                }
+                
                 // 自己不處理傷害邏輯，而是呼叫 Health 元件的 TakeDamage 方法
                 // 將傷害處理的權力交出去
                 float damageAmount = dealer.GetDamage();
-                healthComponent.TakeDamage(dealer.GetDamage());
-                onDamaged?.Invoke(damageAmount);
+                if (healthComponent != null)
+                {
+                    healthComponent.TakeDamage(damageAmount);
+                    onDamaged?.Invoke(damageAmount);
+                    Debug.Log($"[DamageReceiver] {gameObject.name} 受到 {damageAmount} 點傷害");
+                }
+                else
+                {
+                    Debug.LogWarning($"[DamageReceiver] {gameObject.name} 沒有設定 Health 組件");
+                }
             }
         }
     }

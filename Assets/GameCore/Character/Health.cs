@@ -15,6 +15,7 @@ namespace Wuxia.GameCore
         private float maxHealth = 100f;
         
         public float currentHealth;
+        public CombatEntity ownerEntity;
 
         // 唯讀屬性，供外部腳本（如UI）安全地讀取數值
         public float CurrentHealth => currentHealth;

@@ -870,6 +870,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: CombatController
       objectReference: {fileID: 0}
+    - target: {fileID: 5107213043303977310, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: autoFindSourceEntity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5355287738686104127, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.53
@@ -909,6 +913,10 @@ PrefabInstance:
     - target: {fileID: 5355287738686104127, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5876503828881947583, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6903515148748646631, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: Speed
