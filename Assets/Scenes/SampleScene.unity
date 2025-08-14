@@ -462,11 +462,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &851102441 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1588288096788536482, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
-  m_PrefabInstance: {fileID: 3703745408807739789}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1095111008 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 507542057868587843, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
@@ -606,21 +601,6 @@ MonoBehaviour:
   currentCombatState: 0
   isCombatActive: 0
   currentTurnNumber: 0
---- !u!114 &1816902763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 851102441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdbc36e79b7a22d46a779c1fca388500, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiDamageNumberPrefab: {fileID: 654962155742320905, guid: 88b85777e6860d64594e05e0e66c369f, type: 3}
-  spawnOffset: {x: 0, y: 1.5, z: 0}
-  targetCanvas: {fileID: 0}
 --- !u!1 &1836343431
 GameObject:
   m_ObjectHideFlags: 0
@@ -1018,10 +998,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1588288096788536482, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1816902763}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
 --- !u!1001 &6102996864610147521
 PrefabInstance:
@@ -1416,22 +1393,6 @@ PrefabInstance:
     - target: {fileID: 4857791147700307493, guid: cf2a4183917391442884c41998698ea9, type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5132094348995154949, guid: cf2a4183917391442884c41998698ea9, type: 3}
-      propertyPath: moveMaxScale
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5132094348995154949, guid: cf2a4183917391442884c41998698ea9, type: 3}
-      propertyPath: moveMinScale
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5132094348995154949, guid: cf2a4183917391442884c41998698ea9, type: 3}
-      propertyPath: evaluateOffset
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5132094348995154949, guid: cf2a4183917391442884c41998698ea9, type: 3}
-      propertyPath: referenceDistance
-      value: 2.87
       objectReference: {fileID: 0}
     - target: {fileID: 7449280019692975245, guid: cf2a4183917391442884c41998698ea9, type: 3}
       propertyPath: skillB

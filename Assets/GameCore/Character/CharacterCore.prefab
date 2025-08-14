@@ -775,10 +775,10 @@ MonoBehaviour:
   animator: {fileID: 3502313563350019197}
   evaluateType: 2
   isContinuousUpdate: 0
-  referenceDistance: 5
-  evaluateOffset: -1
-  moveMinScale: 0.5
-  moveMaxScale: 1.5
+  referenceDistance: 2.87
+  evaluateOffset: 0
+  moveMinScale: 0.1
+  moveMaxScale: 4
   evaluateTarget: {fileID: 0}
   evaluatePoints: []
   clickPosition: {x: 0, y: 0, z: 0}
@@ -1865,7 +1865,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5531937141200449668
 Transform:
   m_ObjectHideFlags: 0
