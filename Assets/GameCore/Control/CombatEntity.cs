@@ -16,6 +16,7 @@ namespace Wuxia.GameCore
         All = Ally | Neutral | Hostile // 7 (二進制: 111) - 所有陣營
     }
 
+
     public class CombatEntity : MonoBehaviour
     {
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -25,7 +26,8 @@ namespace Wuxia.GameCore
         public Sprite PortraitIcon;
         public CharacterCore CharacterCore;
 
-        [Header("陣營設定")] public CombatEntityFaction Faction = CombatEntityFaction.Neutral;
+        [Header("陣營設定")] 
+        public CombatEntityFaction Faction = CombatEntityFaction.Neutral;
         
         
         // 提供一個方法來推進此角色的行動值

@@ -32,6 +32,9 @@ namespace Wuxia.GameCore
         public bool isCombatActive = false;
         public int currentTurnNumber = 0;
         
+        [Header("Turn Indicator")]
+        public TurnIndicator turnIndicator;
+        
         private bool isProcessingTurn = false;
         
         
@@ -51,6 +54,11 @@ namespace Wuxia.GameCore
             AllCombatEntity = new List<CombatEntity>();
             CombatEntity[] combatEntityInScene = FindObjectsOfType<CombatEntity>();
             AllCombatEntity.AddRange(combatEntityInScene);
+
+            if (turnIndicator == null)
+            {
+                turnIndicator = FindObjectOfType<TurnIndicator>();
+            }
 
             // 初始化戰鬥
             InitializeCombat();
@@ -87,6 +95,12 @@ namespace Wuxia.GameCore
         {
             isCombatActive = false;
             currentCombatState = CombatState.CombatEnd;
+            
+            if (turnIndicator != null)
+            {
+                turnIndicator.HideIndicator();
+            }
+            
             StopAllCoroutines();
         }
         
@@ -105,6 +119,12 @@ namespace Wuxia.GameCore
                 // 設定當前回合實體
                 currentRoundEntity = nextEntity;
                 currentTurnNumber++;
+                
+                // 顯示回合指示器
+                if (turnIndicator != null)
+                {
+                    turnIndicator.ShowIndicator(nextEntity);
+                }
                 
                 // 更新UI顯示
                 UpdateTurnOrderUI();
