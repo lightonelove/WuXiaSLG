@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using GameCore.Control;
 
 namespace Wuxia.GameCore
 {
@@ -149,6 +150,15 @@ namespace Wuxia.GameCore
         
         IEnumerator ProcessPlayerTurn(CharacterCore character)
         {
+            // 讓相機聚焦到玩家（但允許玩家控制）
+            CombatCameraController cameraController = Camera.main?.GetComponent<CombatCameraController>();
+            if (cameraController != null)
+            {
+                // 聚焦到玩家但不鎖定控制
+                cameraController.FocusOnGameObject(character.gameObject);
+                // 確保停止任何跟隨
+                cameraController.StopFollowing();
+            }
             
             // 設定角色為控制狀態
             character.nowState = CharacterCore.CharacterCoreState.ControlState;
@@ -195,8 +205,18 @@ namespace Wuxia.GameCore
         
         IEnumerator ProcessEnemyTurn(EnemyCore enemy)
         {
-            
             currentCombatState = CombatState.ProcessingAction;
+            
+            // 讓相機聚焦並跟隨敵人
+            CombatCameraController cameraController = Camera.main?.GetComponent<CombatCameraController>();
+            if (cameraController != null)
+            {
+                // 開始跟隨敵人，並鎖定用戶控制
+                cameraController.StartFollowing(enemy.transform, true);
+                
+                // 等待相機移動到位
+                yield return new WaitForSeconds(0.5f);
+            }
             
             // 開始敵人回合
             enemy.StartTurn();
@@ -216,6 +236,11 @@ namespace Wuxia.GameCore
             // 重置敵人狀態為 Idle，準備下一回合
             enemy.SetState(EnemyState.Idle);
             
+            // 停止相機跟隨
+            if (cameraController != null)
+            {
+                cameraController.StopFollowing();
+            }
         }
         
         CombatEntity CalculateNextActorFromActual()

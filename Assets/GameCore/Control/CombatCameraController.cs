@@ -17,6 +17,12 @@ namespace GameCore.Control
         [SerializeField] private bool invertDragX = false; // 反轉X軸拖曳方向
         [SerializeField] private bool invertDragY = false; // 反轉Y軸拖曳方向
         
+        [Header("目標跟隨設定")]
+        [SerializeField] private bool enableTargetFollow = true; // 是否啟用目標跟隨
+        [SerializeField] private float followSmoothTime = 0.3f; // 跟隨平滑時間
+        [SerializeField] private Vector3 followOffset = new Vector3(0, 0, -5f); // 跟隨偏移（相對於目標）
+        [SerializeField] private bool lockUserControl = false; // 跟隨時是否鎖定用戶控制
+        
         [Header("高度設定")]
         [SerializeField] private float cameraHeight = 10f; // 相機高度
         
@@ -58,6 +64,11 @@ namespace GameCore.Control
         private bool isDragging = false;
         private Vector3 lastMousePosition;
         private Vector3 dragStartPosition;
+        
+        // 目標跟隨相關變數
+        private Transform followTarget;
+        private bool isFollowing = false;
+        private Vector3 followVelocity;
         
         private void Awake()
         {
@@ -101,10 +112,23 @@ namespace GameCore.Control
         
         private void Update()
         {
+            // 如果正在跟隨目標
+            if (isFollowing && followTarget != null)
+            {
+                HandleTargetFollow();
+                
+                // 如果鎖定用戶控制，跳過其他輸入處理
+                if (lockUserControl)
+                {
+                    ApplyZoom();
+                    return;
+                }
+            }
+            
             HandleMiddleMouseDrag();
             
-            // 只有在沒有拖曳時才處理邊界滾動
-            if (!isDragging)
+            // 只有在沒有拖曳且沒有跟隨目標時才處理邊界滾動
+            if (!isDragging && !isFollowing)
             {
                 HandleEdgeScrolling();
             }
@@ -317,8 +341,51 @@ namespace GameCore.Control
             }
         }
         
+        private void HandleTargetFollow()
+        {
+            if (followTarget == null)
+            {
+                StopFollowing();
+                return;
+            }
+            
+            // 計算跟隨目標位置
+            Vector3 desiredPosition = followTarget.position + followOffset;
+            
+            // 根據相機模式調整高度
+            if (mainCamera.orthographic)
+            {
+                desiredPosition.y = cameraHeight;
+            }
+            else
+            {
+                desiredPosition.y = currentCameraDistance;
+            }
+            
+            // 應用移動限制
+            desiredPosition.x = Mathf.Clamp(desiredPosition.x,
+                initialPosition.x - movementLimits.x,
+                initialPosition.x + movementLimits.x);
+                
+            desiredPosition.z = Mathf.Clamp(desiredPosition.z,
+                initialPosition.z - movementLimits.y,
+                initialPosition.z + movementLimits.y);
+            
+            // 平滑移動到目標位置
+            transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref followVelocity, followSmoothTime);
+            
+            // 更新 targetPosition 以保持同步
+            targetPosition = desiredPosition;
+        }
+        
         private void MoveCamera()
         {
+            // 如果正在跟隨目標，跳過一般移動（已在 HandleTargetFollow 處理）
+            if (isFollowing && followTarget != null)
+            {
+                return;
+            }
+            
             // 平滑移動相機到目標位置
             transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref currentVelocity, smoothTime);
         }
@@ -398,6 +465,44 @@ namespace GameCore.Control
             {
                 FocusOnPosition(target.transform.position);
             }
+        }
+        
+        // 公開方法：開始跟隨目標
+        public void StartFollowing(Transform target, bool lockControl = false)
+        {
+            if (!enableTargetFollow) return;
+            
+            followTarget = target;
+            isFollowing = true;
+            lockUserControl = lockControl;
+            isDragging = false; // 停止任何進行中的拖曳
+            
+            // 立即聚焦到目標位置
+            if (target != null)
+            {
+                FocusOnPosition(target.position);
+            }
+        }
+        
+        // 公開方法：停止跟隨
+        public void StopFollowing()
+        {
+            isFollowing = false;
+            followTarget = null;
+            lockUserControl = false;
+            followVelocity = Vector3.zero;
+        }
+        
+        // 公開方法：檢查是否正在跟隨
+        public bool IsFollowing()
+        {
+            return isFollowing && followTarget != null;
+        }
+        
+        // 公開方法：設定是否鎖定用戶控制
+        public void SetLockUserControl(bool locked)
+        {
+            lockUserControl = locked;
         }
         
         // 在編輯器中顯示移動範圍
