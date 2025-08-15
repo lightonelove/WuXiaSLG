@@ -12,6 +12,11 @@ namespace GameCore.Control
         [SerializeField] private float smoothTime = 0.1f; // 平滑移動時間
         [SerializeField] private Vector2 movementLimits = new Vector2(50f, 50f); // X和Z軸的移動限制
         
+        [Header("中鍵拖曳設定")]
+        [SerializeField] private float dragSensitivity = 0.5f; // 拖曳靈敏度
+        [SerializeField] private bool invertDragX = false; // 反轉X軸拖曳方向
+        [SerializeField] private bool invertDragY = false; // 反轉Y軸拖曳方向
+        
         [Header("高度設定")]
         [SerializeField] private float cameraHeight = 10f; // 相機高度
         
@@ -48,6 +53,11 @@ namespace GameCore.Control
         private float targetCameraDistance;
         private float currentCameraDistance;
         private float distanceVelocity;
+        
+        // 中鍵拖曳相關變數
+        private bool isDragging = false;
+        private Vector3 lastMousePosition;
+        private Vector3 dragStartPosition;
         
         private void Awake()
         {
@@ -91,10 +101,93 @@ namespace GameCore.Control
         
         private void Update()
         {
-            HandleEdgeScrolling();
+            HandleMiddleMouseDrag();
+            
+            // 只有在沒有拖曳時才處理邊界滾動
+            if (!isDragging)
+            {
+                HandleEdgeScrolling();
+            }
+            
             HandleZoom();
             MoveCamera();
             ApplyZoom();
+        }
+        
+        private void HandleMiddleMouseDrag()
+        {
+            // 檢測中鍵按下
+            if (Input.GetMouseButtonDown(2)) // 2 是中鍵
+            {
+                isDragging = true;
+                lastMousePosition = Input.mousePosition;
+                dragStartPosition = transform.position;
+            }
+            
+            // 處理拖曳
+            if (isDragging && Input.GetMouseButton(2))
+            {
+                Vector3 currentMousePosition = Input.mousePosition;
+                Vector3 mouseDelta = currentMousePosition - lastMousePosition;
+                
+                // 根據相機模式計算移動量
+                float moveScale = dragSensitivity;
+                
+                if (mainCamera.orthographic)
+                {
+                    // Orthographic 模式：根據 orthographicSize 調整移動速度
+                    moveScale *= currentOrthoSize / orthoSizeDefault;
+                }
+                else
+                {
+                    // Perspective 模式：根據相機距離調整移動速度
+                    moveScale *= currentCameraDistance / cameraHeight;
+                }
+                
+                // 計算世界空間的移動方向
+                Vector3 moveDirection = Vector3.zero;
+                
+                // X軸移動（左右拖曳）
+                float xMove = mouseDelta.x * moveScale * 0.01f;
+                if (invertDragX) xMove = -xMove;
+                moveDirection.x = -xMove; // 負號讓拖曳方向更自然
+                
+                // Z軸移動（上下拖曳）
+                float zMove = mouseDelta.y * moveScale * 0.01f;
+                if (invertDragY) zMove = -zMove;
+                moveDirection.z = -zMove; // 負號讓拖曳方向更自然
+                
+                // 應用移動
+                Vector3 newTargetPosition = targetPosition + moveDirection;
+                
+                // 限制移動範圍
+                newTargetPosition.x = Mathf.Clamp(newTargetPosition.x,
+                    initialPosition.x - movementLimits.x,
+                    initialPosition.x + movementLimits.x);
+                    
+                newTargetPosition.z = Mathf.Clamp(newTargetPosition.z,
+                    initialPosition.z - movementLimits.y,
+                    initialPosition.z + movementLimits.y);
+                
+                // 保持高度
+                if (mainCamera.orthographic)
+                {
+                    newTargetPosition.y = cameraHeight;
+                }
+                else
+                {
+                    newTargetPosition.y = currentCameraDistance;
+                }
+                
+                targetPosition = newTargetPosition;
+                lastMousePosition = currentMousePosition;
+            }
+            
+            // 檢測中鍵釋放
+            if (Input.GetMouseButtonUp(2))
+            {
+                isDragging = false;
+            }
         }
         
         private void HandleEdgeScrolling()

@@ -296,8 +296,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   edgeThreshold: 10
   edgeScrollSpeed: 10
-  smoothTime: 0.1
+  smoothTime: 0.05
   movementLimits: {x: 50, y: 50}
+  dragSensitivity: 1
+  invertDragX: 0
+  invertDragY: 0
   cameraHeight: 10
   zoomSpeed: 2
   zoomSmoothTime: 0.1
