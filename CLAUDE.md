@@ -101,3 +101,5 @@ Key Unity packages (from manifest.json):
 5. **Performance**: Use Unity Profiler (Window > Analysis > Profiler) for optimization
 - 有編譯錯誤的話繼續做
 - 都用繁體中文跟我溝通
+- 當我提出需求時，先回應我清楚度 1-10分，當問題不清楚時，請要求我提供更多資訊
+- Commit Push時包括scene和csproj檔案還有md檔  以及asset preb任何有修改的內容都要Commit

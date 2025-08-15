@@ -301,6 +301,10 @@ MonoBehaviour:
   dragSensitivity: 1
   invertDragX: 0
   invertDragY: 0
+  enableTargetFollow: 1
+  followSmoothTime: 0.1
+  followOffset: {x: 0, y: 0, z: -5}
+  lockUserControl: 0
   cameraHeight: 10
   zoomSpeed: 2
   zoomSmoothTime: 0.1
