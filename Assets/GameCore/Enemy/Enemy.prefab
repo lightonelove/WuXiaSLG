@@ -315,6 +315,7 @@ GameObject:
   - component: {fileID: 3309778327019055104}
   - component: {fileID: 2952278509770769901}
   - component: {fileID: 5207808132746345017}
+  - component: {fileID: 5442271328811615309}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -481,6 +482,22 @@ MonoBehaviour:
   uiDamageNumberPrefab: {fileID: 654962155742320905, guid: 88b85777e6860d64594e05e0e66c369f, type: 3}
   spawnOffset: {x: 0, y: 1.5, z: 0}
   targetCanvas: {fileID: 0}
+--- !u!208 &5442271328811615309
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588288096788536482}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.5, y: 1, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1645170805765397387
 GameObject:
   m_ObjectHideFlags: 0
