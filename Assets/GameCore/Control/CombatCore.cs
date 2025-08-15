@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.AI;
 
 namespace Wuxia.GameCore
 {
@@ -118,6 +119,9 @@ namespace Wuxia.GameCore
                 // 設定當前回合實體
                 currentRoundEntity = nextEntity;
                 currentTurnNumber++;
+                
+                // 管理 NavMeshObstacle：關閉當前回合實體的障礙物，啟用其他實體的障礙物
+                ManageNavMeshObstacles(nextEntity);
                 
                 // 顯示回合指示器
                 if (turnIndicator != null)
@@ -478,6 +482,40 @@ namespace Wuxia.GameCore
         public CombatEntity GetCurrentTurnEntity()
         {
             return currentRoundEntity;
+        }
+        
+        /// <summary>
+        /// 管理所有實體的 NavMeshObstacle 和 NavMeshAgent：
+        /// 當前回合實體：關閉 Obstacle + 啟用 Agent（可移動，不阻擋自己）
+        /// 其他實體：啟用 Obstacle + 關閉 Agent（成為障礙物，不能移動）
+        /// </summary>
+        /// <param name="currentTurnEntity">當前回合的實體</param>
+        private void ManageNavMeshObstacles(CombatEntity currentTurnEntity)
+        {
+            foreach (var entity in AllCombatEntity)
+            {
+                if (entity == null || !entity.gameObject.activeInHierarchy) continue;
+                
+                bool isCurrentTurn = (entity == currentTurnEntity);
+                
+                // 管理 NavMeshObstacle
+                NavMeshObstacle obstacle = entity.GetComponent<NavMeshObstacle>();
+                if (obstacle != null)
+                {
+                    // 當前回合的實體：關閉 NavMeshObstacle（避免阻擋自己的移動）
+                    // 其他實體：啟用 NavMeshObstacle（成為移動路徑的障礙物）
+                    obstacle.enabled = !isCurrentTurn;
+                }
+                
+                // 管理 NavMeshAgent
+                NavMeshAgent agent = entity.GetComponent<NavMeshAgent>();
+                if (agent != null)
+                {
+                    // 當前回合的實體：啟用 NavMeshAgent（允許移動）
+                    // 其他實體：關閉 NavMeshAgent（禁止移動）
+                    agent.enabled = isCurrentTurn;
+                }
+            }
         }
         
         public int GetCurrentTurnNumber()
