@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameCore.Control
+namespace Wuxia.GameCore
 {
     public class CombatCameraController : MonoBehaviour
     {
@@ -443,8 +443,9 @@ namespace GameCore.Control
         // 公開方法：聚焦到特定位置
         public void FocusOnPosition(Vector3 worldPosition)
         {
+            
             float height = mainCamera.orthographic ? cameraHeight : currentCameraDistance;
-            Vector3 newPosition = new Vector3(worldPosition.x, height, worldPosition.z);
+            Vector3 newPosition = new Vector3(worldPosition.x, height, worldPosition.z) + followOffset;
             
             // 應用限制
             newPosition.x = Mathf.Clamp(newPosition.x, 
@@ -456,6 +457,7 @@ namespace GameCore.Control
                 initialPosition.z + movementLimits.y);
             
             targetPosition = newPosition;
+            
         }
         
         // 公開方法：聚焦到特定物件
@@ -477,10 +479,11 @@ namespace GameCore.Control
             lockUserControl = lockControl;
             isDragging = false; // 停止任何進行中的拖曳
             
-            // 立即聚焦到目標位置
+            // 立即聚焦到目標位置（包含 offset）
             if (target != null)
             {
-                FocusOnPosition(target.position);
+                Vector3 targetPositionWithOffset = target.position + followOffset;
+                FocusOnPosition(targetPositionWithOffset);
             }
         }
         

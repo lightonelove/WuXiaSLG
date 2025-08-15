@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
-using GameCore.Control;
 
 namespace Wuxia.GameCore
 {
