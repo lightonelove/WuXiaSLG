@@ -492,28 +492,53 @@ namespace Wuxia.GameCore
         /// <param name="currentTurnEntity">當前回合的實體</param>
         private void ManageNavMeshObstacles(CombatEntity currentTurnEntity)
         {
+            StartCoroutine(ManageNavMeshObstaclesCoroutine(currentTurnEntity));
+        }
+        
+        /// <summary>
+        /// 協程版本的 NavMesh 組件管理，避免 NavMeshAgent 瞬間偏移問題
+        /// </summary>
+        private IEnumerator ManageNavMeshObstaclesCoroutine(CombatEntity currentTurnEntity)
+        {
             foreach (var entity in AllCombatEntity)
             {
                 if (entity == null || !entity.gameObject.activeInHierarchy) continue;
                 
                 bool isCurrentTurn = (entity == currentTurnEntity);
-                
-                // 管理 NavMeshObstacle
                 NavMeshObstacle obstacle = entity.GetComponent<NavMeshObstacle>();
-                if (obstacle != null)
-                {
-                    // 當前回合的實體：關閉 NavMeshObstacle（避免阻擋自己的移動）
-                    // 其他實體：啟用 NavMeshObstacle（成為移動路徑的障礙物）
-                    obstacle.enabled = !isCurrentTurn;
-                }
-                
-                // 管理 NavMeshAgent
                 NavMeshAgent agent = entity.GetComponent<NavMeshAgent>();
-                if (agent != null)
+                
+                if (isCurrentTurn)
                 {
-                    // 當前回合的實體：啟用 NavMeshAgent（允許移動）
-                    // 其他實體：關閉 NavMeshAgent（禁止移動）
-                    agent.enabled = isCurrentTurn;
+                    // 當前回合實體：先關閉 Obstacle，等待一幀後啟用 Agent
+                    if (obstacle != null)
+                    {
+                        obstacle.enabled = false;
+                    }
+                    
+                    // 等待一幀讓 NavMesh 更新
+                    yield return null;
+                    
+                    if (agent != null)
+                    {
+                        agent.enabled = true;
+                    }
+                }
+                else
+                {
+                    // 其他實體：先關閉 Agent，等待一幀後啟用 Obstacle
+                    if (agent != null)
+                    {
+                        agent.enabled = false;
+                    }
+                    
+                    // 等待一幀讓 NavMeshAgent 完全停用
+                    yield return null;
+                    
+                    if (obstacle != null)
+                    {
+                        obstacle.enabled = true;
+                    }
                 }
             }
         }
