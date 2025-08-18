@@ -66,6 +66,7 @@
     <Compile Include="Assets\GameCore\Enemy\EnemyCore.cs" />
     <Compile Include="Assets\GameCore\UI\HealthBarController.cs" />
     <Compile Include="Assets\GameCore\Control\CombatCameraController.cs" />
+    <Compile Include="Assets\GameCore\Control\BlockingSystem.cs" />
     <Compile Include="Assets\GameCore\AI\Core\IEnemyAction.cs" />
     <Compile Include="Assets\GameCore\Control\CharacterMovement.cs" />
     <Compile Include="Assets\GameCore\AI\Core\ICondition.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Assets\GameCore\Enemy\DamageDealer.cs" />
     <Compile Include="Assets\GameCore\Control\CombatCore.cs" />
     <Compile Include="Assets\GameCore\Config\CombatConfig.cs" />
+    <Compile Include="Assets\GameCore\UI\BlockFeedback.cs" />
     <Compile Include="Assets\GameCore\AI\Conditions\DistanceCondition.cs" />
     <Compile Include="Assets\GameCore\Skill\CombatSkill.cs" />
     <Compile Include="Assets\GameCore\Control\CharacterSkills.cs" />
