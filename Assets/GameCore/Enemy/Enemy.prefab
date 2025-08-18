@@ -368,6 +368,12 @@ MonoBehaviour:
   useNavMesh: 0
   enemyAISystem: {fileID: 2213449209274314099}
   damageReceiver: {fileID: 1181071552201193841}
+  onAttackStateEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  onAttackStateExit:
+    m_PersistentCalls:
+      m_Calls: []
   health: {fileID: 7697422947043063634}
   animator: {fileID: 494543029378924733}
 --- !u!114 &7697422947043063634
@@ -482,6 +488,10 @@ MonoBehaviour:
   uiDamageNumberPrefab: {fileID: 654962155742320905, guid: 88b85777e6860d64594e05e0e66c369f, type: 3}
   spawnOffset: {x: 0, y: 1.5, z: 0}
   targetCanvas: {fileID: 0}
+  blockTextColor: {r: 0, g: 1, b: 1, a: 1}
+  blockText: "\u683C\u64CB!!"
+  health: {fileID: 7697422947043063634}
+  damageReceiver: {fileID: 1181071552201193841}
 --- !u!208 &5442271328811615309
 NavMeshObstacle:
   m_ObjectHideFlags: 0

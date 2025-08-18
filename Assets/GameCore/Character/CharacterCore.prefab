@@ -854,6 +854,10 @@ MonoBehaviour:
   uiDamageNumberPrefab: {fileID: 654962155742320905, guid: 88b85777e6860d64594e05e0e66c369f, type: 3}
   spawnOffset: {x: 0, y: 1.5, z: 0}
   targetCanvas: {fileID: 0}
+  blockTextColor: {r: 0, g: 1, b: 1, a: 1}
+  blockText: "\u683C\u64CB!!"
+  health: {fileID: 5525503941534339325}
+  damageReceiver: {fileID: 5161354361511243107}
 --- !u!208 &8816574247964560716
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -2460,6 +2464,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fded1ae414bd2bc49bbc20d054643357, type: 3}
+--- !u!114 &5161354361511243107 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4574451190531000145, guid: fded1ae414bd2bc49bbc20d054643357, type: 3}
+  m_PrefabInstance: {fileID: 8708668022572509746}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59804118561a67f4d93d3bb710dbe3b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8049737580612404324 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1688021666883382870, guid: fded1ae414bd2bc49bbc20d054643357, type: 3}

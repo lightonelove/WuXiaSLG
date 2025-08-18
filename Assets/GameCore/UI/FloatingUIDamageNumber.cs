@@ -56,4 +56,19 @@ public class FloatingUIDamageNumber : MonoBehaviour
             textMeshProUGUI.text = Mathf.RoundToInt(damageAmount).ToString();
         }
     }
+    
+    /// <summary>
+    /// 設定格擋文字
+    /// </summary>
+    /// <param name="blockText">格擋文字內容</param>
+    /// <param name="blockColor">格擋文字顏色</param>
+    public void SetupBlockText(string blockText, Color blockColor)
+    {
+        if (textMeshProUGUI != null)
+        {
+            textMeshProUGUI.text = blockText;
+            textMeshProUGUI.color = blockColor;
+            initialColor = blockColor;
+        }
+    }
 }

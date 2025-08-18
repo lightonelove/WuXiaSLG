@@ -70,10 +70,8 @@ namespace Wuxia.GameCore
             // 如果沒有啟用陣營檢查，所有目標都可以傷害
             if (!enableFactionCheck)
             {
-                Debug.Log("??????1");
                 return true;
             }
-            Debug.Log("??????2");
             // 如果沒有來源實體或目標實體，無法判斷陣營
             
             if (sourceCombatEntity == null || targetEntity == null)
@@ -81,15 +79,12 @@ namespace Wuxia.GameCore
                 Debug.LogWarning($"[DamageDealer] 無法進行陣營檢查 - 來源: {sourceCombatEntity?.Name}, 目標: {targetEntity?.Name}");
                 return !enableFactionCheck; // 如果沒有實體資訊且啟用陣營檢查，則不造成傷害
             }
-            
-            Debug.Log("??????3");
             // 不能傷害同陣營的目標
             if (sourceCombatEntity.Faction == targetEntity.Faction)
             {
                 Debug.Log($"[DamageDealer] {sourceCombatEntity.Name} 不能傷害同陣營目標 {targetEntity.Name} (陣營: {targetEntity.Faction})");
                 return false;
             }
-            Debug.Log("??????4");
             // 根據來源陣營判斷可以攻擊的目標
             bool canDamage = IsHostileTarget(sourceCombatEntity.Faction, targetEntity.Faction);
             Debug.Log("canDamage:" + canDamage);
@@ -101,7 +96,6 @@ namespace Wuxia.GameCore
             {
                 Debug.Log($"[DamageDealer] {sourceCombatEntity.Name} ({sourceCombatEntity.Faction}) 不能傷害 {targetEntity.Name} ({targetEntity.Faction})");
             }
-            Debug.Log("??????5");
             return canDamage;
         }
         
