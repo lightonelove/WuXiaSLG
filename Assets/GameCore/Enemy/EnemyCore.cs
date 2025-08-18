@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities.Content; // 如果需要使用協程 (Coroutines)
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 namespace Wuxia.GameCore
 {
@@ -54,6 +55,10 @@ namespace Wuxia.GameCore
         public EnemyAISystem enemyAISystem;
         
         public DamageReceiver damageReceiver;
+        
+        [Header("狀態事件")]
+        [HideInInspector] public UnityEvent onAttackStateEnter = new UnityEvent();
+        [HideInInspector] public UnityEvent onAttackStateExit = new UnityEvent();
     
         // C# 屬性 (Property)，方便外部程式碼安全地讀取數值
         public Health health;
@@ -131,9 +136,24 @@ namespace Wuxia.GameCore
         public void SetState(EnemyState newState)
         {
             if (currentState == newState) return;
+            
+            // 觸發舊狀態的退出事件
+            if (currentState == EnemyState.Attacking)
+            {
+                onAttackStateExit?.Invoke();
+                Debug.Log($"{gameObject.name} 退出攻擊狀態");
+            }
     
+            EnemyState oldState = currentState;
             currentState = newState;
             Debug.Log(gameObject.name + " 狀態切換為: " + newState);
+            
+            // 觸發新狀態的進入事件
+            if (newState == EnemyState.Attacking)
+            {
+                onAttackStateEnter?.Invoke();
+                Debug.Log($"{gameObject.name} 進入攻擊狀態");
+            }
         }
     
         public void ToHurt(float amount)

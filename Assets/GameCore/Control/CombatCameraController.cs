@@ -509,6 +509,110 @@ namespace Wuxia.GameCore
             lockUserControl = locked;
         }
         
+        // 攻擊縮放相關變數
+        private Coroutine attackZoomCoroutine;
+        private bool isAttackZooming = false;
+        private float attackZoomStartOrthoSize;
+        private float attackZoomStartFOV;
+        private float attackZoomStartDistance;
+        
+        // 公開方法：開始攻擊縮放（配合狀態機使用）
+        public void StartAttackZoom(float zoomPercent = 0.85f, float duration = 0.5f)
+        {
+            if (isAttackZooming) return;
+            
+            isAttackZooming = true;
+            
+            // 記錄開始時的縮放值
+            attackZoomStartOrthoSize = targetOrthoSize;
+            attackZoomStartFOV = targetPerspectiveFOV;
+            attackZoomStartDistance = targetCameraDistance;
+            
+            // 停止之前的縮放協程
+            if (attackZoomCoroutine != null)
+            {
+                StopCoroutine(attackZoomCoroutine);
+            }
+            
+            attackZoomCoroutine = StartCoroutine(AnimateAttackZoom(zoomPercent, duration, true));
+        }
+        
+        // 公開方法：結束攻擊縮放（配合狀態機使用）
+        public void EndAttackZoom(float duration = 0.5f)
+        {
+            if (!isAttackZooming) return;
+            
+            isAttackZooming = false;
+            
+            // 停止之前的縮放協程
+            if (attackZoomCoroutine != null)
+            {
+                StopCoroutine(attackZoomCoroutine);
+            }
+            
+            attackZoomCoroutine = StartCoroutine(AnimateAttackZoom(1f, duration, false));
+        }
+        
+        // 執行攻擊縮放動畫
+        private IEnumerator AnimateAttackZoom(float zoomPercent, float duration, bool isZoomIn)
+        {
+            float elapsed = 0f;
+            
+            // 獲取起始值和目標值
+            float startOrthoSize = currentOrthoSize;
+            float startFOV = currentPerspectiveFOV;
+            float startDistance = currentCameraDistance;
+            
+            float targetOrtho, targetFOV, targetDistance;
+            
+            if (isZoomIn)
+            {
+                // 縮放進入
+                targetOrtho = attackZoomStartOrthoSize * zoomPercent;
+                targetFOV = attackZoomStartFOV * zoomPercent;
+                targetDistance = attackZoomStartDistance * zoomPercent;
+            }
+            else
+            {
+                // 縮放恢復
+                targetOrtho = attackZoomStartOrthoSize;
+                targetFOV = attackZoomStartFOV;
+                targetDistance = attackZoomStartDistance;
+            }
+            
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / duration;
+                t = Mathf.SmoothStep(0, 1, t);
+                
+                if (mainCamera.orthographic)
+                {
+                    targetOrthoSize = Mathf.Lerp(startOrthoSize, targetOrtho, t);
+                }
+                else
+                {
+                    targetPerspectiveFOV = Mathf.Lerp(startFOV, targetFOV, t);
+                    targetCameraDistance = Mathf.Lerp(startDistance, targetDistance, t);
+                }
+                
+                yield return null;
+            }
+            
+            // 確保達到目標值
+            if (mainCamera.orthographic)
+            {
+                targetOrthoSize = targetOrtho;
+            }
+            else
+            {
+                targetPerspectiveFOV = targetFOV;
+                targetCameraDistance = targetDistance;
+            }
+            
+            attackZoomCoroutine = null;
+        }
+        
         // 公開方法：執行臨時縮放效果（用於戰鬥特效等）
         public IEnumerator TemporaryZoomEffect(float zoomPercent, float duration, float holdTime = 0f)
         {

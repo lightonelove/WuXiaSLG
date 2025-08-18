@@ -267,95 +267,139 @@ namespace Wuxia.GameCore
         {
             // 取得相機控制器
             CombatCameraController cameraController = Camera.main?.GetComponent<CombatCameraController>();
-            Coroutine zoomCoroutine = null;
             
-            // 計算攻擊動畫的預估時間
-            float estimatedAttackTime = 2f; // 預設值
-            
-            if (cachedAnimator != null && !string.IsNullOrEmpty(attackAnimationName))
-            {
-                // 嘗試獲取攻擊動畫的長度
-                AnimationClip[] clips = cachedAnimator.runtimeAnimatorController.animationClips;
-                foreach (AnimationClip clip in clips)
-                {
-                    if (clip.name == attackAnimationName)
-                    {
-                        estimatedAttackTime = clip.length;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                estimatedAttackTime = attackDuration;
-            }
-            
-            // 開始相機縮放效果
+            // 設定相機事件監聽
             if (cameraController != null)
             {
                 // 聚焦到敵人位置
                 cameraController.FocusOnGameObject(enemy.gameObject);
                 
-                // 開始相機縮放效果（縮放到85%，0.5秒進入，保持到攻擊結束）
-                // holdTime 設為攻擊動畫時間減去進入時間
-                float holdTime = estimatedAttackTime - 0.5f;
-                if (holdTime < 0) holdTime = 0;
+                // 註冊攻擊狀態的相機縮放事件
+                UnityEngine.Events.UnityAction onAttackEnter = () => {
+                    cameraController.StartAttackZoom(0.85f, 0.5f);
+                };
                 
-                zoomCoroutine = enemy.StartCoroutine(cameraController.TemporaryZoomEffect(0.85f, 0.5f, holdTime));
+                UnityEngine.Events.UnityAction onAttackExit = () => {
+                    cameraController.EndAttackZoom(0.5f);
+                };
                 
-                // 等待縮放進入完成
+                // 添加事件監聽
+                enemy.onAttackStateEnter.AddListener(onAttackEnter);
+                enemy.onAttackStateExit.AddListener(onAttackExit);
+                
+                // 確保在攻擊結束後移除監聽（避免記憶體洩漏）
+                System.Action cleanup = () => {
+                    enemy.onAttackStateEnter.RemoveListener(onAttackEnter);
+                    enemy.onAttackStateExit.RemoveListener(onAttackExit);
+                };
+                
+                // 切換到攻擊狀態（這會觸發 onAttackStateEnter 事件）
+                enemy.SetState(EnemyState.Attacking);
+                
+                // 等待縮放動畫完成
                 yield return new WaitForSeconds(0.5f);
-            }
-            
-            // 直接播放攻擊動畫
-            Debug.Log("ExecuteSingleAttack");
-            if (cachedAnimator != null && !string.IsNullOrEmpty(attackAnimationName))
-            {
-                cachedAnimator.Play(attackAnimationName);
-                Debug.Log($"[AI] {enemy.gameObject.name} 播放攻擊動畫: {attackAnimationName}");
                 
-                // 等待動畫開始播放
-                yield return null;
-                
-                // 等待動畫播放完成
-                AnimatorStateInfo stateInfo;
-                bool isPlayingAttack = true;
-                
-                while (isPlayingAttack)
+                // 播放攻擊動畫
+                Debug.Log("ExecuteSingleAttack");
+                if (cachedAnimator != null && !string.IsNullOrEmpty(attackAnimationName))
                 {
-                    stateInfo = cachedAnimator.GetCurrentAnimatorStateInfo(0);
+                    cachedAnimator.Play(attackAnimationName);
+                    Debug.Log($"[AI] {enemy.gameObject.name} 播放攻擊動畫: {attackAnimationName}");
                     
-                    // 檢查是否正在播放攻擊動畫
-                    if (stateInfo.IsName(attackAnimationName))
-                    {
-                        // 檢查動畫是否播放完成 (normalizedTime >= 1 表示動畫播放完成)
-                        if (stateInfo.normalizedTime >= 1f)
-                        {
-                            isPlayingAttack = false;
-                            Debug.Log($"[AI] {enemy.gameObject.name} 攻擊動畫播放完成");
-                        }
-                    }
-                    else
-                    {
-                        // 如果狀態已經不是攻擊動畫，表示動畫已結束或被中斷
-                        isPlayingAttack = false;
-                        Debug.Log($"[AI] {enemy.gameObject.name} 攻擊動畫已結束或切換");
-                    }
-                    
+                    // 等待動畫開始播放
                     yield return null;
+                    
+                    // 等待動畫播放完成
+                    AnimatorStateInfo stateInfo;
+                    bool isPlayingAttack = true;
+                    
+                    while (isPlayingAttack)
+                    {
+                        stateInfo = cachedAnimator.GetCurrentAnimatorStateInfo(0);
+                        
+                        // 檢查是否正在播放攻擊動畫
+                        if (stateInfo.IsName(attackAnimationName))
+                        {
+                            // 檢查動畫是否播放完成 (normalizedTime >= 1 表示動畫播放完成)
+                            if (stateInfo.normalizedTime >= 1f)
+                            {
+                                isPlayingAttack = false;
+                                Debug.Log($"[AI] {enemy.gameObject.name} 攻擊動畫播放完成");
+                            }
+                        }
+                        else
+                        {
+                            // 如果狀態已經不是攻擊動畫，表示動畫已結束或被中斷
+                            isPlayingAttack = false;
+                            Debug.Log($"[AI] {enemy.gameObject.name} 攻擊動畫已結束或切換");
+                        }
+                        
+                        yield return null;
+                    }
                 }
+                else
+                {
+                    // 如果沒有 Animator 或動畫名稱，使用備用的等待時間
+                    Debug.LogWarning($"[AI] {enemy.gameObject.name} 無法播放攻擊動畫，使用備用等待時間");
+                    yield return new WaitForSeconds(attackDuration);
+                }
+                
+                // 攻擊結束，切換回執行回合狀態（這會觸發 onAttackStateExit 事件）
+                enemy.SetState(EnemyState.ExecutingTurn);
+                
+                // 清理事件監聽
+                cleanup();
+                
+                // 等待相機恢復動畫完成
+                yield return new WaitForSeconds(0.5f);
             }
             else
             {
-                // 如果沒有 Animator 或動畫名稱，使用備用的等待時間
-                Debug.LogWarning($"[AI] {enemy.gameObject.name} 無法播放攻擊動畫，使用備用等待時間");
-                yield return new WaitForSeconds(attackDuration);
-            }
-            
-            // 確保相機縮放效果完成（如果還在執行的話，再等待一下讓它完成恢復動畫）
-            if (zoomCoroutine != null)
-            {
-                yield return new WaitForSeconds(0.5f); // 等待恢復動畫完成
+                // 沒有相機控制器時的處理
+                enemy.SetState(EnemyState.Attacking);
+                
+                // 播放攻擊動畫
+                Debug.Log("ExecuteSingleAttack");
+                if (cachedAnimator != null && !string.IsNullOrEmpty(attackAnimationName))
+                {
+                    cachedAnimator.Play(attackAnimationName);
+                    Debug.Log($"[AI] {enemy.gameObject.name} 播放攻擊動畫: {attackAnimationName}");
+                    
+                    // 等待動畫開始播放
+                    yield return null;
+                    
+                    // 等待動畫播放完成
+                    AnimatorStateInfo stateInfo;
+                    bool isPlayingAttack = true;
+                    
+                    while (isPlayingAttack)
+                    {
+                        stateInfo = cachedAnimator.GetCurrentAnimatorStateInfo(0);
+                        
+                        if (stateInfo.IsName(attackAnimationName))
+                        {
+                            if (stateInfo.normalizedTime >= 1f)
+                            {
+                                isPlayingAttack = false;
+                                Debug.Log($"[AI] {enemy.gameObject.name} 攻擊動畫播放完成");
+                            }
+                        }
+                        else
+                        {
+                            isPlayingAttack = false;
+                            Debug.Log($"[AI] {enemy.gameObject.name} 攻擊動畫已結束或切換");
+                        }
+                        
+                        yield return null;
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"[AI] {enemy.gameObject.name} 無法播放攻擊動畫，使用備用等待時間");
+                    yield return new WaitForSeconds(attackDuration);
+                }
+                
+                enemy.SetState(EnemyState.ExecutingTurn);
             }
         }
         
