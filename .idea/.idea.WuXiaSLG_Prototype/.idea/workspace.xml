@@ -6,14 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/UI/EnemyHealthBarController.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/UI/EnemyHealthBarController.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/UI/EnemyHpBar.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/UI/EnemyHpBar.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyAttackAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyAttackAction.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CombatCameraController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CombatCameraController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,13 +39,13 @@
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Editor/TargetedIndicatorAutoSetup.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Enemy/DamageDealer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Enemy/DamageReceiver.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy.prefab" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyCore.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Skill/CombatSkill.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Skill/Editor/CombatSkillEditor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/System/AnimationMoveScaler3D.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/System/ColliderEventReceiver.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/System/TargetedIndicator.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GameCore/UI/EnemyHealthBarController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/UI/SLGCoreUI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/UI/TurnOrderIcon.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/UI/TurnOrderUIController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -58,6 +53,10 @@
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Utility/SectorMeshGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Utility/SectorMeshTest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Plugins/Sirenix/Odin Inspector/Modules/Unity.Addressables/AddressablesInspectors.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -164,6 +163,7 @@
       <workItem from="1754977434576" duration="11783000" />
       <workItem from="1755003142976" duration="7539000" />
       <workItem from="1755148008408" duration="9675000" />
+      <workItem from="1755494315538" duration="1177000" />
     </task>
     <servers />
   </component>

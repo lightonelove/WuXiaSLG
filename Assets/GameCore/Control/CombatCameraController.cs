@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Wuxia.GameCore
@@ -506,6 +507,90 @@ namespace Wuxia.GameCore
         public void SetLockUserControl(bool locked)
         {
             lockUserControl = locked;
+        }
+        
+        // 公開方法：執行臨時縮放效果（用於戰鬥特效等）
+        public IEnumerator TemporaryZoomEffect(float zoomPercent, float duration, float holdTime = 0f)
+        {
+            // 記錄原始縮放值
+            float originalOrthoSize = targetOrthoSize;
+            float originalFOV = targetPerspectiveFOV;
+            float originalDistance = targetCameraDistance;
+            
+            // 計算目標縮放值（zoomPercent: 1.0 = 100%原始大小, 0.85 = 85%）
+            float targetZoomOrtho = originalOrthoSize * zoomPercent;
+            float targetZoomFOV = originalFOV * zoomPercent;
+            float targetZoomDistance = originalDistance * zoomPercent;
+            
+            // 縮放進入
+            float elapsed = 0f;
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / duration;
+                t = Mathf.SmoothStep(0, 1, t); // 使用 SmoothStep 讓動畫更平滑
+                
+                if (mainCamera.orthographic)
+                {
+                    targetOrthoSize = Mathf.Lerp(originalOrthoSize, targetZoomOrtho, t);
+                }
+                else
+                {
+                    targetPerspectiveFOV = Mathf.Lerp(originalFOV, targetZoomFOV, t);
+                    targetCameraDistance = Mathf.Lerp(originalDistance, targetZoomDistance, t);
+                }
+                
+                yield return null;
+            }
+            
+            // 確保達到目標值
+            if (mainCamera.orthographic)
+            {
+                targetOrthoSize = targetZoomOrtho;
+            }
+            else
+            {
+                targetPerspectiveFOV = targetZoomFOV;
+                targetCameraDistance = targetZoomDistance;
+            }
+            
+            // 保持縮放狀態
+            if (holdTime > 0f)
+            {
+                yield return new WaitForSeconds(holdTime);
+            }
+            
+            // 縮放恢復
+            elapsed = 0f;
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / duration;
+                t = Mathf.SmoothStep(0, 1, t);
+                
+                if (mainCamera.orthographic)
+                {
+                    targetOrthoSize = Mathf.Lerp(targetZoomOrtho, originalOrthoSize, t);
+                }
+                else
+                {
+                    targetPerspectiveFOV = Mathf.Lerp(targetZoomFOV, originalFOV, t);
+                    targetCameraDistance = Mathf.Lerp(targetZoomDistance, originalDistance, t);
+                }
+                
+                yield return null;
+            }
+            
+            // 確保恢復到原始值
+            if (mainCamera.orthographic)
+            {
+                targetOrthoSize = originalOrthoSize;
+            }
+            else
+            {
+                targetPerspectiveFOV = originalFOV;
+                targetCameraDistance = originalDistance;
+            }
         }
         
         // 在編輯器中顯示移動範圍

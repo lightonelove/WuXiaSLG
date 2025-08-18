@@ -265,6 +265,48 @@ namespace Wuxia.GameCore
         /// </summary>
         private IEnumerator ExecuteSingleAttack(EnemyCore enemy)
         {
+            // 取得相機控制器
+            CombatCameraController cameraController = Camera.main?.GetComponent<CombatCameraController>();
+            Coroutine zoomCoroutine = null;
+            
+            // 計算攻擊動畫的預估時間
+            float estimatedAttackTime = 2f; // 預設值
+            
+            if (cachedAnimator != null && !string.IsNullOrEmpty(attackAnimationName))
+            {
+                // 嘗試獲取攻擊動畫的長度
+                AnimationClip[] clips = cachedAnimator.runtimeAnimatorController.animationClips;
+                foreach (AnimationClip clip in clips)
+                {
+                    if (clip.name == attackAnimationName)
+                    {
+                        estimatedAttackTime = clip.length;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                estimatedAttackTime = attackDuration;
+            }
+            
+            // 開始相機縮放效果
+            if (cameraController != null)
+            {
+                // 聚焦到敵人位置
+                cameraController.FocusOnGameObject(enemy.gameObject);
+                
+                // 開始相機縮放效果（縮放到85%，0.5秒進入，保持到攻擊結束）
+                // holdTime 設為攻擊動畫時間減去進入時間
+                float holdTime = estimatedAttackTime - 0.5f;
+                if (holdTime < 0) holdTime = 0;
+                
+                zoomCoroutine = enemy.StartCoroutine(cameraController.TemporaryZoomEffect(0.85f, 0.5f, holdTime));
+                
+                // 等待縮放進入完成
+                yield return new WaitForSeconds(0.5f);
+            }
+            
             // 直接播放攻擊動畫
             Debug.Log("ExecuteSingleAttack");
             if (cachedAnimator != null && !string.IsNullOrEmpty(attackAnimationName))
@@ -308,6 +350,12 @@ namespace Wuxia.GameCore
                 // 如果沒有 Animator 或動畫名稱，使用備用的等待時間
                 Debug.LogWarning($"[AI] {enemy.gameObject.name} 無法播放攻擊動畫，使用備用等待時間");
                 yield return new WaitForSeconds(attackDuration);
+            }
+            
+            // 確保相機縮放效果完成（如果還在執行的話，再等待一下讓它完成恢復動畫）
+            if (zoomCoroutine != null)
+            {
+                yield return new WaitForSeconds(0.5f); // 等待恢復動畫完成
             }
         }
         
