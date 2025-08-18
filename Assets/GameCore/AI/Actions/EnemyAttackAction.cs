@@ -303,38 +303,59 @@ namespace Wuxia.GameCore
                 Debug.Log("ExecuteSingleAttack");
                 if (cachedAnimator != null && !string.IsNullOrEmpty(attackAnimationName))
                 {
-                    cachedAnimator.Play(attackAnimationName);
+                    // 強制從頭開始播放動畫（第二個參數 0 表示 layer，第三個參數 0 表示從頭開始）
+                    cachedAnimator.Play(attackAnimationName, 0, 0f);
                     Debug.Log($"[AI] {enemy.gameObject.name} 播放攻擊動畫: {attackAnimationName}");
                     
-                    // 等待動畫開始播放
+                    // 等待一幀確保動畫狀態切換
                     yield return null;
                     
                     // 等待動畫播放完成
                     AnimatorStateInfo stateInfo;
-                    bool isPlayingAttack = true;
+                    bool isPlayingAttack = false;
+                    float animationStartTime = Time.time;
+                    float maxWaitTime = 5f; // 最大等待時間，防止無限循環
                     
-                    while (isPlayingAttack)
+                    // 先等待動畫真正開始
+                    while (!isPlayingAttack && (Time.time - animationStartTime) < maxWaitTime)
+                    {
+                        stateInfo = cachedAnimator.GetCurrentAnimatorStateInfo(0);
+                        if (stateInfo.IsName(attackAnimationName) && stateInfo.normalizedTime < 0.95f)
+                        {
+                            isPlayingAttack = true;
+                            Debug.Log($"[AI] {enemy.gameObject.name} 攻擊動畫開始播放");
+                        }
+                        yield return null;
+                    }
+                    
+                    // 等待動畫播放完成
+                    while (isPlayingAttack && (Time.time - animationStartTime) < maxWaitTime)
                     {
                         stateInfo = cachedAnimator.GetCurrentAnimatorStateInfo(0);
                         
                         // 檢查是否正在播放攻擊動畫
                         if (stateInfo.IsName(attackAnimationName))
                         {
-                            // 檢查動畫是否播放完成 (normalizedTime >= 1 表示動畫播放完成)
-                            if (stateInfo.normalizedTime >= 1f)
+                            // 檢查動畫是否播放完成 (normalizedTime >= 0.95 表示動畫接近完成)
+                            if (stateInfo.normalizedTime >= 0.95f && !stateInfo.loop)
                             {
                                 isPlayingAttack = false;
-                                Debug.Log($"[AI] {enemy.gameObject.name} 攻擊動畫播放完成");
+                                Debug.Log($"[AI] {enemy.gameObject.name} 攻擊動畫播放完成 (normalizedTime: {stateInfo.normalizedTime})");
                             }
                         }
                         else
                         {
                             // 如果狀態已經不是攻擊動畫，表示動畫已結束或被中斷
                             isPlayingAttack = false;
-                            Debug.Log($"[AI] {enemy.gameObject.name} 攻擊動畫已結束或切換");
+                            Debug.Log($"[AI] {enemy.gameObject.name} 攻擊動畫已結束或切換到其他狀態");
                         }
                         
                         yield return null;
+                    }
+                    
+                    if ((Time.time - animationStartTime) >= maxWaitTime)
+                    {
+                        Debug.LogWarning($"[AI] {enemy.gameObject.name} 攻擊動畫等待超時");
                     }
                 }
                 else
@@ -362,23 +383,39 @@ namespace Wuxia.GameCore
                 Debug.Log("ExecuteSingleAttack");
                 if (cachedAnimator != null && !string.IsNullOrEmpty(attackAnimationName))
                 {
-                    cachedAnimator.Play(attackAnimationName);
+                    // 強制從頭開始播放動畫
+                    cachedAnimator.Play(attackAnimationName, 0, 0f);
                     Debug.Log($"[AI] {enemy.gameObject.name} 播放攻擊動畫: {attackAnimationName}");
                     
-                    // 等待動畫開始播放
+                    // 等待一幀確保動畫狀態切換
                     yield return null;
                     
                     // 等待動畫播放完成
                     AnimatorStateInfo stateInfo;
-                    bool isPlayingAttack = true;
+                    bool isPlayingAttack = false;
+                    float animationStartTime = Time.time;
+                    float maxWaitTime = 5f;
                     
-                    while (isPlayingAttack)
+                    // 先等待動畫真正開始
+                    while (!isPlayingAttack && (Time.time - animationStartTime) < maxWaitTime)
+                    {
+                        stateInfo = cachedAnimator.GetCurrentAnimatorStateInfo(0);
+                        if (stateInfo.IsName(attackAnimationName) && stateInfo.normalizedTime < 0.95f)
+                        {
+                            isPlayingAttack = true;
+                            Debug.Log($"[AI] {enemy.gameObject.name} 攻擊動畫開始播放");
+                        }
+                        yield return null;
+                    }
+                    
+                    // 等待動畫播放完成
+                    while (isPlayingAttack && (Time.time - animationStartTime) < maxWaitTime)
                     {
                         stateInfo = cachedAnimator.GetCurrentAnimatorStateInfo(0);
                         
                         if (stateInfo.IsName(attackAnimationName))
                         {
-                            if (stateInfo.normalizedTime >= 1f)
+                            if (stateInfo.normalizedTime >= 0.95f && !stateInfo.loop)
                             {
                                 isPlayingAttack = false;
                                 Debug.Log($"[AI] {enemy.gameObject.name} 攻擊動畫播放完成");
