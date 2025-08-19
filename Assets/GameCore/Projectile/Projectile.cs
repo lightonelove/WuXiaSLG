@@ -85,14 +85,10 @@ namespace Wuxia.GameCore
             if (!hasTarget)
             {
                 targetPosition = startPosition + transform.forward * maxRange;
-                Debug.Log($"[Projectile] {gameObject.name} 沒有設定目標，使用預設方向 {transform.forward}，目標位置: {targetPosition}");
             }
             else
             {
-                Debug.Log($"[Projectile] {gameObject.name} 已有目標，目標位置: {targetPosition}");
             }
-            
-            Debug.Log($"[Projectile] {gameObject.name} Start - 位置: {transform.position}，旋轉: {transform.rotation.eulerAngles}，Forward: {transform.forward}");
             
             // 計算飛行時間
             CalculateTravelTime();
@@ -116,14 +112,11 @@ namespace Wuxia.GameCore
             targetPosition = target;
             hasTarget = true;
             
-            Debug.Log($"[Projectile] {gameObject.name} SetTarget - 起始位置: {startPosition}，目標位置: {targetPosition}");
-            
             // 如果是追蹤類型，計算初始方向
             if (trajectoryType == ProjectileTrajectory.Homing || isHoming)
             {
                 Vector3 direction = (targetPosition - startPosition).normalized;
                 transform.rotation = Quaternion.LookRotation(direction);
-                Debug.Log($"[Projectile] {gameObject.name} SetTarget - 追蹤模式，設定方向: {direction}");
             }
         }
         
@@ -146,9 +139,6 @@ namespace Wuxia.GameCore
         /// <param name="direction">發射方向</param>
         public void SetDirection(Vector3 direction)
         {
-            Debug.Log($"[Projectile] {gameObject.name} SetDirection - 輸入方向: {direction}，正規化後: {direction.normalized}");
-            Debug.Log($"[Projectile] {gameObject.name} SetDirection - 設定前的旋轉: {transform.rotation.eulerAngles}");
-            
             // 重新設定起始位置為當前位置
             startPosition = transform.position;
             
@@ -156,9 +146,6 @@ namespace Wuxia.GameCore
             targetPosition = startPosition + direction.normalized * maxRange;
             hasTarget = true;
             
-            Debug.Log($"[Projectile] {gameObject.name} SetDirection - 設定後的旋轉: {transform.rotation.eulerAngles}");
-            Debug.Log($"[Projectile] {gameObject.name} SetDirection - 設定後的 Forward: {transform.forward}");
-            Debug.Log($"[Projectile] {gameObject.name} SetDirection - 起始位置: {startPosition}，目標位置: {targetPosition}");
         }
         
         /// <summary>

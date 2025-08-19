@@ -50,7 +50,6 @@ namespace Wuxia.GameCore
                     if (foundEnemy != null)
                     {
                         enemy = foundEnemy;
-                        Debug.Log($"[AI] 找到 EnemyCore: {enemy.gameObject.name} (層級距離: {GetHierarchyDistance(transform, current)})");
                         break;
                     }
                     current = current.parent;
@@ -58,7 +57,6 @@ namespace Wuxia.GameCore
                 
                 if (enemy == null)
                 {
-                    Debug.LogError($"[AI] {gameObject.name} 無法找到父物件中的 EnemyCore！");
                     return;
                 }
             }
@@ -67,7 +65,6 @@ namespace Wuxia.GameCore
             enemyCombatEntity = enemy.GetComponent<CombatEntity>();
             if (enemyCombatEntity == null)
             {
-                Debug.LogError($"[AI] {enemy.gameObject.name} 沒有 CombatEntity 組件！");
                 return;
             }
             
@@ -105,14 +102,8 @@ namespace Wuxia.GameCore
                     if (action != null)
                     {
                         action.SetEnemyCombatEntity(enemyCombatEntity);
-                        Debug.Log($"[AI] 已將 CombatEntity 設定到 {action.GetActionName()}");
                     }
                 }
-                Debug.Log($"[AI] 總共設定了 {allActions.Length} 個 EnemyAction 的 CombatEntity");
-            }
-            else
-            {
-                Debug.LogWarning($"[AI] {gameObject.name} 沒有找到任何 EnemyAction");
             }
             
             // 同時自動抓取所有啟用的 Strategy
@@ -138,17 +129,11 @@ namespace Wuxia.GameCore
                     if (strategy != null && strategy.gameObject.activeInHierarchy && strategy.enabled)
                     {
                         strategies.Add(strategy);
-                        Debug.Log($"[AI] 找到啟用的 Strategy: {strategy.StrategyName} (Priority: {strategy.Priority})");
                         
                         // 讓每個 Strategy 也自動收集它的 Actions
                         strategy.CollectActiveActions();
                     }
                 }
-                Debug.Log($"[AI] 總共找到 {strategies.Count} 個啟用的 Strategy");
-            }
-            else
-            {
-                Debug.LogWarning($"[AI] {gameObject.name} 沒有找到任何 Strategy");
             }
         }
         
@@ -156,7 +141,6 @@ namespace Wuxia.GameCore
         {
             if (strategies == null || strategies.Count == 0)
             {
-                Debug.LogWarning("[AI] No strategies available!");
                 return null;
             }
             
@@ -167,7 +151,6 @@ namespace Wuxia.GameCore
             
             if (availableStrategies.Count == 0)
             {
-                Debug.LogWarning("[AI] No strategies can execute!");
                 return null;
             }
             
@@ -204,7 +187,6 @@ namespace Wuxia.GameCore
         {
             if (IsExecuting)
             {
-                Debug.LogWarning("[AI] Already executing a strategy!");
                 return;
             }
             
@@ -217,11 +199,8 @@ namespace Wuxia.GameCore
         
         private IEnumerator ExecuteStrategyCoroutine()
         {
-            Debug.Log($"[AI] Starting execution of strategy: {currentStrategy.StrategyName}");
-            
             yield return currentStrategy.ExecuteStrategy(enemy);
             
-            Debug.Log($"[AI] Completed execution of strategy: {currentStrategy.StrategyName}");
             currentExecutionCoroutine = null;
             currentStrategy = null;
         }
@@ -233,7 +212,6 @@ namespace Wuxia.GameCore
                 StopCoroutine(currentExecutionCoroutine);
                 currentExecutionCoroutine = null;
                 currentStrategy = null;
-                Debug.Log("[AI] Execution stopped");
             }
         }
         
@@ -242,7 +220,6 @@ namespace Wuxia.GameCore
             if (strategy != null && !strategies.Contains(strategy))
             {
                 strategies.Add(strategy);
-                Debug.Log($"[AI] Added strategy: {strategy.StrategyName}");
             }
         }
         
@@ -250,14 +227,12 @@ namespace Wuxia.GameCore
         {
             if (strategies.Remove(strategy))
             {
-                Debug.Log($"[AI] Removed strategy: {strategy.StrategyName}");
             }
         }
         
         public void ClearStrategies()
         {
             strategies.Clear();
-            Debug.Log("[AI] Cleared all strategies");
         }
         
         public IReadOnlyList<EnemyStrategy> GetStrategies()
@@ -270,7 +245,6 @@ namespace Wuxia.GameCore
         /// </summary>
         public void RefreshStrategiesAndActions()
         {
-            Debug.Log($"[AI] 重新收集 {gameObject.name} 的 Strategy 和 Action");
             CollectActiveStrategies();
         }
         
@@ -282,10 +256,7 @@ namespace Wuxia.GameCore
             {
                 ExecuteAI();
             }
-            else
-            {
-                Debug.LogWarning("Can only test in Play Mode!");
-            }
+
         }
         #endif
     }
