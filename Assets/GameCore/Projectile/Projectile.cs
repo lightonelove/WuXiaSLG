@@ -335,5 +335,79 @@ namespace Wuxia.GameCore
             OnDestroy?.Invoke(this);
             Destroy(gameObject);
         }
+        
+        /// <summary>
+        /// 投射物反彈 - 朝反方向飛行並更換陣營
+        /// </summary>
+        /// <param name="newOwner">新的擁有者 CombatEntity</param>
+        /// <param name="reflectionDirection">反彈方向（可選，如果為 Vector3.zero 則自動計算反方向）</param>
+        public void ReflectProjectile(CombatEntity newOwner, Vector3 reflectionDirection = default)
+        {
+            if (newOwner == null)
+            {
+                Debug.LogWarning($"[Projectile] ReflectProjectile 的 newOwner 為 null");
+                return;
+            }
+            
+            // 更換發射者
+            shooter = newOwner;
+            
+            // 更新投射物上所有 DamageDealer 的陣營
+            UpdateDamageDealerOwnership(newOwner);
+            
+            // 計算反彈方向
+            Vector3 newDirection;
+            if (reflectionDirection == Vector3.zero)
+            {
+                // 如果沒有指定方向，使用當前飛行方向的反方向
+                newDirection = -transform.forward;
+            }
+            else
+            {
+                newDirection = reflectionDirection.normalized;
+            }
+            
+            // 重置投射物飛行參數
+            startPosition = transform.position;
+            targetPosition = startPosition + newDirection * maxRange;
+            currentTime = 0f;
+            hasTarget = true;
+            
+            // 更新朝向和重新計算飛行時間
+            transform.rotation = Quaternion.LookRotation(newDirection);
+            CalculateTravelTime();
+            
+            Debug.Log($"[Projectile] 投射物反彈！新擁有者: {newOwner.Name}，反彈方向: {newDirection}");
+        }
+        
+        /// <summary>
+        /// 更新投射物上所有 DamageDealer 的擁有者
+        /// </summary>
+        /// <param name="newOwner">新擁有者</param>
+        private void UpdateDamageDealerOwnership(CombatEntity newOwner)
+        {
+            DamageDealer[] damageDealers = GetComponentsInChildren<DamageDealer>();
+            
+            foreach (DamageDealer dealer in damageDealers)
+            {
+                if (dealer != null)
+                {
+                    dealer.sourceCombatEntity = newOwner;
+                    Debug.Log($"[Projectile] 更新 DamageDealer {dealer.gameObject.name} 的擁有者為: {newOwner.Name}");
+                }
+            }
+            
+            Debug.Log($"[Projectile] 共更新了 {damageDealers.Length} 個 DamageDealer 的擁有者");
+        }
+        
+        /// <summary>
+        /// 檢查投射物是否可以被反彈
+        /// </summary>
+        /// <returns>是否可以反彈</returns>
+        public bool CanBeReflected()
+        {
+            // 可以添加額外的條件，例如投射物類型、速度等
+            return gameObject != null && enabled;
+        }
     }
 }
