@@ -74,6 +74,7 @@
     <Compile Include="Assets\GameCore\UI\TurnIndicator.cs" />
     <Compile Include="Assets\GameCore\Control\CharacterResources.cs" />
     <Compile Include="Assets\GameCore\UI\UIFollowWorldObject.cs" />
+    <Compile Include="Assets\GameCore\AI\Actions\EnemyRangeAttackAction.cs" />
     <Compile Include="Assets\GameCore\AI\Actions\EnemyWaitAction.cs" />
     <Compile Include="Assets\Tool\AnimationPathRebinder.cs" />
     <Compile Include="Assets\GameCore\Character\Health.cs" />

@@ -606,7 +606,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4905970598403988487, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5753816644660638939, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: priority
@@ -1128,6 +1128,10 @@ PrefabInstance:
       propertyPath: maxActionPoints
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 1732624960756659377, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: stoppingRemainingAP
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 2458074102862914687, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: priority
       value: 1
@@ -1142,7 +1146,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4905970598403988487, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4936464210962526008, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: m_IsActive
