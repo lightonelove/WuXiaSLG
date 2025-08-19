@@ -53,6 +53,7 @@ namespace Wuxia.GameCore
         private float currentTime;
         private Vector3 initialScale;
         private bool hasTarget;
+        private CombatEntity shooter; // 發射者
         
         // 事件
         public System.Action<Projectile, Collider> OnHit;
@@ -300,6 +301,22 @@ namespace Wuxia.GameCore
             speed = newSpeed;
             lifeTime = newLifeTime;
             maxRange = newRange;
+        }
+        
+        /// <summary>
+        /// 設定發射者
+        /// </summary>
+        public void SetShooter(CombatEntity shooterEntity)
+        {
+            shooter = shooterEntity;
+        }
+        
+        /// <summary>
+        /// 取得發射者
+        /// </summary>
+        public CombatEntity GetShooter()
+        {
+            return shooter;
         }
         
         /// <summary>

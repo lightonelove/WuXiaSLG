@@ -88,6 +88,10 @@ namespace Wuxia.GameCore
         [Tooltip("顯示調試資訊")]
         [SerializeField] private bool showDebug = false;
         
+        [Header("實體參考")]
+        [Tooltip("發射者的 CombatEntity（留空會自動尋找）")]
+        [SerializeField] private CombatEntity shooterCombatEntity;
+        
         // 內部變數
         private bool hasShot = false;
         
@@ -101,6 +105,38 @@ namespace Wuxia.GameCore
             if (audioSource == null)
             {
                 audioSource = GetComponent<AudioSource>();
+            }
+            
+            // 如果沒有設定 CombatEntity，自動往上層尋找
+            if (shooterCombatEntity == null)
+            {
+                FindShooterCombatEntity();
+            }
+        }
+        
+        /// <summary>
+        /// 自動尋找發射者的 CombatEntity
+        /// </summary>
+        private void FindShooterCombatEntity()
+        {
+            Transform current = transform;
+            
+            while (current != null)
+            {
+                CombatEntity foundEntity = current.GetComponent<CombatEntity>();
+                if (foundEntity != null)
+                {
+                    shooterCombatEntity = foundEntity;
+                    if (showDebug)
+                        Debug.Log($"[ProjectileShooter] 找到發射者 CombatEntity: {foundEntity.Name} 在 {current.name}");
+                    break;
+                }
+                current = current.parent;
+            }
+            
+            if (shooterCombatEntity == null && showDebug)
+            {
+                Debug.LogWarning($"[ProjectileShooter] {gameObject.name} 無法找到發射者的 CombatEntity");
             }
         }
         
@@ -231,6 +267,14 @@ namespace Wuxia.GameCore
             Projectile projectileScript = projectile.GetComponent<Projectile>();
             if (projectileScript != null)
             {
+                // 設定發射者
+                if (shooterCombatEntity != null)
+                {
+                    projectileScript.SetShooter(shooterCombatEntity);
+                    if (showDebug)
+                        Debug.Log($"[ProjectileShooter] 設定投射物發射者: {shooterCombatEntity.Name}");
+                }
+                
                 // 只有在覆蓋模式下才設定參數
                 if (overrideProjectileParameters)
                 {
@@ -426,6 +470,30 @@ namespace Wuxia.GameCore
         public bool HasShot()
         {
             return hasShot;
+        }
+        
+        /// <summary>
+        /// 取得發射者的 CombatEntity
+        /// </summary>
+        public CombatEntity GetShooterCombatEntity()
+        {
+            return shooterCombatEntity;
+        }
+        
+        /// <summary>
+        /// 設定發射者的 CombatEntity
+        /// </summary>
+        public void SetShooterCombatEntity(CombatEntity combatEntity)
+        {
+            shooterCombatEntity = combatEntity;
+        }
+        
+        /// <summary>
+        /// 手動重新搜尋發射者的 CombatEntity
+        /// </summary>
+        public void RefreshShooterCombatEntity()
+        {
+            FindShooterCombatEntity();
         }
         
         // 在編輯器中顯示發射方向

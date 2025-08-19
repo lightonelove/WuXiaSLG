@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Core/EnemyAISystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Core/EnemyAISystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/Projectile/Projectile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Projectile/Projectile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Projectile/ProjectileShooter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Projectile/ProjectileShooter.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +160,7 @@
       <workItem from="1755003142976" duration="7539000" />
       <workItem from="1755148008408" duration="9675000" />
       <workItem from="1755494315538" duration="4738000" />
-      <workItem from="1755579276446" duration="7995000" />
+      <workItem from="1755579276446" duration="9043000" />
     </task>
     <servers />
   </component>
