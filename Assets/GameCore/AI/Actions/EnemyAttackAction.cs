@@ -235,7 +235,6 @@ namespace Wuxia.GameCore
                 Debug.LogError($"[AI] {enemy.gameObject.name} 執行攻擊時沒有有效目標");
                 yield break;
             }
-            
             // 再次檢查目標有效性
             if (!cachedTarget.gameObject.activeInHierarchy)
             {

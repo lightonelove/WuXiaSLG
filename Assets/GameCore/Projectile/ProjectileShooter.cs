@@ -48,6 +48,12 @@ namespace Wuxia.GameCore
         [Tooltip("自訂發射方向（如果不使用 Transform.forward）")]
         [SerializeField] private Vector3 customDirection = Vector3.forward;
         
+        [Tooltip("使用根物件的 Forward 方向（適用於子物件）")]
+        [SerializeField] private bool useRootForward = false;
+        
+        [Tooltip("指定要使用哪個 Transform 的 Forward（留空則自動尋找根物件）")]
+        [SerializeField] private Transform forwardReferenceTransform;
+        
         [Header("多重發射")]
         [Tooltip("是否多重發射")]
         [SerializeField] private bool multipleShots = false;
@@ -205,9 +211,21 @@ namespace Wuxia.GameCore
                 return null;
             }
             
+            if (showDebug)
+            {
+                Debug.Log($"[ProjectileShooter] {gameObject.name} 創建投射物，位置: {position}，方向: {direction}");
+                Debug.DrawRay(position, direction * 3f, Color.red, 2f);
+            }
+            
             // 創建投射物
             Quaternion rotation = Quaternion.LookRotation(direction);
             GameObject projectile = Instantiate(projectilePrefab, position, rotation);
+            
+            if (showDebug)
+            {
+                Debug.Log($"[ProjectileShooter] 投射物創建後的旋轉: {projectile.transform.rotation.eulerAngles}");
+                Debug.Log($"[ProjectileShooter] 投射物的 Forward: {projectile.transform.forward}");
+            }
             
             // 設定投射物參數
             Projectile projectileScript = projectile.GetComponent<Projectile>();
@@ -225,20 +243,32 @@ namespace Wuxia.GameCore
                     if (targetTransform != null)
                     {
                         projectileScript.SetTarget(targetTransform);
+                        if (showDebug)
+                            Debug.Log($"[ProjectileShooter] 設定投射物目標: {targetTransform.name}");
                     }
                     else
                     {
                         projectileScript.SetTarget(targetPosition);
+                        if (showDebug)
+                            Debug.Log($"[ProjectileShooter] 設定投射物目標位置: {targetPosition}");
                     }
                 }
                 else
                 {
                     projectileScript.SetDirection(direction);
+                    if (showDebug)
+                        Debug.Log($"[ProjectileShooter] 設定投射物方向: {direction}");
+                }
+                
+                if (showDebug)
+                {
+                    Debug.Log($"[ProjectileShooter] 投射物設定完成後的旋轉: {projectile.transform.rotation.eulerAngles}");
+                    Debug.Log($"[ProjectileShooter] 投射物設定完成後的 Forward: {projectile.transform.forward}");
                 }
             }
             else
             {
-                Debug.LogWarning($"[ProjectileShooter] 投射物預製物上沒有 Projectile 腳本");
+                Debug.LogError($"[ProjectileShooter] 投射物預製物上沒有 Projectile 腳本！");
             }
             
             return projectile;
@@ -259,10 +289,55 @@ namespace Wuxia.GameCore
             {
                 return customDirection.normalized;
             }
+            else if (useRootForward)
+            {
+                // 使用根物件或指定物件的 forward 方向
+                Transform referenceTransform = GetForwardReferenceTransform();
+                if (referenceTransform != null)
+                {
+                    if (showDebug)
+                        Debug.Log($"[ProjectileShooter] 使用 {referenceTransform.name} 的 Forward 方向");
+                    return referenceTransform.forward;
+                }
+                else
+                {
+                    Debug.LogError($"[ProjectileShooter] 無法找到參考 Transform！使用自己的 Forward");
+                    return transform.forward;
+                }
+            }
             else
             {
                 return transform.forward;
             }
+        }
+        
+        /// <summary>
+        /// 獲取用於 Forward 方向的參考 Transform
+        /// </summary>
+        private Transform GetForwardReferenceTransform()
+        {
+            // 如果有指定的 Transform，使用它
+            if (forwardReferenceTransform != null)
+                return forwardReferenceTransform;
+            
+            // 否則尋找根物件（通常是 Enemy）
+            Transform current = transform;
+            Transform root = current;
+            
+            // 往上找到最頂層的物件
+            while (current.parent != null)
+            {
+                current = current.parent;
+                // 檢查是否有 EnemyCore 元件（這通常是 Enemy 的根物件）
+                if (current.GetComponent<EnemyCore>() != null)
+                {
+                    root = current;
+                    break;
+                }
+                root = current;
+            }
+            
+            return root;
         }
         
         /// <summary>

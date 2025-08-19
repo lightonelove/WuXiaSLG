@@ -6,9 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Core/EnemyAISystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Core/EnemyAISystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Core/EnemyStrategy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Core/EnemyStrategy.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyAttackAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyAttackAction.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Projectile/Projectile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Projectile/Projectile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Projectile/ProjectileShooter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Projectile/ProjectileShooter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Projectile/ProjectileShooter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Projectile/ProjectileShooter.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CLAUDE.md" beforeDir="false" afterPath="$PROJECT_DIR$/CLAUDE.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,10 +59,6 @@
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Utility/SectorMeshGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Utility/SectorMeshTest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Plugins/Sirenix/Odin Inspector/Modules/Unity.Addressables/AddressablesInspectors.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
@@ -165,7 +167,7 @@
       <workItem from="1755003142976" duration="7539000" />
       <workItem from="1755148008408" duration="9675000" />
       <workItem from="1755494315538" duration="4738000" />
-      <workItem from="1755579276446" duration="4840000" />
+      <workItem from="1755579276446" duration="7637000" />
     </task>
     <servers />
   </component>

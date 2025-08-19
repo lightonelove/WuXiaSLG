@@ -316,6 +316,7 @@ GameObject:
   - component: {fileID: 2952278509770769901}
   - component: {fileID: 5207808132746345017}
   - component: {fileID: 5442271328811615309}
+  - component: {fileID: 8473038947874109521}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -508,6 +509,27 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 1, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &8473038947874109521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588288096788536482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18813cc8a16822a478b5327ea04b2fbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showInEditor: 1
+  showInGame: 0
+  lineLength: 3
+  lineColor: {r: 0, g: 0, b: 1, a: 1}
+  lineThickness: 0.3
+  showArrowHead: 1
+  arrowHeadLength: 0.5
+  arrowHeadAngle: 30
+  heightOffset: 0.1
 --- !u!1 &1645170805765397387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1555,6 +1577,10 @@ PrefabInstance:
       propertyPath: projectilePrefab
       value: 
       objectReference: {fileID: 5521011822059568325, guid: 9f53e743ba72ecd4b8e55c287d541590, type: 3}
+    - target: {fileID: 490480182419864288, guid: 6ad6a051e50a0e544b2f0e2483bcb108, type: 3}
+      propertyPath: forwardReferenceTransform
+      value: 
+      objectReference: {fileID: 7146826614908490065}
     - target: {fileID: 550999032360076522, guid: 6ad6a051e50a0e544b2f0e2483bcb108, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1594,6 +1620,14 @@ PrefabInstance:
     - target: {fileID: 550999032360076522, guid: 6ad6a051e50a0e544b2f0e2483bcb108, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4436163535806637728, guid: 6ad6a051e50a0e544b2f0e2483bcb108, type: 3}
+      propertyPath: showInGame
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4436163535806637728, guid: 6ad6a051e50a0e544b2f0e2483bcb108, type: 3}
+      propertyPath: lineThickness
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8112581456999014513, guid: 6ad6a051e50a0e544b2f0e2483bcb108, type: 3}
       propertyPath: m_Name

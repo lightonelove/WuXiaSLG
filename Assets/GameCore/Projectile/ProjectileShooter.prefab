@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 550999032360076522}
   - component: {fileID: 490480182419864288}
+  - component: {fileID: 4436163535806637728}
   m_Layer: 0
   m_Name: ProjectileShooter
   m_TagString: Untagged
@@ -49,6 +50,7 @@ MonoBehaviour:
   useThisTransform: 1
   customShootPoint: {fileID: 0}
   shootDelay: 0
+  overrideProjectileParameters: 0
   projectileSpeed: 10
   projectileRange: 20
   projectileLifetime: 5
@@ -64,3 +66,24 @@ MonoBehaviour:
   shootSound: {fileID: 0}
   audioSource: {fileID: 0}
   showDebug: 0
+--- !u!114 &4436163535806637728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8112581456999014513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18813cc8a16822a478b5327ea04b2fbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showInEditor: 1
+  showInGame: 0
+  lineLength: 3
+  lineColor: {r: 0.17964578, g: 1, b: 0, a: 1}
+  lineThickness: 0.1
+  showArrowHead: 1
+  arrowHeadLength: 0.5
+  arrowHeadAngle: 30
+  heightOffset: 0.1

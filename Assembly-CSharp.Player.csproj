@@ -66,6 +66,7 @@
     <Compile Include="Assets\GameCore\Enemy\EnemyCore.cs" />
     <Compile Include="Assets\GameCore\UI\HealthBarController.cs" />
     <Compile Include="Assets\GameCore\Control\CombatCameraController.cs" />
+    <Compile Include="Assets\GameCore\Debug\ForwardDirectionVisualizer.cs" />
     <Compile Include="Assets\GameCore\Control\BlockingSystem.cs" />
     <Compile Include="Assets\GameCore\AI\Core\IEnemyAction.cs" />
     <Compile Include="Assets\GameCore\Control\CharacterMovement.cs" />
