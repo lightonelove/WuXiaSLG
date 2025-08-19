@@ -31,7 +31,6 @@ namespace Wuxia.GameCore
         private Animator cachedAnimator;
         private bool isInitialized;
         private List<CombatEntity> availableTargets = new List<CombatEntity>();
-        private CombatEntity enemyCombatEntity; // 快取敵人的 CombatEntity
         
         public override void InitializeAction(EnemyCore enemy)
         {
@@ -43,11 +42,10 @@ namespace Wuxia.GameCore
             cachedAnimator = null;
             availableTargets = new List<CombatEntity>();
             
-            // 快取敵人的 CombatEntity
-            enemyCombatEntity = enemy.GetComponent<CombatEntity>();
+            // 檢查 enemyCombatEntity 是否已經被設定（應該由 EnemyAISystem 設定）
             if (enemyCombatEntity == null)
             {
-                Debug.LogError($"[AI] {enemy.gameObject.name} 沒有 CombatEntity 組件！");
+                Debug.LogError($"[AI] {enemy.gameObject.name} 的 enemyCombatEntity 尚未設定！請確保 EnemyAISystem 已正確初始化。");
                 return;
             }
             
@@ -89,13 +87,17 @@ namespace Wuxia.GameCore
             if (CombatCore.Instance != null && enemyCombatEntity != null)
             {
                 // 使用 CombatEntity 列表來尋找目標
+                Debug.Log("?????1");
                 foreach (var entity in CombatCore.Instance.AllCombatEntity)
                 {
+                    Debug.Log("?????2");
                     if (entity != null && entity.gameObject.activeInHierarchy)
                     {
+                        Debug.Log("?????3");
                         // 檢查陣營 - 只攻擊不同陣營的目標
                         if (IsHostileFaction(entity))
                         {
+                            Debug.Log("?????4");
                             // 檢查目標是否在攻擊範圍內
                             float distance = Vector3.Distance(enemy.transform.position, entity.transform.position);
                             Debug.Log($"[AI] 檢查目標 {entity.Name}, 陣營: {entity.Faction}, 距離: {distance}");

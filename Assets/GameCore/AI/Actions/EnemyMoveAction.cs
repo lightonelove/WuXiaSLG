@@ -28,7 +28,6 @@ namespace Wuxia.GameCore
         // 快取的目標和初始化狀態
         private Transform cachedTarget;
         private bool isInitialized;
-        private CombatEntity enemyCombatEntity; // 快取敵人的 CombatEntity
         
         public override void InitializeAction(EnemyCore enemy)
         {
@@ -38,11 +37,10 @@ namespace Wuxia.GameCore
             isInitialized = false;
             cachedTarget = null;
             
-            // 快取敵人的 CombatEntity
-            enemyCombatEntity = enemy.GetComponent<CombatEntity>();
+            // 檢查 enemyCombatEntity 是否已經被設定（應該由 EnemyAISystem 設定）
             if (enemyCombatEntity == null)
             {
-                Debug.LogError($"[AI] {enemy.gameObject.name} 沒有 CombatEntity 組件！");
+                Debug.LogError($"[AI] {enemy.gameObject.name} 的 enemyCombatEntity 尚未設定！請確保 EnemyAISystem 已正確初始化。");
                 return;
             }
             

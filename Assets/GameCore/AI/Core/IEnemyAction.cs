@@ -17,10 +17,21 @@ namespace Wuxia.GameCore
     {
         [SerializeField] public List<BaseCondition> Condition;
         
+        // 快取敵人的 CombatEntity
+        protected CombatEntity enemyCombatEntity;
+        
         public virtual void InitializeAction(EnemyCore enemy)
         {
             // 基本的初始化邏輯，子類別可以覆寫
             Debug.Log($"[AI] Initializing action: {GetActionName()} for {enemy.gameObject.name}");
+        }
+        
+        /// <summary>
+        /// 設定敵人的 CombatEntity 給這個 Action
+        /// </summary>
+        public void SetEnemyCombatEntity(CombatEntity combatEntity)
+        {
+            enemyCombatEntity = combatEntity;
         }
 
         public virtual bool CanExecute(EnemyCore enemy)

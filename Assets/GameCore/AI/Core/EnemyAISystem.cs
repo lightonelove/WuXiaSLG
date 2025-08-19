@@ -14,11 +14,107 @@ namespace Wuxia.GameCore
         [SerializeField] private float randomSelectionWeight = 0.5f;
         
         public EnemyCore enemy;
+        private CombatEntity enemyCombatEntity; // 快取敵人的 CombatEntity
         private EnemyStrategy currentStrategy;
         private Coroutine currentExecutionCoroutine;
         
         public EnemyStrategy CurrentStrategy => currentStrategy;
         public bool IsExecuting => currentExecutionCoroutine != null;
+        
+        private void Awake()
+        {
+            InitializeEnemyReferences();
+        }
+        
+        private void Start()
+        {
+            // 再次確保初始化（以防某些元件在 Awake 時還沒準備好）
+            if (enemy == null || enemyCombatEntity == null)
+            {
+                InitializeEnemyReferences();
+            }
+        }
+        
+        /// <summary>
+        /// 初始化敵人相關的參考
+        /// </summary>
+        private void InitializeEnemyReferences()
+        {
+            // 如果 enemy 還沒設定，往上找最近的 EnemyCore
+            if (enemy == null)
+            {
+                Transform current = transform;
+                while (current != null)
+                {
+                    EnemyCore foundEnemy = current.GetComponent<EnemyCore>();
+                    if (foundEnemy != null)
+                    {
+                        enemy = foundEnemy;
+                        Debug.Log($"[AI] 找到 EnemyCore: {enemy.gameObject.name} (層級距離: {GetHierarchyDistance(transform, current)})");
+                        break;
+                    }
+                    current = current.parent;
+                }
+                
+                if (enemy == null)
+                {
+                    Debug.LogError($"[AI] {gameObject.name} 無法找到父物件中的 EnemyCore！");
+                    return;
+                }
+            }
+            
+            // 取得 CombatEntity
+            enemyCombatEntity = enemy.GetComponent<CombatEntity>();
+            if (enemyCombatEntity == null)
+            {
+                Debug.LogError($"[AI] {enemy.gameObject.name} 沒有 CombatEntity 組件！");
+                return;
+            }
+            
+            // 將 CombatEntity 設定到所有的 EnemyAction 中
+            SetCombatEntityToAllActions();
+        }
+        
+        /// <summary>
+        /// 計算兩個 Transform 之間的層級距離
+        /// </summary>
+        private int GetHierarchyDistance(Transform from, Transform to)
+        {
+            int distance = 0;
+            Transform current = from;
+            while (current != null && current != to)
+            {
+                current = current.parent;
+                distance++;
+            }
+            return distance;
+        }
+        
+        /// <summary>
+        /// 將 CombatEntity 設定到所有的 EnemyAction 中
+        /// </summary>
+        private void SetCombatEntityToAllActions()
+        {
+            // 取得所有的 BaseEnemyAction 元件（包括子物件）
+            BaseEnemyAction[] allActions = GetComponentsInChildren<BaseEnemyAction>();
+            
+            if (allActions != null && allActions.Length > 0)
+            {
+                foreach (var action in allActions)
+                {
+                    if (action != null)
+                    {
+                        action.SetEnemyCombatEntity(enemyCombatEntity);
+                        Debug.Log($"[AI] 已將 CombatEntity 設定到 {action.GetActionName()}");
+                    }
+                }
+                Debug.Log($"[AI] 總共設定了 {allActions.Length} 個 EnemyAction 的 CombatEntity");
+            }
+            else
+            {
+                Debug.LogWarning($"[AI] {gameObject.name} 沒有找到任何 EnemyAction");
+            }
+        }
         
         public EnemyStrategy SelectStrategy()
         {

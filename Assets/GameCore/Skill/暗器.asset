@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70e9598c0f138964bab76601527812cb, type: 3}
+  m_Name: "\u6697\u5668"
+  m_EditorClassIdentifier: 
+  skillName: "\u6697\u5668"
+  animationName: Throwing
+  targetingMode: 1
+  skillRange: 5
+  isFixedRange: 0
+  skillAngle: 60
+  targetableFactions: 4
+  attackMultiplier: 1
+  dodgeChance: 0
+  defense: 0
+  spCost: 2
