@@ -315,6 +315,9 @@ namespace Wuxia.GameCore
                 Debug.LogError($"[ProjectileShooter] 投射物預製物上沒有 Projectile 腳本！");
             }
             
+            // 檢查並設定 DamageDealer 的 CombatEntity 參考
+            SetupProjectileDamageDealer(projectile);
+            
             return projectile;
         }
         
@@ -494,6 +497,39 @@ namespace Wuxia.GameCore
         public void RefreshShooterCombatEntity()
         {
             FindShooterCombatEntity();
+        }
+        
+        /// <summary>
+        /// 設定投射物上 DamageDealer 的 CombatEntity 參考
+        /// </summary>
+        private void SetupProjectileDamageDealer(GameObject projectile)
+        {
+            if (projectile == null || shooterCombatEntity == null) return;
+            
+            // 查找投射物本身及其子物件中的所有 DamageDealer
+            DamageDealer[] damageDealers = projectile.GetComponentsInChildren<DamageDealer>();
+            
+            if (damageDealers.Length > 0)
+            {
+                foreach (DamageDealer damageDealer in damageDealers)
+                {
+                    if (damageDealer != null)
+                    {
+                        // 設定發射者的 CombatEntity 作為傷害來源
+                        damageDealer.sourceCombatEntity = shooterCombatEntity;
+                        
+                        if (showDebug)
+                            Debug.Log($"[ProjectileShooter] 設定 DamageDealer 的來源實體: {shooterCombatEntity.Name} 在 {damageDealer.gameObject.name}");
+                    }
+                }
+                
+                if (showDebug)
+                    Debug.Log($"[ProjectileShooter] 找到並設定了 {damageDealers.Length} 個 DamageDealer");
+            }
+            else if (showDebug)
+            {
+                Debug.Log($"[ProjectileShooter] 投射物上沒有找到 DamageDealer 元件");
+            }
         }
         
         // 在編輯器中顯示發射方向
