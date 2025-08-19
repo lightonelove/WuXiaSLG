@@ -939,9 +939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Condition: []
-  Actions:
-  - {fileID: 1732624960756659377}
-  - {fileID: 3016788547654963436}
+  Actions: []
   strategyName: 
   priority: 0
 --- !u!1 &4936464210962526008
@@ -1299,8 +1297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45c97a0854f47cc4eae7caff0d6f0256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strategies:
-  - {fileID: 5753816644660638939}
+  strategies: []
   useRandomSelection: 1
   randomSelectionWeight: 0.5
   enemy: {fileID: 0}
@@ -1459,8 +1456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Condition: []
-  Actions:
-  - {fileID: 5921199055215084127}
+  Actions: []
   strategyName: 
   priority: 0
 --- !u!1 &7563324953207873047

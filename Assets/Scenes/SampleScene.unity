@@ -592,8 +592,20 @@ PrefabInstance:
       propertyPath: maxActionPoints
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 2458074102862914687, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: priority
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2952278509770769901, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: affectChildMeshRenderers
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4905970598403988487, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5753816644660638939, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: priority
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7146826614908490065, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
@@ -1104,9 +1116,25 @@ PrefabInstance:
       propertyPath: maxActionPoints
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 2458074102862914687, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: priority
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2952278509770769901, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: affectChildMeshRenderers
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4905970598403988487, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4936464210962526008, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5753816644660638939, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: priority
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7146826614908490065, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1147,6 +1175,10 @@ PrefabInstance:
     - target: {fileID: 7146826614908490065, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7246287793239033631, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -114,6 +114,42 @@ namespace Wuxia.GameCore
             {
                 Debug.LogWarning($"[AI] {gameObject.name} 沒有找到任何 EnemyAction");
             }
+            
+            // 同時自動抓取所有啟用的 Strategy
+            CollectActiveStrategies();
+        }
+        
+        /// <summary>
+        /// 自動收集所有啟用的 Strategy
+        /// </summary>
+        private void CollectActiveStrategies()
+        {
+            // 清空現有的策略列表
+            strategies.Clear();
+            
+            // 取得所有的 EnemyStrategy 元件（包括子物件）
+            EnemyStrategy[] allStrategies = GetComponentsInChildren<EnemyStrategy>();
+            
+            if (allStrategies != null && allStrategies.Length > 0)
+            {
+                foreach (var strategy in allStrategies)
+                {
+                    // 只加入啟用的 Strategy
+                    if (strategy != null && strategy.gameObject.activeInHierarchy && strategy.enabled)
+                    {
+                        strategies.Add(strategy);
+                        Debug.Log($"[AI] 找到啟用的 Strategy: {strategy.StrategyName} (Priority: {strategy.Priority})");
+                        
+                        // 讓每個 Strategy 也自動收集它的 Actions
+                        strategy.CollectActiveActions();
+                    }
+                }
+                Debug.Log($"[AI] 總共找到 {strategies.Count} 個啟用的 Strategy");
+            }
+            else
+            {
+                Debug.LogWarning($"[AI] {gameObject.name} 沒有找到任何 Strategy");
+            }
         }
         
         public EnemyStrategy SelectStrategy()
@@ -227,6 +263,15 @@ namespace Wuxia.GameCore
         public IReadOnlyList<EnemyStrategy> GetStrategies()
         {
             return strategies.AsReadOnly();
+        }
+        
+        /// <summary>
+        /// 手動重新收集所有啟用的 Strategy 和 Action
+        /// </summary>
+        public void RefreshStrategiesAndActions()
+        {
+            Debug.Log($"[AI] 重新收集 {gameObject.name} 的 Strategy 和 Action");
+            CollectActiveStrategies();
         }
         
         #if UNITY_EDITOR
