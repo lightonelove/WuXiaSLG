@@ -614,6 +614,25 @@ namespace Wuxia.GameCore
                 ClearSingleTargetState();
             }
 
+            // 讓角色面向滑鼠方向（即使沒有有效目標）
+            if (SLGCoreUI.Instance != null && SLGCoreUI.Instance.IsMouseOverFloor())
+            {
+                Vector3 mouseWorldPos = SLGCoreUI.Instance.GetMouseFloorPosition();
+                if (mouseWorldPos != Vector3.zero)
+                {
+                    // 計算方向（用於角色旋轉）
+                    Vector3 direction = mouseWorldPos - characterCore.transform.position;
+                    direction.y = 0; // 保持水平
+                    
+                    // 旋轉整個 CharacterCore 面向目標（即時跟隨）
+                    if (direction != Vector3.zero)
+                    {
+                        Quaternion targetRotation = Quaternion.LookRotation(direction);
+                        characterCore.transform.rotation = targetRotation;
+                    }
+                }
+            }
+
             // 使用 Raycast 檢測滑鼠指向的 CombatEntity
             CombatEntity hoveredEntity = GetCombatEntityUnderMouse();
 
