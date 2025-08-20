@@ -623,6 +623,23 @@ namespace Wuxia.GameCore
 
             CombatSkill skill = character.skillsComponent.currentSelectedSkill;
 
+            // SingleTarget 模式驗證
+            if (skill.TargetingMode == SkillTargetingMode.SingleTarget)
+            {
+                CombatEntity target = character.skillsComponent.GetCurrentSingleTarget();
+                if (target == null)
+                {
+                    Debug.Log("SingleTarget 技能執行失敗：沒有選擇有效目標");
+                    return;
+                }
+                
+                if (!character.skillsComponent.IsSkillTargetValid())
+                {
+                    Debug.Log("SingleTarget 技能執行失敗：目標不合法（距離過遠或被遮擋）");
+                    return;
+                }
+            }
+
             Debug.Log($"在位置 {targetLocation} 執行技能: {skill.SkillName}");
 
             // 呼叫CharacterCore的ExecuteSkillAtLocation方法
