@@ -84,6 +84,13 @@ namespace Wuxia.GameCore
                 // 檢查是否到達目標
                 if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.3f)
                 {
+                    // 到達目標時，如果AP小於0.5，直接歸零
+                    if (characterResources.AP < 2.0f)
+                    {
+                        characterResources.AP = 0;
+                        characterResources.UpdateAPDisplay();
+                    }
+                    
                     // 到達目標，停止移動
                     StopMovement();
                 }
