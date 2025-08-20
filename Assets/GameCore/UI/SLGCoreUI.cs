@@ -303,6 +303,13 @@ namespace Wuxia.GameCore
             // 檢查滑鼠右鍵點擊
             if (Mouse.current.rightButton.wasPressedThisFrame)
             {
+                // 檢查角色是否正在移動，如果是則阻擋右鍵取消
+                if (IsCharacterMoving(currentCharacter))
+                {
+                    Debug.Log("角色正在移動中，無法取消動作模式");
+                    return;
+                }
+
                 // 如果在Move/Skill狀態，取消回到None狀態
                 if (currentCharacter.currentActionMode != CharacterCore.PlayerActionMode.None)
                 {
@@ -419,6 +426,13 @@ namespace Wuxia.GameCore
             if (currentCharacter.nowState != CharacterCore.CharacterCoreState.ControlState)
                 return;
 
+            // 檢查角色是否正在移動，如果是則阻擋模式切換
+            if (IsCharacterMoving(currentCharacter))
+            {
+                Debug.Log("角色正在移動中，無法切換動作模式");
+                return;
+            }
+
             // 移除舊的技能模式處理邏輯，因為現在由ExecuteSkillButton處理
 
             // 如果目前已經是該模式，則取消回到None；否則設定為該模式
@@ -505,10 +519,15 @@ namespace Wuxia.GameCore
             if (currentCharacter == null)
                 return;
 
-            // 更新按鈕顏色根據當前模式
-            UpdateButtonColor(moveButton, currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.Move);
+            // 檢查角色是否正在移動
+            bool isCharacterMoving = IsCharacterMoving(currentCharacter);
 
-            // 更新技能按鈕顏色
+            // 更新 Move 按鈕顏色（移動中時禁用）
+            bool moveButtonSelected = currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.Move;
+            bool moveButtonAvailable = !isCharacterMoving;
+            UpdateButtonColor(moveButton, moveButtonSelected, moveButtonAvailable);
+
+            // 更新技能按鈕顏色（移動中時全部禁用）
             for (int i = 0; i < skillButtons.Count && i < 4; i++)
             {
                 if (skillButtons[i] != null)
@@ -519,7 +538,8 @@ namespace Wuxia.GameCore
                         currentCharacter.skillsComponent.currentSelectedSkill ==
                         currentCharacter.skillsComponent.GetSkill(i);
                     bool canUse = currentCharacter.skillsComponent != null &&
-                                  currentCharacter.skillsComponent.CanUseSkillByIndex(i);
+                                  currentCharacter.skillsComponent.CanUseSkillByIndex(i) &&
+                                  !isCharacterMoving; // 移動中時技能不可用
                     UpdateButtonColor(skillButtons[i], isSelected, canUse);
                 }
             }
@@ -580,6 +600,13 @@ namespace Wuxia.GameCore
             CharacterCore currentCharacter = currentEntity.GetComponent<CharacterCore>();
             if (currentCharacter == null || currentCharacter.nowState != CharacterCore.CharacterCoreState.ControlState)
                 return;
+
+            // 檢查角色是否正在移動，如果是則阻擋技能切換
+            if (IsCharacterMoving(currentCharacter))
+            {
+                Debug.Log("角色正在移動中，無法切換技能模式");
+                return;
+            }
 
             // 檢查對應技能是否可用
             bool canUse = currentCharacter.skillsComponent != null &&
