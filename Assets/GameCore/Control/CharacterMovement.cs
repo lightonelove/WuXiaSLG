@@ -25,6 +25,11 @@ namespace Wuxia.GameCore
 
         [Header("預覽系統")] private bool isPreviewingPath = false; // 是否正在預覽路徑
         private float previewAPCost = 0f; // 預覽的AP消耗量
+        private float confirmedAPCost = 0f; // 確認要使用的AP消耗量（從預覽取得）
+        private float pathTotalLength = 0f; // 路徑總長度
+        private float pathTraveledDistance = 0f; // 已經走過的距離
+        private Vector3 lastMovementPosition; // 上一次移動的位置（用於計算已走距離）
+        private float movementStartAP = 0f; // 開始移動時的AP值（用於計算本次移動消耗）
 
         // 對其他組件的引用
         private CharacterCore characterCore;
@@ -84,11 +89,30 @@ namespace Wuxia.GameCore
                 }
                 else
                 {
-                    // 正在移動，消耗體力
-                    Vector2 nowPosition = new Vector2(transform.position.x, transform.position.z);
-                    float distance = Vector2.Distance(characterResources.lastPosition, nowPosition);
+                    // 計算本幀移動的距離
+                    float frameDistance = Vector3.Distance(lastMovementPosition, transform.position);
+                    pathTraveledDistance += frameDistance;
 
-                    characterResources.ConsumeAP(distance * 5.0f);
+                    // 基於路徑進度計算應該消耗的AP
+                    if (pathTotalLength > 0 && confirmedAPCost > 0)
+                    {
+                        // 使用預覽時確定的總AP消耗量，根據路徑進度平均分配
+                        float progressRatio = pathTraveledDistance / pathTotalLength;
+                        float targetAPConsumed = confirmedAPCost * progressRatio;
+                        // 計算本次移動已經消耗的AP（從移動開始時的AP算起）
+                        float currentMovementAPConsumed = movementStartAP - characterResources.AP;
+                        float apToConsume = targetAPConsumed - currentMovementAPConsumed;
+
+                        if (apToConsume > 0)
+                        {
+                            characterResources.ConsumeAP(apToConsume);
+                        }
+                    }
+                    else
+                    {
+                        // 如果沒有預覽資料，使用原本的計算方式（每單位距離5點AP）
+                        characterResources.ConsumeAP(frameDistance * 5.0f);
+                    }
 
                     // 如果AP耗盡，立即停止移動
                     if (characterResources.AP <= 0)
@@ -98,8 +122,8 @@ namespace Wuxia.GameCore
                         return;
                     }
 
-                    // 更新lastPosition為當前位置，以便下一幀計算
-                    characterResources.lastPosition = nowPosition;
+                    // 更新上一次的位置
+                    lastMovementPosition = transform.position;
 
                     // 更新動畫
                     if (characterCore != null && characterCore.CharacterControlAnimator != null)
@@ -163,6 +187,18 @@ namespace Wuxia.GameCore
                     targetPosition = actualDestination;
                     hasValidTarget = true;
 
+                    // 如果沒有預覽資料，現在計算
+                    if (confirmedAPCost == 0 || pathTotalLength == 0)
+                    {
+                        pathTotalLength = CalculatePathLength(path);
+                        confirmedAPCost = CalculateAPCost(pathTotalLength);
+                    }
+
+                    // 初始化移動追蹤變數
+                    pathTraveledDistance = 0f;
+                    lastMovementPosition = transform.position;
+                    movementStartAP = characterResources.AP; // 記錄開始移動時的AP值
+
                     // 重置預覽狀態，回到顯示實際AP值
                     if (isPreviewingPath)
                     {
@@ -196,6 +232,12 @@ namespace Wuxia.GameCore
             navMeshAgent.isStopped = true;
             isMoving = false;
             hasValidTarget = false;
+
+            // 重置移動相關變數
+            confirmedAPCost = 0f;
+            pathTotalLength = 0f;
+            pathTraveledDistance = 0f;
+            movementStartAP = 0f;
 
             // 停止動畫
             if (characterCore != null && characterCore.CharacterControlAnimator != null)
@@ -247,9 +289,13 @@ namespace Wuxia.GameCore
                     float pathLength = CalculatePathLength(path);
                     float apCost = CalculateAPCost(pathLength);
 
-                    // 設定預覽狀態
+                    // 設定預覽狀態，儲存預覽的AP消耗量
                     isPreviewingPath = true;
                     previewAPCost = apCost;
+                    
+                    // 儲存預覽的路徑資訊，供之後MoveTo使用
+                    confirmedAPCost = apCost;
+                    pathTotalLength = pathLength;
 
                     // 使用Proxy值更新UI（顯示預期的剩餘AP）
                     characterResources.ShowPreviewAP(apCost);
@@ -286,11 +332,13 @@ namespace Wuxia.GameCore
                 invalidPathLineRenderer.enabled = false;
             }
 
-            // 重置預覽狀態
+            // 重置預覽狀態和路徑資料
             if (isPreviewingPath)
             {
                 isPreviewingPath = false;
                 previewAPCost = 0f;
+                confirmedAPCost = 0f;
+                pathTotalLength = 0f;
 
                 if (characterResources != null)
                 {
