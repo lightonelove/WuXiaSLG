@@ -34,6 +34,9 @@ namespace Wuxia.GameCore
         // 對其他組件的引用
         private CharacterCore characterCore;
         private CharacterResources characterResources;
+        
+        // 延遲停止的協程參考
+        private Coroutine delayedStopCoroutine;
 
         void Awake()
         {
@@ -84,15 +87,18 @@ namespace Wuxia.GameCore
                 // 檢查是否到達目標
                 if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.3f)
                 {
-                    // 到達目標時，如果AP小於0.5，直接歸零
+                    // 到達目標時，如果AP小於2.0，直接歸零
                     if (characterResources.AP < 2.0f)
                     {
                         characterResources.AP = 0;
                         characterResources.UpdateAPDisplay();
                     }
                     
-                    // 到達目標，停止移動
-                    StopMovement();
+                    // 到達目標，延遲停止移動以確保 NavMeshAgent 完全停止
+                    if (delayedStopCoroutine == null)
+                    {
+                        delayedStopCoroutine = StartCoroutine(DelayedStopMovement());
+                    }
                 }
                 else
                 {
@@ -156,6 +162,12 @@ namespace Wuxia.GameCore
         public void MoveTo(Vector3 destination)
         {
             if (navMeshAgent == null || characterResources == null) return;
+            
+            // 如果正在移動中，阻擋新的移動指令
+            if (isMoving)
+            {
+                return;
+            }
 
             // 檢查是否有足夠AP
             if (characterResources.AP <= 0)
@@ -236,6 +248,13 @@ namespace Wuxia.GameCore
         {
             if (navMeshAgent == null) return;
 
+            // 如果有延遲停止的協程在運行，先停止它
+            if (delayedStopCoroutine != null)
+            {
+                StopCoroutine(delayedStopCoroutine);
+                delayedStopCoroutine = null;
+            }
+
             navMeshAgent.isStopped = true;
             isMoving = false;
             hasValidTarget = false;
@@ -254,6 +273,28 @@ namespace Wuxia.GameCore
 
             // 清除路徑顯示（包括兩個LineRenderer）
             ClearPathDisplay();
+        }
+        
+        /// <summary>
+        /// 延遲停止移動（等待 NavMeshAgent 完全停止）
+        /// </summary>
+        private IEnumerator DelayedStopMovement()
+        {
+            // 先停止 NavMeshAgent 但保持 isMoving 狀態
+            navMeshAgent.isStopped = true;
+            
+            // 等待一小段時間讓 NavMeshAgent 完全停止
+            yield return new WaitForSeconds(0.2f);
+            
+            // 確保 NavMeshAgent 速度已經降到接近 0
+            while (navMeshAgent.velocity.magnitude > 0.1f)
+            {
+                yield return null;
+            }
+            
+            // 現在可以安全地切換狀態了
+            StopMovement();
+            delayedStopCoroutine = null;
         }
 
         /// <summary>
