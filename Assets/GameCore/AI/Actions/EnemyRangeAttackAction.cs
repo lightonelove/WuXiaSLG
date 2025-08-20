@@ -181,10 +181,38 @@ namespace Wuxia.GameCore
                 
                 if (!hitTarget)
                 {
-                    hasLineOfSight = false;
-                    if (showDebugRaycast)
+                    // 檢查是否擊中了 DamageReceiver
+                    DamageReceiver hitDamageReceiver = hit.collider.GetComponent<DamageReceiver>();
+                    if (hitDamageReceiver != null)
                     {
-                        Debug.Log($"[AI] {enemy.gameObject.name} 到 {target.Name} 的視線被 {hit.collider.name} 阻擋");
+                        // 檢查這個 DamageReceiver 是否屬於我們的目標
+                        DamageReceiver targetDamageReceiver = target.GetComponent<DamageReceiver>();
+                        if (targetDamageReceiver != null && hitDamageReceiver == targetDamageReceiver)
+                        {
+                            // 擊中的是目標的 DamageReceiver，視線暢通
+                            hitTarget = true;
+                            if (showDebugRaycast)
+                            {
+                                Debug.Log($"[AI] {enemy.gameObject.name} Raycast 擊中目標 {target.Name} 的 DamageReceiver，視線暢通");
+                            }
+                        }
+                        else
+                        {
+                            // 擊中的是其他角色的 DamageReceiver，視線被阻擋
+                            if (showDebugRaycast)
+                            {
+                                Debug.Log($"[AI] {enemy.gameObject.name} 到 {target.Name} 的視線被其他角色的 DamageReceiver ({hit.collider.name}) 阻擋");
+                            }
+                        }
+                    }
+                    
+                    if (!hitTarget)
+                    {
+                        hasLineOfSight = false;
+                        if (showDebugRaycast)
+                        {
+                            Debug.Log($"[AI] {enemy.gameObject.name} 到 {target.Name} 的視線被 {hit.collider.name} 阻擋");
+                        }
                     }
                 }
             }
