@@ -15,6 +15,7 @@ namespace Wuxia.GameCore
         [Header("組件引用")] [SerializeField] private CombatEntity combatEntity; // 自動找到的 CombatEntity 引用
 
         [Header("指示器設定")] [SerializeField] private Color targetedColor = Color.white; // 被瞄準時的顏色
+        [SerializeField] private Color invalidSelectionColor = Color.red; // 無效選擇時的顏色
         [SerializeField] private bool affectChildMeshRenderers = true; // 是否影響子物件的 MeshRenderer
 
         [Header("Debug 設定")] [SerializeField] private bool enableDebugLog = false; // 是否啟用 Debug 輸出
@@ -30,6 +31,7 @@ namespace Wuxia.GameCore
 
         private List<MaterialColorInfo> materialInfos = new List<MaterialColorInfo>();
         private bool isTargeted = false;
+        private bool isInvalidSelection = false; // 是否為無效選擇狀態
         private int targeterCount = 0; // 記錄有多少個技能瞄準者
 
         void Awake()
@@ -150,14 +152,66 @@ namespace Wuxia.GameCore
         }
 
         /// <summary>
+        /// 當被滑鼠指向但條件無效時調用（顯示紅色指示器）
+        /// </summary>
+        public void OnInvalidSelection()
+        {
+            if (!isInvalidSelection)
+            {
+                isInvalidSelection = true;
+                ApplyInvalidSelectionEffect();
+
+                if (enableDebugLog)
+                {
+                    Debug.Log($"[TargetedIndicator] {gameObject.name} is now INVALID SELECTION");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 當不再為無效選擇時調用
+        /// </summary>
+        public void OnValidSelection()
+        {
+            if (isInvalidSelection)
+            {
+                isInvalidSelection = false;
+                RemoveTargetedEffect();
+
+                if (enableDebugLog)
+                {
+                    Debug.Log($"[TargetedIndicator] {gameObject.name} is no longer invalid selection");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 清除無效選擇狀態（專門用於 SingleTarget 模式）
+        /// </summary>
+        public void ClearInvalidSelection()
+        {
+            if (isInvalidSelection)
+            {
+                isInvalidSelection = false;
+                RemoveTargetedEffect();
+
+                if (enableDebugLog)
+                {
+                    Debug.Log($"[TargetedIndicator] {gameObject.name} invalid selection cleared");
+                }
+            }
+        }
+
+        /// <summary>
         /// 強制清除所有瞄準狀態
         /// </summary>
         public void ClearAllTargeting()
         {
             targeterCount = 0;
-            if (isTargeted)
+            if (isTargeted || isInvalidSelection)
             {
                 isTargeted = false;
+                isInvalidSelection = false;
                 RemoveTargetedEffect();
 
                 if (enableDebugLog)
@@ -182,6 +236,29 @@ namespace Wuxia.GameCore
                     if (info.modifiedMaterials[i] != null)
                     {
                         info.modifiedMaterials[i].color = targetedColor;
+                    }
+                }
+
+                // 應用修改後的材質
+                info.renderer.materials = info.modifiedMaterials;
+            }
+        }
+
+        /// <summary>
+        /// 應用無效選擇的視覺效果
+        /// </summary>
+        private void ApplyInvalidSelectionEffect()
+        {
+            foreach (MaterialColorInfo info in materialInfos)
+            {
+                if (info.renderer == null) continue;
+
+                // 將修改用的材質設定為無效選擇顏色
+                for (int i = 0; i < info.modifiedMaterials.Length; i++)
+                {
+                    if (info.modifiedMaterials[i] != null)
+                    {
+                        info.modifiedMaterials[i].color = invalidSelectionColor;
                     }
                 }
 
@@ -244,6 +321,30 @@ namespace Wuxia.GameCore
             {
                 ApplyTargetedEffect();
             }
+        }
+
+        /// <summary>
+        /// 設定無效選擇顏色
+        /// </summary>
+        /// <param name="color">新的無效選擇顏色</param>
+        public void SetInvalidSelectionColor(Color color)
+        {
+            invalidSelectionColor = color;
+
+            // 如果當前為無效選擇狀態，立即更新顏色
+            if (isInvalidSelection)
+            {
+                ApplyInvalidSelectionEffect();
+            }
+        }
+
+        /// <summary>
+        /// 獲取當前是否為無效選擇狀態
+        /// </summary>
+        /// <returns>是否為無效選擇</returns>
+        public bool IsInvalidSelection()
+        {
+            return isInvalidSelection;
         }
 
         /// <summary>

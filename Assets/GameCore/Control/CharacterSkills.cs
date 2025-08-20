@@ -74,6 +74,11 @@ namespace Wuxia.GameCore
         private System.Collections.Generic.HashSet<TargetedIndicator> currentTargets =
             new System.Collections.Generic.HashSet<TargetedIndicator>();
 
+        // SingleTarget 模式相關變數
+        private CombatEntity currentHoveredTarget = null; // 當前滑鼠指向的目標
+        private TargetedIndicator currentHoveredIndicator = null; // 當前目標的指示器
+        public LayerMask selectableLayerMask = (1 << 12); // Selectable 圖層遮罩 (Layer 12)
+
         // 對其他組件的引用
         public CharacterCore characterCore;
         public CharacterResources characterResources;
@@ -282,6 +287,9 @@ namespace Wuxia.GameCore
 
                     // 清除所有碰撞狀態（包括 Floor 碰撞和目標碰撞）
                     ClearAllCollidingObjects();
+                    
+                    // 清除 SingleTarget 狀態
+                    ClearSingleTargetState();
                 }
 
                 return;
@@ -297,6 +305,9 @@ namespace Wuxia.GameCore
                         break;
                     case SkillTargetingMode.StandStill:
                         UpdateStandStillTargeting();
+                        break;
+                    case SkillTargetingMode.SingleTarget:
+                        UpdateSingleTargetTargeting();
                         break;
                     default:
                         UpdateFrontDashTargeting(); // 預設使用 FrontDash
@@ -450,6 +461,194 @@ namespace Wuxia.GameCore
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 更新 SingleTarget 瞄準模式（滑鼠直接點擊目標）
+        /// </summary>
+        private void UpdateSingleTargetTargeting()
+        {
+            // 隱藏其他瞄準器
+            if (straightFrontTargetingAnchor != null && straightFrontTargetingAnchor.gameObject.activeSelf)
+            {
+                straightFrontTargetingAnchor.gameObject.SetActive(false);
+            }
+
+            if (standStillTargetingAnchor != null)
+            {
+                standStillTargetingAnchor.SetVisible(false);
+            }
+
+            // 檢查是否需要清除狀態（模式或技能改變時）
+            bool targetingModeChanged = lastTargetingMode != SkillTargetingMode.SingleTarget;
+            bool skillChanged = lastSelectedSkill != currentSelectedSkill;
+            bool needsClear = targetingModeChanged || skillChanged;
+
+            // 更新狀態追蹤
+            lastTargetingMode = SkillTargetingMode.SingleTarget;
+            lastSelectedSkill = currentSelectedSkill;
+
+            // 如果模式或技能改變，清除之前的狀態
+            if (needsClear)
+            {
+                ClearSingleTargetState();
+            }
+
+            // 使用 Raycast 檢測滑鼠指向的 CombatEntity
+            CombatEntity hoveredEntity = GetCombatEntityUnderMouse();
+
+            // 檢查目標是否改變
+            if (hoveredEntity != currentHoveredTarget)
+            {
+                // 清除舊目標的指示器（包括正常狀態和無效選擇狀態）
+                if (currentHoveredIndicator != null)
+                {
+                    currentHoveredIndicator.OnUntargeted();
+                    currentHoveredIndicator.ClearInvalidSelection();
+                    currentHoveredIndicator = null;
+                }
+
+                currentHoveredTarget = hoveredEntity;
+
+                // 設定新目標的指示器
+                if (currentHoveredTarget != null)
+                {
+                    TargetedIndicator indicator = currentHoveredTarget.GetComponent<TargetedIndicator>();
+                    if (indicator != null)
+                    {
+                        if (IsValidSingleTarget(currentHoveredTarget))
+                        {
+                            // 有效目標：顯示正常的瞄準效果
+                            indicator.OnTargeted();
+                            currentHoveredIndicator = indicator;
+                            isSkillTargetValid = true;
+                        }
+                        else
+                        {
+                            // 無效目標：顯示紅色的無效選擇效果
+                            indicator.OnInvalidSelection();
+                            currentHoveredIndicator = indicator;
+                            isSkillTargetValid = false;
+                        }
+                    }
+                }
+                else
+                {
+                    // 沒有目標
+                    isSkillTargetValid = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 清除 SingleTarget 狀態
+        /// </summary>
+        private void ClearSingleTargetState()
+        {
+            if (currentHoveredIndicator != null)
+            {
+                // 清除所有狀態（包括正常瞄準和無效選擇狀態）
+                currentHoveredIndicator.ClearAllTargeting();
+                currentHoveredIndicator = null;
+            }
+            currentHoveredTarget = null;
+            isSkillTargetValid = false;
+        }
+
+        /// <summary>
+        /// 使用 Raycast 檢測滑鼠指向的 CombatEntity（優先檢測 Selectable Layer）
+        /// </summary>
+        /// <returns>滑鼠指向的 CombatEntity，如果沒有則返回 null</returns>
+        private CombatEntity GetCombatEntityUnderMouse()
+        {
+            if (SLGCoreUI.Instance == null) return null;
+
+            // 從滑鼠位置發射射線
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+            // 首先查找 Selectable Layer 中最近的 CombatEntity
+            CombatEntity selectableEntity = null;
+            float selectableDistance = Mathf.Infinity;
+
+            // 然後查找其他層中最近的 CombatEntity (備用)
+            CombatEntity fallbackEntity = null;
+            float fallbackDistance = Mathf.Infinity;
+
+            foreach (RaycastHit hit in hits)
+            {
+                // 跳過 Floor 層
+                if (IsInLayerMask(hit.collider.gameObject, floorLayerMask))
+                    continue;
+
+                // 檢查是否為自己
+                if (IsSelfEntity(hit.collider))
+                    continue;
+
+                // 檢查是否為 Selectable Layer
+                bool isSelectableLayer = IsInLayerMask(hit.collider.gameObject, selectableLayerMask);
+
+                if (isSelectableLayer)
+                {
+                    // 在 Selectable Layer 中尋找 CombatEntity
+                    CombatEntity entity = hit.collider.GetComponentInParent<CombatEntity>();
+                    if (entity != null && hit.distance < selectableDistance)
+                    {
+                        selectableEntity = entity;
+                        selectableDistance = hit.distance;
+                    }
+                }
+                else
+                {
+                    // 在其他層中尋找 CombatEntity (備用)
+                    CombatEntity entity = hit.collider.GetComponentInParent<CombatEntity>();
+                    if (entity != null && hit.distance < fallbackDistance)
+                    {
+                        fallbackEntity = entity;
+                        fallbackDistance = hit.distance;
+                    }
+                }
+            }
+
+            // 優先返回 Selectable Layer 中的實體，如果沒有則返回備用實體
+            return selectableEntity != null ? selectableEntity : fallbackEntity;
+        }
+
+        /// <summary>
+        /// 檢查指定的 CombatEntity 是否為有效的單一目標
+        /// </summary>
+        /// <param name="entity">要檢查的 CombatEntity</param>
+        /// <returns>是否為有效目標</returns>
+        private bool IsValidSingleTarget(CombatEntity entity)
+        {
+            if (entity == null || currentSelectedSkill == null || characterCore == null)
+                return false;
+
+            // 檢查陣營是否可瞄準
+            if (!currentSelectedSkill.CanTargetFaction(entity.Faction))
+                return false;
+
+            // 檢查距離是否在技能範圍內
+            float distance = Vector3.Distance(characterCore.transform.position, entity.transform.position);
+            if (distance > currentSelectedSkill.SkillRange)
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// 獲取當前滑鼠指向的有效目標
+        /// </summary>
+        /// <returns>當前有效目標，如果沒有則返回 null</returns>
+        public CombatEntity GetCurrentSingleTarget()
+        {
+            if (currentSelectedSkill != null && 
+                currentSelectedSkill.TargetingMode == SkillTargetingMode.SingleTarget &&
+                isSkillTargetValid)
+            {
+                return currentHoveredTarget;
+            }
+            return null;
         }
 
 

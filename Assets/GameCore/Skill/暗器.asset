@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: "\u6697\u5668"
   animationName: Throwing
-  targetingMode: 1
-  skillRange: 5
+  targetingMode: 2
+  skillRange: 12
   isFixedRange: 0
   skillAngle: 60
   targetableFactions: 4

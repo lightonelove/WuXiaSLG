@@ -6,6 +6,7 @@ namespace Wuxia.GameCore
     {
         FrontDash, // 前方衝刺瞄準模式（目前實作的模式）
         StandStill, // 原地施放瞄準模式（待實作）
+        SingleTarget, // 單一目標瞄準模式（滑鼠直接點擊目標）
     }
 
     [CreateAssetMenu(fileName = "NewCombatSkill", menuName = "WuXiaSLG/CombatSkill", order = 1)]
