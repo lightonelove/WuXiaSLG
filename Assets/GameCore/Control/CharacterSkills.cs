@@ -78,6 +78,15 @@ namespace Wuxia.GameCore
         private CombatEntity currentHoveredTarget = null; // 當前滑鼠指向的目標
         private TargetedIndicator currentHoveredIndicator = null; // 當前目標的指示器
         public LayerMask selectableLayerMask = (1 << 12); // Selectable 圖層遮罩 (Layer 12)
+        
+        [Header("瞄準線設定")]
+        private LineRenderer sightLineRenderer; // 瞄準線 LineRenderer
+        private LayerMask lineOfSightBlockingLayers; // 阻擋視線的圖層遮罩
+        public Color clearSightLineColor = Color.green; // 視線暢通時的線條顏色
+        public Color blockedSightLineColor = Color.red; // 視線被阻擋時的線條顏色
+        public float sightLineWidth = 0.05f; // 瞄準線寬度
+        private Material clearSightMaterial; // 視線暢通時的材質
+        private Material blockedSightMaterial; // 視線被阻擋時的材質
 
         // 對其他組件的引用
         public CharacterCore characterCore;
@@ -143,6 +152,117 @@ namespace Wuxia.GameCore
             {
                 // 使用預設的 Floor 圖層
                 floorLayerMask = LayerMask.GetMask("Floor");
+            }
+            
+            // 初始化瞄準線 LineRenderer
+            InitializeSightLineRenderer();
+            
+            // 設定視線阻擋圖層（包含 Floor 和 DamageReceiver 相關圖層）
+            lineOfSightBlockingLayers = floorLayerMask | LayerMask.GetMask("Default");
+        }
+
+        /// <summary>
+        /// 初始化瞄準線 LineRenderer
+        /// </summary>
+        private void InitializeSightLineRenderer()
+        {
+            // 創建 LineRenderer 子物件
+            GameObject sightLineObject = new GameObject("SightLine");
+            sightLineObject.transform.SetParent(transform);
+            sightLineObject.transform.localPosition = Vector3.zero;
+            
+            sightLineRenderer = sightLineObject.AddComponent<LineRenderer>();
+            
+            // 創建兩種不同顏色的材質
+            clearSightMaterial = new Material(Shader.Find("Sprites/Default"));
+            clearSightMaterial.color = clearSightLineColor;
+            
+            blockedSightMaterial = new Material(Shader.Find("Sprites/Default"));
+            blockedSightMaterial.color = blockedSightLineColor;
+            
+            // 設定 LineRenderer 屬性
+            sightLineRenderer.material = clearSightMaterial; // 預設使用綠色材質
+            sightLineRenderer.startWidth = sightLineWidth;
+            sightLineRenderer.endWidth = sightLineWidth;
+            sightLineRenderer.positionCount = 2;
+            sightLineRenderer.useWorldSpace = true;
+            sightLineRenderer.enabled = false; // 初始時隱藏
+        }
+
+        /// <summary>
+        /// 檢查從角色到目標的視線是否被阻擋
+        /// </summary>
+        /// <param name="targetPosition">目標位置</param>
+        /// <returns>視線檢查結果：(isBlocked, hitPoint)</returns>
+        private (bool isBlocked, Vector3 hitPoint) CheckLineOfSight(Vector3 targetPosition)
+        {
+            if (characterCore == null) return (false, targetPosition);
+            
+            Vector3 startPosition = characterCore.transform.position + Vector3.up * 0.5f; // 稍微抬高起點
+            Vector3 endPosition = targetPosition + Vector3.up * 0.5f; // 稍微抬高終點
+            Vector3 direction = (endPosition - startPosition).normalized;
+            float distance = Vector3.Distance(startPosition, endPosition);
+            
+            // 發射射線檢查障礙物
+            RaycastHit hit;
+            if (Physics.Raycast(startPosition, direction, out hit, distance, lineOfSightBlockingLayers))
+            {
+                // 檢查擊中的是否為目標本身
+                CombatEntity hitEntity = hit.collider.GetComponentInParent<CombatEntity>();
+                if (hitEntity != null && hitEntity == currentHoveredTarget)
+                {
+                    // 擊中的是目標本身，視線暢通
+                    return (false, targetPosition);
+                }
+                
+                // 視線被其他物體阻擋
+                return (true, hit.point);
+            }
+            
+            // 視線暢通
+            return (false, targetPosition);
+        }
+
+        /// <summary>
+        /// 更新瞄準線顯示
+        /// </summary>
+        /// <param name="targetPosition">目標位置</param>
+        /// <param name="isBlocked">視線是否被阻擋</param>
+        /// <param name="hitPoint">射線擊中點</param>
+        private void UpdateSightLine(Vector3 targetPosition, bool isBlocked, Vector3 hitPoint)
+        {
+            if (sightLineRenderer == null || characterCore == null) return;
+            
+            Vector3 startPosition = characterCore.transform.position + Vector3.up * 0.5f;
+            
+            if (isBlocked)
+            {
+                // 視線被阻擋：使用紅色材質，顯示線條到阻擋點
+                if (blockedSightMaterial != null)
+                    sightLineRenderer.material = blockedSightMaterial;
+                sightLineRenderer.SetPosition(0, startPosition);
+                sightLineRenderer.SetPosition(1, hitPoint);
+            }
+            else
+            {
+                // 視線暢通：使用綠色材質，顯示線條到目標
+                if (clearSightMaterial != null)
+                    sightLineRenderer.material = clearSightMaterial;
+                sightLineRenderer.SetPosition(0, startPosition);
+                sightLineRenderer.SetPosition(1, targetPosition + Vector3.up * 0.5f);
+            }
+            
+            sightLineRenderer.enabled = true;
+        }
+
+        /// <summary>
+        /// 隱藏瞄準線
+        /// </summary>
+        private void HideSightLine()
+        {
+            if (sightLineRenderer != null)
+            {
+                sightLineRenderer.enabled = false;
             }
         }
 
@@ -516,26 +636,47 @@ namespace Wuxia.GameCore
                     TargetedIndicator indicator = currentHoveredTarget.GetComponent<TargetedIndicator>();
                     if (indicator != null)
                     {
+                        // 檢查視線並獲取結果用於顯示瞄準線
+                        var (isBlocked, hitPoint) = CheckLineOfSight(currentHoveredTarget.transform.position);
+                        
                         if (IsValidSingleTarget(currentHoveredTarget))
                         {
-                            // 有效目標：顯示正常的瞄準效果
+                            // 有效目標：顯示正常的瞄準效果和綠色瞄準線
                             indicator.OnTargeted();
                             currentHoveredIndicator = indicator;
                             isSkillTargetValid = true;
+                            UpdateSightLine(currentHoveredTarget.transform.position, false, Vector3.zero);
                         }
                         else
                         {
-                            // 無效目標：顯示紅色的無效選擇效果
+                            // 無效目標：顯示紅色的無效選擇效果和紅色瞄準線（如果被阻擋）
                             indicator.OnInvalidSelection();
                             currentHoveredIndicator = indicator;
                             isSkillTargetValid = false;
+                            UpdateSightLine(currentHoveredTarget.transform.position, isBlocked, hitPoint);
                         }
                     }
                 }
                 else
                 {
-                    // 沒有目標
+                    // 沒有目標，隱藏瞄準線
                     isSkillTargetValid = false;
+                    HideSightLine();
+                }
+            }
+            else if (currentHoveredTarget != null)
+            {
+                // 目標沒有改變，但每幀更新瞄準線（為了動態顯示視線變化）
+                var (isBlocked, hitPoint) = CheckLineOfSight(currentHoveredTarget.transform.position);
+                bool isValid = IsValidSingleTarget(currentHoveredTarget);
+                
+                if (isValid)
+                {
+                    UpdateSightLine(currentHoveredTarget.transform.position, false, Vector3.zero);
+                }
+                else
+                {
+                    UpdateSightLine(currentHoveredTarget.transform.position, isBlocked, hitPoint);
                 }
             }
         }
@@ -553,6 +694,9 @@ namespace Wuxia.GameCore
             }
             currentHoveredTarget = null;
             isSkillTargetValid = false;
+            
+            // 隱藏瞄準線
+            HideSightLine();
         }
 
         /// <summary>
@@ -631,6 +775,11 @@ namespace Wuxia.GameCore
             // 檢查距離是否在技能範圍內
             float distance = Vector3.Distance(characterCore.transform.position, entity.transform.position);
             if (distance > currentSelectedSkill.SkillRange)
+                return false;
+
+            // 檢查視線是否被阻擋
+            var (isBlocked, hitPoint) = CheckLineOfSight(entity.transform.position);
+            if (isBlocked)
                 return false;
 
             return true;
