@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70e9598c0f138964bab76601527812cb, type: 3}
   m_Name: "\u64F2\u6697\u5668"
   m_EditorClassIdentifier: 
-  skillName: "\u6697\u5668"
-  animationName: Throwing
+  skillName: "\u64F2\u6697\u5668"
+  animationName: "\u64F2\u6697\u5668"
   targetingMode: 2
   skillRange: 12
   isFixedRange: 0
