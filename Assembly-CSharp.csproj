@@ -477,6 +477,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Field Planner\Special\PR_BoundsSeparatePushOut.cs" />
     <Compile Include="Assets\FImpossible Creations\Shared Tools\Node FGraph\Node Base\FGraph_NodeBase.EditorRefreshing.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Core\Async Related\PlannerAsyncInstance.cs" />
+    <Compile Include="Assets\GameCore\AI\NavMeshRuntimeBaker.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Tile Designer\Tile Design\TileDesignPreset.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Generators Classes\Sub Generators\SimpleDungeonClasses.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Tile Designer\Tile Mesh Setup\TileMeshSetup.Class.ShapePoint.cs" />

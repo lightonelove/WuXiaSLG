@@ -8,6 +8,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Rules Logics/Placement/SR_OddCoordinateSum.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Rules Logics/Placement/SR_OddCoordinateSum.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FieldAsset/DarkFloorCell.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FieldAsset/DarkFloorCell.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FieldAsset/WhiteFloorCell.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FieldAsset/WhiteFloorCell.prefab" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +28,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Core/EnemyStrategy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Core/ICondition.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Core/IEnemyAction.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/NavMeshRuntimeBaker.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Character/Health.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Config/CombatConfig.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/AnimationRelativePos.cs" root0="FORCE_HIGHLIGHTING" />
@@ -171,7 +175,7 @@
       <workItem from="1755494315538" duration="4738000" />
       <workItem from="1755579276446" duration="16545000" />
       <workItem from="1755665650714" duration="18282000" />
-      <workItem from="1755751786765" duration="2883000" />
+      <workItem from="1755751786765" duration="5226000" />
     </task>
     <servers />
   </component>

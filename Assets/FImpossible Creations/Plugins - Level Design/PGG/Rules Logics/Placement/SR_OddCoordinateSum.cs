@@ -1,8 +1,9 @@
 using UnityEngine;
-using FIMSpace.Generating;
-using FIMSpace.Generating.Rules;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
-namespace GameCore.PGGRules
+namespace FIMSpace.Generating.Rules.Placement
 {
     /// <summary>
     /// 自定義 Spawn Rule：當 X 和 Z 座標相加為奇數時才允許生成
@@ -33,22 +34,9 @@ namespace GameCore.PGGRules
         {
             // 獲取當前 Cell 的座標
             Vector3Int cellCoords;
-            
-            if (UseWorldPosition)
-            {
-                // 使用世界座標
-                Vector3 worldPos = spawn.GetWorldPositionWithFullOffset();
-                cellCoords = new Vector3Int(
-                    Mathf.RoundToInt(worldPos.x),
-                    Mathf.RoundToInt(worldPos.y),
-                    Mathf.RoundToInt(worldPos.z)
-                );
-            }
-            else
-            {
-                // 使用格子座標
-                cellCoords = cell.Pos;
-            }
+
+            // 使用格子座標
+            cellCoords = cell.Pos;
             
             // 加上偏移量
             cellCoords += CoordinateOffset;
@@ -89,17 +77,17 @@ namespace GameCore.PGGRules
         /// <summary>
         /// 在編輯器中顯示額外資訊
         /// </summary>
-        public override void NodeFooter(UnityEditor.SerializedObject so, FieldModification mod)
+        public override void NodeFooter(SerializedObject so, FieldModification mod)
         {
             base.NodeFooter(so, mod);
             
             // 顯示範例說明
-            UnityEditor.EditorGUILayout.HelpBox(
+            EditorGUILayout.HelpBox(
                 "範例：\n" +
                 "• Cell(0,1): 0+1=1 (奇數) → 生成\n" +
                 "• Cell(1,1): 1+1=2 (偶數) → 不生成\n" +
                 "• Cell(2,3): 2+3=5 (奇數) → 生成",
-                UnityEditor.MessageType.Info);
+                MessageType.Info);
         }
 #endif
     }
