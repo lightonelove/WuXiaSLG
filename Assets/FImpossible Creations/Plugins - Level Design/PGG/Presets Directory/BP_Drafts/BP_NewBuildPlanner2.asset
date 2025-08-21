@@ -1,0 +1,442 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7088751324938896963
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d3514c4697cf541b2d647b9793695a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -1
+  NameID: 
+  wasCreated: 1
+  OutputConnections: []
+  InputConnections: []
+  NodePosition: {x: 690, y: 430}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 0
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: -4379926194258459096}
+  _editor_drawRule: 1
+--- !u!114 &-4379926194258459096
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27cf1ba038a8c7349bf700113ce0725f, type: 3}
+  m_Name: Room
+  m_EditorClassIdentifier: 
+  _EditorDrawShape: 1
+  _EditorDrawParameters: 1
+  _EditorDrawLogics: 1
+  _EditorDrawPostLogics: 0
+  _EditorSelectedShape: 0
+  _EditorSelectedVar: 0
+  _EditorDisplayGizmosOnPlan: 1
+  _Editor_OperationsFoldout: 0
+  savedValueVariables: []
+  Operations: []
+  ParentBuildPlanner: {fileID: 11400000}
+  ShapeGenerator: {fileID: 8104139250732287920}
+  DisableWholePlanner: 0
+  tag: 
+  proceduresBegin: {fileID: 2949111255599535042}
+  postProceduresBegin: {fileID: -7088751324938896963}
+  FProcedures:
+  - {fileID: 2949111255599535042}
+  - {fileID: -4357860202386546923}
+  FPostProcedures:
+  - {fileID: -7088751324938896963}
+  FSubGraphs: []
+  FVariables: []
+  ExposeShape: 1
+  FieldType: 0
+  DefaultFieldSetup: {fileID: 0}
+  DefaultPrefab: {fileID: 0}
+  Instances: 2
+  ExposeInstanceCount: 0
+  DisableCollision: 0
+  AlwaysPushOut: 1
+  AllowRotateBy90: 1
+  PreviewCellSize: {x: 1, y: 1, z: 1}
+  RoundToScale: 0
+  MaxRetries: 64
+  IndexOnPrint: 1
+  IndexOfDuplicate: -1
+  IndexOnPreset: 1
+  GraphView: 0
+--- !u!114 &-4357860202386546923
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 010157af7ddfc834cb4c2cd07a4dda0e, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -2147483646
+  NameID: 
+  wasCreated: 1
+  OutputConnections: []
+  InputConnections:
+  - ConnectionFromID: -2147483647
+    ConnectionToID: -2147483646
+    ConnectionFrom_AlternativeID: -1
+    ConnectionTo_AlternativeID: -1
+  NodePosition: {x: 695.0714, y: 515.7857}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 1
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: -4379926194258459096}
+  _editor_drawRule: 1
+  AlignTo:
+    ParentNodeID: -2147483646
+    PortID: 0
+    ParentNode: {fileID: -4357860202386546923}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 718.0714
+      y: 551.7857
+      width: 27
+      height: 27
+    PortType: 0
+    NameDisplayMode: 0
+    ValueDisplayMode: 4
+    SlotMode: 0
+    DisplayName: Align To
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections: []
+    initValueSet: 1
+    initialized: 0
+    UniquePlannerID: 0
+    Editor_DisplayVariableName: 1
+    Switch_DisconnectedReturnsByID: 1
+    Switch_MinusOneReturnsMainField: 1
+    Switch_ReturnOnlyFieldPlanners: 0
+    Switch_ReturnOnlyCheckers: 0
+    Switch_DontUsePlannerForCheckerReference: 0
+  FastCheck: 0
+  PushOut:
+    ParentNodeID: -2147483646
+    PortID: 1
+    ParentNode: {fileID: -4357860202386546923}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 718.0714
+      y: 591.7857
+      width: 27
+      height: 27
+    PortType: 0
+    NameDisplayMode: 0
+    ValueDisplayMode: 0
+    SlotMode: 0
+    DisplayName: Push Out
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections: []
+    initValueSet: 1
+    initialized: 0
+    Value: 0
+  SidesSpace:
+    ParentNodeID: -2147483646
+    PortID: 2
+    ParentNode: {fileID: -4357860202386546923}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 718.0714
+      y: 611.7857
+      width: 27
+      height: 27
+    PortType: 0
+    NameDisplayMode: 0
+    ValueDisplayMode: 0
+    SlotMode: 0
+    DisplayName: Sides Space
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections: []
+    initValueSet: 1
+    initialized: 0
+    Value: 0
+  ContactCell:
+    ParentNodeID: -2147483646
+    PortID: 0
+    ParentNode: {fileID: -4357860202386546923}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 847.0714
+      y: 633.7857
+      width: 27
+      height: 27
+    PortType: 1
+    NameDisplayMode: 0
+    ValueDisplayMode: 3
+    SlotMode: 0
+    DisplayName: Contact Cell
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections: []
+    initValueSet: 1
+    initialized: 0
+  AlignedToCell:
+    ParentNodeID: -2147483646
+    PortID: 1
+    ParentNode: {fileID: -4357860202386546923}
+    _E_LatestCorrectPortRect:
+      serializedVersion: 2
+      x: 847.0714
+      y: 653.7857
+      width: 27
+      height: 27
+    PortType: 1
+    NameDisplayMode: 0
+    ValueDisplayMode: 3
+    SlotMode: 0
+    DisplayName: Aligned To Cell
+    OverwriteName: 
+    _HelperFunctionsID: -1
+    ConnectionDisplay: 0
+    IsSendingSignals: 0
+    portConnections: []
+    initValueSet: 1
+    initialized: 0
+  ForceForwardAlign: 0
+--- !u!114 &-2467848318146127623
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 124b385a8cf08044d9f7353b2aec97a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
+  BranchLength:
+    Min: 5
+    Max: 7
+  TargetBranches:
+    Min: 4
+    Max: 5
+  BranchThickness:
+    Min: 1
+    Max: 1
+  SeparationFactor: 5
+  AvoidOverlaps: 1
+  MaxSize: {x: 10, y: 10, z: 10}
+  MinSize: {x: -10, y: -10, z: -10}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4674bb147e48a4f418520e682889d263, type: 3}
+  m_Name: BP_NewBuildPlanner2
+  m_EditorClassIdentifier: 
+  CustomInfo: 
+  BuildVariables: []
+  BuildLayers:
+  - Name: Build Layer
+    FieldPlanners:
+    - {fileID: 1056993416827635787}
+    - {fileID: -4379926194258459096}
+  AsyncGenerating: 0
+  Operations: []
+  _Editor_OperationsFoldout: 0
+--- !u!114 &1056993416827635787
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27cf1ba038a8c7349bf700113ce0725f, type: 3}
+  m_Name: Corridor
+  m_EditorClassIdentifier: 
+  _EditorDrawShape: 1
+  _EditorDrawParameters: 1
+  _EditorDrawLogics: 1
+  _EditorDrawPostLogics: 0
+  _EditorSelectedShape: 0
+  _EditorSelectedVar: 0
+  _EditorDisplayGizmosOnPlan: 1
+  _Editor_OperationsFoldout: 0
+  savedValueVariables: []
+  Operations: []
+  ParentBuildPlanner: {fileID: 11400000}
+  ShapeGenerator: {fileID: -2467848318146127623}
+  DisableWholePlanner: 0
+  tag: 
+  proceduresBegin: {fileID: 4224002336506588391}
+  postProceduresBegin: {fileID: 3371929494122251626}
+  FProcedures:
+  - {fileID: 4224002336506588391}
+  FPostProcedures:
+  - {fileID: 3371929494122251626}
+  FSubGraphs: []
+  FVariables: []
+  ExposeShape: 1
+  FieldType: 0
+  DefaultFieldSetup: {fileID: 0}
+  DefaultPrefab: {fileID: 0}
+  Instances: 1
+  ExposeInstanceCount: 0
+  DisableCollision: 0
+  AlwaysPushOut: 1
+  AllowRotateBy90: 1
+  PreviewCellSize: {x: 1, y: 1, z: 1}
+  RoundToScale: 0
+  MaxRetries: 64
+  IndexOnPrint: 0
+  IndexOfDuplicate: -1
+  IndexOnPreset: 0
+  GraphView: 0
+--- !u!114 &2949111255599535042
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d3514c4697cf541b2d647b9793695a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -2147483647
+  NameID: 
+  wasCreated: 1
+  OutputConnections:
+  - ConnectionFromID: -2147483647
+    ConnectionToID: -2147483646
+    ConnectionFrom_AlternativeID: -1
+    ConnectionTo_AlternativeID: -1
+  InputConnections: []
+  NodePosition: {x: 690, y: 430}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 0
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: -4379926194258459096}
+  _editor_drawRule: 1
+--- !u!114 &3371929494122251626
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d3514c4697cf541b2d647b9793695a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -1
+  NameID: 
+  wasCreated: 1
+  OutputConnections: []
+  InputConnections: []
+  NodePosition: {x: 690, y: 430}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 0
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: 1056993416827635787}
+  _editor_drawRule: 1
+--- !u!114 &4224002336506588391
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d3514c4697cf541b2d647b9793695a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TriggerConnectionDrawMode: 0
+  IndividualID: -2147483647
+  NameID: 
+  wasCreated: 1
+  OutputConnections: []
+  InputConnections: []
+  NodePosition: {x: 692.8572, y: 435.14288}
+  NodeDrawOffset: {x: 0, y: 0}
+  ResizedScale: {x: 200, y: 140}
+  _EditorInContainedRange: []
+  IsContainedBy: {fileID: 0}
+  _EditorFoldout: 0
+  _EditorCollapse: 0
+  Enabled: 1
+  ParentPlanner: {fileID: 0}
+  ParentNodesContainer: {fileID: 1056993416827635787}
+  _editor_drawRule: 1
+--- !u!114 &8104139250732287920
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c79c7a2539c4104cb6be2cba7f34193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
+  Width: 5
+  YLevels: 1
+  Depth: 4
+  OriginInCenter: 0
