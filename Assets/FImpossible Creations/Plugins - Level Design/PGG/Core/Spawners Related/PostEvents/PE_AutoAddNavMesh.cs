@@ -99,15 +99,21 @@ namespace FIMSpace.Generating
                     navMeshSurface.collectObjects = CollectObjects;
                     navMeshSurface.layerMask = LayerMask;
                     navMeshSurface.useGeometry = UseGeometry;
-                    
-                    // 立即烘焙 NavMesh
-                    navMeshSurface.BuildNavMesh();
-                    Debug.Log($"[PE_AutoAddNavMesh] NavMesh 已烘焙完成");
                 }
                 else
                 {
-                    Debug.Log($"[PE_AutoAddNavMesh] {container.name} 已有 NavMeshSurface 組件");
+                    Debug.Log($"[PE_AutoAddNavMesh] {container.name} 已有 NavMeshSurface 組件，重新設定參數");
+                    
+                    // 即使組件存在，也要更新設定參數（以防使用者改變了設定）
+                    navMeshSurface.agentTypeID = AgentTypeID;
+                    navMeshSurface.collectObjects = CollectObjects;
+                    navMeshSurface.layerMask = LayerMask;
+                    navMeshSurface.useGeometry = UseGeometry;
                 }
+                
+                // 無論組件是新增還是已存在，都要重新烘焙 NavMesh
+                navMeshSurface.BuildNavMesh();
+                Debug.Log($"[PE_AutoAddNavMesh] NavMesh 已重新烘焙完成");
             }
             
             // 添加 NavMeshRuntimeBaker 組件

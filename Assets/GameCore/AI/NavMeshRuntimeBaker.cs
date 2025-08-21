@@ -44,6 +44,41 @@ public class NavMeshRuntimeBaker : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// 強制重新烘焙 NavMesh（清除舊資料後重新烘焙）
+    /// </summary>
+    [Button("強制重新烘焙")]
+    public void ForceBake()
+    {
+        if (surface == null)
+        {
+            surface = GetComponent<NavMeshSurface>();
+        }
+        
+        if (surface == null)
+        {
+            Debug.LogError("[NavMeshRuntimeBaker] 找不到 NavMeshSurface 組件！");
+            return;
+        }
+        
+        // 先清除現有的 NavMesh 資料
+        surface.RemoveData();
+        
+        // 等待一幀後重新烘焙
+        StartCoroutine(ForceBakeCoroutine());
+    }
+    
+    private System.Collections.IEnumerator ForceBakeCoroutine()
+    {
+        yield return null; // 等待一幀
+        
+        if (surface != null)
+        {
+            surface.BuildNavMesh();
+            Debug.Log($"[NavMeshRuntimeBaker] NavMesh 已強制重新烘焙完成 - {gameObject.name}");
+        }
+    }
+    
     private IEnumerator BakeWithDelay()
     {
         yield return new WaitForSeconds(bakeDelay);

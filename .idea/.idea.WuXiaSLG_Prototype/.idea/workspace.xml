@@ -6,11 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Presets Directory/FS_Drafts/TestField.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Presets Directory/FS_Drafts/TestField.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FieldAsset/DarkFloorCell.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FieldAsset/DarkFloorCell.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FieldAsset/WhiteFloorCell.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FieldAsset/WhiteFloorCell.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/NavMeshRuntimeBaker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/NavMeshRuntimeBaker.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/PGG_TestScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/PGG_TestScene.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +176,7 @@
       <workItem from="1755494315538" duration="4738000" />
       <workItem from="1755579276446" duration="16545000" />
       <workItem from="1755665650714" duration="18282000" />
-      <workItem from="1755751786765" duration="7644000" />
+      <workItem from="1755751786765" duration="8933000" />
     </task>
     <servers />
   </component>

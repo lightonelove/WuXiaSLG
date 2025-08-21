@@ -99,6 +99,40 @@ MonoBehaviour:
   OffsetZ: 0
   Every: 2
   CheckForWalls: 0
+--- !u!114 &-6555443059293175450
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 671fd9c659a53a04eb310656f11c9125, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TemporaryContainer: {fileID: 0}
+  Enabled: 1
+  ModTag: 
+  DrawMeshAndBox: 0
+  Combine: 0
+  RunEmittersIfContains: 0
+  DrawSetupFor: 0
+  OStamp: {fileID: 0}
+  DrawObjectStamps: 1
+  OMultiStamp: {fileID: 0}
+  PrefabsList: []
+  DrawMultiObjectStamps: 1
+  Spawners: []
+  SubSpawners: []
+  VariantOf: {fileID: 0}
+  _editor_drawStamp: 1
+  _editor_drawSpawners: 1
+  _editor_drawGlobalRules: 0
+  _editor_drawModPackRules: 0
+  _editor_shareSelected: 0
+  ParentPreset: {fileID: 11400000}
+  ParentPack: {fileID: 2226408485270133224}
 --- !u!114 &-6513223419437024745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,7 +416,13 @@ MonoBehaviour:
   SelfInjections: []
   disabledMods: []
   OnSpawnProcessors: []
-  CustomPostEvents: []
+  CustomPostEvents:
+  - Enabled: 1
+    Foldout: 1
+    PostEvent: {fileID: 11400000, guid: 3b074ca37fa8d6f4ebedb674085bb71d, type: 2}
+    variables: []
+    customStringList: []
+    customObjectList: []
   AddReflectionProbes: 0
   MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f, type: 2}
   AddMultipleProbes: 0
@@ -450,15 +490,15 @@ MonoBehaviour:
   OMultiStamp: {fileID: 0}
   PrefabsList:
   - Prefab: {fileID: 3578197552732280354, guid: 1dd1d0769c99bda4b91b604ac3545431, type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 4437969965631864071, guid: 1dd1d0769c99bda4b91b604ac3545431, type: 3}
     subID: 0
     _refMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 4437969965631864071, guid: 1dd1d0769c99bda4b91b604ac3545431, type: 3}
   - Prefab: {fileID: 4313796076316519695, guid: 56ed40e41bbf7304c87ddb01d69b7574, type: 3}
-    MainCollider: {fileID: 0}
+    MainCollider: {fileID: 7295104921267447422, guid: 56ed40e41bbf7304c87ddb01d69b7574, type: 3}
     subID: 0
     _refMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-    _refCol: {fileID: 0}
+    _refCol: {fileID: 7295104921267447422, guid: 56ed40e41bbf7304c87ddb01d69b7574, type: 3}
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -512,7 +552,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: 2226408485270133224}
 --- !u!114 &1272846876224067132
 MonoBehaviour:
@@ -556,7 +596,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   UseWorldPosition: 0
   CoordinateOffset: {x: 0, y: 0, z: 0}
@@ -581,9 +621,9 @@ MonoBehaviour:
   CustomSeed: 0
   ModPackType: 0
   TagForAllSpawners: 
-  CombineSpawns: 0
+  CombineSpawns: 1
   Variables: []
-  CallOnAllMod: {fileID: 0}
+  CallOnAllMod: {fileID: -6555443059293175450}
   CallOnAllSpawners:
     Enabled: 0
     Name: 
@@ -787,7 +827,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
+  CellAllow: 0
   AllConditionsMet: 1
   UseWorldPosition: 0
   CoordinateOffset: {x: 0, y: 0, z: 0}
