@@ -239,6 +239,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Collision\SR_SpawnUntilCollides.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Components\Minimap Utilities\PGG_MinimapDisplayController.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Core\FieldPlanner.InternalValVariables.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Spawners Related\PostEvents\PE_AutoAddNavMesh.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Generators Classes\OutlineFillHelper.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Build Setup\PR_GetBuildVariable.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Cells\Actions\PR_IsAnyCellInPosition.cs" />
@@ -667,6 +668,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Math\Algebra\PR_OneMinus.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Utilities\QuarterRotationCheck.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Tile Designer\Tile Mesh Setup\TileMeshSetup.Params.cs" />
+    <Compile Include="Assets\GameCore\Map\RuntimeMapGenerator.cs" />
     <Compile Include="Assets\GameCore\AI\Actions\EnemyMoveAction.cs" />
     <Compile Include="Assets\GameCore\Control\ClonedCombatEntity.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Field Planner\Shape\PR_ShapeSubtract.cs" />

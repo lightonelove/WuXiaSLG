@@ -228,7 +228,7 @@ MonoBehaviour:
     Tooltip: 
 --- !u!114 &-2959876880071766035
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -309,7 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b6c361108247f045b5087f48c0c7951, type: 3}
   m_Name: TestField
   m_EditorClassIdentifier: 
-  CellSize: 2
+  CellSize: 1
   NonUniformSize: 0
   NonUniformCellSize: {x: 2, y: 2, z: 2}
   InfoText: Here write custom note about FieldSetup
@@ -462,12 +462,12 @@ MonoBehaviour:
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
-    Name: WhiteFloorCell_1
+    Name: WhiteFloorCell
     SpawnerTag: 
     StampPrefabID: 0
     Parent: {fileID: 640095411961385302}
     Rules:
-    - {fileID: -2959876880071766035}
+    - {fileID: 6473007901989805136}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -484,56 +484,12 @@ MonoBehaviour:
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 1
   - Enabled: 1
-    Name: WhiteFloorCell_2
-    SpawnerTag: 
-    StampPrefabID: 0
-    Parent: {fileID: 640095411961385302}
-    Rules:
-    - {fileID: 6085750844493533943}
-    Mode: 0
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 0
-    Repeat: 1
-    DontInheritRotations: 0
-    SwitchSpawnedToStatic: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 1
-  - Enabled: 1
-    Name: DarkFloorCell_1
+    Name: DarkFloorCell
     SpawnerTag: 
     StampPrefabID: 1
     Parent: {fileID: 640095411961385302}
     Rules:
-    - {fileID: 1272846876224067132}
-    Mode: 0
-    CellCheckMode: 0
-    _Editor_SpawnerAdvancedOptionsFoldout: 0
-    OnScalledGrid: 0
-    Repeat: 1
-    DontInheritRotations: 0
-    SwitchSpawnedToStatic: 0
-    MultipleToSpawn: 0
-    UseGlobalRules: 1
-    UseParentPackageRules: 1
-    _wasEnablingGlobalRules: 1
-    ScaleAccess: 1
-    DisplayPreviewGUI: 1
-    IsSubSpawner: 0
-    _EditorDisplaySpawnerHeader: 1
-  - Enabled: 1
-    Name: DarkFloorCell_2
-    SpawnerTag: 
-    StampPrefabID: 1
-    Parent: {fileID: 640095411961385302}
-    Rules:
-    - {fileID: -1743095079086966126}
+    - {fileID: 1545494691148230851}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -555,12 +511,12 @@ MonoBehaviour:
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 2
+  _editor_shareSelected: 0
   ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 2226408485270133224}
 --- !u!114 &1272846876224067132
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -582,6 +538,29 @@ MonoBehaviour:
   OffsetZ: 1
   Every: 2
   CheckForWalls: 0
+--- !u!114 &1545494691148230851
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7e4f8a9c3d2e5f6a8b9c1d2e3f4a5b6, type: 3}
+  m_Name: 'SR_OddCoordinateSum-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  UseWorldPosition: 0
+  CoordinateOffset: {x: 0, y: 0, z: 0}
+  InvertCondition: 0
 --- !u!114 &2226408485270133224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -768,7 +747,7 @@ MonoBehaviour:
     Tooltip: 
 --- !u!114 &6085750844493533943
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -790,6 +769,29 @@ MonoBehaviour:
   OffsetZ: 1
   Every: 2
   CheckForWalls: 0
+--- !u!114 &6473007901989805136
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7e4f8a9c3d2e5f6a8b9c1d2e3f4a5b6, type: 3}
+  m_Name: 'SR_OddCoordinateSum-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  UseWorldPosition: 0
+  CoordinateOffset: {x: 0, y: 0, z: 0}
+  InvertCondition: 1
 --- !u!114 &8892986702789720409
 MonoBehaviour:
   m_ObjectHideFlags: 0
