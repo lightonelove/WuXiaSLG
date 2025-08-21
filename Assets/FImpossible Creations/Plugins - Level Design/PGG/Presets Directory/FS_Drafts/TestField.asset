@@ -1,5 +1,302 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8981504538375578922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9078b826195bff47856a06442080ad0, type: 3}
+  m_Name: 'SR_IfRotated-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  RotationFrom: -90
+  RotationTo: 90
+--- !u!114 &-8507512226135693551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6b5b89b5b20c1419ae6725f516ec6f, type: 3}
+  m_Name: 'SR_AllowEveryFew-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  OffsetX: 1
+  OffsetZ: 1
+  Every: 2
+  CheckForWalls: 0
+--- !u!114 &-8220161631270291920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c46bad85e11ef44b81af1e5e1391dfc, type: 3}
+  m_Name: 'SR_CellPosition-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  Mode: 7
+  Axis: 0
+  Exact: 2
+  Offset: 0
+  Range: {x: -3, y: 3}
+  ValueMulVariable:
+    name: Spawn Count Multiplier
+    requiredType: 1
+    Tooltip: 
+--- !u!114 &-7337225964550259533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6b5b89b5b20c1419ae6725f516ec6f, type: 3}
+  m_Name: 'SR_AllowEveryFew-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  OffsetX: 1
+  OffsetZ: 0
+  Every: 2
+  CheckForWalls: 0
+--- !u!114 &-6513223419437024745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c46bad85e11ef44b81af1e5e1391dfc, type: 3}
+  m_Name: 'SR_CellPosition-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Mode: 0
+  Axis: 1
+  Exact: 0
+  Offset: 0
+  Range: {x: -3, y: 3}
+  ValueMulVariable:
+    name: 
+    requiredType: 1
+    Tooltip: 
+--- !u!114 &-5884130892724966020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9327e64f60ac33a4fa5e7efebb9176fb, type: 3}
+  m_Name: 'SR_GetCoords-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  GetFromTagged: 
+  CheckMode: 0
+  WorldOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 0
+  DirectionalOffset: {x: 0, y: 0, z: 0}
+  StackOffset: 0
+  RotationEulerOffset: {x: 0, y: 0, z: 0}
+  GetScale: 0
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomOffsets: {x: 0, y: 0, z: 0}
+  RandomLocalRotation: {x: 0, y: 0, z: 0}
+  RandomScale: {x: 0, y: 0, z: 0}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  MultiplyGetted: {x: 1, y: 1, z: 1}
+  DontSpawnIfNoTagged: 0
+  RemoveTagged: 0
+  TransformLikeChild: 0
+  GetRandomIfMulti: 0
+  RunOnRepetition: 0
+  HelperMode: 0
+  _DrawOffsets: 1
+  _DrawRandomization: 0
+  _DrawAdditionals: 0
+--- !u!114 &-5186573231233159776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 749e2955633fe5c469e8987607e107ed, type: 3}
+  m_Name: 'SR_CompareVariable-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  VariableMustBe: 2
+  ThisValue: 1
+  CompareVariable:
+    name: 
+    requiredType: 1
+    Tooltip: 
+--- !u!114 &-4235903083601384781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c46bad85e11ef44b81af1e5e1391dfc, type: 3}
+  m_Name: 'SR_CellPosition-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  Mode: 0
+  Axis: 0
+  Exact: 2
+  Offset: 0
+  Range: {x: -3, y: 3}
+  ValueMulVariable:
+    name: 
+    requiredType: 1
+    Tooltip: 
+--- !u!114 &-2959876880071766035
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6b5b89b5b20c1419ae6725f516ec6f, type: 3}
+  m_Name: 'SR_AllowEveryFew-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  OffsetX: 1
+  OffsetZ: 0
+  Every: 2
+  CheckForWalls: 0
+--- !u!114 &-2379074254769911279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d60eb5f2bb8d52849961c19a7d3fabf2, type: 3}
+  m_Name: 'SR_GridSpecifics-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Condition: 2
+  ConditionMetAxis: 3
+  SizeRange: 5
+--- !u!114 &-1743095079086966126
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6b5b89b5b20c1419ae6725f516ec6f, type: 3}
+  m_Name: 'SR_AllowEveryFew-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  OffsetX: 0
+  OffsetZ: 0
+  Every: 2
+  CheckForWalls: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,6 +400,32 @@ MonoBehaviour:
     GenerateRelations: 1
     GroupUpToSize: 8
     MaxGroupDistance: 8
+--- !u!114 &339390123681548863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 749e2955633fe5c469e8987607e107ed, type: 3}
+  m_Name: 'SR_CompareVariable-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  VariableMustBe: 2
+  ThisValue: 1
+  CompareVariable:
+    name: Spawn Count Multiplier
+    requiredType: 1
+    Tooltip: 
 --- !u!114 &640095411961385302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,18 +448,140 @@ MonoBehaviour:
   OStamp: {fileID: 0}
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
-  PrefabsList: []
+  PrefabsList:
+  - Prefab: {fileID: 3578197552732280354, guid: 1dd1d0769c99bda4b91b604ac3545431, type: 3}
+    MainCollider: {fileID: 0}
+    subID: 0
+    _refMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+    _refCol: {fileID: 0}
+  - Prefab: {fileID: 4313796076316519695, guid: 56ed40e41bbf7304c87ddb01d69b7574, type: 3}
+    MainCollider: {fileID: 0}
+    subID: 0
+    _refMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+    _refCol: {fileID: 0}
   DrawMultiObjectStamps: 1
-  Spawners: []
+  Spawners:
+  - Enabled: 1
+    Name: WhiteFloorCell_1
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: 640095411961385302}
+    Rules:
+    - {fileID: -2959876880071766035}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  - Enabled: 1
+    Name: WhiteFloorCell_2
+    SpawnerTag: 
+    StampPrefabID: 0
+    Parent: {fileID: 640095411961385302}
+    Rules:
+    - {fileID: 6085750844493533943}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  - Enabled: 1
+    Name: DarkFloorCell_1
+    SpawnerTag: 
+    StampPrefabID: 1
+    Parent: {fileID: 640095411961385302}
+    Rules:
+    - {fileID: 1272846876224067132}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
+  - Enabled: 1
+    Name: DarkFloorCell_2
+    SpawnerTag: 
+    StampPrefabID: 1
+    Parent: {fileID: 640095411961385302}
+    Rules:
+    - {fileID: -1743095079086966126}
+    Mode: 0
+    CellCheckMode: 0
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 1
   _editor_drawSpawners: 1
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
-  _editor_shareSelected: 0
+  _editor_shareSelected: 2
   ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: 2226408485270133224}
+--- !u!114 &1272846876224067132
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6b5b89b5b20c1419ae6725f516ec6f, type: 3}
+  m_Name: 'SR_AllowEveryFew-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  OffsetX: 1
+  OffsetZ: 1
+  Every: 2
+  CheckForWalls: 0
 --- !u!114 &2226408485270133224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,3 +628,194 @@ MonoBehaviour:
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 0
   _EditorDisplayCallOnAll: 0
+--- !u!114 &4473400955338417609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
+  m_Name: 'SR_CellNeightbours-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  CheckedCellsMustBe: 1
+  NeightbourNeeds: 0
+  occupiedByTag: 
+  CheckMode: 0
+  DirectCheck: 0
+  OffsetOrigin: {x: 0, y: 0, z: 0}
+  placement:
+    lu: 0
+    u: 0
+    ru: 0
+    l: 0
+    m: 0
+    r: 0
+    ld: 0
+    d: 0
+    rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
+  quartRotor:
+    q1: 1
+    q2: 0
+    q3: 0
+    q4: 0
+  OverrideRotation: 1
+  initRotation: 0
+  rotorEff: 90
+  spawnOn: 5
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  GetNeightbourPos: 0
+  GetNeightbourRot: 0
+  GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
+--- !u!114 &4674867840658498247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5698d953b70b3542a61cfe5d4517022, type: 3}
+  m_Name: 'SR_CellOperation-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Operation: 0
+  TargetCellOffset: {x: 0, y: 0, z: 0}
+  OffsetWithRotation: 0
+  PreventSpawn: 
+  ToClearTag: 
+  CheckMode: 0
+  RotationOptions: 0
+  RotationTolerance: 0
+  OnRotations: []
+  checkSetup:
+    UseRotor: 1
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+  drawAdditionals: 1
+--- !u!114 &5488326505113292250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 094c68a3bf2d9a349851f593cd6a24eb, type: 3}
+  m_Name: 'SR_CellDistance-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  OffsetCellMode: 0
+  OffsetCell: {x: 0, y: 0, z: 0}
+  DistanceMustBe: 1
+  IgnoreSelf: 1
+  DistanceToTagged: 
+  CheckMode: 0
+  Distance: 3
+  MeasureIn: 1
+  DistanceMulVariable:
+    name: 
+    requiredType: 1
+    Tooltip: 
+--- !u!114 &6085750844493533943
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6b5b89b5b20c1419ae6725f516ec6f, type: 3}
+  m_Name: 'SR_AllowEveryFew-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  OffsetX: 0
+  OffsetZ: 1
+  Every: 2
+  CheckForWalls: 0
+--- !u!114 &8892986702789720409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c46bad85e11ef44b81af1e5e1391dfc, type: 3}
+  m_Name: 'SR_CellPosition-[Floor]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  Mode: 7
+  Axis: 0
+  Exact: 0
+  Offset: 0
+  Range: {x: -3, y: 3}
+  ValueMulVariable:
+    name: 
+    requiredType: 1
+    Tooltip: 

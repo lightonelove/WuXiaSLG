@@ -580,6 +580,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Tile Designer\Tile Designer Window\TileDesignerWindow.GUI.Panels.cs" />
     <Compile Include="Assets\GameCore\Control\CombatCore.cs" />
     <Compile Include="Assets\FImpossible Creations\Shared Tools\Node FGraph\Node Port Types\FSGr_BoolPort.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Placement\SR_OddCoordinateSum.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Utilities\PR_Rewire.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Generators Classes\Checkers 3D\CheckerField3D.Manage.cs" />
     <Compile Include="Assets\GameCore\Config\CombatConfig.cs" />
