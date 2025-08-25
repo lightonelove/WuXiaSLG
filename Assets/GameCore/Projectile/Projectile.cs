@@ -45,6 +45,10 @@ namespace Wuxia.GameCore
         [Tooltip("縮放動畫")]
         [SerializeField] private AnimationCurve scaleCurve = AnimationCurve.Linear(0, 1, 1, 1);
         
+        [Header("反彈設定")]
+        [Tooltip("最大反彈次數（0 = 無限制）")]
+        [SerializeField] private int maxReflections = 3;
+        
         // 內部變數
         private Vector3 startPosition;
         private Vector3 targetPosition;
@@ -367,6 +371,16 @@ namespace Wuxia.GameCore
         }
         
         /// <summary>
+        /// 因達到最大反彈次數而銷毀投射物
+        /// </summary>
+        private void DestroyProjectileOnMaxReflections()
+        {
+            Debug.Log($"[Projectile] 投射物達到最大反彈次數限制 ({maxReflections})，自動銷毀");
+            OnDestroy?.Invoke(this);
+            Destroy(gameObject);
+        }
+        
+        /// <summary>
         /// 投射物反彈 - 朝反方向飛行並更換陣營
         /// </summary>
         /// <param name="newOwner">新的擁有者 CombatEntity</param>
@@ -376,6 +390,14 @@ namespace Wuxia.GameCore
             if (newOwner == null)
             {
                 Debug.LogWarning($"[Projectile] ReflectProjectile 的 newOwner 為 null");
+                return;
+            }
+            
+            // 檢查反彈次數限制
+            if (maxReflections > 0 && reflectionCount >= maxReflections)
+            {
+                Debug.Log($"[Projectile] 投射物已達到最大反彈次數 ({maxReflections})，直接銷毀");
+                DestroyProjectileOnMaxReflections();
                 return;
             }
             
@@ -412,7 +434,7 @@ namespace Wuxia.GameCore
             transform.rotation = Quaternion.LookRotation(newDirection);
             CalculateTravelTime();
             
-            Debug.Log($"[Projectile] 投射物反彈！第 {reflectionCount} 次反彈，新擁有者: {newOwner.Name}，反彈方向: {newDirection}");
+            Debug.Log($"[Projectile] 投射物反彈！第 {reflectionCount}/{maxReflections} 次反彈，新擁有者: {newOwner.Name}，反彈方向: {newDirection}");
         }
         
         /// <summary>
@@ -518,6 +540,24 @@ namespace Wuxia.GameCore
         public int GetReflectionCount()
         {
             return reflectionCount;
+        }
+        
+        /// <summary>
+        /// 取得最大反彈次數
+        /// </summary>
+        /// <returns>最大反彈次數</returns>
+        public int GetMaxReflections()
+        {
+            return maxReflections;
+        }
+        
+        /// <summary>
+        /// 設定最大反彈次數
+        /// </summary>
+        /// <param name="max">最大反彈次數（0 = 無限制）</param>
+        public void SetMaxReflections(int max)
+        {
+            maxReflections = Mathf.Max(0, max);
         }
     }
 }
