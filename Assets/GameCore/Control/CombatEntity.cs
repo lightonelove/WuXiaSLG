@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using GameCore.Stats;
 
 /// <summary>
 /// 戰鬥實體陣營類型
@@ -29,6 +30,9 @@ namespace Wuxia.GameCore
         [Header("陣營設定")] 
         public CombatEntityFaction Faction = CombatEntityFaction.Neutral;
         
+        [Header("屬性設定")]
+        [Tooltip("戰鬥實體的屬性資料")]
+        public CombatEntityStats entityStats;
         
         // 提供一個方法來推進此角色的行動值
         public void AdvanceActionValue(float time)

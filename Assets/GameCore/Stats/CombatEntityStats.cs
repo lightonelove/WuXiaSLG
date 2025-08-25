@@ -70,6 +70,9 @@ namespace GameCore.Stats
         [Tooltip("爆擊傷害倍率")]
         public float CriticalDamage => 1.5f + LUCK * 0.01f;
 
+        [Tooltip("格擋率 (僅敵人使用)")]
+        public float BlockRate => PERCEPTION * 1.5f + DEX * 2.5f;
+
         public void CopyFrom(CombatEntityStats other)
         {
             if (other == null) return;

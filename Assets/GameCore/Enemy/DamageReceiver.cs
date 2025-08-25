@@ -54,9 +54,25 @@ namespace Wuxia.GameCore
                 float finalDamage = originalDamage;
                 
                 // 檢查格擋
-                if (enableBlocking && CanBlock())
+                if (enableBlocking)
                 {
-                    if (BlockingSystem.Instance != null && BlockingSystem.Instance.CheckBlockWindow(Time.time))
+                    bool isBlocked = false;
+                    
+                    // 玩家使用 BlockingSystem
+                    if (ownerEntity != null && ownerEntity.Faction == CombatEntityFaction.Ally)
+                    {
+                        if (BlockingSystem.Instance != null && BlockingSystem.Instance.CheckBlockWindow(Time.time))
+                        {
+                            isBlocked = true;
+                        }
+                    }
+                    // 敵人使用機率格擋
+                    else if (ownerEntity != null && ownerEntity.Faction == CombatEntityFaction.Hostile)
+                    {
+                        isBlocked = CheckEnemyAutoBlock();
+                    }
+                    
+                    if (isBlocked)
                     {
                         // 格擋成功，傷害變為 0
                         finalDamage = 0f;
@@ -90,6 +106,31 @@ namespace Wuxia.GameCore
         }
         
         /// <summary>
+        /// 檢查敵人是否自動格擋
+        /// </summary>
+        /// <returns>是否格擋成功</returns>
+        private bool CheckEnemyAutoBlock()
+        {
+            if (ownerEntity == null || ownerEntity.entityStats == null)
+            {
+                Debug.LogError($"[DamageReceiver] CheckEnemyAutoBlock: ownerEntity 或 entityStats 為 null");
+                return false;
+            }
+            
+            // 根據 BlockRate 機率決定是否格擋
+            float blockRate = ownerEntity.entityStats.BlockRate;
+            float randomValue = Random.Range(0f, 100f);
+            bool willBlock = randomValue < blockRate;
+            
+            if (willBlock)
+            {
+                Debug.Log($"[DamageReceiver] {ownerEntity.Name} 觸發自動格擋 (機率: {blockRate:F1}%, 擲骰: {randomValue:F1})");
+            }
+            
+            return willBlock;
+        }
+        
+        /// <summary>
         /// 檢查是否可以進行格擋
         /// </summary>
         /// <returns>是否可以格擋</returns>
@@ -102,7 +143,30 @@ namespace Wuxia.GameCore
                 return ownerEntity != null && ownerEntity.Faction == CombatEntityFaction.Ally;
             }
             
-            // 所有實體都可以格擋（如果有 BlockingSystem）
+            // 敵人的自動格擋機制
+            if (ownerEntity != null && ownerEntity.Faction == CombatEntityFaction.Hostile)
+            {
+                // 檢查是否有屬性資料
+                if (ownerEntity.entityStats == null)
+                {
+                    Debug.LogError($"[DamageReceiver] {ownerEntity.Name} 沒有設定 CombatEntityStats");
+                    return false;
+                }
+                
+                // 根據 BlockRate 機率決定是否格擋
+                float blockRate = ownerEntity.entityStats.BlockRate;
+                float randomValue = Random.Range(0f, 100f);
+                bool willBlock = randomValue < blockRate;
+                
+                if (willBlock)
+                {
+                    Debug.Log($"[DamageReceiver] {ownerEntity.Name} 觸發自動格擋 (機率: {blockRate:F1}%, 擲骰: {randomValue:F1})");
+                }
+                
+                return willBlock;
+            }
+            
+            // 其他實體都可以格擋（如果有 BlockingSystem）
             return true;
         }
         
