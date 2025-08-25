@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/DamageReceiver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/DamageReceiver.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Projectile/Projectile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Projectile/Projectile.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,7 +173,7 @@
       <workItem from="1755579276446" duration="16545000" />
       <workItem from="1755665650714" duration="18282000" />
       <workItem from="1755751786765" duration="8933000" />
-      <workItem from="1756097662518" duration="10313000" />
+      <workItem from="1756097662518" duration="9118000" />
     </task>
     <servers />
   </component>

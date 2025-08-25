@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Events;
-using System.Collections;
 
 namespace Wuxia.GameCore
 {
@@ -79,9 +78,6 @@ namespace Wuxia.GameCore
                         finalDamage = 0f;
                         onDamageBlocked?.Invoke();
                         Debug.Log($"[DamageReceiver] {gameObject.name} 成功格擋了 {originalDamage} 點傷害！");
-                        
-                        // 觸發格擋特效（慢動作和鏡頭 Zoom In）
-                        TriggerBlockEffect();
                         
                         // 嘗試反彈投射物
                         TryReflectProjectile(dealer);
@@ -206,158 +202,6 @@ namespace Wuxia.GameCore
             projectile.ReflectProjectile(ownerEntity);
             
             Debug.Log($"[DamageReceiver] {ownerEntity.Name} 成功反彈了投射物 {projectile.gameObject.name}！");
-        }
-        
-        /// <summary>
-        /// 觸發格擋特效（慢動作和鏡頭 Zoom In）
-        /// </summary>
-        private void TriggerBlockEffect()
-        {
-            // 只有敵人格擋才觸發特效
-            if (ownerEntity == null || ownerEntity.Faction != CombatEntityFaction.Hostile)
-            {
-                Debug.Log("Here!!!");
-                return;
-            }
-                
-                
-            StartCoroutine(ExecuteBlockEffect());
-        }
-        
-        /// <summary>
-        /// 執行格擋特效協程
-        /// </summary>
-        private IEnumerator ExecuteBlockEffect()
-        {
-            Debug.Log($"[DamageReceiver] {ownerEntity.Name} 觸發格擋特效");
-            
-            // 取得相機控制器
-            CombatCameraController cameraController = Camera.main?.GetComponent<CombatCameraController>();
-            
-            if (cameraController != null)
-            {
-                // 聚焦到敵人位置
-                cameraController.FocusOnGameObject(ownerEntity.gameObject);
-                
-                // 開始不受 timeScale 影響的鏡頭 Zoom In 效果
-                StartCoroutine(UnscaledTemporaryZoomEffect(cameraController, 0.75f, 0.3f, 0.4f));
-            }
-            
-            // 開始慢動作效果（1秒）
-            float originalTimeScale = Time.timeScale;
-            Time.timeScale = 0.15f; // 慢動作到 15% 速度
-            
-            // 等待慢動作效果持續時間（實際時間）
-            yield return new WaitForSecondsRealtime(1.0f);
-            
-            // 恢復正常時間流速
-            Time.timeScale = originalTimeScale;
-            
-            Debug.Log($"[DamageReceiver] {ownerEntity.Name} 格擋特效結束");
-        }
-        
-        /// <summary>
-        /// 不受 timeScale 影響的臨時縮放效果
-        /// </summary>
-        /// <param name="cameraController">相機控制器</param>
-        /// <param name="zoomPercent">縮放百分比</param>
-        /// <param name="duration">縮放動畫時間</param>
-        /// <param name="holdTime">保持縮放時間</param>
-        /// <returns></returns>
-        private IEnumerator UnscaledTemporaryZoomEffect(CombatCameraController cameraController, float zoomPercent, float duration, float holdTime = 0f)
-        {
-            // 使用反射來存取 CombatCameraController 的私有變數
-            var cameraType = typeof(CombatCameraController);
-            var mainCameraField = cameraType.GetField("mainCamera", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var targetOrthoSizeField = cameraType.GetField("targetOrthoSize", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var targetPerspectiveFOVField = cameraType.GetField("targetPerspectiveFOV", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            
-            if (mainCameraField == null || targetOrthoSizeField == null || targetPerspectiveFOVField == null)
-            {
-                Debug.LogError("[DamageReceiver] 無法存取 CombatCameraController 的私有變數");
-                yield break;
-            }
-            
-            Camera mainCamera = (Camera)mainCameraField.GetValue(cameraController);
-            if (mainCamera == null) yield break;
-            
-            // 記錄原始目標縮放值（從 CombatCameraController）
-            float originalTargetOrthoSize = (float)targetOrthoSizeField.GetValue(cameraController);
-            float originalTargetFOV = (float)targetPerspectiveFOVField.GetValue(cameraController);
-            
-            // 計算縮放後的目標值
-            float zoomedTargetOrthoSize = originalTargetOrthoSize * zoomPercent;
-            float zoomedTargetFOV = originalTargetFOV * zoomPercent;
-            
-            // 縮放進入（使用實際時間）
-            float elapsed = 0f;
-            while (elapsed < duration)
-            {
-                elapsed += Time.unscaledDeltaTime;
-                float t = elapsed / duration;
-                t = Mathf.SmoothStep(0, 1, t);
-                
-                if (mainCamera.orthographic)
-                {
-                    float currentTarget = Mathf.Lerp(originalTargetOrthoSize, zoomedTargetOrthoSize, t);
-                    targetOrthoSizeField.SetValue(cameraController, currentTarget);
-                }
-                else
-                {
-                    float currentTarget = Mathf.Lerp(originalTargetFOV, zoomedTargetFOV, t);
-                    targetPerspectiveFOVField.SetValue(cameraController, currentTarget);
-                }
-                
-                yield return null;
-            }
-            
-            // 確保達到目標值
-            if (mainCamera.orthographic)
-            {
-                targetOrthoSizeField.SetValue(cameraController, zoomedTargetOrthoSize);
-            }
-            else
-            {
-                targetPerspectiveFOVField.SetValue(cameraController, zoomedTargetFOV);
-            }
-            
-            // 保持縮放狀態（使用實際時間）
-            if (holdTime > 0f)
-            {
-                yield return new WaitForSecondsRealtime(holdTime);
-            }
-            
-            // 縮放恢復（使用實際時間）
-            elapsed = 0f;
-            while (elapsed < duration)
-            {
-                elapsed += Time.unscaledDeltaTime;
-                float t = elapsed / duration;
-                t = Mathf.SmoothStep(0, 1, t);
-                
-                if (mainCamera.orthographic)
-                {
-                    float currentTarget = Mathf.Lerp(zoomedTargetOrthoSize, originalTargetOrthoSize, t);
-                    targetOrthoSizeField.SetValue(cameraController, currentTarget);
-                }
-                else
-                {
-                    float currentTarget = Mathf.Lerp(zoomedTargetFOV, originalTargetFOV, t);
-                    targetPerspectiveFOVField.SetValue(cameraController, currentTarget);
-                }
-                
-                yield return null;
-            }
-            
-            // 確保恢復到原始值
-            if (mainCamera.orthographic)
-            {
-                targetOrthoSizeField.SetValue(cameraController, originalTargetOrthoSize);
-            }
-            else
-            {
-                targetPerspectiveFOVField.SetValue(cameraController, originalTargetFOV);
-            }
         }
         
     }
