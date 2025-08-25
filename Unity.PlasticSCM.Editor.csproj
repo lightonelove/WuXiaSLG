@@ -269,8 +269,8 @@
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\AssetMenu\AssetsSelection.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\UI\OverlayRect.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\AssetOverlays\AssetStatus.cs" />
-    <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\Views\Merge\DrawMergeOverview.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\Settings\ShelveAndSwitchOptionsFoldout.cs" />
+    <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\Views\Merge\DrawMergeOverview.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\ViewSwitcher.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\Views\Merge\Gluon\IncomingChangesTreeView.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\Views\Shelves\ShelvesSelection.cs" />
@@ -360,8 +360,8 @@
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\Views\Diff\ClientDiffTreeViewItem.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\Gluon\Errors\ErrorsPanel.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\Views\CreateWorkspace\Dialogs\RepositoryListViewItem.cs" />
-    <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\Views\Branch\SerializableBranchesTabState.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\UI\Tree\TreeViewSessionState.cs" />
+    <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\Views\Branch\SerializableBranchesTabState.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\Configuration\TeamEdition\TeamEditionConfigurationWindow.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\UI\FindEditorWindow.cs" />
     <Compile Include="Library\PackageCache\com.unity.collab-proxy\Editor\Views\Changesets\ChangesetsViewMenu.cs" />

@@ -153,8 +153,8 @@
     <Compile Include="Assets\FImpossible Creations\Shared Tools\Node FGraph\Editor\Functional Window\FGraphWindowExampleBase.cs" />
     <Compile Include="Assets\FImpossible Creations\Editor\Editor Tools\Files and Components Support\FEditor_ScriptMenuAddOptions.Components.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Pipe Generator\Core\Editor\PipeGeneratorEditorInspector.cs" />
-    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Editor\Utilities\PGGMenuCreate.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Editor\ShapeDesignerWindow.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Editor\Utilities\PGGMenuCreate.cs" />
     <Compile Include="Assets\FImpossible Creations\Shared Tools\Node FGraph\Editor\Graph Shared Styles\FGraphStyles.Default.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Editor\Planner Related\BuildPlannerWindow.Utilities.cs" />
     <Compile Include="Assets\FImpossible Creations\Shared Tools\Node FGraph\Editor\Graph Drawer Core\FGraph.Nodes.Input.cs" />

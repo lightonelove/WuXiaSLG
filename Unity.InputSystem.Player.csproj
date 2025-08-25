@@ -230,8 +230,8 @@
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Controls\InputControlExtensions.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Controls\InputProcessor.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Actions\Interactions\SlowTapInteraction.cs" />
-    <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Controls\Processors\NormalizeVector2Processor.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Devices\Remote\InputRemoting.cs" />
+    <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Controls\Processors\NormalizeVector2Processor.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Editor\Dialog.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Utilities\PrimitiveValue.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Editor\ControlPicker\InputControlDropdownItem.cs" />
@@ -300,8 +300,8 @@
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Plugins\PlayerInput\PlayerInputManager.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Editor\Internal\AdvancedDropdown\AdvancedDropdownItem.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Editor\UITKAssetEditor\Views\DropManipulator.cs" />
-    <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Utilities\SpriteUtilities.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\NativeInputRuntime.cs" />
+    <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Utilities\SpriteUtilities.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Editor\UITKAssetEditor\Views\CollectionViewSelectionChangeFilter.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Editor\UITKAssetEditor\SerializedInputBinding.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Editor\AssetImporter\InputActionCodeGenerator.cs" />
@@ -390,8 +390,8 @@
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Devices\Sensor.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Devices\Haptics\DualMotorRumbleCommand.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Editor\ControlPicker\InputControlPathEditor.cs" />
-    <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Events\TextEvent.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Editor\AssetImporter\InputActionImporter.cs" />
+    <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Events\TextEvent.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Editor\UITKAssetEditor\Views\ActionMapsView.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Plugins\EnhancedTouch\TouchSimulation.cs" />
     <Compile Include="Library\PackageCache\com.unity.inputsystem\InputSystem\Editor\EditorInputControlLayoutCache.cs" />
