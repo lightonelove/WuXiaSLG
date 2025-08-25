@@ -697,6 +697,53 @@ namespace Wuxia.GameCore
             }
         }
         
+        /// <summary>
+        /// 投射物技能相機控制協程
+        /// </summary>
+        /// <param name="shooterPos">發射者位置</param>
+        /// <param name="targetPos">目標位置</param>
+        /// <param name="moveDuration">移動時間</param>
+        /// <param name="waitTime">等待時間</param>
+        /// <returns></returns>
+        public IEnumerator ProjectileSkillCameraControl(Vector3 shooterPos, Vector3 targetPos, float moveDuration = 0.3f, float waitTime = 0.1f)
+        {
+            // 保存當前的目標位置
+            Vector3 originalTargetPosition = targetPosition;
+            
+            // 計算發射者和目標之間的中間點
+            Vector3 midPoint = (shooterPos + targetPos) * 0.5f;
+            
+            // 計算相機的目標位置（保持當前高度）
+            Vector3 cameraTargetPos = new Vector3(midPoint.x, targetPosition.y, midPoint.z) + followOffset;
+            
+            // 應用移動限制
+            cameraTargetPos.x = Mathf.Clamp(cameraTargetPos.x,
+                initialPosition.x - movementLimits.x,
+                initialPosition.x + movementLimits.x);
+                
+            cameraTargetPos.z = Mathf.Clamp(cameraTargetPos.z,
+                initialPosition.z - movementLimits.y,
+                initialPosition.z + movementLimits.y);
+            
+            // 清除跟隨狀態
+            StopFollowing();
+            
+            // 設定目標位置，讓相機自然移動過去
+            targetPosition = cameraTargetPos;
+            
+            // 等待相機移動到位
+            yield return new WaitForSeconds(moveDuration);
+            
+            // 等待一小段時間讓玩家看清楚場景
+            if (waitTime > 0f)
+            {
+                yield return new WaitForSeconds(waitTime);
+            }
+            
+            // 可以在這裡觸發技能動畫的回調
+            // 投射物技能相機控制完成，可以開始播放技能動畫
+        }
+        
         // 在編輯器中顯示移動範圍
         private void OnDrawGizmosSelected()
         {

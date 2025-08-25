@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -342,10 +343,19 @@ namespace Wuxia.GameCore
                 {
                     characterCore.nowState = CharacterCore.CharacterCoreState.UsingSkill;
 
-                    // 播放技能動畫
-                    if (characterCore.CharacterControlAnimator != null)
+                    // 檢查是否為投射物技能
+                    if (skill.IsProjectile)
                     {
-                        characterCore.CharacterControlAnimator.Play(skill.AnimationName);
+                        // 投射物技能：先移動相機，再播放動畫
+                        StartCoroutine(ExecuteProjectileSkillWithCamera(skill, adjustedTargetLocation));
+                    }
+                    else
+                    {
+                        // 非投射物技能：直接播放動畫
+                        if (characterCore.CharacterControlAnimator != null)
+                        {
+                            characterCore.CharacterControlAnimator.Play(skill.AnimationName);
+                        }
                     }
 
                     characterResources.ConsumeAP(skill.SPCost);
@@ -1168,6 +1178,36 @@ namespace Wuxia.GameCore
 
             // 其他情況使用原始目標位置
             return originalTarget;
+        }
+        
+        /// <summary>
+        /// 執行投射物技能並處理相機控制
+        /// </summary>
+        /// <param name="skill">技能資料</param>
+        /// <param name="targetLocation">目標位置</param>
+        /// <returns></returns>
+        private IEnumerator ExecuteProjectileSkillWithCamera(CombatSkill skill, Vector3 targetLocation)
+        {
+            if (skill == null || characterCore == null || characterCore.CharacterControlAnimator == null)
+            {
+                yield break;
+            }
+            
+            // 取得相機控制器
+            CombatCameraController cameraController = Camera.main?.GetComponent<CombatCameraController>();
+            if (cameraController == null)
+            {
+                // 如果沒有相機控制器，直接播放動畫
+                characterCore.CharacterControlAnimator.Play(skill.AnimationName);
+                yield break;
+            }
+            
+            // 使用相機控制器的投射物技能相機控制協程
+            Vector3 shooterPos = transform.position;
+            yield return StartCoroutine(cameraController.ProjectileSkillCameraControl(shooterPos, targetLocation, 0.3f, 0.1f));
+            
+            // 相機控制完成後，播放技能動畫
+            characterCore.CharacterControlAnimator.Play(skill.AnimationName);
         }
 
 #if UNITY_EDITOR
