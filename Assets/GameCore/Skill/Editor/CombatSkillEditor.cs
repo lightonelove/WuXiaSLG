@@ -16,6 +16,7 @@ namespace Wuxia.GameCore
         private SerializedProperty attackMultiplier;
         private SerializedProperty dodgeChance;
         private SerializedProperty defense;
+        private SerializedProperty isProjectile;
         private SerializedProperty spCost;
 
         void OnEnable()
@@ -30,6 +31,7 @@ namespace Wuxia.GameCore
             attackMultiplier = serializedObject.FindProperty("attackMultiplier");
             dodgeChance = serializedObject.FindProperty("dodgeChance");
             defense = serializedObject.FindProperty("defense");
+            isProjectile = serializedObject.FindProperty("isProjectile");
             spCost = serializedObject.FindProperty("spCost");
         }
 
@@ -81,6 +83,12 @@ namespace Wuxia.GameCore
             EditorGUILayout.PropertyField(attackMultiplier);
             EditorGUILayout.PropertyField(dodgeChance);
             EditorGUILayout.PropertyField(defense);
+
+            EditorGUILayout.Space();
+
+            // 技能類型
+            EditorGUILayout.LabelField("技能類型", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(isProjectile, new GUIContent("是否為投射物技能"));
 
             EditorGUILayout.Space();
 

@@ -30,6 +30,10 @@ namespace Wuxia.GameCore
         [SerializeField] [Range(0f, 1f)] private float dodgeChance = 0f;
         [SerializeField] private float defense = 0f;
 
+        [Header("技能類型")]
+        [Tooltip("是否為投射物技能")]
+        [SerializeField] private bool isProjectile = false;
+
         [Header("消耗")] [SerializeField] private int spCost = 20;
 
         public string SkillName => skillName;
@@ -42,6 +46,7 @@ namespace Wuxia.GameCore
         public float AttackMultiplier => attackMultiplier;
         public float DodgeChance => dodgeChance;
         public float Defense => defense;
+        public bool IsProjectile => isProjectile;
         public int SPCost => spCost;
 
         /// <summary>
