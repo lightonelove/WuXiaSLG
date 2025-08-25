@@ -54,6 +54,11 @@ namespace Wuxia.GameCore
         private Vector3 initialScale;
         private bool hasTarget;
         private CombatEntity shooter; // 發射者
+        private Vector3 originalStartPosition; // 原始發射位置（用於反彈計算）
+        private Vector3 originalTargetPosition; // 原始目標位置（用於反彈計算）
+        private Vector3 originalDirection; // 原始發射方向向量（用於精確反彈）
+        private bool hasOriginalDirection = false; // 是否已記錄原始方向
+        private int reflectionCount = 0; // 反彈次數
         
         // 事件
         public System.Action<Projectile, Collider> OnHit;
@@ -86,6 +91,12 @@ namespace Wuxia.GameCore
             if (!hasTarget)
             {
                 targetPosition = startPosition + transform.forward * maxRange;
+                // 保存原始位置和方向
+                originalStartPosition = startPosition;
+                originalTargetPosition = targetPosition;
+                originalDirection = (targetPosition - startPosition).normalized;
+                hasOriginalDirection = true;
+                Debug.Log($"[Projectile] Start 記錄原始方向: {originalDirection}");
             }
             else
             {
@@ -112,6 +123,16 @@ namespace Wuxia.GameCore
             
             targetPosition = target;
             hasTarget = true;
+            
+            // 保存原始位置和方向（第一次設定時）
+            if (!hasOriginalDirection)
+            {
+                originalStartPosition = startPosition;
+                originalTargetPosition = targetPosition;
+                originalDirection = (targetPosition - startPosition).normalized;
+                hasOriginalDirection = true;
+                Debug.Log($"[Projectile] 記錄原始方向: {originalDirection}");
+            }
             
             // 如果是追蹤類型，計算初始方向
             if (trajectoryType == ProjectileTrajectory.Homing || isHoming)
@@ -147,6 +168,15 @@ namespace Wuxia.GameCore
             targetPosition = startPosition + direction.normalized * maxRange;
             hasTarget = true;
             
+            // 保存原始位置和方向（第一次設定時）
+            if (!hasOriginalDirection)
+            {
+                originalStartPosition = startPosition;
+                originalTargetPosition = targetPosition;
+                originalDirection = direction.normalized;
+                hasOriginalDirection = true;
+                Debug.Log($"[Projectile] SetDirection 記錄原始方向: {originalDirection}");
+            }
         }
         
         /// <summary>
@@ -340,7 +370,7 @@ namespace Wuxia.GameCore
         /// 投射物反彈 - 朝反方向飛行並更換陣營
         /// </summary>
         /// <param name="newOwner">新的擁有者 CombatEntity</param>
-        /// <param name="reflectionDirection">反彈方向（可選，如果為 Vector3.zero 則自動計算反方向）</param>
+        /// <param name="reflectionDirection">反彈方向（可選，如果為 Vector3.zero 則自動計算反彈方向）</param>
         public void ReflectProjectile(CombatEntity newOwner, Vector3 reflectionDirection = default)
         {
             if (newOwner == null)
@@ -348,6 +378,9 @@ namespace Wuxia.GameCore
                 Debug.LogWarning($"[Projectile] ReflectProjectile 的 newOwner 為 null");
                 return;
             }
+            
+            // 增加反彈次數
+            reflectionCount++;
             
             // 更換發射者
             shooter = newOwner;
@@ -357,14 +390,16 @@ namespace Wuxia.GameCore
             
             // 計算反彈方向
             Vector3 newDirection;
-            if (reflectionDirection == Vector3.zero)
+            if (reflectionDirection != Vector3.zero)
             {
-                // 如果沒有指定方向，使用當前飛行方向的反方向
-                newDirection = -transform.forward;
+                // 如果外部指定了方向，使用指定的方向
+                newDirection = reflectionDirection.normalized;
+                Debug.Log($"[Projectile] 第 {reflectionCount} 次反彈，使用指定方向: {newDirection}");
             }
             else
             {
-                newDirection = reflectionDirection.normalized;
+                // 自動計算反彈方向，根據原始方向和反彈次數
+                newDirection = CalculateAutoReflectionDirection();
             }
             
             // 重置投射物飛行參數
@@ -377,7 +412,7 @@ namespace Wuxia.GameCore
             transform.rotation = Quaternion.LookRotation(newDirection);
             CalculateTravelTime();
             
-            Debug.Log($"[Projectile] 投射物反彈！新擁有者: {newOwner.Name}，反彈方向: {newDirection}");
+            Debug.Log($"[Projectile] 投射物反彈！第 {reflectionCount} 次反彈，新擁有者: {newOwner.Name}，反彈方向: {newDirection}");
         }
         
         /// <summary>
@@ -401,6 +436,45 @@ namespace Wuxia.GameCore
         }
         
         /// <summary>
+        /// 自動計算反彈方向（內部邏輯）
+        /// </summary>
+        /// <returns>計算後的反彈方向</returns>
+        private Vector3 CalculateAutoReflectionDirection()
+        {
+            Vector3 reflectionDirection;
+            
+            // 如果有原始方向資訊
+            if (hasOriginalDirection && originalDirection != Vector3.zero)
+            {
+                // 根據反彈次數決定方向
+                // 第1次反彈：負向（返回）
+                // 第2次反彈：正向（再次向前）
+                // 第3次反彈：負向（再次返回）
+                // 以此類推...
+                if (reflectionCount % 2 == 1)
+                {
+                    // 奇數次反彈，使用負向（返回）
+                    reflectionDirection = -originalDirection;
+                    Debug.Log($"[Projectile] 第 {reflectionCount} 次反彈（奇數），使用負向: {reflectionDirection}");
+                }
+                else
+                {
+                    // 偶數次反彈，使用正向（向前）
+                    reflectionDirection = originalDirection;
+                    Debug.Log($"[Projectile] 第 {reflectionCount} 次反彈（偶數），使用正向: {reflectionDirection}");
+                }
+            }
+            else
+            {
+                // 備用方案：使用當前方向的反向
+                reflectionDirection = -transform.forward;
+                Debug.Log($"[Projectile] 無原始方向資訊，使用當前方向反向: {reflectionDirection}");
+            }
+            
+            return reflectionDirection.normalized;
+        }
+        
+        /// <summary>
         /// 檢查投射物是否可以被反彈
         /// </summary>
         /// <returns>是否可以反彈</returns>
@@ -408,6 +482,42 @@ namespace Wuxia.GameCore
         {
             // 可以添加額外的條件，例如投射物類型、速度等
             return gameObject != null && enabled;
+        }
+        
+        /// <summary>
+        /// 取得原始發射位置
+        /// </summary>
+        /// <returns>原始發射位置</returns>
+        public Vector3 GetOriginalStartPosition()
+        {
+            return originalStartPosition;
+        }
+        
+        /// <summary>
+        /// 取得原始目標位置
+        /// </summary>
+        /// <returns>原始目標位置</returns>
+        public Vector3 GetOriginalTargetPosition()
+        {
+            return originalTargetPosition;
+        }
+        
+        /// <summary>
+        /// 取得原始發射方向向量
+        /// </summary>
+        /// <returns>原始發射方向</returns>
+        public Vector3 GetOriginalDirection()
+        {
+            return originalDirection;
+        }
+        
+        /// <summary>
+        /// 取得反彈次數
+        /// </summary>
+        /// <returns>反彈次數</returns>
+        public int GetReflectionCount()
+        {
+            return reflectionCount;
         }
     }
 }

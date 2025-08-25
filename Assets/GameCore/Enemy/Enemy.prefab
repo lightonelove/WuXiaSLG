@@ -493,7 +493,7 @@ MonoBehaviour:
   spawnOffset: {x: 0, y: 1.5, z: 0}
   targetCanvas: {fileID: 0}
   blockTextColor: {r: 0, g: 1, b: 1, a: 1}
-  blockText: "\u683C\u64CB!!"
+  blockText: Parried!!
   health: {fileID: 7697422947043063634}
   damageReceiver: {fileID: 1181071552201193841}
 --- !u!208 &5442271328811615309

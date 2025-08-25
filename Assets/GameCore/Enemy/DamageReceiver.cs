@@ -198,39 +198,11 @@ namespace Wuxia.GameCore
                 return;
             }
             
-            // 計算反彈方向（朝向原始攻擊者的方向）
-            Vector3 reflectionDirection = CalculateReflectionDirection(projectile);
-            
-            // 執行反彈
-            projectile.ReflectProjectile(ownerEntity, reflectionDirection);
+            // 執行反彈（讓 Projectile 自動計算方向）
+            projectile.ReflectProjectile(ownerEntity);
             
             Debug.Log($"[DamageReceiver] {ownerEntity.Name} 成功反彈了投射物 {projectile.gameObject.name}！");
         }
         
-        /// <summary>
-        /// 計算投射物反彈方向
-        /// </summary>
-        /// <param name="projectile">要反彈的投射物</param>
-        /// <returns>反彈方向</returns>
-        private Vector3 CalculateReflectionDirection(Projectile projectile)
-        {
-            // 方法 1：使用投射物當前方向的反方向
-            Vector3 incomingDirection = projectile.transform.forward;
-            Vector3 reflectionDirection = -incomingDirection;
-            
-            // 方法 2：朝向原始攻擊者方向（如果可以取得的話）
-            CombatEntity originalShooter = projectile.GetShooter();
-            if (originalShooter != null)
-            {
-                Vector3 toShooter = (originalShooter.transform.position - projectile.transform.position).normalized;
-                // 可以選擇使用這個方向，或是混合兩個方向
-                reflectionDirection = toShooter;
-            }
-            
-            // 稍微調整高度，避免投射物卡在地面
-            reflectionDirection.y = Mathf.Max(reflectionDirection.y, 0.1f);
-            
-            return reflectionDirection.normalized;
-        }
     }
 }
