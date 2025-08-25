@@ -150,6 +150,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DamageProjectile
       objectReference: {fileID: 0}
+    - target: {fileID: 8041881019750185475, guid: 441fcf963ad377f43abef24b16b9d4f7, type: 3}
+      propertyPath: speed
+      value: 25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

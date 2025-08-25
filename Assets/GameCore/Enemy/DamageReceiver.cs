@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections;
 
 namespace Wuxia.GameCore
 {
@@ -81,6 +82,9 @@ namespace Wuxia.GameCore
                         
                         // 嘗試反彈投射物
                         TryReflectProjectile(dealer);
+                        
+                        // 檢查是否為投射物格擋，觸發慢動作效果
+                        CheckAndTriggerProjectileBlockEffect(dealer);
                     }
                 }
                 
@@ -202,6 +206,54 @@ namespace Wuxia.GameCore
             projectile.ReflectProjectile(ownerEntity);
             
             Debug.Log($"[DamageReceiver] {ownerEntity.Name} 成功反彈了投射物 {projectile.gameObject.name}！");
+        }
+        
+        /// <summary>
+        /// 檢查並觸發投射物格擋的慢動作效果
+        /// </summary>
+        /// <param name="damageDealer">造成傷害的 DamageDealer</param>
+        private void CheckAndTriggerProjectileBlockEffect(DamageDealer damageDealer)
+        {
+            if (damageDealer == null)
+            {
+                Debug.LogWarning($"[DamageReceiver] CheckAndTriggerProjectileBlockEffect: damageDealer 為 null");
+                return;
+            }
+            
+            // 檢查是否為投射物
+            Projectile projectile = damageDealer.GetComponentInParent<Projectile>();
+            
+            if (projectile != null)
+            {
+                // 是投射物，觸發慢動作效果
+                Debug.Log($"[DamageReceiver] {ownerEntity?.Name ?? "Unknown"} 格擋投射物 {projectile.gameObject.name}，觸發慢動作效果");
+                StartCoroutine(ProjectileBlockSlowMotionEffect());
+            }
+            else
+            {
+                Debug.Log($"[DamageReceiver] {damageDealer.gameObject.name} 不是投射物，不觸發慢動作效果");
+            }
+        }
+        
+        /// <summary>
+        /// 投射物格擋的慢動作效果
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator ProjectileBlockSlowMotionEffect()
+        {
+            // 記錄原始時間軸速度
+            float originalTimeScale = Time.timeScale;
+            
+            // 設定慢動作
+            Time.timeScale = 0.11f;
+            Debug.Log("[DamageReceiver] 開始投射物格擋慢動作效果");
+            
+            // 等待 0.5 秒（使用實際時間）
+            yield return new WaitForSecondsRealtime(1.0f);
+            
+            // 恢復正常時間軸
+            Time.timeScale = originalTimeScale;
+            Debug.Log("[DamageReceiver] 投射物格擋慢動作效果結束");
         }
         
     }
