@@ -7,7 +7,7 @@
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterSkills.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CharacterSkills.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Projectile/Projectile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Projectile/Projectile.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/UI/SLGCoreUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/UI/SLGCoreUI.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,7 +175,7 @@
       <workItem from="1755665650714" duration="18282000" />
       <workItem from="1755751786765" duration="8933000" />
       <workItem from="1756097662518" duration="9118000" />
-      <workItem from="1756187509782" duration="7390000" />
+      <workItem from="1756187509782" duration="8418000" />
     </task>
     <servers />
   </component>

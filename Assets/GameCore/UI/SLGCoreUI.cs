@@ -519,15 +519,17 @@ namespace Wuxia.GameCore
             if (currentCharacter == null)
                 return;
 
-            // 檢查角色是否正在移動
+            // 檢查角色是否正在移動或使用技能
             bool isCharacterMoving = IsCharacterMoving(currentCharacter);
+            bool isCharacterUsingSkill = IsCharacterUsingSkill(currentCharacter);
+            bool isCharacterBusy = isCharacterMoving || isCharacterUsingSkill;
 
-            // 更新 Move 按鈕顏色（移動中時禁用）
+            // 更新 Move 按鈕顏色（移動中或使用技能時禁用）
             bool moveButtonSelected = currentCharacter.currentActionMode == CharacterCore.PlayerActionMode.Move;
-            bool moveButtonAvailable = !isCharacterMoving;
+            bool moveButtonAvailable = !isCharacterBusy;
             UpdateButtonColor(moveButton, moveButtonSelected, moveButtonAvailable);
 
-            // 更新技能按鈕顏色（移動中時全部禁用）
+            // 更新技能按鈕顏色（移動中或使用技能時全部禁用）
             for (int i = 0; i < skillButtons.Count && i < 4; i++)
             {
                 if (skillButtons[i] != null)
@@ -539,7 +541,7 @@ namespace Wuxia.GameCore
                         currentCharacter.skillsComponent.GetSkill(i);
                     bool canUse = currentCharacter.skillsComponent != null &&
                                   currentCharacter.skillsComponent.CanUseSkillByIndex(i) &&
-                                  !isCharacterMoving; // 移動中時技能不可用
+                                  !isCharacterBusy; // 移動中或使用技能時技能不可用
                     UpdateButtonColor(skillButtons[i], isSelected, canUse);
                 }
             }
@@ -719,6 +721,22 @@ namespace Wuxia.GameCore
                 return false;
 
             return character.movementComponent.isMoving;
+        }
+        
+        /// <summary>
+        /// 檢查角色是否正在使用技能
+        /// </summary>
+        /// <param name="character">要檢查的角色</param>
+        /// <returns>是否正在使用技能</returns>
+        private bool IsCharacterUsingSkill(CharacterCore character)
+        {
+            if (character == null)
+                return false;
+
+            // 檢查角色狀態是否為使用技能或執行技能
+            return character.nowState == CharacterCore.CharacterCoreState.UsingSkill ||
+                   character.nowState == CharacterCore.CharacterCoreState.ExecutingSkill ||
+                   character.currentActionMode == CharacterCore.PlayerActionMode.SkillExecuting;
         }
     }
 }

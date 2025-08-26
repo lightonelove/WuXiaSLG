@@ -346,7 +346,8 @@ namespace Wuxia.GameCore
                     // 檢查是否為投射物技能
                     if (skill.IsProjectile)
                     {
-                        // 投射物技能：先移動相機，再播放動畫
+                        // 投射物技能：設定為技能執行模式，先移動相機，再播放動畫
+                        characterCore.currentActionMode = CharacterCore.PlayerActionMode.SkillExecuting;
                         StartCoroutine(ExecuteProjectileSkillWithCamera(skill, adjustedTargetLocation));
                     }
                     else
@@ -371,8 +372,11 @@ namespace Wuxia.GameCore
                         standStillTargetingAnchor.SetVisible(false);
                     }
 
-                    // 重置動作模式
-                    characterCore.currentActionMode = CharacterCore.PlayerActionMode.None;
+                    // 只有非投射物技能才立即重置動作模式
+                    if (!skill.IsProjectile)
+                    {
+                        characterCore.currentActionMode = CharacterCore.PlayerActionMode.None;
+                    }
                 }
             }
         }
@@ -1217,6 +1221,14 @@ namespace Wuxia.GameCore
             
             // 恢復相機的原始縮放狀態
             yield return StartCoroutine(cameraController.RestoreProjectileSkillCameraState(0.5f));
+            
+            // 投射物技能完成，重置角色狀態和動作模式
+            if (characterCore != null)
+            {
+                characterCore.nowState = CharacterCore.CharacterCoreState.ControlState;
+                characterCore.currentActionMode = CharacterCore.PlayerActionMode.None;
+                Debug.Log($"[CharacterSkills] 投射物技能執行完成，恢復角色控制狀態");
+            }
         }
         
         /// <summary>
