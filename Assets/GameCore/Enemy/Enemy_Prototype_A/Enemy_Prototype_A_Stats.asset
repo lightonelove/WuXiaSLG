@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a6542e069399240bdffc3f0ce5592b, type: 3}
   m_Name: Enemy_Prototype_A_Stats
   m_EditorClassIdentifier: 
-  DEX: 10
+  DEX: 46
   AGI: 10
   CON: 10
   STR: 10
   CHI: 10
   CHA: 10
-  LUCK: 10
-  PERCEPTION: 10
+  LUCK: 15
+  PERCEPTION: 44
