@@ -285,6 +285,12 @@ namespace Wuxia.GameCore
                 // 空白鍵被釋放
                 if (isHoldingSpace)
                 {
+                    // 檢查是否為輕按（沒有觸發結束回合）
+                    if (!hasTriggeredEndTurn)
+                    {
+                        FocusOnCurrentCharacter();
+                    }
+                    
                     isHoldingSpace = false;
                     spaceKeyHoldTime = 0f;
                     hasTriggeredEndTurn = false; // 釋放時重置觸發標記
@@ -305,6 +311,23 @@ namespace Wuxia.GameCore
             if (CombatCore.Instance != null)
             {
                 CombatCore.Instance.EndCurrentEntityTurn();
+            }
+        }
+
+        /// <summary>
+        /// 輕按空白鍵時讓攝影機focus到當前操作的角色
+        /// </summary>
+        private void FocusOnCurrentCharacter()
+        {
+            CombatCameraController cameraController = Camera.main?.GetComponent<CombatCameraController>();
+            if (cameraController != null)
+            {
+                cameraController.FocusOnGameObject(gameObject);
+                Debug.Log($"[CharacterCore] 攝影機聚焦到當前角色: {gameObject.name}");
+            }
+            else
+            {
+                Debug.LogWarning($"[CharacterCore] 找不到 CombatCameraController，無法聚焦到角色");
             }
         }
         
