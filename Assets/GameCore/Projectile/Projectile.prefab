@@ -53,6 +53,7 @@ MonoBehaviour:
   isHoming: 0
   homingSpeed: 5
   destroyOnImpact: 1
+  destroyOnDamage: 1
   collisionLayers:
     serializedVersion: 2
     m_Bits: 4087
@@ -81,6 +82,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  maxReflections: 6
 --- !u!1 &4523865310293765659
 GameObject:
   m_ObjectHideFlags: 0

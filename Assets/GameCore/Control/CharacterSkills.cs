@@ -1209,17 +1209,120 @@ namespace Wuxia.GameCore
             // 相機控制完成後，播放技能動畫
             characterCore.CharacterControlAnimator.Play(skill.AnimationName);
             
-            // 等待技能動畫播放一段時間（投射物飛行時間）
-            // 可以根據技能的實際動畫時間來調整這個等待時間
-            float skillDuration = 2.0f; // 預設等待2秒，可以根據技能調整
+            // 等待投射物技能完成
+            yield return StartCoroutine(WaitForProjectileSkillCompletion());
             
-            // 如果技能有自定義的動畫時間，可以從技能資料中讀取
-            // float skillDuration = skill.AnimationDuration ?? 2.0f;
-            
-            yield return new WaitForSeconds(skillDuration);
+            // 技能完成後等待半秒
+            yield return new WaitForSeconds(0.5f);
             
             // 恢復相機的原始縮放狀態
             yield return StartCoroutine(cameraController.RestoreProjectileSkillCameraState(0.5f));
+        }
+        
+        /// <summary>
+        /// 等待投射物技能完成（基於投射物存在狀態）
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator WaitForProjectileSkillCompletion()
+        {
+            // 等待技能動畫播放完成
+            yield return StartCoroutine(WaitForSkillAnimationComplete());
+            
+            // 等待一小段額外時間讓投射物生成
+            yield return new WaitForSeconds(0.3f);
+            
+            // 查找場景中所有投射物
+            Projectile[] projectiles = FindObjectsOfType<Projectile>();
+            
+            // 過濾出屬於當前角色的投射物
+            List<Projectile> myProjectiles = new List<Projectile>();
+            CombatEntity myCombatEntity = characterCore?.GetComponent<CombatEntity>();
+            
+            foreach (Projectile projectile in projectiles)
+            {
+                // 檢查投射物的發射者是否為當前角色
+                Debug.Log("[CharacterSkills] 找到幾個投射物:" + projectiles.Length);
+                if (projectile.GetShooter() == myCombatEntity)
+                {
+                    myProjectiles.Add(projectile);
+                    Debug.Log($"[CharacterSkills] 找到我的投射物: {projectile.gameObject.name}");
+                }
+            }
+            
+            if (myProjectiles.Count == 0)
+            {
+                Debug.LogWarning($"[CharacterSkills] 未找到投射物，使用預設等待時間");
+                yield return new WaitForSeconds(2.0f);
+                yield break;
+            }
+            
+            Debug.Log($"[CharacterSkills] 開始追蹤 {myProjectiles.Count} 個投射物");
+            
+            // 持續檢查投射物是否還存在
+            while (myProjectiles.Count > 0)
+            {
+                // 清理已被銷毀的投射物
+                for (int i = myProjectiles.Count - 1; i >= 0; i--)
+                {
+                    if (myProjectiles[i] == null)
+                    {
+                        myProjectiles.RemoveAt(i);
+                        Debug.Log($"[CharacterSkills] 投射物已消失，剩餘 {myProjectiles.Count} 個");
+                    }
+                }
+                
+                // 如果還有投射物存在，繼續等待
+                if (myProjectiles.Count > 0)
+                {
+                    yield return new WaitForSeconds(0.1f); // 每0.1秒檢查一次
+                }
+            }
+            
+            Debug.Log($"[CharacterSkills] 所有投射物已消失，投射物技能完成");
+        }
+        
+        /// <summary>
+        /// 等待技能動畫播放完成
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator WaitForSkillAnimationComplete()
+        {
+            if (characterCore?.CharacterControlAnimator == null)
+            {
+                Debug.LogWarning($"[CharacterSkills] CharacterControlAnimator 為 null，無法等待動畫完成");
+                yield return new WaitForSeconds(1.0f); // 使用預設等待時間
+                yield break;
+            }
+            
+            Animator animator = characterCore.CharacterControlAnimator;
+            
+            // 等待一小段時間讓動畫開始播放
+            yield return new WaitForSeconds(0.1f);
+            
+            // 獲取當前動畫狀態資訊
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            float animationLength = stateInfo.length;
+            
+            Debug.Log($"[CharacterSkills] 開始等待技能動畫播放完成，動畫長度: {animationLength:F2}秒");
+            
+            // 等待動畫播放完成
+            float elapsedTime = 0f;
+            while (elapsedTime < animationLength)
+            {
+                elapsedTime += Time.deltaTime;
+                
+                // 也檢查動畫是否真的在播放
+                stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+                if (stateInfo.normalizedTime >= 1.0f && !animator.IsInTransition(0))
+                {
+                    Debug.Log($"[CharacterSkills] 動畫播放完成 (normalizedTime: {stateInfo.normalizedTime:F2})");
+                    break;
+                }
+                
+                yield return null;
+            }
+            
+            Debug.Log($"[CharacterSkills] 技能動畫播放完成，總等待時間: {elapsedTime:F2}秒");
         }
 
 #if UNITY_EDITOR
