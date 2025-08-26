@@ -698,6 +698,81 @@ namespace Wuxia.GameCore
         }
         
         /// <summary>
+        /// 恢復投射物技能前的相機狀態
+        /// </summary>
+        /// <param name="duration">恢復動畫時間</param>
+        /// <returns></returns>
+        public IEnumerator RestoreProjectileSkillCameraState(float duration = 0.3f)
+        {
+            // 檢查是否有保存的狀態
+            if (projectileSkillOriginalOrthoSize <= 0 && projectileSkillOriginalFOV <= 0)
+            {
+                yield break;
+            }
+            
+            // 恢復動畫
+            float elapsed = 0f;
+            float startOrtho = currentOrthoSize;
+            float startFOV = currentPerspectiveFOV;
+            float startDist = currentCameraDistance;
+            
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / duration;
+                t = Mathf.SmoothStep(0, 1, t);
+                
+                // 平滑恢復縮放
+                if (mainCamera.orthographic)
+                {
+                    currentOrthoSize = Mathf.Lerp(startOrtho, projectileSkillOriginalOrthoSize, t);
+                    targetOrthoSize = projectileSkillOriginalOrthoSize;
+                    mainCamera.orthographicSize = currentOrthoSize;
+                }
+                else
+                {
+                    currentPerspectiveFOV = Mathf.Lerp(startFOV, projectileSkillOriginalFOV, t);
+                    targetPerspectiveFOV = projectileSkillOriginalFOV;
+                    mainCamera.fieldOfView = currentPerspectiveFOV;
+                    
+                    currentCameraDistance = Mathf.Lerp(startDist, projectileSkillOriginalDistance, t);
+                    targetCameraDistance = projectileSkillOriginalDistance;
+                }
+                
+                yield return null;
+            }
+            
+            // 確保恢復到原始值
+            if (mainCamera.orthographic)
+            {
+                currentOrthoSize = projectileSkillOriginalOrthoSize;
+                targetOrthoSize = projectileSkillOriginalOrthoSize;
+                mainCamera.orthographicSize = projectileSkillOriginalOrthoSize;
+            }
+            else
+            {
+                currentPerspectiveFOV = projectileSkillOriginalFOV;
+                targetPerspectiveFOV = projectileSkillOriginalFOV;
+                mainCamera.fieldOfView = projectileSkillOriginalFOV;
+                
+                currentCameraDistance = projectileSkillOriginalDistance;
+                targetCameraDistance = projectileSkillOriginalDistance;
+            }
+            
+            // 清除保存的狀態
+            projectileSkillOriginalOrthoSize = 0;
+            projectileSkillOriginalFOV = 0;
+            projectileSkillOriginalDistance = 0;
+            
+            Debug.Log($"[CombatCameraController] 相機狀態已恢復");
+        }
+        
+        // 保存投射物技能前的相機狀態
+        private float projectileSkillOriginalOrthoSize = 0;
+        private float projectileSkillOriginalFOV = 0;
+        private float projectileSkillOriginalDistance = 0;
+        
+        /// <summary>
         /// 投射物技能相機控制協程
         /// </summary>
         /// <param name="shooterPos">發射者位置</param>
@@ -707,8 +782,13 @@ namespace Wuxia.GameCore
         /// <returns></returns>
         public IEnumerator ProjectileSkillCameraControl(Vector3 shooterPos, Vector3 targetPos, float moveDuration = 0.3f, float waitTime = 0.1f)
         {
-            // 保存當前的目標位置
+            // 保存當前的目標位置和縮放值
             Vector3 originalTargetPosition = targetPosition;
+            
+            // 保存原始縮放值到類變數（用於之後恢復）
+            projectileSkillOriginalOrthoSize = targetOrthoSize;
+            projectileSkillOriginalFOV = targetPerspectiveFOV;
+            projectileSkillOriginalDistance = targetCameraDistance;
             
             // 計算發射者和目標之間的中間點
             Vector3 midPoint = (shooterPos + targetPos) * 0.5f;
@@ -728,11 +808,90 @@ namespace Wuxia.GameCore
             // 清除跟隨狀態
             StopFollowing();
             
+            // 計算所需的縮放值
+            float distance = Vector3.Distance(shooterPos, targetPos);
+            
+            if (mainCamera.orthographic)
+            {
+                // Orthographic 模式：根據距離調整 orthographicSize
+                // 基礎公式：需要的視野大小 = 距離的一半 + 額外空間
+                float requiredSize = (distance * 0.5f) + 3f; // +3f 作為額外邊距
+                
+                // 限制在最小最大值之間
+                float newOrthoSize = Mathf.Clamp(requiredSize, orthoSizeMin, orthoSizeMax);
+                
+                // 如果需要的縮放比當前更大，才進行縮放
+                if (newOrthoSize > currentOrthoSize)
+                {
+                    targetOrthoSize = newOrthoSize;
+                    Debug.Log($"[CombatCameraController] 調整 Orthographic Size: {currentOrthoSize} -> {newOrthoSize}, 距離: {distance}");
+                }
+            }
+            else
+            {
+                // Perspective 模式：調整 FOV 和距離
+                // 根據距離計算需要的 FOV
+                float requiredFOV = Mathf.Clamp(30f + (distance * 2f), perspectiveFOVMin, perspectiveFOVMax);
+                float requiredDistance = Mathf.Clamp(10f + (distance * 0.5f), perspectiveDistanceMin, perspectiveDistanceMax);
+                
+                // 如果需要更廣的視角，才進行調整
+                if (requiredFOV > currentPerspectiveFOV || requiredDistance > currentCameraDistance)
+                {
+                    targetPerspectiveFOV = Mathf.Max(currentPerspectiveFOV, requiredFOV);
+                    targetCameraDistance = Mathf.Max(currentCameraDistance, requiredDistance);
+                    targetPosition.y = targetCameraDistance;
+                    Debug.Log($"[CombatCameraController] 調整 Perspective FOV: {currentPerspectiveFOV} -> {targetPerspectiveFOV}, 距離: {distance}");
+                }
+            }
+            
             // 設定目標位置，讓相機自然移動過去
             targetPosition = cameraTargetPos;
             
-            // 等待相機移動到位
-            yield return new WaitForSeconds(moveDuration);
+            // 同時執行移動和縮放動畫
+            float elapsed = 0f;
+            Vector3 startPos = transform.position;
+            float startOrtho = currentOrthoSize;
+            float startFOV = currentPerspectiveFOV;
+            float startDist = currentCameraDistance;
+            
+            while (elapsed < moveDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / moveDuration;
+                t = Mathf.SmoothStep(0, 1, t);
+                
+                // 平滑移動位置
+                transform.position = Vector3.Lerp(startPos, cameraTargetPos, t);
+                
+                // 平滑調整縮放
+                if (mainCamera.orthographic)
+                {
+                    currentOrthoSize = Mathf.Lerp(startOrtho, targetOrthoSize, t);
+                    mainCamera.orthographicSize = currentOrthoSize;
+                }
+                else
+                {
+                    currentPerspectiveFOV = Mathf.Lerp(startFOV, targetPerspectiveFOV, t);
+                    mainCamera.fieldOfView = currentPerspectiveFOV;
+                    currentCameraDistance = Mathf.Lerp(startDist, targetCameraDistance, t);
+                }
+                
+                yield return null;
+            }
+            
+            // 確保達到目標值
+            transform.position = cameraTargetPos;
+            if (mainCamera.orthographic)
+            {
+                currentOrthoSize = targetOrthoSize;
+                mainCamera.orthographicSize = targetOrthoSize;
+            }
+            else
+            {
+                currentPerspectiveFOV = targetPerspectiveFOV;
+                mainCamera.fieldOfView = targetPerspectiveFOV;
+                currentCameraDistance = targetCameraDistance;
+            }
             
             // 等待一小段時間讓玩家看清楚場景
             if (waitTime > 0f)
