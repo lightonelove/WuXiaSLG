@@ -342,6 +342,9 @@ namespace Wuxia.GameCore
                 if (characterCore != null)
                 {
                     characterCore.nowState = CharacterCore.CharacterCoreState.UsingSkill;
+                    
+                    // 技能開始時關閉 NavMeshObstacle
+                    characterCore.OnSkillStart();
 
                     // 檢查是否為投射物技能
                     if (skill.IsProjectile)
@@ -1229,6 +1232,8 @@ namespace Wuxia.GameCore
             {
                 characterCore.nowState = CharacterCore.CharacterCoreState.ControlState;
                 characterCore.currentActionMode = CharacterCore.PlayerActionMode.None;
+                // 技能結束時恢復 NavMeshObstacle
+                characterCore.OnSkillEnd();
                 Debug.Log($"[CharacterSkills] 投射物技能執行完成，恢復角色控制狀態");
             }
         }
@@ -1352,6 +1357,8 @@ namespace Wuxia.GameCore
             if (characterCore != null)
             {
                 characterCore.nowState = CharacterCore.CharacterCoreState.ControlState;
+                // 技能結束時恢復 NavMeshObstacle
+                characterCore.OnSkillEnd();
                 Debug.Log($"[CharacterSkills] 非投射物技能執行完成，恢復角色控制狀態");
             }
         }

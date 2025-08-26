@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.AI;
 using System.Collections.Generic;
 
 namespace Wuxia.GameCore
@@ -18,6 +19,12 @@ namespace Wuxia.GameCore
         public Animator CharacterControlAnimator;
 
         [Header("動畫根運動控制")] public AnimationMoveScaler3D animationMoveScaler3D;
+        
+        [Header("導航網格控制")] 
+        private NavMeshObstacle navMeshObstacle;
+        private bool navObstacleOriginalState = true; // 記錄原始啟用狀態
+        private NavMeshAgent navMeshAgent;
+        private bool navAgentOriginalState = true; // 記錄原始啟用狀態
 
         public enum CharacterCoreState
         {
@@ -51,6 +58,9 @@ namespace Wuxia.GameCore
 
             // 初始化AnimationMoveScaler3D設定
             InitializeAnimationMoveScaler3D();
+            
+            // 初始化 NavMeshObstacle
+            InitializeNavMeshObstacle();
         }
 
         private void InitializeAnimationMoveScaler3D()
@@ -296,6 +306,146 @@ namespace Wuxia.GameCore
             {
                 CombatCore.Instance.EndCurrentEntityTurn();
             }
+        }
+        
+        /// <summary>
+        /// 初始化導航網格組件
+        /// </summary>
+        private void InitializeNavMeshObstacle()
+        {
+            // 初始化 NavMeshObstacle
+            navMeshObstacle = GetComponent<NavMeshObstacle>();
+            if (navMeshObstacle != null)
+            {
+                navObstacleOriginalState = navMeshObstacle.enabled;
+                Debug.Log($"[CharacterCore] 找到 NavMeshObstacle，原始狀態: {navObstacleOriginalState}");
+            }
+            
+            // 初始化 NavMeshAgent
+            navMeshAgent = GetComponent<NavMeshAgent>();
+            if (navMeshAgent != null)
+            {
+                navAgentOriginalState = navMeshAgent.enabled;
+                Debug.Log($"[CharacterCore] 找到 NavMeshAgent，原始狀態: {navAgentOriginalState}");
+            }
+        }
+        
+        /// <summary>
+        /// 設定 NavMeshObstacle 啟用狀態
+        /// </summary>
+        /// <param name="enabled">是否啟用</param>
+        public void SetNavMeshObstacleEnabled(bool enabled)
+        {
+            if (navMeshObstacle != null)
+            {
+                navMeshObstacle.enabled = enabled;
+                Debug.Log($"[CharacterCore] NavMeshObstacle 設定為: {enabled}");
+            }
+        }
+        
+        /// <summary>
+        /// 設定 NavMeshAgent 啟用狀態
+        /// </summary>
+        /// <param name="enabled">是否啟用</param>
+        public void SetNavMeshAgentEnabled(bool enabled)
+        {
+            if (navMeshAgent != null)
+            {
+                navMeshAgent.enabled = enabled;
+                Debug.Log($"[CharacterCore] NavMeshAgent 設定為: {enabled}");
+            }
+        }
+        
+        /// <summary>
+        /// 恢復 NavMeshObstacle 到原始狀態
+        /// </summary>
+        public void RestoreNavMeshObstacleState()
+        {
+            if (navMeshObstacle != null)
+            {
+                navMeshObstacle.enabled = navObstacleOriginalState;
+                Debug.Log($"[CharacterCore] NavMeshObstacle 恢復到原始狀態: {navObstacleOriginalState}");
+            }
+        }
+        
+        /// <summary>
+        /// 恢復 NavMeshAgent 到原始狀態
+        /// </summary>
+        public void RestoreNavMeshAgentState()
+        {
+            if (navMeshAgent != null)
+            {
+                navMeshAgent.enabled = navAgentOriginalState;
+                Debug.Log($"[CharacterCore] NavMeshAgent 恢復到原始狀態: {navAgentOriginalState}");
+            }
+        }
+        
+        /// <summary>
+        /// 當角色開始使用技能時調用 - 關閉導航網格組件
+        /// </summary>
+        public void OnSkillStart()
+        {
+            SetNavMeshObstacleEnabled(false);
+            SetNavMeshAgentEnabled(false);
+        }
+        
+        /// <summary>
+        /// 當角色技能結束時調用 - 恢復導航網格組件
+        /// </summary>
+        public void OnSkillEnd()
+        {
+            RestoreNavMeshObstacleState();
+            RestoreNavMeshAgentState();
+        }
+        
+        /// <summary>
+        /// 當角色開始移動時調用 - 啟用 NavMeshAgent，關閉 NavMeshObstacle
+        /// </summary>
+        public void OnMoveStart()
+        {
+            StartCoroutine(SetNavMeshForMovement());
+        }
+        
+        /// <summary>
+        /// 當角色移動結束時調用 - 恢復導航網格組件到原始狀態
+        /// </summary>
+        public void OnMoveEnd()
+        {
+            StartCoroutine(RestoreNavMeshAfterMovement());
+        }
+        
+        /// <summary>
+        /// 設定導航網格組件為移動模式（延遲1幀防止衝突）
+        /// </summary>
+        private System.Collections.IEnumerator SetNavMeshForMovement()
+        {
+            // 先關閉 NavMeshObstacle
+            SetNavMeshObstacleEnabled(false);
+            
+            // 等待1幀
+            yield return null;
+            
+            // 然後啟用 NavMeshAgent
+            SetNavMeshAgentEnabled(true);
+            
+            Debug.Log("[CharacterCore] 移動模式：NavMeshObstacle 關閉，NavMeshAgent 啟用");
+        }
+        
+        /// <summary>
+        /// 移動結束後恢復導航網格組件（延遲1幀防止衝突）
+        /// </summary>
+        private System.Collections.IEnumerator RestoreNavMeshAfterMovement()
+        {
+            // 先關閉 NavMeshAgent
+            SetNavMeshAgentEnabled(false);
+            
+            // 等待1幀
+            yield return null;
+            
+            // 然後恢復 NavMeshObstacle
+            RestoreNavMeshObstacleState();
+            
+            Debug.Log("[CharacterCore] 移動結束：NavMeshAgent 關閉，NavMeshObstacle 恢復");
         }
     }
 }

@@ -479,8 +479,23 @@ namespace Wuxia.GameCore
             }
 
 
+            // 記錄之前的模式
+            CharacterCore.PlayerActionMode previousMode = currentCharacter.currentActionMode;
+            
             // 設定動作模式
             currentCharacter.currentActionMode = mode;
+
+            // 根據模式控制NavMesh組件
+            if (mode == CharacterCore.PlayerActionMode.Move)
+            {
+                // 進入Move模式時，啟用NavMeshAgent用於路徑預覽
+                currentCharacter.OnMoveStart();
+            }
+            else if (previousMode == CharacterCore.PlayerActionMode.Move && mode != CharacterCore.PlayerActionMode.Move)
+            {
+                // 離開Move模式時，恢復NavMesh組件狀態
+                currentCharacter.OnMoveEnd();
+            }
 
             // 清除任何現有的路徑預覽
             currentCharacter.ClearPathDisplay();
