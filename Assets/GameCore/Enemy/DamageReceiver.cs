@@ -218,7 +218,7 @@ namespace Wuxia.GameCore
         }
         
         /// <summary>
-        /// 檢查並觸發投射物格擋的慢動作效果
+        /// 檢查並觸發投射物格擋的慢動作效果 - 只有投射物會反彈時才觸發
         /// </summary>
         /// <param name="damageDealer">造成傷害的 DamageDealer</param>
         private void CheckAndTriggerProjectileBlockEffect(DamageDealer damageDealer)
@@ -234,9 +234,24 @@ namespace Wuxia.GameCore
             
             if (projectile != null)
             {
-                // 是投射物，觸發慢動作效果
-                Debug.Log($"[DamageReceiver] {ownerEntity?.Name ?? "Unknown"} 格擋投射物 {projectile.gameObject.name}，觸發慢動作效果");
-                StartCoroutine(ProjectileBlockSlowMotionEffect());
+                // 檢查投射物是否可以被反彈（會反彈就不會消失）
+                bool canBeReflected = projectile.CanBeReflected();
+                
+                // 檢查是否還有反彈次數（如果達到上限就會消失）
+                bool hasReflectionsLeft = projectile.GetMaxReflections() == 0 || 
+                                         projectile.GetReflectionCount() <= projectile.GetMaxReflections();
+                
+                if (canBeReflected && hasReflectionsLeft)
+                {
+                    // 投射物會反彈，觸發慢動作效果
+                    Debug.Log($"[DamageReceiver] {ownerEntity?.Name ?? "Unknown"} 格擋投射物 {projectile.gameObject.name}，投射物會反彈，觸發慢動作效果");
+                    StartCoroutine(ProjectileBlockSlowMotionEffect());
+                }
+                else
+                {
+                    Debug.Log($"[DamageReceiver] {ownerEntity?.Name ?? "Unknown"} 格擋投射物 {projectile.gameObject.name}，但投射物會消失，不觸發慢動作效果 " +
+                             $"(CanReflect: {canBeReflected}, HasReflectionsLeft: {hasReflectionsLeft})");
+                }
             }
             else
             {
