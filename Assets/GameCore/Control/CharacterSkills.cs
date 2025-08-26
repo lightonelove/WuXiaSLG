@@ -372,10 +372,12 @@ namespace Wuxia.GameCore
                         standStillTargetingAnchor.SetVisible(false);
                     }
 
-                    // 只有非投射物技能才立即重置動作模式
+                    // 只有非投射物技能才立即重置動作模式和狀態
                     if (!skill.IsProjectile)
                     {
                         characterCore.currentActionMode = CharacterCore.PlayerActionMode.None;
+                        // 非投射物技能結束後立即恢復控制狀態
+                        StartCoroutine(RestoreCharacterStateAfterNonProjectileSkill());
                     }
                 }
             }
@@ -1217,7 +1219,7 @@ namespace Wuxia.GameCore
             yield return StartCoroutine(WaitForProjectileSkillCompletion());
             
             // 技能完成後等待半秒
-            yield return new WaitForSeconds(0.5f);
+            //yield return new WaitForSeconds(0.2f);
             
             // 恢復相機的原始縮放狀態
             yield return StartCoroutine(cameraController.RestoreProjectileSkillCameraState(0.5f));
@@ -1264,7 +1266,7 @@ namespace Wuxia.GameCore
             if (myProjectiles.Count == 0)
             {
                 Debug.LogWarning($"[CharacterSkills] 未找到投射物，使用預設等待時間");
-                yield return new WaitForSeconds(2.0f);
+                //yield return new WaitForSeconds(2.0f);
                 yield break;
             }
             
@@ -1335,6 +1337,23 @@ namespace Wuxia.GameCore
             }
             
             Debug.Log($"[CharacterSkills] 技能動畫播放完成，總等待時間: {elapsedTime:F2}秒");
+        }
+        
+        /// <summary>
+        /// 非投射物技能結束後恢復角色控制狀態
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator RestoreCharacterStateAfterNonProjectileSkill()
+        {
+            // 等待技能動畫播放完成
+            yield return StartCoroutine(WaitForSkillAnimationComplete());
+            
+            // 非投射物技能完成，立即恢復角色控制狀態
+            if (characterCore != null)
+            {
+                characterCore.nowState = CharacterCore.CharacterCoreState.ControlState;
+                Debug.Log($"[CharacterSkills] 非投射物技能執行完成，恢復角色控制狀態");
+            }
         }
 
 #if UNITY_EDITOR

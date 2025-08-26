@@ -130,7 +130,17 @@ namespace Wuxia.GameCore
                         animationMoveScaler3D.ClearEvaluate();
                     }
 
-                    nowState = CharacterCoreState.ControlState;
+                    // 只有非投射物技能才自動恢復狀態
+                    // 投射物技能的狀態恢復由 CharacterSkills 控制（基於投射物消失）
+                    if (currentActionMode != PlayerActionMode.SkillExecuting)
+                    {
+                        nowState = CharacterCoreState.ControlState;
+                        Debug.Log($"[CharacterCore] 非投射物技能動畫完成，恢復控制狀態");
+                    }
+                    else
+                    {
+                        Debug.Log($"[CharacterCore] 投射物技能動畫完成，但保持 UsingSkill 狀態等待投射物消失");
+                    }
                 }
             }
         }
