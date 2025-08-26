@@ -1208,6 +1208,18 @@ namespace Wuxia.GameCore
             
             // 相機控制完成後，播放技能動畫
             characterCore.CharacterControlAnimator.Play(skill.AnimationName);
+            
+            // 等待技能動畫播放一段時間（投射物飛行時間）
+            // 可以根據技能的實際動畫時間來調整這個等待時間
+            float skillDuration = 2.0f; // 預設等待2秒，可以根據技能調整
+            
+            // 如果技能有自定義的動畫時間，可以從技能資料中讀取
+            // float skillDuration = skill.AnimationDuration ?? 2.0f;
+            
+            yield return new WaitForSeconds(skillDuration);
+            
+            // 恢復相機的原始縮放狀態
+            yield return StartCoroutine(cameraController.RestoreProjectileSkillCameraState(0.5f));
         }
 
 #if UNITY_EDITOR

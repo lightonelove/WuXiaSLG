@@ -820,27 +820,32 @@ namespace Wuxia.GameCore
                 // 限制在最小最大值之間
                 float newOrthoSize = Mathf.Clamp(requiredSize, orthoSizeMin, orthoSizeMax);
                 
-                // 如果需要的縮放比當前更大，才進行縮放
-                if (newOrthoSize > currentOrthoSize)
+                // 無論當前縮放多大，都調整到最適合的大小（可以 Zoom in 或 Zoom out）
+                targetOrthoSize = newOrthoSize;
+                
+                if (Mathf.Abs(newOrthoSize - currentOrthoSize) > 0.1f)
                 {
-                    targetOrthoSize = newOrthoSize;
-                    Debug.Log($"[CombatCameraController] 調整 Orthographic Size: {currentOrthoSize} -> {newOrthoSize}, 距離: {distance}");
+                    string zoomAction = newOrthoSize < currentOrthoSize ? "Zoom in" : "Zoom out";
+                    Debug.Log($"[CombatCameraController] {zoomAction} - 調整 Orthographic Size: {currentOrthoSize:F2} -> {newOrthoSize:F2}, 距離: {distance:F2}");
                 }
             }
             else
             {
                 // Perspective 模式：調整 FOV 和距離
-                // 根據距離計算需要的 FOV
-                float requiredFOV = Mathf.Clamp(30f + (distance * 2f), perspectiveFOVMin, perspectiveFOVMax);
-                float requiredDistance = Mathf.Clamp(10f + (distance * 0.5f), perspectiveDistanceMin, perspectiveDistanceMax);
+                // 根據距離計算需要的 FOV 和相機距離
+                // 調整公式以獲得更合適的視野
+                float requiredFOV = Mathf.Clamp(25f + (distance * 1.5f), perspectiveFOVMin, perspectiveFOVMax);
+                float requiredDistance = Mathf.Clamp(8f + (distance * 0.4f), perspectiveDistanceMin, perspectiveDistanceMax);
                 
-                // 如果需要更廣的視角，才進行調整
-                if (requiredFOV > currentPerspectiveFOV || requiredDistance > currentCameraDistance)
+                // 無論當前狀態如何，都調整到最適合的視角（可以 Zoom in 或 Zoom out）
+                targetPerspectiveFOV = requiredFOV;
+                targetCameraDistance = requiredDistance;
+                targetPosition.y = targetCameraDistance;
+                
+                if (Mathf.Abs(requiredFOV - currentPerspectiveFOV) > 1f || Mathf.Abs(requiredDistance - currentCameraDistance) > 0.5f)
                 {
-                    targetPerspectiveFOV = Mathf.Max(currentPerspectiveFOV, requiredFOV);
-                    targetCameraDistance = Mathf.Max(currentCameraDistance, requiredDistance);
-                    targetPosition.y = targetCameraDistance;
-                    Debug.Log($"[CombatCameraController] 調整 Perspective FOV: {currentPerspectiveFOV} -> {targetPerspectiveFOV}, 距離: {distance}");
+                    string zoomAction = requiredFOV < currentPerspectiveFOV ? "Zoom in" : "Zoom out";
+                    Debug.Log($"[CombatCameraController] {zoomAction} - 調整 Perspective FOV: {currentPerspectiveFOV:F2} -> {targetPerspectiveFOV:F2}, 相機距離: {currentCameraDistance:F2} -> {targetCameraDistance:F2}, 目標距離: {distance:F2}");
                 }
             }
             
