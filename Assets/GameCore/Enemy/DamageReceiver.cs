@@ -245,11 +245,11 @@ namespace Wuxia.GameCore
             float originalTimeScale = Time.timeScale;
             
             // 設定慢動作
-            Time.timeScale = 0.11f;
+            Time.timeScale = 0.05f;
             Debug.Log("[DamageReceiver] 開始投射物格擋慢動作效果");
             
             // 等待 0.5 秒（使用實際時間）
-            yield return new WaitForSecondsRealtime(1.0f);
+            yield return new WaitForSecondsRealtime(0.75f);
             
             // 恢復正常時間軸
             Time.timeScale = originalTimeScale;
