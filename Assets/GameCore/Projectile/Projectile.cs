@@ -32,8 +32,11 @@ namespace Wuxia.GameCore
         [SerializeField] private float homingSpeed = 5f;
         
         [Header("碰撞設定")]
-        [Tooltip("碰撞時是否銷毀")]
+        [Tooltip("碰撞時是否銷毀（已棄用，請使用 DestroyOnDamage）")]
         [SerializeField] private bool destroyOnImpact = true;
+        
+        [Tooltip("造成傷害時是否銷毀")]
+        [SerializeField] private bool destroyOnDamage = true;
         
         [Tooltip("可碰撞的圖層")]
         [SerializeField] private LayerMask collisionLayers = -1;
@@ -311,7 +314,7 @@ namespace Wuxia.GameCore
         }
         
         /// <summary>
-        /// 碰撞檢測
+        /// 碰撞檢測 - 不再自動銷毀，由外部系統決定
         /// </summary>
         private void OnTriggerEnter(Collider other)
         {
@@ -320,8 +323,11 @@ namespace Wuxia.GameCore
             {
                 OnHit?.Invoke(this, other);
                 
+                // 移除自動銷毀邏輯，改由外部系統呼叫 OnProjectileBlocked 或 OnDamageDealt
+                // 保留舊的 destroyOnImpact 邏輯作為後備方案（向後兼容）
                 if (destroyOnImpact)
                 {
+                    Debug.LogWarning($"[Projectile] 使用舊的 DestroyOnImpact 邏輯，建議使用新的 DestroyOnDamage 系統");
                     Destroy(gameObject);
                 }
             }
@@ -558,6 +564,87 @@ namespace Wuxia.GameCore
         public void SetMaxReflections(int max)
         {
             maxReflections = Mathf.Max(0, max);
+        }
+        
+        /// <summary>
+        /// 投射物被格擋時的處理 - 根據反彈次數決定是否銷毀
+        /// </summary>
+        /// <param name="blockingEntity">格擋的實體</param>
+        /// <param name="shouldReflect">是否應該反彈（如果為 false，則只檢查反彈次數限制）</param>
+        /// <param name="reflectionDirection">反彈方向（可選）</param>
+        public void OnProjectileBlocked(CombatEntity blockingEntity, bool shouldReflect = true, Vector3 reflectionDirection = default)
+        {
+            Debug.Log($"[Projectile] 投射物被 {blockingEntity?.Name ?? "unknown"} 格擋");
+            
+            if (shouldReflect && blockingEntity != null)
+            {
+                // 嘗試反彈
+                ReflectProjectile(blockingEntity, reflectionDirection);
+            }
+            else
+            {
+                // 不反彈，檢查是否已達到最大反彈次數限制
+                if (maxReflections > 0 && reflectionCount >= maxReflections)
+                {
+                    Debug.Log($"[Projectile] 格擋時已達到最大反彈次數 ({maxReflections})，銷毀投射物");
+                    DestroyProjectileOnMaxReflections();
+                }
+                else
+                {
+                    Debug.Log($"[Projectile] 格擋但未達到反彈次數限制，投射物繼續存在");
+                }
+            }
+        }
+        
+        /// <summary>
+        /// 投射物造成傷害時的處理 - 根據 DestroyOnDamage 決定是否銷毀
+        /// </summary>
+        /// <param name="targetEntity">受傷害的實體</param>
+        /// <param name="damageAmount">造成的傷害量</param>
+        public void OnDamageDealt(CombatEntity targetEntity, float damageAmount)
+        {
+            Debug.Log($"[Projectile] 投射物對 {targetEntity?.Name ?? "unknown"} 造成 {damageAmount} 點傷害");
+            
+            if (destroyOnDamage)
+            {
+                Debug.Log($"[Projectile] DestroyOnDamage = true，銷毀投射物");
+                DestroyProjectile();
+            }
+            else
+            {
+                Debug.Log($"[Projectile] DestroyOnDamage = false，投射物繼續存在");
+            }
+        }
+        
+        /// <summary>
+        /// 投射物未能造成傷害時的處理（例如：目標免疫）
+        /// </summary>
+        /// <param name="targetEntity">目標實體</param>
+        /// <param name="reason">未造成傷害的原因</param>
+        public void OnDamageFailed(CombatEntity targetEntity, string reason = "unknown")
+        {
+            Debug.Log($"[Projectile] 投射物未能對 {targetEntity?.Name ?? "unknown"} 造成傷害，原因: {reason}");
+            
+            // 未造成傷害時不銷毀，讓投射物繼續飛行
+            // 可以根據需要添加其他邏輯，例如特殊效果等
+        }
+        
+        /// <summary>
+        /// 獲取 DestroyOnDamage 設定
+        /// </summary>
+        /// <returns>是否在造成傷害時銷毀</returns>
+        public bool GetDestroyOnDamage()
+        {
+            return destroyOnDamage;
+        }
+        
+        /// <summary>
+        /// 設定 DestroyOnDamage
+        /// </summary>
+        /// <param name="value">是否在造成傷害時銷毀</param>
+        public void SetDestroyOnDamage(bool value)
+        {
+            destroyOnDamage = value;
         }
     }
 }

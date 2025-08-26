@@ -96,15 +96,24 @@ namespace Wuxia.GameCore
                         healthComponent.TakeDamage(finalDamage);
                         onDamaged?.Invoke(finalDamage);
                         Debug.Log($"[DamageReceiver] {gameObject.name} 受到 {finalDamage} 點傷害");
+                        
+                        // 通知投射物造成了傷害
+                        NotifyProjectileOnDamage(dealer, finalDamage);
                     }
                     else
                     {
                         Debug.Log($"[DamageReceiver] {gameObject.name} 傷害被完全格擋");
+                        
+                        // 通知投射物傷害被格擋/失敗
+                        NotifyProjectileOnDamageFailed(dealer, "damage blocked");
                     }
                 }
                 else
                 {
                     Debug.LogWarning($"[DamageReceiver] {gameObject.name} 沒有設定 Health 組件");
+                    
+                    // 通知投射物傷害失敗（沒有 Health 組件）
+                    NotifyProjectileOnDamageFailed(dealer, "no health component");
                 }
             }
         }
@@ -254,6 +263,60 @@ namespace Wuxia.GameCore
             // 恢復正常時間軸
             Time.timeScale = originalTimeScale;
             Debug.Log("[DamageReceiver] 投射物格擋慢動作效果結束");
+        }
+        
+        /// <summary>
+        /// 通知投射物成功造成傷害
+        /// </summary>
+        /// <param name="damageDealer">造成傷害的 DamageDealer</param>
+        /// <param name="damageAmount">造成的傷害量</param>
+        private void NotifyProjectileOnDamage(DamageDealer damageDealer, float damageAmount)
+        {
+            if (damageDealer == null)
+            {
+                Debug.LogWarning($"[DamageReceiver] NotifyProjectileOnDamage: damageDealer 為 null");
+                return;
+            }
+            
+            // 往上查找 Projectile 元件（在 DamageDealer 的父物件中）
+            Projectile projectile = damageDealer.GetComponentInParent<Projectile>();
+            
+            if (projectile != null)
+            {
+                Debug.Log($"[DamageReceiver] 通知投射物 {projectile.gameObject.name} 成功造成 {damageAmount} 點傷害");
+                projectile.OnDamageDealt(ownerEntity, damageAmount);
+            }
+            else
+            {
+                Debug.Log($"[DamageReceiver] {damageDealer.gameObject.name} 不是投射物，無需通知");
+            }
+        }
+        
+        /// <summary>
+        /// 通知投射物傷害失敗
+        /// </summary>
+        /// <param name="damageDealer">造成傷害的 DamageDealer</param>
+        /// <param name="reason">失敗原因</param>
+        private void NotifyProjectileOnDamageFailed(DamageDealer damageDealer, string reason)
+        {
+            if (damageDealer == null)
+            {
+                Debug.LogWarning($"[DamageReceiver] NotifyProjectileOnDamageFailed: damageDealer 為 null");
+                return;
+            }
+            
+            // 往上查找 Projectile 元件（在 DamageDealer 的父物件中）
+            Projectile projectile = damageDealer.GetComponentInParent<Projectile>();
+            
+            if (projectile != null)
+            {
+                Debug.Log($"[DamageReceiver] 通知投射物 {projectile.gameObject.name} 傷害失敗，原因: {reason}");
+                projectile.OnDamageFailed(ownerEntity, reason);
+            }
+            else
+            {
+                Debug.Log($"[DamageReceiver] {damageDealer.gameObject.name} 不是投射物，無需通知");
+            }
         }
         
     }
