@@ -6,14 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Presets Directory/FS_Drafts/TestField.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Presets Directory/FS_Drafts/TestField.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterA/SkillA.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterA/SkillA.anim" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy_Prototype_A/Enemy_Prototype_A_Stats.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy_Prototype_A/Enemy_Prototype_A_Stats.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Maps/Map_Test.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Maps/Map_Test.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/PGG_TestScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/PGG_TestScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/PGG_TestScene2.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/PGG_TestScene2.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Presets Directory/FS_Drafts/HighGroundField.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Presets Directory/FS_Drafts/HighGroundField.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FieldAsset/DarkRed.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FieldAsset/DarkRed.prefab" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,7 +176,7 @@
       <workItem from="1755751786765" duration="8933000" />
       <workItem from="1756097662518" duration="9118000" />
       <workItem from="1756187509782" duration="14737000" />
-      <workItem from="1756275504474" duration="2654000" />
+      <workItem from="1756275504474" duration="4760000" />
     </task>
     <servers />
   </component>

@@ -49,6 +49,42 @@ MonoBehaviour:
     IsSubSpawner: 0
     _EditorDisplaySpawnerHeader: 0
   _EditorDisplayCallOnAll: 0
+--- !u!114 &-7987502064517205739
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: 'SR_MoveRotateScale-[HighGround]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 0
+  ApplyMode: 0
+  Space: 0
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0.75, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: 0, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomizeOffset: {x: 0, y: 0, z: 0}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &-7941859914617326981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,6 +183,7 @@ MonoBehaviour:
     Parent: {fileID: -7858836565979478858}
     Rules:
     - {fileID: -4410603646781025183}
+    - {fileID: -7987502064517205739}
     Mode: 0
     CellCheckMode: 0
     _Editor_SpawnerAdvancedOptionsFoldout: 0
@@ -220,7 +257,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 671fd9c659a53a04eb310656f11c9125, type: 3}
-  m_Name: New Modificator
+  m_Name: Ramp
   m_EditorClassIdentifier: 
   TemporaryContainer: {fileID: 0}
   Enabled: 1
@@ -232,7 +269,12 @@ MonoBehaviour:
   OStamp: {fileID: 0}
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
-  PrefabsList: []
+  PrefabsList:
+  - Prefab: {fileID: 2462901921352981716, guid: eb511dcced92e8e49a30e669cfb294b4, type: 3}
+    MainCollider: {fileID: 2893545964165449424, guid: eb511dcced92e8e49a30e669cfb294b4, type: 3}
+    subID: 0
+    _refMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+    _refCol: {fileID: 2893545964165449424, guid: eb511dcced92e8e49a30e669cfb294b4, type: 3}
   DrawMultiObjectStamps: 1
   Spawners: []
   SubSpawners: []
