@@ -67,6 +67,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Transforming\Legacy\SR_PushPosition.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Generating\FlexibleGeneratorSetup.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Generators Shared\Helpers\FVector2IntUnity2017.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Build Planner (Node Graph) Demos\PGG_Demo_PlannerProgress.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Field Planner\Access\PR_SubFieldsCount.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Logics\Shape Generators\SG_ManualRectangles.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Grid Operations\GeneratedInfo.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Tile Designer\Tile Mesh Setup\TileMeshSetup.Extrude.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Components\Simple\SimpleFieldGenerator.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Tile Designer\Tile Designer Window\TileDesignerWindow.GUI.Actions.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\SimpleAttachCamera.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Cells\SR_RemoveSpawn.cs" />
     <Compile Include="Assets\GameCore\UI\HealthBarController.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Placement\SR_IfRotated.cs" />
@@ -197,6 +199,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Build Setup\PR_ChooseOneField.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Tile Designer\Tile Mesh Setup\TileMeshSetup.CustomMeshAndExtra.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Modelling\Volume Generators\SR Roof Generator\SR_RoofGeneratorPlacer.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\RotatingObject.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Generators Shared\Interfaces\IGenerating.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Logics\PlannerFunctionNode.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Modelling\Volume Generators\SR Roof Generator\SR_RoofPlaneGenerator.cs" />
@@ -216,6 +219,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Cells\PR_GetCellInstructionParams.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Graph\Custom Ports\PGGUniversalPort.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Math\Values\PR_Half.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\PGGDemo_InfiniteFlight.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\FieldAndGrid\SR_CompareVariable.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Math\Values\PR_GetValueByAxis.cs" />
     <Compile Include="Assets\GameCore\Control\BlockingSystem.cs" />
@@ -225,6 +229,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Modelling\SR_SetMaterialProperty.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Components\Utils\PGGIgnoreCombining.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\PE_Start.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\PGGDemo_PlaymodePaint.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Field Planner\PR_SetLocalVariable.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Grid Operations\SpawnInstruction.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Generators Classes\Checkers\CheckerField.cs" />
@@ -344,6 +349,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Utilities\Old Backup\Stamp Tile\SR_StampTile.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Placement\SR_HelperPivotCorrection.cs" />
     <Compile Include="Assets\GameCore\UI\TurnIndicator.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\SimpleGameController.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Field Planner\Special\PR_PushInDirUntilNotCollides.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Executor\BuildPlannerExecutor.Generating.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Mod Graph\Operations\MR_BreakSpawner.cs" />
@@ -430,6 +436,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Placement\SR_IfCellContainsTag.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Utilities\Property Drawers\PGG_FieldPresetSwitch.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Core\PlannerMeshIgnore.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\SimpleWSADMovement.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Pipe Generator\Core\PipeGenerator.Generate.RandomFindOnStart.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\FieldPlanner.cs" />
     <Compile Include="Assets\GameCore\System\TargetedIndicator.cs" />
@@ -469,6 +476,7 @@
     <Compile Include="Assets\FImpossible Creations\Shared Tools\Node FGraph\Node Port Types\FSGr_IntPort.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Grid Fundamentals\FGenGraph.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Transforming\Legacy\SR_GetRestrictedRotation.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\SimpleIzoCamera.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Core\FieldPlanner.Reference.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Pipe Generator\Core\PipeGenerator.Generate.Conditions.Extra.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Quick Solutions\SR_EdgesPlacer.cs" />
@@ -610,7 +618,9 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Modelling\Volume Generators\SR Roof Generator\SR_RoofGeneratorEdgesPlacer.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Modelling\SR_SetMaterial.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Field Planner\Operations\PR_DiscardField.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\SimpleProjectile.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Graph\Custom Ports\PGGModCellPort.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\ExteriorWithInteriorGeneratorExample.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Components\Simple\RectangleOfFieldsGenerator.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Utilities\Utility_DeloneField.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Community\PR_RemoveCellsUnder.cs" />
@@ -623,6 +633,7 @@
     <Compile Include="Assets\GameCore\Skill\CombatSkill.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\BuildPlannerPreset.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Tile Designer\Tile Mesh Setup\TileMeshSetup.Compute.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\ExampleSpawnAnimation.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Cells\Actions\PR_RoundAccordingly.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Field Planner\Access\PR_GetGlobalIndexOfInstance.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Community\PR_PathFindGenerateLowerCost.cs" />
@@ -636,6 +647,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Generators Classes\Checkers 3D\CheckerField3D.Operations.Trigo.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Field Planner\Shape\PR_RemoveAllFieldCells.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Shared\Utils\FUniversalVariable.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\PGGDemo_Rotator.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Graph\Custom Ports\PGGSpawnPort.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Logics\PlannerFunctionNode.Ports.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Mod Graph\Transforming\MR_SetRotation.cs" />
@@ -706,12 +718,15 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Generators Classes\Checkers\CheckerField.Alignment.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Utilities\GenerationProcedures.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Math\Values\PR_Null.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Build Planner New Demos\Key Dungeon Game Example\StepToNextLevelArea.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Field Planner\Shape\PR_YToFields.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\SimpleElevator.cs" />
     <Compile Include="Assets\GameCore\UI\FloorMouseIndicator.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Transforming\Conditional\SR_ConditionalPushPosition.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Math\Algebra\PR_Multiply.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Field Planner\Transforming\PR_SetFieldPosition.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Field Planner\Access\PR_GetCellInstructionCount.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Minimap Examples\PGG_Demo_Sidescroll_CollectPainters.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Scriptables\FieldSetup.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Cells\Actions\PR_CopyOtherCellParams.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Cells\Actions\PR_GetMostMiddleCell.cs" />
@@ -759,10 +774,12 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Cells\SR_CellSpawnsCount.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Generating\OnSpawnProcessor.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Cells\SR_PreventSpawns.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Build Planner New Demos\Key Dungeon Game Example\SimpleEnemy.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Field Planner\Access\PR_GetFieldInstance.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Operations\Core\TestFieldPlannerOperation.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Tile Designer\Extra Generators\TileDesigner.CableGenerator.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Core\Async Related\FieldPlannerPrepareThread.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\SimpleGate.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Transforming\Legacy\SR_Rotate.cs" />
     <Compile Include="Assets\GameCore\UI\TurnOrderIcon.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Modelling\SR_ReplacePrefab.cs" />
@@ -770,6 +787,8 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Math\Algebra\PR_Clamp.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Mod Graph\Mod Cells\MR_CellContainsTag.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Cells\PR_IsCellDataInRange.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Demos Assets\Scripts\FlatGeneratorExample.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Build Planner New Demos\Key Dungeon Game Example\SimpleKey.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Placement\SR_FreeSpace.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Shared\Math Helpers\Math\FVectorMethods.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Transforming\Legacy\SR_DirectOffset.cs" />
@@ -799,6 +818,7 @@
     <Compile Include="Assets\GameCore\AI\Core\EnemyStrategy.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Build Setup\PR_IterateFields.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Mod Graph\Mod Cells\MR_AddCellData.cs" />
+    <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Demos - PGG\Build Planner New Demos\Key Dungeon Game Example\DungeonGameController_PGGDemo.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Mod Graph\Mod Spawns\MR_SpawnIsTagged.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Helper Components\Bases\PGGDataHolder.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Mod Graph\Mod Cells\Mod Cell Parameters\MR_IterateCellInstructions.cs" />
