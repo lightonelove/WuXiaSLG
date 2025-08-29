@@ -47,7 +47,7 @@ MonoBehaviour:
   _EditorDrawPostLogics: 0
   _EditorSelectedShape: 0
   _EditorSelectedVar: 0
-  _EditorDisplayGizmosOnPlan: 1
+  _EditorDisplayGizmosOnPlan: 0
   _Editor_OperationsFoldout: 0
   savedValueVariables: []
   Operations: []
@@ -102,7 +102,7 @@ MonoBehaviour:
     ConnectionToID: -2147483646
     ConnectionFrom_AlternativeID: -1
     ConnectionTo_AlternativeID: -1
-  NodePosition: {x: 695.0714, y: 515.7857}
+  NodePosition: {x: 662.5, y: 515.7857}
   NodeDrawOffset: {x: 0, y: 0}
   ResizedScale: {x: 200, y: 140}
   _EditorInContainedRange: []
@@ -119,7 +119,7 @@ MonoBehaviour:
     ParentNode: {fileID: -4357860202386546923}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 718.0714
+      x: 685.5
       y: 551.7857
       width: 27
       height: 27
@@ -135,7 +135,7 @@ MonoBehaviour:
     portConnections: []
     initValueSet: 1
     initialized: 0
-    UniquePlannerID: 0
+    UniquePlannerID: 1
     Editor_DisplayVariableName: 1
     Switch_DisconnectedReturnsByID: 1
     Switch_MinusOneReturnsMainField: 1
@@ -149,7 +149,7 @@ MonoBehaviour:
     ParentNode: {fileID: -4357860202386546923}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 718.0714
+      x: 685.5
       y: 591.7857
       width: 27
       height: 27
@@ -165,14 +165,14 @@ MonoBehaviour:
     portConnections: []
     initValueSet: 1
     initialized: 0
-    Value: 0
+    Value: 2
   SidesSpace:
     ParentNodeID: -2147483646
     PortID: 2
     ParentNode: {fileID: -4357860202386546923}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 718.0714
+      x: 685.5
       y: 611.7857
       width: 27
       height: 27
@@ -195,7 +195,7 @@ MonoBehaviour:
     ParentNode: {fileID: -4357860202386546923}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 847.0714
+      x: 814.5
       y: 633.7857
       width: 27
       height: 27
@@ -217,7 +217,7 @@ MonoBehaviour:
     ParentNode: {fileID: -4357860202386546923}
     _E_LatestCorrectPortRect:
       serializedVersion: 2
-      x: 847.0714
+      x: 814.5
       y: 653.7857
       width: 27
       height: 27
@@ -234,32 +234,6 @@ MonoBehaviour:
     initValueSet: 1
     initialized: 0
   ForceForwardAlign: 0
---- !u!114 &-2467848318146127623
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 124b385a8cf08044d9f7353b2aec97a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _editorForceChanged: 0
-  BranchLength:
-    Min: 5
-    Max: 7
-  TargetBranches:
-    Min: 4
-    Max: 5
-  BranchThickness:
-    Min: 2
-    Max: 2
-  SeparationFactor: 5
-  AvoidOverlaps: 1
-  MaxSize: {x: 10, y: 10, z: 10}
-  MinSize: {x: -10, y: -10, z: -10}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,9 +253,82 @@ MonoBehaviour:
     FieldPlanners:
     - {fileID: 1056993416827635787}
     - {fileID: -4379926194258459096}
+    - {fileID: 442720095961944283}
   AsyncGenerating: 0
   Operations: []
   _Editor_OperationsFoldout: 0
+--- !u!114 &291031340920723137
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c51f20aee773364b8d51fa23d9e5be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _editorForceChanged: 0
+  BranchLength:
+    Min: 5
+    Max: 7
+  TargetBranches:
+    Min: 4
+    Max: 5
+  BranchThickness:
+    Min: 1
+    Max: 1
+  SeparationFactor: 5
+  AvoidOverlaps: 1
+--- !u!114 &442720095961944283
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27cf1ba038a8c7349bf700113ce0725f, type: 3}
+  m_Name: New Field Planner
+  m_EditorClassIdentifier: 
+  _EditorDrawShape: 1
+  _EditorDrawParameters: 0
+  _EditorDrawLogics: 1
+  _EditorDrawPostLogics: 0
+  _EditorSelectedShape: 0
+  _EditorSelectedVar: 0
+  _EditorDisplayGizmosOnPlan: 1
+  _Editor_OperationsFoldout: 0
+  savedValueVariables: []
+  Operations: []
+  ParentBuildPlanner: {fileID: 11400000}
+  ShapeGenerator: {fileID: 0}
+  DisableWholePlanner: 0
+  tag: 
+  proceduresBegin: {fileID: 0}
+  postProceduresBegin: {fileID: 0}
+  FProcedures: []
+  FPostProcedures: []
+  FSubGraphs: []
+  FVariables: []
+  ExposeShape: 1
+  FieldType: 0
+  DefaultFieldSetup: {fileID: 0}
+  DefaultPrefab: {fileID: 0}
+  Instances: 1
+  ExposeInstanceCount: 0
+  DisableCollision: 0
+  AlwaysPushOut: 1
+  AllowRotateBy90: 1
+  PreviewCellSize: {x: 1, y: 1, z: 1}
+  RoundToScale: 0
+  MaxRetries: 64
+  IndexOnPrint: -1
+  IndexOfDuplicate: -1
+  IndexOnPreset: -1
+  GraphView: 0
 --- !u!114 &1056993416827635787
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -305,7 +352,7 @@ MonoBehaviour:
   savedValueVariables: []
   Operations: []
   ParentBuildPlanner: {fileID: 11400000}
-  ShapeGenerator: {fileID: -2467848318146127623}
+  ShapeGenerator: {fileID: 291031340920723137}
   DisableWholePlanner: 0
   tag: 
   proceduresBegin: {fileID: 4224002336506588391}
