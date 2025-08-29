@@ -54,7 +54,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   Module: 0
   CornerMode: 0
@@ -179,12 +179,7 @@ MonoBehaviour:
   OStamp: {fileID: 0}
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
-  PrefabsList:
-  - Prefab: {fileID: 3578197552732280354, guid: 201d853e175be614bbe78973185a7da2, type: 3}
-    MainCollider: {fileID: 4437969965631864071, guid: 201d853e175be614bbe78973185a7da2, type: 3}
-    subID: 0
-    _refMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-    _refCol: {fileID: 4437969965631864071, guid: 201d853e175be614bbe78973185a7da2, type: 3}
+  PrefabsList: []
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1
@@ -567,7 +562,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   OffsetCellMode: 0
   OffsetCell: {x: 0, y: 0, z: 0}
@@ -694,7 +689,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
+  CellAllow: 0
   AllConditionsMet: 1
   YawOffset: 0
   DirectOffset: {x: 0, y: 0, z: 0}
@@ -719,8 +714,8 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
-  AllConditionsMet: 1
+  CellAllow: 1
+  AllConditionsMet: 0
   Count:
     Min: 2
     Max: 4
@@ -1048,12 +1043,7 @@ MonoBehaviour:
   OStamp: {fileID: 0}
   DrawObjectStamps: 1
   OMultiStamp: {fileID: 0}
-  PrefabsList:
-  - Prefab: {fileID: 4313796076316519695, guid: 56ed40e41bbf7304c87ddb01d69b7574, type: 3}
-    MainCollider: {fileID: 7295104921267447422, guid: 56ed40e41bbf7304c87ddb01d69b7574, type: 3}
-    subID: 0
-    _refMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-    _refCol: {fileID: 7295104921267447422, guid: 56ed40e41bbf7304c87ddb01d69b7574, type: 3}
+  PrefabsList: []
   DrawMultiObjectStamps: 1
   Spawners:
   - Enabled: 1

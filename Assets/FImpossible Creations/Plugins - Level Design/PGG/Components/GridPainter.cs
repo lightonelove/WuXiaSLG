@@ -50,6 +50,13 @@ namespace FIMSpace.Generating
         public enum EPaintMode { Cells, Instructions }
         [HideInInspector][SerializeField] public int PaintingID = -1;
 
+        // 新增拖拉方形範圍功能的變數
+        [HideInInspector][SerializeField] public bool _Editor_RectangleDragMode = false;
+        [HideInInspector] public Vector3Int _Editor_DragStart;
+        [HideInInspector] public Vector3Int _Editor_DragEnd;
+        [HideInInspector] public bool _Editor_IsDragging = false;
+        [HideInInspector] public bool _Editor_DragStarted = false;
+
         #region Add Header Options
 
 #if UNITY_EDITOR
@@ -1435,19 +1442,31 @@ namespace FIMSpace.Generating
 
                 if (Get._Editor_Paint)
                 {
-                    //if (Get._Editor_PaintSpaceMode == GridPainter.EPaintSpaceMode.XZ)
+                    // 新增方形拖拉模式切換
+                    Rect rectModeRect = new Rect(15, hOffset - 220, 140, 20);
+                    Get._Editor_RectangleDragMode = GUI.Toggle(rectModeRect, Get._Editor_RectangleDragMode, "Rectangle Drag Mode");
+                    
+                    if (!Get._Editor_RectangleDragMode)
                     {
-                        Rect radRect = new Rect(15, hOffset - 140, 140, 20);
-                        Get._Editor_PaintRadius = Mathf.RoundToInt(GUI.HorizontalSlider(radRect, Get._Editor_PaintRadius, 1, 4));
-                        radRect = new Rect(radRect);
-                        radRect.y -= 18;
-                        GUI.Label(radRect, new GUIContent("Radius"));
+                        //if (Get._Editor_PaintSpaceMode == GridPainter.EPaintSpaceMode.XZ)
+                        {
+                            Rect radRect = new Rect(15, hOffset - 140, 140, 20);
+                            Get._Editor_PaintRadius = Mathf.RoundToInt(GUI.HorizontalSlider(radRect, Get._Editor_PaintRadius, 1, 4));
+                            radRect = new Rect(radRect);
+                            radRect.y -= 18;
+                            GUI.Label(radRect, new GUIContent("Radius"));
 
-                        radRect = new Rect(15, hOffset - 179, 140, 20);
-                        Get._Editor_RadiusY = Mathf.RoundToInt(GUI.HorizontalSlider(radRect, Get._Editor_RadiusY, 1, 4));
-                        radRect = new Rect(radRect);
-                        radRect.y -= 18;
-                        GUI.Label(radRect, new GUIContent("Radius Y"));
+                            radRect = new Rect(15, hOffset - 179, 140, 20);
+                            Get._Editor_RadiusY = Mathf.RoundToInt(GUI.HorizontalSlider(radRect, Get._Editor_RadiusY, 1, 4));
+                            radRect = new Rect(radRect);
+                            radRect.y -= 18;
+                            GUI.Label(radRect, new GUIContent("Radius Y"));
+                        }
+                    }
+                    else
+                    {
+                        Rect helpRect = new Rect(15, hOffset - 190, 250, 40);
+                        GUI.Label(helpRect, "拖拉滑鼠左鍵填滿範圍\n拖拉滑鼠右鍵刪除範圍");
                     }
 
                     Rect refreshRect = new Rect(160, hOffset - 75, 120, 20);
@@ -1550,9 +1569,16 @@ namespace FIMSpace.Generating
 
                 if (Get.PaintingID <= -1)
                 {
-                    var cell = GridVisualize.ProcessInputEvents(ref Get._Editor_Paint, Get.grid, Get.FieldPreset, ref Get._Editor_YLevel, Get.transform, true, cSize.y, is2D);
+                    // 方形拖拉模式處理
+                    if (Get._Editor_RectangleDragMode && Get._Editor_Paint)
+                    {
+                        ProcessRectangleDragMode(Get, cSize, is2D);
+                    }
+                    else
+                    {
+                        var cell = GridVisualize.ProcessInputEvents(ref Get._Editor_Paint, Get.grid, Get.FieldPreset, ref Get._Editor_YLevel, Get.transform, true, cSize.y, is2D);
 
-                    if (cell != null)
+                        if (cell != null)
                     {
                         if (Get._Editor_PaintRadius > 1 || Get._Editor_RadiusY > 1)
                         {
@@ -1609,6 +1635,7 @@ namespace FIMSpace.Generating
                         }
 
                         Get.OnChange();
+                        }
                     }
                 }
                 else
@@ -1794,6 +1821,127 @@ namespace FIMSpace.Generating
 
             #endregion
 
+            /// <summary>
+            /// 處理方形拖拉模式的輸入和視覺化
+            /// </summary>
+            void ProcessRectangleDragMode(GridPainter painter, Vector3 cellSize, bool is2D)
+            {
+                Event currentEvent = Event.current;
+                
+                // 獲取滑鼠位置對應的 Cell 坐標
+                Vector3 mouseWorldPos;
+                if (is2D)
+                {
+                    mouseWorldPos = painter.transform.InverseTransformPoint(GridVisualize.GetMouseWorldPosition2D(-painter.transform.forward, currentEvent, SceneView.currentDrawingSceneView.camera, painter._Editor_YLevel, cellSize.y, painter.transform.position.z * Vector3.forward));
+                }
+                else
+                {
+                    mouseWorldPos = painter.transform.InverseTransformPoint(GridVisualize.GetMouseWorldPosition(painter.transform.up, currentEvent, SceneView.currentDrawingSceneView.camera, painter._Editor_YLevel, cellSize.y, painter.transform.position.y * Vector3.up));
+                }
+                
+                Vector3Int currentCellPos = PGGUtils.V3toV3Int(mouseWorldPos / cellSize.x);
+                
+                // 處理滑鼠事件
+                if (currentEvent.type == EventType.MouseDown)
+                {
+                    if (currentEvent.button == 0 || currentEvent.button == 1) // 左鍵或右鍵
+                    {
+                        painter._Editor_DragStart = currentCellPos;
+                        painter._Editor_DragEnd = currentCellPos;
+                        painter._Editor_IsDragging = true;
+                        painter._Editor_DragStarted = true;
+                        currentEvent.Use();
+                    }
+                }
+                else if (currentEvent.type == EventType.MouseDrag && painter._Editor_IsDragging)
+                {
+                    painter._Editor_DragEnd = currentCellPos;
+                    SceneView.RepaintAll();
+                    currentEvent.Use();
+                }
+                else if (currentEvent.type == EventType.MouseUp)
+                {
+                    if (painter._Editor_IsDragging && painter._Editor_DragStarted)
+                    {
+                        // 執行批量操作
+                        bool isDelete = currentEvent.button == 1; // 右鍵刪除，左鍵新增
+                        ExecuteRectangleOperation(painter, painter._Editor_DragStart, painter._Editor_DragEnd, isDelete);
+                        
+                        painter._Editor_IsDragging = false;
+                        painter._Editor_DragStarted = false;
+                        painter.OnChange();
+                        SceneView.RepaintAll();
+                    }
+                    currentEvent.Use();
+                }
+                
+                // 繪製拖拉範圍預覽
+                if (painter._Editor_IsDragging && painter._Editor_DragStarted)
+                {
+                    DrawRectangleDragPreview(painter, painter._Editor_DragStart, painter._Editor_DragEnd, cellSize, currentEvent.button == 1);
+                }
+            }
+            
+            /// <summary>
+            /// 執行方形範圍的批量操作
+            /// </summary>
+            void ExecuteRectangleOperation(GridPainter painter, Vector3Int start, Vector3Int end, bool isDelete)
+            {
+                Vector3Int min = new Vector3Int(Mathf.Min(start.x, end.x), Mathf.Min(start.y, end.y), Mathf.Min(start.z, end.z));
+                Vector3Int max = new Vector3Int(Mathf.Max(start.x, end.x), Mathf.Max(start.y, end.y), Mathf.Max(start.z, end.z));
+                
+                for (int x = min.x; x <= max.x; x++)
+                {
+                    for (int z = min.z; z <= max.z; z++)
+                    {
+                        for (int y = min.y; y <= max.y; y++)
+                        {
+                            Vector3Int cellPos = new Vector3Int(x, y, z);
+                            
+                            if (isDelete)
+                            {
+                                painter.grid.RemoveCell(cellPos);
+                            }
+                            else
+                            {
+                                painter.grid.AddCell(cellPos);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            /// <summary>
+            /// 繪製拖拉範圍預覽
+            /// </summary>
+            void DrawRectangleDragPreview(GridPainter painter, Vector3Int start, Vector3Int end, Vector3 cellSize, bool isDelete)
+            {
+                Vector3Int min = new Vector3Int(Mathf.Min(start.x, end.x), Mathf.Min(start.y, end.y), Mathf.Min(start.z, end.z));
+                Vector3Int max = new Vector3Int(Mathf.Max(start.x, end.x), Mathf.Max(start.y, end.y), Mathf.Max(start.z, end.z));
+                
+                Color preColor = Handles.color;
+                Handles.color = isDelete ? Color.red : Color.green;
+                Handles.color = new Color(Handles.color.r, Handles.color.g, Handles.color.b, 0.3f);
+                
+                for (int x = min.x; x <= max.x; x++)
+                {
+                    for (int z = min.z; z <= max.z; z++)
+                    {
+                        for (int y = min.y; y <= max.y; y++)
+                        {
+                            Vector3Int cellPos = new Vector3Int(x, y, z);
+                            Vector3 worldPos = painter.transform.TransformPoint(painter.FieldPreset.TransformCellPosition((Vector3)cellPos));
+                            
+                            // 繪製半透明的立方體預覽
+                            Handles.matrix = Matrix4x4.TRS(worldPos, painter.transform.rotation, Vector3.one);
+                            Handles.DrawWireCube(Vector3.zero, new Vector3(cellSize.x * 0.9f, cellSize.y * 0.2f, cellSize.z * 0.9f));
+                        }
+                    }
+                }
+                
+                Handles.matrix = Matrix4x4.identity;
+                Handles.color = preColor;
+            }
 
         }
 
