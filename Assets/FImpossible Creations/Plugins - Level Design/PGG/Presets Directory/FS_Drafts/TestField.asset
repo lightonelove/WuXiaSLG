@@ -416,13 +416,7 @@ MonoBehaviour:
   SelfInjections: []
   disabledMods: []
   OnSpawnProcessors: []
-  CustomPostEvents:
-  - Enabled: 1
-    Foldout: 1
-    PostEvent: {fileID: 11400000, guid: 3b074ca37fa8d6f4ebedb674085bb71d, type: 2}
-    variables: []
-    customStringList: []
-    customObjectList: []
+  CustomPostEvents: []
   AddReflectionProbes: 0
   MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f, type: 2}
   AddMultipleProbes: 0

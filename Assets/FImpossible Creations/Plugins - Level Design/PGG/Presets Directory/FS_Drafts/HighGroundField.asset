@@ -54,7 +54,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
+  CellAllow: 0
   AllConditionsMet: 1
   Module: 0
   CornerMode: 0
@@ -298,7 +298,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
+  CellAllow: 0
   AllConditionsMet: 1
   DetectionTolerance: 4
   IgnoreY: 1
@@ -719,8 +719,8 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
-  AllConditionsMet: 0
+  CellAllow: 0
+  AllConditionsMet: 1
   Count:
     Min: 2
     Max: 4
@@ -853,13 +853,7 @@ MonoBehaviour:
   SelfInjections: []
   disabledMods: []
   OnSpawnProcessors: []
-  CustomPostEvents:
-  - Enabled: 1
-    Foldout: 1
-    PostEvent: {fileID: 11400000, guid: 3b074ca37fa8d6f4ebedb674085bb71d, type: 2}
-    variables: []
-    customStringList: []
-    customObjectList: []
+  CustomPostEvents: []
   AddReflectionProbes: 0
   MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f, type: 2}
   AddMultipleProbes: 0
@@ -895,7 +889,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
+  CellAllow: 0
   AllConditionsMet: 1
   OffsetCellMode: 0
   OffsetCell: {x: 0, y: 0, z: 0}
