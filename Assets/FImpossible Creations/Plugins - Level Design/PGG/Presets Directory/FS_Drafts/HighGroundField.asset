@@ -180,7 +180,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -8616504377416383969}
 --- !u!114 &-7858836565979478858
 MonoBehaviour:
@@ -242,7 +242,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -8616504377416383969}
 --- !u!114 &-7440416677852520370
 MonoBehaviour:
@@ -262,7 +262,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
+  CellAllow: 0
   AllConditionsMet: 1
   DetectionTolerance: 4
   IgnoreY: 1
@@ -479,7 +479,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -8616504377416383969}
 --- !u!114 &-5581974450991703342
 MonoBehaviour:
@@ -831,7 +831,7 @@ MonoBehaviour:
   IgnoreSelf: 1
   DistanceToTagged: Ramp
   CheckMode: 0
-  Distance: 7
+  Distance: 6
   MeasureIn: 1
   DistanceMulVariable:
     name: 
@@ -1020,7 +1020,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 0}
+  ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -8616504377416383969}
 --- !u!114 &5105695274302847174
 MonoBehaviour:
