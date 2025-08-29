@@ -54,7 +54,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   Module: 0
   CornerMode: 0
@@ -68,7 +68,7 @@ MonoBehaviour:
   ScaleBounds: 0.99
   Padding: 0
   YawOffset: 0
-  DirectOffset: {x: -1.42, y: 0.255, z: 0.67}
+  DirectOffset: {x: -1.5, y: 0.255, z: 0.67}
   OffsetMode: 0
   IgnoreOtherMods: 1
   DontCheckAdditionals: 0
@@ -895,7 +895,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   OffsetCellMode: 0
   OffsetCell: {x: 0, y: 0, z: 0}

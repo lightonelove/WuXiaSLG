@@ -26,7 +26,7 @@ MonoBehaviour:
   _EditorFoldout: 0
   _EditorCollapse: 0
   Enabled: 1
-  ParentPlanner: {fileID: 0}
+  ParentPlanner: {fileID: -4379926194258459096}
   ParentNodesContainer: {fileID: -4379926194258459096}
   _editor_drawRule: 1
 --- !u!114 &-4379926194258459096
@@ -110,7 +110,7 @@ MonoBehaviour:
   _EditorFoldout: 1
   _EditorCollapse: 0
   Enabled: 1
-  ParentPlanner: {fileID: 0}
+  ParentPlanner: {fileID: -4379926194258459096}
   ParentNodesContainer: {fileID: -4379926194258459096}
   _editor_drawRule: 1
   AlignTo:
@@ -254,8 +254,8 @@ MonoBehaviour:
     Min: 4
     Max: 5
   BranchThickness:
-    Min: 1
-    Max: 1
+    Min: 2
+    Max: 2
   SeparationFactor: 5
   AvoidOverlaps: 1
   MaxSize: {x: 10, y: 10, z: 10}
@@ -362,7 +362,7 @@ MonoBehaviour:
   _EditorFoldout: 0
   _EditorCollapse: 0
   Enabled: 1
-  ParentPlanner: {fileID: 0}
+  ParentPlanner: {fileID: -4379926194258459096}
   ParentNodesContainer: {fileID: -4379926194258459096}
   _editor_drawRule: 1
 --- !u!114 &3371929494122251626
@@ -391,7 +391,7 @@ MonoBehaviour:
   _EditorFoldout: 0
   _EditorCollapse: 0
   Enabled: 1
-  ParentPlanner: {fileID: 0}
+  ParentPlanner: {fileID: 1056993416827635787}
   ParentNodesContainer: {fileID: 1056993416827635787}
   _editor_drawRule: 1
 --- !u!114 &4224002336506588391
@@ -420,7 +420,7 @@ MonoBehaviour:
   _EditorFoldout: 0
   _EditorCollapse: 0
   Enabled: 1
-  ParentPlanner: {fileID: 0}
+  ParentPlanner: {fileID: 1056993416827635787}
   ParentNodesContainer: {fileID: 1056993416827635787}
   _editor_drawRule: 1
 --- !u!114 &8104139250732287920
