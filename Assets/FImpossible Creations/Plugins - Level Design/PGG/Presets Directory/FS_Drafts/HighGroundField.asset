@@ -1,5 +1,41 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8794093863289544314
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 893e62798003cfc4ba6de159ef003bf2, type: 3}
+  m_Name: 'SR_WallPlacer-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  Module: 0
+  CornerMode: 0
+  CornerMode45: 0
+  SpawnOnEachSide: 0
+  UseYLevel: -1
+  AutoRemoveOverlaps: 1
+  SetGhosts: 0
+  OverlapDetectMode: 0
+  Version2: 0
+  ScaleBounds: 0.99
+  Padding: 0
+  YawOffset: 90
+  DirectOffset: {x: -0.67, y: 0.26, z: -0.5}
+  OffsetMode: 0
+  IgnoreOtherMods: 1
+  DontCheckAdditionals: 0
 --- !u!114 &-8616504377416383969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,7 +214,7 @@ MonoBehaviour:
   Spawners:
   - Enabled: 1
     Name: DarkRed
-    SpawnerTag: 
+    SpawnerTag: HighGround
     StampPrefabID: 0
     Parent: {fileID: -7858836565979478858}
     Rules:
@@ -208,6 +244,118 @@ MonoBehaviour:
   _editor_shareSelected: 0
   ParentPreset: {fileID: 11400000}
   ParentPack: {fileID: -8616504377416383969}
+--- !u!114 &-7440416677852520370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ebac899d15200e42bf216436ceba8f6, type: 3}
+  m_Name: 'SR_OnGridCorner-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 1
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  DetectionTolerance: 4
+  IgnoreY: 1
+--- !u!114 &-7091714668720373763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
+  m_Name: 'SR_CellNeightbours-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  CheckedCellsMustBe: 1
+  NeightbourNeeds: 0
+  occupiedByTag: 
+  CheckMode: 0
+  DirectCheck: 0
+  OffsetOrigin: {x: 0, y: 0, z: 0}
+  placement:
+    lu: 0
+    u: 0
+    ru: 0
+    l: 1
+    m: 0
+    r: 0
+    ld: 0
+    d: 0
+    rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
+  quartRotor:
+    q1: 1
+    q2: 0
+    q3: 0
+    q4: 0
+  OverrideRotation: 1
+  initRotation: 0
+  rotorEff: 90
+  spawnOn: 5
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  GetNeightbourPos: 0
+  GetNeightbourRot: 0
+  GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
+--- !u!114 &-6918314648628025381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6b5b89b5b20c1419ae6725f516ec6f, type: 3}
+  m_Name: 'SR_AllowEveryFew-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  OffsetX: 0
+  OffsetZ: 0
+  Every: 4
+  CheckForWalls: 0
 --- !u!114 &-6747556597234820056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,6 +395,28 @@ MonoBehaviour:
       ToCheck:
       - {x: 0, y: 0, z: 0}
       EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+--- !u!114 &-6607576226337000256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ebac899d15200e42bf216436ceba8f6, type: 3}
+  m_Name: 'SR_OnGridCorner-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 1
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  DetectionTolerance: 2
+  IgnoreY: 1
 --- !u!114 &-5645148250833579313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,7 +446,32 @@ MonoBehaviour:
     _refMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
     _refCol: {fileID: 2893545964165449424, guid: eb511dcced92e8e49a30e669cfb294b4, type: 3}
   DrawMultiObjectStamps: 1
-  Spawners: []
+  Spawners:
+  - Enabled: 1
+    Name: Ramp
+    SpawnerTag: Ramp
+    StampPrefabID: 0
+    Parent: {fileID: -5645148250833579313}
+    Rules:
+    - {fileID: -8794093863289544314}
+    - {fileID: -7440416677852520370}
+    - {fileID: -2505542683652541545}
+    - {fileID: 1266529913617937482}
+    Mode: 0
+    CellCheckMode: 4
+    _Editor_SpawnerAdvancedOptionsFoldout: 0
+    OnScalledGrid: 0
+    Repeat: 1
+    DontInheritRotations: 0
+    SwitchSpawnedToStatic: 0
+    MultipleToSpawn: 0
+    UseGlobalRules: 1
+    UseParentPackageRules: 1
+    _wasEnablingGlobalRules: 1
+    ScaleAccess: 1
+    DisplayPreviewGUI: 1
+    IsSubSpawner: 0
+    _EditorDisplaySpawnerHeader: 1
   SubSpawners: []
   VariantOf: {fileID: 0}
   _editor_drawStamp: 1
@@ -434,6 +629,73 @@ MonoBehaviour:
   OffsetMode: 0
   OnTagged: 
   CheckMode: 0
+--- !u!114 &-2505542683652541545
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a80a4eda1baa814cb0a342f0acfc697, type: 3}
+  m_Name: 'SR_LimitSpawnCount-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 0
+  Count:
+    Min: 2
+    Max: 4
+  CountMulVariable:
+    name: 
+    requiredType: 1
+    Tooltip: 
+  InheritFromCellsCount: 0
+  RoomCellsDivBy:
+    Min: 4
+    Max: 6
+--- !u!114 &-1909043204182154396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b496837ae5a0c3b4786589d6fb51e8d5, type: 3}
+  m_Name: 'SR_MoveRotateScale-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  EffectOn: 1
+  ApplyMode: 0
+  Space: 1
+  GetCoords: 
+  CheckMode: 0
+  PositionOffset: {x: 0, y: 0, z: 0}
+  OffsetMode: 1
+  OffsetPosVariable:
+    name: 
+    requiredType: 5
+    Tooltip: Set Additive Vector3 Field Variable value to this property
+  RotationOffset: {x: -27.04, y: 90, z: 0}
+  ScaleMultiplier: {x: 1, y: 1, z: 1}
+  RandomizeOffset: {x: -3.37, y: 4.68, z: -6.64}
+  MaxDegreesSteps: {x: 1, y: 1, z: 1}
+  InheritScaleOffset: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -519,7 +781,13 @@ MonoBehaviour:
   SelfInjections: []
   disabledMods: []
   OnSpawnProcessors: []
-  CustomPostEvents: []
+  CustomPostEvents:
+  - Enabled: 1
+    Foldout: 1
+    PostEvent: {fileID: 11400000, guid: 3b074ca37fa8d6f4ebedb674085bb71d, type: 2}
+    variables: []
+    customStringList: []
+    customObjectList: []
   AddReflectionProbes: 0
   MainReflectionSettings: {fileID: 11400000, guid: dabe448206028124294db7edb02eed3f, type: 2}
   AddMultipleProbes: 0
@@ -537,6 +805,161 @@ MonoBehaviour:
     GenerateRelations: 1
     GroupUpToSize: 8
     MaxGroupDistance: 8
+--- !u!114 &1266529913617937482
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 094c68a3bf2d9a349851f593cd6a24eb, type: 3}
+  m_Name: 'SR_CellDistance-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  OffsetCellMode: 0
+  OffsetCell: {x: 0, y: 0, z: 0}
+  DistanceMustBe: 1
+  IgnoreSelf: 1
+  DistanceToTagged: Ramp
+  CheckMode: 0
+  Distance: 5
+  MeasureIn: 1
+  DistanceMulVariable:
+    name: 
+    requiredType: 1
+    Tooltip: 
+--- !u!114 &1962215806076923909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
+  m_Name: 'SR_CellNeightbours-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  CheckedCellsMustBe: 2
+  NeightbourNeeds: 0
+  occupiedByTag: 
+  CheckMode: 0
+  DirectCheck: 0
+  OffsetOrigin: {x: 0, y: -22, z: 0}
+  placement:
+    lu: 0
+    u: 0
+    ru: 0
+    l: 0
+    m: 0
+    r: 0
+    ld: 0
+    d: 0
+    rd: 0
+    UseAdvancedSetup: 0
+    AdvancedSetup: []
+  quartRotor:
+    q1: 1
+    q2: 0
+    q3: 0
+    q4: 0
+  OverrideRotation: 1
+  initRotation: 0
+  rotorEff: 90
+  spawnOn: 5
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  GetNeightbourPos: 0
+  GetNeightbourRot: 0
+  GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
+--- !u!114 &2897196707150718436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3401e8bda3cc91343b11bed2506f2b74, type: 3}
+  m_Name: 'SR_IfCellContainsTag-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  Tag: Boundary
+  CheckMode: 0
+  UseRotationsCheck: 0
+  OnlyWithSameDirection: 0
+  CompareOffsetsAngle: 181
+  checkSetup:
+    UseRotor: 1
+    Rotor: 0
+    UseCondition: 1
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+--- !u!114 &3556211128077359460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ebac899d15200e42bf216436ceba8f6, type: 3}
+  m_Name: 'SR_OnGridCorner-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 1
+  Global: 1
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 1
+  AllConditionsMet: 1
+  DetectionTolerance: 1
+  IgnoreY: 1
 --- !u!114 &4849887831027769214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -740,6 +1163,30 @@ MonoBehaviour:
   OverridePitchRotation: 1
   InitPitchRotation: 0
   NotCheckDefaultPitch: 0
+--- !u!114 &7188679725161734115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6b5b89b5b20c1419ae6725f516ec6f, type: 3}
+  m_Name: 'SR_AllowEveryFew-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  OffsetX: 0
+  OffsetZ: 0
+  Every: 4
+  CheckForWalls: 0
 --- !u!114 &7471955123372520401
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -780,3 +1227,186 @@ MonoBehaviour:
     - {x: 0, y: 0, z: 0}
     EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
   drawAdditionals: 0
+--- !u!114 &8099419515205561953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6b5b89b5b20c1419ae6725f516ec6f, type: 3}
+  m_Name: 'SR_AllowEveryFew-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  OffsetX: 0
+  OffsetZ: 0
+  Every: 2
+  CheckForWalls: 0
+--- !u!114 &8710249748409927011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e40483fbb8044424db6e9848a59ac14c, type: 3}
+  m_Name: 'SR_StairsHelper-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  RemoveTagged: HightGround
+  CheckMode: 0
+  RemoveDetectionTolerance: 0
+  StopOnTagged: 
+  StopOnCheckMode: 0
+  checkSetup:
+    UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: -1}
+    - {x: 0, y: 1, z: 0}
+    - {x: 0, y: 1, z: 1}
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+  removeInCells:
+    UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 1, z: 0}
+    EditorDisplayColor: {r: 0.8, g: 0.5, b: 0.4, a: 0.75}
+  breakOnCells:
+    UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck: []
+    EditorDisplayColor: {r: 1, g: 0.1, b: 0.1, a: 1}
+  customRemovers:
+  - UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck: []
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+  - UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck: []
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+  - UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck: []
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+  - UseRotor: 0
+    Rotor: 0
+    UseCondition: 0
+    Condition: 0
+    ExtraString: 
+    ExtraValue: 0
+    ToCheck: []
+    EditorDisplayColor: {r: 0.4, g: 0.4, b: 1, a: 0.95}
+  wasGenerated: 1
+  doFullBreak: 0
+--- !u!114 &8857721846454327585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c360632d4510a074baef619f3210b541, type: 3}
+  m_Name: 'SR_CellNeightbours-[Ramp]'
+  m_EditorClassIdentifier: 
+  Logic: 0
+  Negate: 0
+  Global: 0
+  Enabled: 1
+  Ignore: 0
+  _editor_drawRule: 1
+  CellAllow: 0
+  AllConditionsMet: 1
+  CheckedCellsMustBe: 1
+  NeightbourNeeds: 0
+  occupiedByTag: HighGround
+  CheckMode: 0
+  DirectCheck: 0
+  OffsetOrigin: {x: 0, y: 0, z: 0}
+  placement:
+    lu: 0
+    u: 0
+    ru: 0
+    l: 0
+    m: 0
+    r: 0
+    ld: 0
+    d: 0
+    rd: 0
+    UseAdvancedSetup: 1
+    AdvancedSetup: []
+  quartRotor:
+    q1: 1
+    q2: 0
+    q3: 0
+    q4: 0
+  OverrideRotation: 1
+  initRotation: 0
+  rotorEff: 90
+  spawnOn: 5
+  EachRotor: 0
+  CustomRotors:
+  - 0
+  - 0
+  - 0
+  - 0
+  GetNeightbourPos: 0
+  GetNeightbourRot: 0
+  GetNeightbourScale: 0
+  UseRestrictedDir: 0
+  CustomCellsCheck: 0
+  FullRotGet: 0
+  Check3DAngles: 0
+  RotationSpaceDisplay: 0
+  CheckPosit90: 1
+  CheckNeg90: 1
+  OverridePitchRotation: 1
+  InitPitchRotation: 0
+  NotCheckDefaultPitch: 0
