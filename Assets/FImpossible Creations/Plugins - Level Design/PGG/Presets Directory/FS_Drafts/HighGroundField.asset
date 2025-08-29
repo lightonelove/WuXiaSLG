@@ -54,7 +54,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
+  CellAllow: 0
   AllConditionsMet: 1
   Module: 0
   CornerMode: 0
@@ -211,7 +211,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: -8616504377416383969}
 --- !u!114 &-7858836565979478858
 MonoBehaviour:
@@ -273,7 +273,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: -8616504377416383969}
 --- !u!114 &-7440416677852520370
 MonoBehaviour:
@@ -293,7 +293,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   DetectionTolerance: 4
   IgnoreY: 1
@@ -510,7 +510,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: -8616504377416383969}
 --- !u!114 &-5581974450991703342
 MonoBehaviour:
@@ -562,7 +562,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
+  CellAllow: 0
   AllConditionsMet: 1
   OffsetCellMode: 0
   OffsetCell: {x: 0, y: 0, z: 0}
@@ -689,7 +689,7 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 0
+  CellAllow: 1
   AllConditionsMet: 1
   YawOffset: 0
   DirectOffset: {x: 0, y: 0, z: 0}
@@ -714,8 +714,8 @@ MonoBehaviour:
   Enabled: 1
   Ignore: 0
   _editor_drawRule: 1
-  CellAllow: 1
-  AllConditionsMet: 0
+  CellAllow: 0
+  AllConditionsMet: 1
   Count:
     Min: 2
     Max: 4
@@ -1076,7 +1076,7 @@ MonoBehaviour:
   _editor_drawGlobalRules: 0
   _editor_drawModPackRules: 0
   _editor_shareSelected: 0
-  ParentPreset: {fileID: 11400000}
+  ParentPreset: {fileID: 0}
   ParentPack: {fileID: -8616504377416383969}
 --- !u!114 &5105695274302847174
 MonoBehaviour:
