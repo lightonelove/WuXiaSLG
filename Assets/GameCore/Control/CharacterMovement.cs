@@ -10,9 +10,6 @@ namespace Wuxia.GameCore
 {
     public class CharacterMovement : MonoBehaviour
     {
-        [Header("移動設定")] public float moveSpeed = 20f;
-        public float turnRate = 720f;
-
         [Header("NavMesh移動系統")] public NavMeshAgent navMeshAgent;
         public bool isMoving = false;
         private Vector3 targetPosition;
@@ -63,12 +60,6 @@ namespace Wuxia.GameCore
                 Debug.LogError("CharacterMovement需要NavMeshAgent元件！");
                 return;
             }
-
-            // 設定NavMeshAgent參數
-            navMeshAgent.speed = moveSpeed;
-            navMeshAgent.angularSpeed = turnRate;
-            navMeshAgent.acceleration = 50f;
-            navMeshAgent.stoppingDistance = 0.1f;
 
             // 初始狀態下停止NavMeshAgent
             navMeshAgent.isStopped = true;
