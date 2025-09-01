@@ -91,7 +91,7 @@ namespace Wuxia.GameCore
 
         // 對其他組件的引用
         public CharacterCore characterCore;
-        public CharacterResources characterResources;
+        public ActionPoint actionPoint;
 
         // 碰撞類型枚舉
         private enum CollisionType
@@ -274,7 +274,7 @@ namespace Wuxia.GameCore
         /// <returns>是否可以使用</returns>
         public bool CanUseSkill(CombatSkill skill)
         {
-            return skill != null && characterResources != null && characterResources.HasEnoughAP(skill.SPCost);
+            return skill != null && actionPoint != null && actionPoint.HasEnoughAP(skill.SPCost);
         }
 
         /// <summary>
@@ -291,7 +291,7 @@ namespace Wuxia.GameCore
         /// <param name="skill">要使用的技能</param>
         public void UseSkill(CombatSkill skill)
         {
-            if (skill != null && characterResources != null && characterResources.HasEnoughAP(skill.SPCost))
+            if (skill != null && actionPoint != null && actionPoint.HasEnoughAP(skill.SPCost))
             {
                 if (characterCore != null)
                 {
@@ -302,7 +302,7 @@ namespace Wuxia.GameCore
                         characterCore.CharacterControlAnimator.Play(skill.AnimationName);
                     }
 
-                    characterResources.ConsumeAP(skill.SPCost);
+                    actionPoint.ConsumeAP(skill.SPCost);
                 }
             }
         }
@@ -314,7 +314,7 @@ namespace Wuxia.GameCore
         /// <param name="skill">要執行的技能</param>
         public void ExecuteSkillAtLocation(Vector3 targetLocation, CombatSkill skill)
         {
-            if (skill != null && characterResources != null && characterResources.HasEnoughAP(skill.SPCost))
+            if (skill != null && actionPoint != null && actionPoint.HasEnoughAP(skill.SPCost))
             {
                 // 檢查技能路徑是否有效（沒有被 Floor 層阻擋）
                 if (!isSkillTargetValid)
@@ -362,7 +362,7 @@ namespace Wuxia.GameCore
                         }
                     }
 
-                    characterResources.ConsumeAP(skill.SPCost);
+                    actionPoint.ConsumeAP(skill.SPCost);
 
                     // 隱藏所有技能瞄準系統
                     if (straightFrontTargetingAnchor != null)

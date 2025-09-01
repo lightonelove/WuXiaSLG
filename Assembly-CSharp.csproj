@@ -373,7 +373,6 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Generators Classes\Old Plan Generator\PlanGen.Plan.Utilities.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Utilities\GenerationUtilities.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Generators Classes\BuildPlanInstance.cs" />
-    <Compile Include="Assets\GameCore\Control\CharacterResources.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Scriptables\Partials\FieldModification.Spawners.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Field Planner\Access\PR_ChooseNeightbourFields.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Logics\Shape Generators\SG_DividedRectangle.cs" />
@@ -463,6 +462,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Quick Solutions\SR_FloorPlacer.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Spawners Related\PostEvents\FSPostEvent_FloorEdgesPainter.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Core\BuildPlannerPreset.Generating.cs" />
+    <Compile Include="Assets\GameCore\Control\ActionPoint.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Mod Graph\Mod Field\MR_GetFieldVariable.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Math\Algebra\PR_MathMinMax.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Tile Designer\Tile Post Filters\TilePostFilterBase.cs" />

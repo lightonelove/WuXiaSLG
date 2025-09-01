@@ -30,7 +30,7 @@ namespace Wuxia.GameCore
 
         // 對其他組件的引用
         private CharacterCore characterCore;
-        private CharacterResources characterResources;
+        private ActionPoint actionPoint;
         
         // 延遲停止的協程參考
         private Coroutine delayedStopCoroutine;
@@ -39,7 +39,7 @@ namespace Wuxia.GameCore
         {
             // 獲取同一GameObject上的其他組件
             characterCore = GetComponent<CharacterCore>();
-            characterResources = characterCore.characterResources;
+            actionPoint = characterCore.actionPoint;
         }
 
         void Start()
@@ -70,7 +70,7 @@ namespace Wuxia.GameCore
         /// </summary>
         public void UpdateMovement()
         {
-            if (navMeshAgent == null || characterResources == null) return;
+            if (navMeshAgent == null || actionPoint == null) return;
 
             // 檢查是否正在移動
             if (isMoving && navMeshAgent.hasPath)
@@ -79,10 +79,10 @@ namespace Wuxia.GameCore
                 if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.3f)
                 {
                     // 到達目標時，如果AP小於2.0，直接歸零
-                    if (characterResources.AP < 2.0f)
+                    if (actionPoint.AP < 2.0f)
                     {
-                        characterResources.AP = 0;
-                        characterResources.UpdateAPDisplay();
+                        actionPoint.AP = 0;
+                        actionPoint.UpdateAPDisplay();
                     }
                     
                     // 到達目標，延遲停止移動以確保 NavMeshAgent 完全停止
@@ -104,22 +104,22 @@ namespace Wuxia.GameCore
                         float progressRatio = pathTraveledDistance / pathTotalLength;
                         float targetAPConsumed = confirmedAPCost * progressRatio;
                         // 計算本次移動已經消耗的AP（從移動開始時的AP算起）
-                        float currentMovementAPConsumed = movementStartAP - characterResources.AP;
+                        float currentMovementAPConsumed = movementStartAP - actionPoint.AP;
                         float apToConsume = targetAPConsumed - currentMovementAPConsumed;
 
                         if (apToConsume > 0)
                         {
-                            characterResources.ConsumeAP(apToConsume);
+                            actionPoint.ConsumeAP(apToConsume);
                         }
                     }
                     else
                     {
                         // 如果沒有預覽資料，使用原本的計算方式（每單位距離5點AP）
-                        characterResources.ConsumeAP(frameDistance * 5.0f);
+                        actionPoint.ConsumeAP(frameDistance * 5.0f);
                     }
 
                     // 如果AP耗盡，立即停止移動
-                    if (characterResources.AP <= 0)
+                    if (actionPoint.AP <= 0)
                     {
                         Debug.Log("AP耗盡，停止移動");
                         StopMovement();
@@ -152,7 +152,7 @@ namespace Wuxia.GameCore
         /// <param name="destination">目標位置</param>
         public void MoveTo(Vector3 destination)
         {
-            if (navMeshAgent == null || characterResources == null) return;
+            if (navMeshAgent == null || actionPoint == null) return;
             
             // 如果正在移動中，阻擋新的移動指令
             if (isMoving)
@@ -161,7 +161,7 @@ namespace Wuxia.GameCore
             }
 
             // 檢查是否有足夠AP
-            if (characterResources.AP <= 0)
+            if (actionPoint.AP <= 0)
             {
                 return;
             }
@@ -207,14 +207,14 @@ namespace Wuxia.GameCore
                     // 初始化移動追蹤變數
                     pathTraveledDistance = 0f;
                     lastMovementPosition = transform.position;
-                    movementStartAP = characterResources.AP; // 記錄開始移動時的AP值
+                    movementStartAP = actionPoint.AP; // 記錄開始移動時的AP值
 
                     // 重置預覽狀態，回到顯示實際AP值
                     if (isPreviewingPath)
                     {
                         isPreviewingPath = false;
                         previewAPCost = 0f;
-                        characterResources.UpdateAPDisplay();
+                        actionPoint.UpdateAPDisplay();
                     }
 
                     // 設定NavMeshAgent目標
@@ -225,7 +225,7 @@ namespace Wuxia.GameCore
                     StartCoroutine(DrawNavMeshPath());
 
                     // 初始化lastPosition為當前位置，用於計算移動消耗的AP
-                    characterResources.lastPosition = new Vector2(transform.position.x, transform.position.z);
+                    actionPoint.lastPosition = new Vector2(transform.position.x, transform.position.z);
 
                     isMoving = true;
                 }
@@ -295,7 +295,7 @@ namespace Wuxia.GameCore
         /// <returns>是否可以移動</returns>
         public bool CanMoveTo(Vector3 destination)
         {
-            if (navMeshAgent == null || characterResources == null || characterResources.AP <= 0) return false;
+            if (navMeshAgent == null || actionPoint == null || actionPoint.AP <= 0) return false;
 
             NavMeshHit hit;
             return NavMesh.SamplePosition(destination, out hit, 2f, NavMesh.AllAreas);
@@ -308,7 +308,7 @@ namespace Wuxia.GameCore
         public void PreviewPath(Vector3 destination)
         {
 
-            if (navMeshAgent == null || pathLineRenderer == null || characterResources == null) return;
+            if (navMeshAgent == null || pathLineRenderer == null || actionPoint == null) return;
             
             // 檢查目標位置是否在NavMesh上
             NavMeshHit hit;
@@ -337,7 +337,7 @@ namespace Wuxia.GameCore
                     pathTotalLength = pathLength;
 
                     // 使用Proxy值更新UI（顯示預期的剩餘AP）
-                    characterResources.ShowPreviewAP(apCost);
+                    actionPoint.ShowPreviewAP(apCost);
                 }
                 else
                 {
@@ -379,9 +379,9 @@ namespace Wuxia.GameCore
                 confirmedAPCost = 0f;
                 pathTotalLength = 0f;
 
-                if (characterResources != null)
+                if (actionPoint != null)
                 {
-                    characterResources.UpdateAPDisplay();
+                    actionPoint.UpdateAPDisplay();
                 }
             }
         }
@@ -548,11 +548,11 @@ namespace Wuxia.GameCore
         /// <returns>是否有足夠AP</returns>
         private bool HasEnoughAPForPath(NavMeshPath path)
         {
-            if (characterResources == null) return false;
+            if (actionPoint == null) return false;
 
             float pathLength = CalculatePathLength(path);
             float requiredAP = CalculateAPCost(pathLength);
-            return characterResources.AP >= requiredAP;
+            return actionPoint.AP >= requiredAP;
         }
 
         /// <summary>
@@ -567,9 +567,9 @@ namespace Wuxia.GameCore
             invalidPath = new List<Vector3>();
 
             Vector3[] corners = path.corners;
-            if (corners.Length == 0 || characterResources == null) return;
+            if (corners.Length == 0 || actionPoint == null) return;
 
-            float maxWalkableDistance = characterResources.AP / 5.0f; // 當前AP能走的最大距離
+            float maxWalkableDistance = actionPoint.AP / 5.0f; // 當前AP能走的最大距離
             float accumulatedDistance = 0f;
             Vector3 currentPos = transform.position;
 
@@ -633,9 +633,9 @@ namespace Wuxia.GameCore
         private Vector3 CalculateMaxReachablePosition(NavMeshPath path)
         {
             Vector3[] corners = path.corners;
-            if (corners.Length == 0 || characterResources == null) return transform.position;
+            if (corners.Length == 0 || actionPoint == null) return transform.position;
 
-            float maxWalkableDistance = characterResources.AP / 5.0f; // 當前AP能走的最大距離
+            float maxWalkableDistance = actionPoint.AP / 5.0f; // 當前AP能走的最大距離
             float accumulatedDistance = 0f;
             Vector3 currentPos = transform.position;
 

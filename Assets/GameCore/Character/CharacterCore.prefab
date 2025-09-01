@@ -670,7 +670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementComponent: {fileID: 8001629113425933385}
-  characterResources: {fileID: 2402614971554661879}
+  actionPoint: {fileID: 2190077052263527030}
   skillsComponent: {fileID: 7708165847968784926}
   holdTimeToEndTurn: 1
   CharacterControlAnimator: {fileID: 3502313563350019197}
@@ -1709,7 +1709,7 @@ MonoBehaviour:
   blockedSightLineColor: {r: 1, g: 0, b: 0, a: 1}
   sightLineWidth: 0.05
   characterCore: {fileID: 507542057868587843}
-  characterResources: {fileID: 2402614971554661879}
+  actionPoint: {fileID: 0}
 --- !u!1 &5394328886506030602
 GameObject:
   m_ObjectHideFlags: 0
@@ -2200,7 +2200,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4591550883524543473}
-  - component: {fileID: 2402614971554661879}
+  - component: {fileID: 2190077052263527030}
   m_Layer: 0
   m_Name: CharacterResouces
   m_TagString: Untagged
@@ -2223,7 +2223,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5355287738686104127}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2402614971554661879
+--- !u!114 &2190077052263527030
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2232,7 +2232,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8207971771052042299}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f0df4131e7083a47a63b6581c86420e, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f8ea9d881583a243847f5ed809e3979, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   AP: 100

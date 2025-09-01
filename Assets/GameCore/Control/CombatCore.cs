@@ -190,9 +190,9 @@ namespace Wuxia.GameCore
             character.currentActionMode = CharacterCore.PlayerActionMode.None;
             
             // 重置行動點
-            if (character.characterResources != null)
+            if (character.actionPoint != null)
             {
-                character.characterResources.RefillAP();
+                character.actionPoint.RefillAP();
             }
             
             

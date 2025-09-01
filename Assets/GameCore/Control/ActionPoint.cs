@@ -1,19 +1,19 @@
 using UnityEngine;
 
 /// <summary>
-/// 角色資源管理系統 - 負責AP系統和UI更新
+/// 行動點數管理系統 - 專門負責AP系統和UI更新
 /// </summary>
 namespace Wuxia.GameCore
 {
-    public class CharacterResources : MonoBehaviour
+    public class ActionPoint : MonoBehaviour
     {
-        [Header("資源系統")] public float AP = 100; // Action Points - 統一的資源系統
+        [Header("行動點數系統")] 
+        public float AP = 100;
         public float MaxAP = 100;
         public Vector2 lastPosition;
 
         void Start()
         {
-            // 初始化lastPosition為當前位置
             lastPosition = new Vector2(transform.position.x, transform.position.z);
         }
 
@@ -24,8 +24,7 @@ namespace Wuxia.GameCore
         public void ConsumeAP(float amount)
         {
             AP -= amount;
-            AP = Mathf.Max(0, AP); // 確保AP不會變負數
-            // 更新UI
+            AP = Mathf.Max(0, AP);
             UpdateAPDisplay();
         }
 
