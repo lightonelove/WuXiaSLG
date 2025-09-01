@@ -64,4 +64,13 @@ public class UIFollowWorldObject : MonoBehaviour
     {
         this.target = targetToFollow;
     }
+    
+    /// <summary>
+    /// 設定UI偏移量
+    /// </summary>
+    /// <param name="offset">螢幕空間的偏移量</param>
+    public void SetOffset(Vector3 offset)
+    {
+        this.screenOffset = offset;
+    }
 }
