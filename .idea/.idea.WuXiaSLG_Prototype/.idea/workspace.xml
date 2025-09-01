@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Presets Directory/FS_Drafts/HighGroundField.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Presets Directory/FS_Drafts/HighGroundField.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FieldAsset/Ramp.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FieldAsset/Ramp.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/PGG_TestScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/PGG_TestScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene/NavMesh-Map_PGG.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene/NavMesh-Map_PGG.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
@@ -22,6 +23,19 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Components/Simple/MiniCityGenerator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Components/Simple/SimpleFieldGenerator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Core/Generating/FlexibleGeneratorSetup.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Core/Spawners Related/PostEvents/PE_AutoAddNavMesh.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Editor/Planner Related/BuildPlannerWindow.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Planners Related/BuildPlannerPreset.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Planners Related/Planner Executor/BuildPlannerExecutor.Editor.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Planners Related/Planner Logics/Shape Generators/SG_ManualRectangles.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Planners Related/Planner Logics/Shape Generators/SG_MultiLineGenerate.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Planners Related/Planner Logics/Shape Generators/SG_PerlinNoiseGenerating.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Planners Related/Planner Logics/Shape Generators/SG_RandomSizeRectangle.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Planners Related/Planner Logics/Shape Generators/SG_ShatteredRectangle.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/FImpossible Creations/Plugins - Level Design/PGG/Rules Logics/Placement/SR_OddCoordinateSum.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyAttackAction.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyMoveAction.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyRangeAttackAction.cs" root0="FORCE_HIGHLIGHTING" />
@@ -67,7 +81,6 @@
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Utility/SectorMeshTest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Plugins/Sirenix/Odin Inspector/Modules/Unity.Addressables/AddressablesInspectors.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Selectable.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -181,6 +194,7 @@
       <workItem from="1756097662518" duration="9118000" />
       <workItem from="1756187509782" duration="14737000" />
       <workItem from="1756275504474" duration="4760000" />
+      <workItem from="1756705297782" duration="778000" />
     </task>
     <servers />
   </component>
