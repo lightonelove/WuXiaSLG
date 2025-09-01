@@ -66156,7 +66156,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1588288096788536482, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1727198852497152677, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: useNavMesh
@@ -98133,7 +98133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1588288096788536482, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1645170805765397387, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: m_IsActive

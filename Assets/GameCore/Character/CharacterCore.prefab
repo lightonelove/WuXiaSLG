@@ -836,7 +836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9c524beab793b2458f9a2befd8e4e57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBarPrefab: {fileID: 1919692162533371824, guid: 6050aad88e8c73543a5dd58362fed6f1, type: 3}
+  CombatEntityUIPrefab: {fileID: 4361885756523593588, guid: 1a2e4ce333aa43344a13fbf0b3c8d7db, type: 3}
   anchor: {fileID: 5019391867052335291}
   autoFindHealth: 1
   showHealthBar: 1

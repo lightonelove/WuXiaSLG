@@ -9,8 +9,8 @@ namespace Wuxia.GameCore
 {
     public class CombatEntityUI : MonoBehaviour
     {
-        [Header("設置")] [Tooltip("血條的UI Prefab")]
-        public GameObject healthBarPrefab;
+        [Header("設置")] [Tooltip("CombatEntity的UI Prefab")]
+        public GameObject CombatEntityUIPrefab;
 
         [Tooltip("血條要跟隨的角色頭頂錨點")] public Transform anchor;
         
@@ -23,7 +23,9 @@ namespace Wuxia.GameCore
         public Health health;
         
         // --- 私有變數 ---
-        private GameObject healthBarInstance;
+        private GameObject combatEntityInstance;
+        private GameObject healthBarObj;
+        
         private UIFollowWorldObject followScript;
         private Slider healthSlider;
 
@@ -73,12 +75,12 @@ namespace Wuxia.GameCore
             }
             Debug.Log("Hello?");
             // 在Canvas底下實體化血條Prefab
-            healthBarInstance = Instantiate(healthBarPrefab, mainCanvas.transform);
+            combatEntityInstance = Instantiate(CombatEntityUIPrefab, mainCanvas.transform);
             // 獲取血條上的必要元件
-            followScript = healthBarInstance.GetComponent<UIFollowWorldObject>();
-            healthSlider = healthBarInstance.GetComponent<Slider>();
-
-            Transform fillTransform = healthBarInstance.transform.Find("Fill");
+            followScript = combatEntityInstance.GetComponent<UIFollowWorldObject>();
+            healthBarObj = combatEntityInstance.transform.Find("HealthBar").gameObject;
+            healthSlider =  healthBarObj.GetComponent<Slider>();
+            
             Debug.Log("Hello?2222");
             // 設定跟隨目標
             if (followScript != null)
@@ -88,7 +90,7 @@ namespace Wuxia.GameCore
             }
             else
             {
-                Debug.LogError("血條Prefab上缺少 UIFollowWorldObject 腳本！", healthBarInstance);
+                Debug.LogError("血條Prefab上缺少 UIFollowWorldObject 腳本！", healthBarObj);
             }
         }
 
@@ -113,9 +115,9 @@ namespace Wuxia.GameCore
             }
             
             // 根據 showHealthBar 設定來控制血條顯示
-            if (healthBarInstance != null && healthBarInstance.activeInHierarchy != showHealthBar)
+            if (healthBarObj != null && healthBarObj.activeInHierarchy != showHealthBar)
             {
-                healthBarInstance.SetActive(showHealthBar);
+                healthBarObj.SetActive(showHealthBar);
             }
         }
         
@@ -126,9 +128,9 @@ namespace Wuxia.GameCore
         public void SetHealthBarVisible(bool show)
         {
             showHealthBar = show;
-            if (healthBarInstance != null)
+            if (healthBarObj != null)
             {
-                healthBarInstance.SetActive(show);
+                healthBarObj.SetActive(show);
             }
         }
         
@@ -140,41 +142,31 @@ namespace Wuxia.GameCore
         {
             health = newHealth;
         }
-        
-        /// <summary>
-        /// 檢查血條是否已經初始化
-        /// </summary>
-        /// <returns>血條是否已初始化</returns>
-        public bool IsHealthBarInitialized()
-        {
-            return healthBarInstance != null;
-        }
-
 
         // 當角色物件被銷毀時，也要一併銷毀它對應的血條
         void OnDestroy()
         {
-            if (healthBarInstance != null)
+            if (combatEntityInstance != null)
             {
-                Destroy(healthBarInstance);
+                Destroy(combatEntityInstance);
             }
         }
 
-        // 當角色被禁用時，也隱藏血條
+        // 當角色被禁用時，也隱藏UI
         void OnDisable()
         {
-            if (healthBarInstance != null)
+            if (combatEntityInstance != null)
             {
-                healthBarInstance.SetActive(false);
+                combatEntityInstance.SetActive(false);
             }
         }
 
-        // 當角色被重新啟用時，也顯示血條
+        // 當角色被重新啟用時，也顯示UI
         void OnEnable()
         {
-            if (healthBarInstance != null)
+            if (combatEntityInstance != null)
             {
-                healthBarInstance.SetActive(true);
+                combatEntityInstance.SetActive(true);
             }
         }
     }
