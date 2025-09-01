@@ -621,7 +621,7 @@ GameObject:
   - component: {fileID: 2833559091790500811}
   - component: {fileID: 8001629113425933385}
   - component: {fileID: 2180760925152422446}
-  - component: {fileID: 5139917354106478825}
+  - component: {fileID: 566711204660000477}
   - component: {fileID: 4413303962481113271}
   - component: {fileID: 8816574247964560716}
   m_Layer: 0
@@ -801,8 +801,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ce303fa0ae8a64409ebd63ad29e9b35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3.5
-  turnRate: 120
   navMeshAgent: {fileID: 6411655993339794702}
   isMoving: 0
   pathLineRenderer: {fileID: 4455222174795399952}
@@ -826,7 +824,7 @@ MonoBehaviour:
   invalidSelectionColor: {r: 1, g: 0, b: 0, a: 1}
   affectChildMeshRenderers: 1
   enableDebugLog: 0
---- !u!114 &5139917354106478825
+--- !u!114 &566711204660000477
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -835,12 +833,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2522113828692673003}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 137ba595c1ca89646b7953be9c0ca4e2, type: 3}
+  m_Script: {fileID: 11500000, guid: e9c524beab793b2458f9a2befd8e4e57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   healthBarPrefab: {fileID: 1919692162533371824, guid: 6050aad88e8c73543a5dd58362fed6f1, type: 3}
   anchor: {fileID: 5019391867052335291}
-  autoFindHealth: 0
+  autoFindHealth: 1
   showHealthBar: 1
   health: {fileID: 5525503941534339325}
 --- !u!114 &4413303962481113271

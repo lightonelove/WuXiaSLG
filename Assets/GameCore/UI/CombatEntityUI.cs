@@ -3,11 +3,11 @@ using UnityEngine;
 using UnityEngine.UI; // 記得引用UI命名空間
 
 /// <summary>
-/// 通用的血條控制器，可掛在任何有 Health 組件的角色身上，負責實體化並管理其對應的血條。
+/// 戰鬥實體UI控制器，負責管理戰鬥實體頭上的所有UI元素（血條、狀態等）。
 /// </summary>
 namespace Wuxia.GameCore
 {
-    public class HealthBarController : MonoBehaviour
+    public class CombatEntityUI : MonoBehaviour
     {
         [Header("設置")] [Tooltip("血條的UI Prefab")]
         public GameObject healthBarPrefab;
@@ -43,7 +43,7 @@ namespace Wuxia.GameCore
                 health = GetComponent<Health>();
                 if (health == null)
                 {
-                    Debug.LogError($"[HealthBarController] {gameObject.name} 沒有找到 Health 組件！", this);
+                    Debug.LogError($"[CombatEntityUI] {gameObject.name} 沒有找到 Health 組件！", this);
                     return;
                 }
             }
@@ -51,7 +51,7 @@ namespace Wuxia.GameCore
             // 檢查是否有有效的 Health 組件
             if (health == null)
             {
-                Debug.LogError($"[HealthBarController] {gameObject.name} 沒有設定 Health 組件！", this);
+                Debug.LogError($"[CombatEntityUI] {gameObject.name} 沒有設定 Health 組件！", this);
                 return;
             }
 
@@ -71,19 +71,20 @@ namespace Wuxia.GameCore
                 Debug.LogError("場景中找不到Canvas！無法創建血條。");
                 return;
             }
-
+            Debug.Log("Hello?");
             // 在Canvas底下實體化血條Prefab
             healthBarInstance = Instantiate(healthBarPrefab, mainCanvas.transform);
-
             // 獲取血條上的必要元件
             followScript = healthBarInstance.GetComponent<UIFollowWorldObject>();
             healthSlider = healthBarInstance.GetComponent<Slider>();
-            Transform fillTransform = healthBarInstance.transform.Find("Fill");
 
+            Transform fillTransform = healthBarInstance.transform.Find("Fill");
+            Debug.Log("Hello?2222");
             // 設定跟隨目標
             if (followScript != null)
             {
                 followScript.SetTarget(anchor);
+                Debug.Log("Hello?33333333");
             }
             else
             {

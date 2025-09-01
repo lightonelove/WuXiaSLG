@@ -182,7 +182,6 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Components\Simple\SimpleFieldGenerator.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Tile Designer\Tile Designer Window\TileDesignerWindow.GUI.Actions.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Cells\SR_RemoveSpawn.cs" />
-    <Compile Include="Assets\GameCore\UI\HealthBarController.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Placement\SR_IfRotated.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Math\Algebra\PR_PeriodModulo.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\Pipe Generator\Core\PipePreset.cs" />
@@ -370,6 +369,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Shared\Math Helpers\Helpers\FStringMethods.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\FieldAndGrid\SR_HeightOffset.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Transforming\Noise\SR_PerlinNoiseRotationOrScale.cs" />
+    <Compile Include="Assets\GameCore\UI\CombatEntityUI.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Generators Classes\Old Plan Generator\PlanGen.Plan.Utilities.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Utilities\GenerationUtilities.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Core\Generators Classes\BuildPlanInstance.cs" />

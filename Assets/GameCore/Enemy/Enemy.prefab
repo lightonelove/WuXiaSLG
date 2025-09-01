@@ -311,9 +311,9 @@ GameObject:
   - component: {fileID: 1727198852497152677}
   - component: {fileID: 7697422947043063634}
   - component: {fileID: 670760991645550886}
-  - component: {fileID: 8048363198152953007}
   - component: {fileID: 3309778327019055104}
   - component: {fileID: 2952278509770769901}
+  - component: {fileID: 9147006424935940054}
   - component: {fileID: 5207808132746345017}
   - component: {fileID: 5442271328811615309}
   - component: {fileID: 8473038947874109521}
@@ -421,23 +421,6 @@ MonoBehaviour:
   CharacterCore: {fileID: 0}
   Faction: 4
   entityStats: {fileID: 11400000, guid: 4cf8a6b152fe28c41aa33c2cac9bf199, type: 2}
---- !u!114 &8048363198152953007
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1588288096788536482}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 137ba595c1ca89646b7953be9c0ca4e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthBarPrefab: {fileID: 1919692162533371824, guid: 6050aad88e8c73543a5dd58362fed6f1, type: 3}
-  anchor: {fileID: 4467518771117506341}
-  autoFindHealth: 0
-  showHealthBar: 1
-  health: {fileID: 7697422947043063634}
 --- !u!195 &3309778327019055104
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -477,6 +460,23 @@ MonoBehaviour:
   invalidSelectionColor: {r: 1, g: 0, b: 0, a: 1}
   affectChildMeshRenderers: 0
   enableDebugLog: 0
+--- !u!114 &9147006424935940054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588288096788536482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9c524beab793b2458f9a2befd8e4e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarPrefab: {fileID: 1919692162533371824, guid: 6050aad88e8c73543a5dd58362fed6f1, type: 3}
+  anchor: {fileID: 4467518771117506341}
+  autoFindHealth: 1
+  showHealthBar: 1
+  health: {fileID: 7697422947043063634}
 --- !u!114 &5207808132746345017
 MonoBehaviour:
   m_ObjectHideFlags: 0
