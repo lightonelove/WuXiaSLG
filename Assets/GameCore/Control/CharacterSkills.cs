@@ -91,7 +91,7 @@ namespace Wuxia.GameCore
 
         // 對其他組件的引用
         public CharacterCore characterCore;
-        public ActionPoint actionPoint;
+        private ActionPoint actionPoint;
 
         // 碰撞類型枚舉
         private enum CollisionType
@@ -112,7 +112,7 @@ namespace Wuxia.GameCore
         private void InitializeSkillTargeting()
         {
             // 尋找 StraightFrontTargetingAnchor
-
+            actionPoint = characterCore.combatEntityComponent.ActionPoint;
             if (straightFrontTargetingAnchor != null)
             {
                 // 尋找其下的 Cube 物件的 BoxCollider
