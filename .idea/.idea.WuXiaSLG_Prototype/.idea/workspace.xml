@@ -6,8 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterB/CharacterB Variant.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterB/CharacterB Variant.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/UI/CombatEntityUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/UI/CombatEntityUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CombatCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CombatCore.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/UI/UIDamageNumberSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/UI/UIDamageNumberSpawner.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

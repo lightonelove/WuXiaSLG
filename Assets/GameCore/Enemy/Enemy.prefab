@@ -421,6 +421,8 @@ MonoBehaviour:
   CharacterCore: {fileID: 0}
   Faction: 4
   entityStats: {fileID: 11400000, guid: 4cf8a6b152fe28c41aa33c2cac9bf199, type: 2}
+  health: {fileID: 7697422947043063634}
+  ActionPoint: {fileID: 0}
 --- !u!195 &3309778327019055104
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -473,10 +475,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CombatEntityUIPrefab: {fileID: 4361885756523593588, guid: 1a2e4ce333aa43344a13fbf0b3c8d7db, type: 3}
+  combatEntity: {fileID: 0}
   anchor: {fileID: 4467518771117506341}
-  autoFindHealth: 1
   showHealthBar: 1
-  health: {fileID: 7697422947043063634}
 --- !u!114 &5207808132746345017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -492,9 +493,9 @@ MonoBehaviour:
   uiDamageNumberPrefab: {fileID: 654962155742320905, guid: 88b85777e6860d64594e05e0e66c369f, type: 3}
   spawnOffset: {x: 0, y: 1.5, z: 0}
   targetCanvas: {fileID: 0}
+  combatEntity: {fileID: 0}
   blockTextColor: {r: 0, g: 1, b: 1, a: 1}
   blockText: Parried!!
-  health: {fileID: 7697422947043063634}
   damageReceiver: {fileID: 1181071552201193841}
 --- !u!208 &5442271328811615309
 NavMeshObstacle:

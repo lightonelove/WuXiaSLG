@@ -21,8 +21,9 @@ namespace Wuxia.GameCore
 
         private void Awake()
         {
-            // 如果沒有手動指定 Canvas，嘗試在場景中尋找
+
             health = combatEntity.health;
+            // 如果沒有手動指定 Canvas，嘗試在場景中尋找
             if (targetCanvas == null)
             {
                 targetCanvas = FindObjectOfType<Canvas>();

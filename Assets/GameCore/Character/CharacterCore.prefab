@@ -842,7 +842,6 @@ MonoBehaviour:
   combatEntity: {fileID: 6903515148748646631}
   anchor: {fileID: 5019391867052335291}
   showHealthBar: 1
-  health: {fileID: 5525503941534339325}
 --- !u!114 &4413303962481113271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -858,9 +857,9 @@ MonoBehaviour:
   uiDamageNumberPrefab: {fileID: 654962155742320905, guid: 88b85777e6860d64594e05e0e66c369f, type: 3}
   spawnOffset: {x: 0, y: 1.5, z: 0}
   targetCanvas: {fileID: 0}
+  combatEntity: {fileID: 6903515148748646631}
   blockTextColor: {r: 0, g: 1, b: 1, a: 1}
   blockText: Parried!!!!
-  health: {fileID: 5525503941534339325}
   damageReceiver: {fileID: 5161354361511243107}
 --- !u!208 &8816574247964560716
 NavMeshObstacle:

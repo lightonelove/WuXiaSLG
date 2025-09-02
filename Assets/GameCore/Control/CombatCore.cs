@@ -319,39 +319,6 @@ namespace Wuxia.GameCore
         bool CheckCombatEnd()
         {
             // 檢查是否所有敵人都被擊敗
-            bool allEnemiesDefeated = true;
-            foreach (var enemy in AllEnemies)
-            {
-                if (enemy.health != null && enemy.health.GetCurrentHealth() > 0)
-                {
-                    allEnemiesDefeated = false;
-                    break;
-                }
-            }
-            
-            if (allEnemiesDefeated)
-            {
-                return true;
-            }
-            
-            // 檢查是否所有玩家角色都被擊敗
-            bool allPlayersDefeated = true;
-            foreach (var character in AllCharacters)
-            {
-                // 假設角色也有Health組件
-                Health characterHealth = character.GetComponent<Health>();
-                if (characterHealth != null && characterHealth.GetCurrentHealth() > 0)
-                {
-                    allPlayersDefeated = false;
-                    break;
-                }
-            }
-            
-            if (allPlayersDefeated)
-            {
-                return true;
-            }
-            
             return false;
         }
 

@@ -8,34 +8,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 507542057868587843, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
-      propertyPath: skillA
-      value: 
-      objectReference: {fileID: 11400000, guid: 477c8d8f274bc5b4bb6761b747d49431, type: 2}
-    - target: {fileID: 507542057868587843, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
-      propertyPath: skillB
-      value: 
-      objectReference: {fileID: 11400000, guid: 477c8d8f274bc5b4bb6761b747d49431, type: 2}
-    - target: {fileID: 507542057868587843, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
-      propertyPath: skillC
-      value: 
-      objectReference: {fileID: 11400000, guid: 477c8d8f274bc5b4bb6761b747d49431, type: 2}
-    - target: {fileID: 507542057868587843, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
-      propertyPath: skillD
-      value: 
-      objectReference: {fileID: 11400000, guid: 477c8d8f274bc5b4bb6761b747d49431, type: 2}
-    - target: {fileID: 507542057868587843, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
-      propertyPath: Stamina
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 507542057868587843, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
-      propertyPath: moveSpeed
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 507542057868587843, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
-      propertyPath: MaxStamina
-      value: 50
-      objectReference: {fileID: 0}
     - target: {fileID: 921727934772688165, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_TagString
       value: CombatController
@@ -140,10 +112,6 @@ PrefabInstance:
       propertyPath: CharacterCore
       value: 
       objectReference: {fileID: 7449280019692975245}
-    - target: {fileID: 7333867140921524281, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
-      propertyPath: OnTriggerStayEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7832689739135729561, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_TagString
       value: CombatController
