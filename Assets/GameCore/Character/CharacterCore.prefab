@@ -696,6 +696,8 @@ MonoBehaviour:
   CharacterCore: {fileID: 0}
   Faction: 1
   entityStats: {fileID: 0}
+  health: {fileID: 2110502893649392414}
+  ActionPoint: {fileID: 2190077052263527030}
 --- !u!114 &5525503941534339325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2201,6 +2203,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4591550883524543473}
   - component: {fileID: 2190077052263527030}
+  - component: {fileID: 2110502893649392414}
   m_Layer: 0
   m_Name: CharacterResouces
   m_TagString: Untagged
@@ -2238,6 +2241,30 @@ MonoBehaviour:
   AP: 100
   MaxAP: 100
   lastPosition: {x: 0, y: 0}
+--- !u!114 &2110502893649392414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8207971771052042299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d01ace6e97d251f41a0eef70b75612dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  ownerEntity: {fileID: 0}
+  OnDamageTaken:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDie:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &9162912869376663710
 GameObject:
   m_ObjectHideFlags: 0

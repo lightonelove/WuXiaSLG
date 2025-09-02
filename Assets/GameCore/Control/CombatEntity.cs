@@ -34,6 +34,10 @@ namespace Wuxia.GameCore
         [Tooltip("戰鬥實體的屬性資料")]
         public CombatEntityStats entityStats;
         
+        [Header("CombatResources")]
+        public Health health;
+        public ActionPoint ActionPoint;
+        
         // 提供一個方法來推進此角色的行動值
         public void AdvanceActionValue(float time)
         {
