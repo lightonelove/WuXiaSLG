@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyAttackAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyAttackAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyMoveAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyMoveAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyRangeAttackAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyRangeAttackAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyWaitAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyWaitAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Conditions/ActionPointCondition.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Conditions/ActionPointCondition.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyCore.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.Player.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CombatCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CombatCore.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/CombatEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/CombatEntity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CLAUDE.md" beforeDir="false" afterPath="$PROJECT_DIR$/CLAUDE.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +47,6 @@
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/BlockingSystem.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/CharacterCore.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/CharacterMovement.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/CharacterResources.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/CharacterSkills.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/ClonedCombatEntity.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/CombatAction.cs" root0="FORCE_HIGHLIGHTING" />
@@ -70,11 +67,13 @@
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/System/AnimationMoveScaler3D.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/System/ColliderEventReceiver.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/System/TargetedIndicator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/GameCore/UI/CombatEntityUI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/UI/SLGCoreUI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/UI/TurnIndicator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/UI/TurnOrderIcon.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/UI/TurnOrderUIController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/UI/UIDamageNumberSpawner.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/GameCore/UI/UIFollowWorldObject.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Utility/SectorMeshGenerator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Utility/SectorMeshTest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Plugins/Sirenix/Odin Inspector/Modules/Unity.Addressables/AddressablesInspectors.cs" root0="FORCE_HIGHLIGHTING" />

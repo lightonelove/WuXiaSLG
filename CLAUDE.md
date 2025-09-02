@@ -105,3 +105,4 @@ Key Unity packages (from manifest.json):
 - Commit Push時包括scene和csproj檔案還有md檔  以及asset preb任何有修改的內容都要Commit
 - 以後檢查Reference是不是Null時  除非你本來就是要幫他設定Reference 不然幫我Print出Debug.Error
 - 不要自動commit push 我有下指令才做
+- 檢查Reference是不是null時  如果真的是null請Print Debug.Error  不要直接跳過

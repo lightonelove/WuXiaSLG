@@ -37,6 +37,7 @@ namespace Wuxia.GameCore
         [Header("CombatResources")]
         public Health health;
         public ActionPoint ActionPoint;
+        public PosturePoint PosturePoint;
         
         // 提供一個方法來推進此角色的行動值
         public void AdvanceActionValue(float time)

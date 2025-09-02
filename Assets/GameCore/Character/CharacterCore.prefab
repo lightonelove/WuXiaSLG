@@ -698,6 +698,7 @@ MonoBehaviour:
   entityStats: {fileID: 0}
   health: {fileID: 2110502893649392414}
   ActionPoint: {fileID: 2190077052263527030}
+  PosturePoint: {fileID: 0}
 --- !u!114 &5525503941534339325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2202,6 +2203,7 @@ GameObject:
   - component: {fileID: 4591550883524543473}
   - component: {fileID: 2190077052263527030}
   - component: {fileID: 2110502893649392414}
+  - component: {fileID: 5906143974337552477}
   m_Layer: 0
   m_Name: CombatResouces
   m_TagString: Untagged
@@ -2261,6 +2263,30 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnDie:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &5906143974337552477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8207971771052042299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a79d641e2906045a9f30a395b3f753, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentPosturePoint: 100
+  maxPosturePoint: 100
+  recoveryPerTurn: 50
+  OnPostureChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostureBroken:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostureRecovered:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &9162912869376663710

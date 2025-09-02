@@ -191,6 +191,16 @@ namespace Wuxia.GameCore
             
             // 重置行動點
             currentRoundEntity.ActionPoint.RefillAP();
+            
+            // 恢復架勢點數
+            if (currentRoundEntity.PosturePoint != null)
+            {
+                currentRoundEntity.PosturePoint.OnTurnStart();
+            }
+            else
+            {
+                Debug.LogError($"[CombatCore] {currentRoundEntity.name} 沒有設定 PosturePoint 組件");
+            }
 
             
             

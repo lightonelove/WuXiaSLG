@@ -743,6 +743,7 @@
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Mod Graph\Mod Spawns\MR_IterateSpawns.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Build Setup\Generating Stage\PR_GetIterationIndex.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Rules Logics\Cells\SR_AnalyzeCell.cs" />
+    <Compile Include="Assets\GameCore\Control\PosturePoint.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Math\Values\PR_Split.cs" />
     <Compile Include="Assets\FImpossible Creations\Plugins - Level Design\PGG\Planners Related\Planner Coded Nodes\Cells\PR_CellContainsDataString.cs" />
     <Compile Include="Assets\GameCore\System\ColliderEventReceiver.cs" />
