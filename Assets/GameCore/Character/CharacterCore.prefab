@@ -670,8 +670,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementComponent: {fileID: 8001629113425933385}
-  actionPoint: {fileID: 2190077052263527030}
   skillsComponent: {fileID: 7708165847968784926}
+  combatEntityComponent: {fileID: 6903515148748646631}
   holdTimeToEndTurn: 1
   CharacterControlAnimator: {fileID: 3502313563350019197}
   animationMoveScaler3D: {fileID: 2833559091790500811}
