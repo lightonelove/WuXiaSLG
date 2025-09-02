@@ -11,16 +11,14 @@ namespace Wuxia.GameCore
     {
         [Header("設置")] [Tooltip("CombatEntity的UI Prefab")]
         public GameObject CombatEntityUIPrefab;
+        public CombatEntity combatEntity;
 
         [Tooltip("血條要跟隨的角色頭頂錨點")] public Transform anchor;
-        
-        [Tooltip("自動尋找 Health 組件（如果未設定）")] 
-        public bool autoFindHealth = true;
         
         [Tooltip("是否顯示血條（可動態控制）")] 
         public bool showHealthBar = true;
 
-        public Health health;
+
         
         // --- 私有變數 ---
         private GameObject combatEntityInstance;
@@ -28,6 +26,7 @@ namespace Wuxia.GameCore
         
         private UIFollowWorldObject followScript;
         private Slider healthSlider;
+        private Health health;
 
         // Health 組件自動在上方設定，用於管理血量 
 
@@ -37,29 +36,12 @@ namespace Wuxia.GameCore
             if (anchor == null)
             {
                 anchor = this.transform;
-            }
-            
-            // 如果沒有設定 Health 組件且啟用自動尋找，嘗試自動獲取
-            if (health == null && autoFindHealth)
-            {
-                health = GetComponent<Health>();
-                if (health == null)
-                {
-                    Debug.LogError($"[CombatEntityUI] {gameObject.name} 沒有找到 Health 組件！", this);
-                    return;
-                }
-            }
-            
-            // 檢查是否有有效的 Health 組件
-            if (health == null)
-            {
-                Debug.LogError($"[CombatEntityUI] {gameObject.name} 沒有設定 Health 組件！", this);
-                return;
+                Debug.LogError("沒有設定Anchor");
             }
 
+            health = combatEntity.health;
             // 實體化血條
             InstantiateHealthBar();
-
             UpdateHealth(health.CurrentHealth, health.MaxHealth);
 
         }

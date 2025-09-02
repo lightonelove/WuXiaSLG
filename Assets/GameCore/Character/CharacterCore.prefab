@@ -839,8 +839,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CombatEntityUIPrefab: {fileID: 4361885756523593588, guid: 1a2e4ce333aa43344a13fbf0b3c8d7db, type: 3}
+  combatEntity: {fileID: 6903515148748646631}
   anchor: {fileID: 5019391867052335291}
-  autoFindHealth: 1
   showHealthBar: 1
   health: {fileID: 5525503941534339325}
 --- !u!114 &4413303962481113271
@@ -1711,7 +1711,6 @@ MonoBehaviour:
   blockedSightLineColor: {r: 1, g: 0, b: 0, a: 1}
   sightLineWidth: 0.05
   characterCore: {fileID: 507542057868587843}
-  actionPoint: {fileID: 0}
 --- !u!1 &5394328886506030602
 GameObject:
   m_ObjectHideFlags: 0
@@ -2650,7 +2649,7 @@ PrefabInstance:
     - target: {fileID: 4574451190531000145, guid: fded1ae414bd2bc49bbc20d054643357, type: 3}
       propertyPath: healthComponent
       value: 
-      objectReference: {fileID: 5525503941534339325}
+      objectReference: {fileID: 2110502893649392414}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

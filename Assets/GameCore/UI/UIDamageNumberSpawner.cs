@@ -8,6 +8,7 @@ namespace Wuxia.GameCore
         public GameObject uiDamageNumberPrefab;
         public Vector3 spawnOffset = new Vector3(0, 1.5f, 0);
         public Canvas targetCanvas; // 指定要將 UI 元素放在哪個 Canvas 上
+        public CombatEntity combatEntity;
         
         [Header("格擋文字設定")]
         [Tooltip("格擋文字顏色")]
@@ -15,13 +16,13 @@ namespace Wuxia.GameCore
         
         [Tooltip("格擋文字內容")]
         public string blockText = "格擋!!";
-
-        public Health health;
+        private Health health;
         public DamageReceiver damageReceiver;
 
         private void Awake()
         {
             // 如果沒有手動指定 Canvas，嘗試在場景中尋找
+            health = combatEntity.health;
             if (targetCanvas == null)
             {
                 targetCanvas = FindObjectOfType<Canvas>();
@@ -35,28 +36,15 @@ namespace Wuxia.GameCore
 
         private void OnEnable()
         {
-            if (health != null)
-            {
-                health.OnDamageTaken.AddListener(CreateDamageNumberUI);
-            }
-            
-            if (damageReceiver != null)
-            {
-                damageReceiver.onDamageBlocked.AddListener(CreateBlockTextUI);
-            }
+
+            health.OnDamageTaken.AddListener(CreateDamageNumberUI);
+            damageReceiver.onDamageBlocked.AddListener(CreateBlockTextUI);
         }
 
         private void OnDisable()
         {
-            if (health != null)
-            {
-                health.OnDamageTaken.RemoveListener(CreateDamageNumberUI);
-            }
-            
-            if (damageReceiver != null)
-            {
-                damageReceiver.onDamageBlocked.RemoveListener(CreateBlockTextUI);
-            }
+            health.OnDamageTaken.RemoveListener(CreateDamageNumberUI);
+            damageReceiver.onDamageBlocked.RemoveListener(CreateBlockTextUI);
         }
 
         private void CreateDamageNumberUI(float damageAmount)

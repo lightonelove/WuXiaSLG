@@ -25941,9 +25941,9 @@ MonoBehaviour:
   uiDamageNumberPrefab: {fileID: 654962155742320905, guid: 88b85777e6860d64594e05e0e66c369f, type: 3}
   spawnOffset: {x: 0, y: 1.5, z: 0}
   targetCanvas: {fileID: 0}
+  combatEntity: {fileID: 0}
   blockTextColor: {r: 0, g: 1, b: 1, a: 1}
   blockText: "\u683C\u64CB!!"
-  health: {fileID: 0}
   damageReceiver: {fileID: 0}
 --- !u!1001 &314510743
 PrefabInstance:
@@ -97977,6 +97977,10 @@ PrefabInstance:
     - target: {fileID: 507542057868587843, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: MaxStamina
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 566711204660000477, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
+      propertyPath: autoFindHealth
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 921727934772688165, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_TagString
