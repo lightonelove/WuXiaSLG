@@ -124,10 +124,6 @@ PrefabInstance:
       propertyPath: turnRate
       value: 720
       objectReference: {fileID: 0}
-    - target: {fileID: 8207971771052042299, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
-      propertyPath: m_Name
-      value: CombatResouces
-      objectReference: {fileID: 0}
     - target: {fileID: 9162912869376663710, guid: ae485f4914a151d4a9092e8c0cac5e95, type: 3}
       propertyPath: m_TagString
       value: CombatController

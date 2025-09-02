@@ -2203,7 +2203,7 @@ GameObject:
   - component: {fileID: 2190077052263527030}
   - component: {fileID: 2110502893649392414}
   m_Layer: 0
-  m_Name: CharacterResouces
+  m_Name: CombatResouces
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2253,7 +2253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
-  ownerEntity: {fileID: 0}
+  ownerEntity: {fileID: 6903515148748646631}
   OnDamageTaken:
     m_PersistentCalls:
       m_Calls: []
