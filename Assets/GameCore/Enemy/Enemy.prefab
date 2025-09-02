@@ -377,7 +377,7 @@ MonoBehaviour:
   onAttackStateExit:
     m_PersistentCalls:
       m_Calls: []
-  health: {fileID: 7697422947043063634}
+  combatEntity: {fileID: 670760991645550886}
   animator: {fileID: 494543029378924733}
 --- !u!114 &7697422947043063634
 MonoBehaviour:
@@ -422,8 +422,8 @@ MonoBehaviour:
   CharacterCore: {fileID: 0}
   Faction: 4
   entityStats: {fileID: 11400000, guid: 4cf8a6b152fe28c41aa33c2cac9bf199, type: 2}
-  health: {fileID: 7697422947043063634}
-  ActionPoint: {fileID: 0}
+  health: {fileID: 5984884673300495073}
+  ActionPoint: {fileID: 8987276224494235255}
 --- !u!195 &3309778327019055104
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -476,7 +476,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CombatEntityUIPrefab: {fileID: 4361885756523593588, guid: 1a2e4ce333aa43344a13fbf0b3c8d7db, type: 3}
-  combatEntity: {fileID: 0}
+  combatEntity: {fileID: 670760991645550886}
   anchor: {fileID: 4467518771117506341}
   showHealthBar: 1
 --- !u!114 &5207808132746345017
@@ -494,7 +494,7 @@ MonoBehaviour:
   uiDamageNumberPrefab: {fileID: 654962155742320905, guid: 88b85777e6860d64594e05e0e66c369f, type: 3}
   spawnOffset: {x: 0, y: 1.5, z: 0}
   targetCanvas: {fileID: 0}
-  combatEntity: {fileID: 0}
+  combatEntity: {fileID: 670760991645550886}
   blockTextColor: {r: 0, g: 1, b: 1, a: 1}
   blockText: Parried!!
   damageReceiver: {fileID: 1181071552201193841}

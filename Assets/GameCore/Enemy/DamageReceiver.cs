@@ -12,7 +12,7 @@ namespace Wuxia.GameCore
     public class DamageReceiver : MonoBehaviour
     {
         // 對 Health 元件的引用
-        public Health healthComponent;
+        private Health healthComponent;
         
         [Header("格擋設定")]
         [Tooltip("是否啟用格擋功能")]
@@ -34,6 +34,7 @@ namespace Wuxia.GameCore
         private void Awake()
         {
             // 在初始時，自動獲取掛在同一個物件上的 Health 元件
+            healthComponent = ownerEntity.health;
         }
 
         private void OnTriggerEnter(Collider other)

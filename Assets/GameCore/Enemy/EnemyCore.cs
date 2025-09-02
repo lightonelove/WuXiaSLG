@@ -59,12 +59,13 @@ namespace Wuxia.GameCore
         [Header("狀態事件")]
         [HideInInspector] public UnityEvent onAttackStateEnter = new UnityEvent();
         [HideInInspector] public UnityEvent onAttackStateExit = new UnityEvent();
+        
+        public CombatEntity combatEntity;
     
         // C# 屬性 (Property)，方便外部程式碼安全地讀取數值
-        public Health health;
+        private Health health;
     
         public Animator animator;
-    
         public float CurrentActionPoints => currentActionPoints;
         public float MaxActionPoints => maxActionPoints;
         public EnemyState CurrentState => currentState;
@@ -79,7 +80,7 @@ namespace Wuxia.GameCore
             // 遊戲開始時，將當前血量設為最大血量
             // 回合開始時，恢復所有行動點數
             RestoreActionPoints();
-            
+            health = combatEntity.health;
             // 初始化元件
             if (characterController == null)
                 characterController = GetComponent<CharacterController>();
