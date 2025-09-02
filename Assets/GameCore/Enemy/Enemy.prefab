@@ -358,8 +358,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackPower: 15
   speed: 10
-  maxActionPoints: 100
-  currentActionPoints: 0
   currentState: 0
   characterController: {fileID: 0}
   moveSpeed: 8
@@ -399,6 +397,7 @@ MonoBehaviour:
   entityStats: {fileID: 11400000, guid: 4cf8a6b152fe28c41aa33c2cac9bf199, type: 2}
   health: {fileID: 5984884673300495073}
   ActionPoint: {fileID: 8987276224494235255}
+  PosturePoint: {fileID: 6521915943191416996}
 --- !u!195 &3309778327019055104
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1451,6 +1450,7 @@ GameObject:
   - component: {fileID: 3502717195814262177}
   - component: {fileID: 5984884673300495073}
   - component: {fileID: 8987276224494235255}
+  - component: {fileID: 6521915943191416996}
   m_Layer: 0
   m_Name: CombatResources
   m_TagString: Untagged
@@ -1512,6 +1512,30 @@ MonoBehaviour:
   AP: 100
   MaxAP: 100
   lastPosition: {x: 0, y: 0}
+--- !u!114 &6521915943191416996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8751311481747557811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a79d641e2906045a9f30a395b3f753, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentPosturePoint: 100
+  maxPosturePoint: 100
+  recoveryPerTurn: 30
+  OnPostureChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostureBroken:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostureRecovered:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1233622965675196725
 PrefabInstance:
   m_ObjectHideFlags: 0

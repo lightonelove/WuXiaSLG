@@ -698,7 +698,7 @@ MonoBehaviour:
   entityStats: {fileID: 0}
   health: {fileID: 2110502893649392414}
   ActionPoint: {fileID: 2190077052263527030}
-  PosturePoint: {fileID: 0}
+  PosturePoint: {fileID: 5906143974337552477}
 --- !u!114 &5525503941534339325
 MonoBehaviour:
   m_ObjectHideFlags: 0

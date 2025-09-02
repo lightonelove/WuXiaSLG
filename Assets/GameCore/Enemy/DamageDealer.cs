@@ -8,6 +8,10 @@ namespace Wuxia.GameCore
         [SerializeField]
         private float damage = 25f;
         
+        [SerializeField]
+        [Tooltip("對架勢造成的傷害")]
+        private float postureDamage = 15f;
+        
         [Header("陣營設定")]
         [Tooltip("傷害來源的戰鬥實體（用於判斷陣營）")]
         [SerializeField]
@@ -39,6 +43,14 @@ namespace Wuxia.GameCore
         public float GetDamage()
         {
             return damage;
+        }
+        
+        /// <summary>
+        /// 公開方法，讓外部可以讀取架勢傷害值
+        /// </summary>
+        public float GetPostureDamage()
+        {
+            return postureDamage;
         }
         
         
