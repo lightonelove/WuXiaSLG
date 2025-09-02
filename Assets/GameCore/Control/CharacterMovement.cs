@@ -39,7 +39,7 @@ namespace Wuxia.GameCore
         {
             // 獲取同一GameObject上的其他組件
             characterCore = GetComponent<CharacterCore>();
-            actionPoint = characterCore.actionPoint;
+            actionPoint = characterCore.combatEntityComponent.ActionPoint;
         }
 
         void Start()

@@ -8,9 +8,8 @@ namespace Wuxia.GameCore
     public class CharacterCore : MonoBehaviour
     {
         [Header("組件引用")] public CharacterMovement movementComponent;
-        public ActionPoint actionPoint;
         public CharacterSkills skillsComponent;
-
+        public CombatEntity combatEntityComponent;
         [Header("回合控制")] public float holdTimeToEndTurn = 1.0f; // 長壓多少秒結束回合
         private float spaceKeyHoldTime = 0f; // 空白鍵持續按住時間
         private bool isHoldingSpace = false; // 是否正在按住空白鍵
@@ -51,8 +50,6 @@ namespace Wuxia.GameCore
             // 獲取組件引用
             if (movementComponent == null)
                 movementComponent = GetComponent<CharacterMovement>();
-            if (actionPoint == null)
-                actionPoint = GetComponent<ActionPoint>();
             if (skillsComponent == null)
                 skillsComponent = GetComponent<CharacterSkills>();
 
