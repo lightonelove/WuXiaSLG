@@ -6,6 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyAttackAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyAttackAction.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyMoveAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyMoveAction.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyRangeAttackAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyRangeAttackAction.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyWaitAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyWaitAction.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/AI/Conditions/ActionPointCondition.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/AI/Conditions/ActionPointCondition.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyCore.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

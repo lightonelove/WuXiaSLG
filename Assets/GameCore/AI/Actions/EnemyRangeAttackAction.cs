@@ -308,9 +308,9 @@ namespace Wuxia.GameCore
         protected override bool CanExecuteInternal(EnemyCore enemy)
         {
             // 檢查 AP 是否足夠
-            if (enemy.CurrentActionPoints < apCost)
+            if (enemy.combatEntity.ActionPoint?.AP < apCost)
             {
-                Debug.Log($"[AI] {enemy.gameObject.name} AP不足無法遠距攻擊 (需要: {apCost}, 當前: {enemy.CurrentActionPoints})");
+                Debug.Log($"[AI] {enemy.gameObject.name} AP不足無法遠距攻擊 (需要: {apCost}, 當前: {enemy.combatEntity.ActionPoint.AP})");
                 return false;
             }
             
@@ -373,7 +373,7 @@ namespace Wuxia.GameCore
                 yield break;
             }
             
-            Debug.Log($"[AI] {enemy.gameObject.name} 開始遠距攻擊 {cachedTarget.name}, AP: {enemy.CurrentActionPoints}");
+            Debug.Log($"[AI] {enemy.gameObject.name} 開始遠距攻擊 {cachedTarget.name}, AP: {enemy.combatEntity.ActionPoint.AP}");
             
             // 面向目標
             Vector3 lookDirection = cachedTarget.transform.position - enemy.transform.position;
@@ -389,7 +389,7 @@ namespace Wuxia.GameCore
             // 消耗AP
             enemy.SpendActionPoints(apCost);
             
-            Debug.Log($"[AI] {enemy.gameObject.name} 遠距攻擊完成，剩餘AP: {enemy.CurrentActionPoints}");
+            Debug.Log($"[AI] {enemy.gameObject.name} 遠距攻擊完成，剩餘AP: {enemy.combatEntity.ActionPoint.AP}");
         }
         
         /// <summary>

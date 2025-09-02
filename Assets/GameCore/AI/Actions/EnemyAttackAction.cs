@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,7 +42,7 @@ namespace Wuxia.GameCore
             cachedTarget = null;
             cachedAnimator = null;
             availableTargets = new List<CombatEntity>();
-            
+
             // 檢查 enemyCombatEntity 是否已經被設定（應該由 EnemyAISystem 設定）
             if (enemyCombatEntity == null)
             {
@@ -195,9 +196,10 @@ namespace Wuxia.GameCore
         protected override bool CanExecuteInternal(EnemyCore enemy)
         {
             // 檢查 AP 是否足夠
-            if (enemy.CurrentActionPoints < apCost)
+            ActionPoint actionPoint = enemy.combatEntity.ActionPoint;
+            if (actionPoint.AP < apCost)
             {
-                Debug.Log($"[AI] {enemy.gameObject.name} AP不足無法攻擊 (需要: {apCost}, 當前: {enemy.CurrentActionPoints})");
+                Debug.Log($"[AI] {enemy.gameObject.name} AP不足無法攻擊 (需要: {apCost}, 當前: {actionPoint.AP})");
                 return false;
             }
             
@@ -229,6 +231,7 @@ namespace Wuxia.GameCore
         
         public override IEnumerator Execute(EnemyCore enemy)
         {
+            ActionPoint actionPoint = enemy.combatEntity.ActionPoint;
             // 確保有有效的目標
             if (!isInitialized || cachedTarget == null)
             {
@@ -242,7 +245,7 @@ namespace Wuxia.GameCore
                 yield break;
             }
             
-            Debug.Log($"[AI] {enemy.gameObject.name} 開始攻擊 {cachedTarget.name}, AP: {enemy.CurrentActionPoints}");
+            Debug.Log($"[AI] {enemy.gameObject.name} 開始攻擊 {cachedTarget.name}, AP: {actionPoint.AP}");
             
             // 面向目標
             Vector3 lookDirection = cachedTarget.transform.position - enemy.transform.position;
@@ -258,7 +261,7 @@ namespace Wuxia.GameCore
             // 消耗AP
             enemy.SpendActionPoints(apCost);
             
-            Debug.Log($"[AI] {enemy.gameObject.name} 攻擊完成，剩餘AP: {enemy.CurrentActionPoints}");
+            Debug.Log($"[AI] {enemy.gameObject.name} 攻擊完成，剩餘AP: {actionPoint.AP}");
         }
         
         /// <summary>

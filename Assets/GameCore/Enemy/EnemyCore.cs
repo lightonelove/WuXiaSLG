@@ -33,10 +33,6 @@ namespace Wuxia.GameCore
         [SerializeField] public float speed = 10f;
     
         [Header("行動與狀態 (用於回合制)")]
-        [Tooltip("每回合可用的最大行動點數 (AP)")]
-        [SerializeField] public float maxActionPoints = 60f;
-        
-        public float currentActionPoints;
     
         [Header("目前狀態")]
         [Tooltip("顯示敵人目前的狀態，主要用於偵錯")]
@@ -66,8 +62,6 @@ namespace Wuxia.GameCore
         private Health health;
     
         public Animator animator;
-        public float CurrentActionPoints => currentActionPoints;
-        public float MaxActionPoints => maxActionPoints;
         public EnemyState CurrentState => currentState;
     
     
@@ -78,8 +72,6 @@ namespace Wuxia.GameCore
         void Awake()
         {
             // 遊戲開始時，將當前血量設為最大血量
-            // 回合開始時，恢復所有行動點數
-            RestoreActionPoints();
             health = combatEntity.health;
             // 初始化元件
             if (characterController == null)
@@ -112,9 +104,15 @@ namespace Wuxia.GameCore
         /// <returns>如果AP足夠則回傳true，否則回傳false</returns>
         public bool SpendActionPoints(float cost)
         {
-            if (currentActionPoints >= cost)
+            if (combatEntity.ActionPoint == null)
             {
-                currentActionPoints -= cost;
+                Debug.LogError($"[EnemyCore] {gameObject.name} 沒有 ActionPoint 組件");
+                return false;
+            }
+            
+            if (combatEntity.ActionPoint.AP >= cost)
+            {
+                combatEntity.ActionPoint.ConsumeAP(cost);
                 return true;
             }
             else
@@ -127,7 +125,13 @@ namespace Wuxia.GameCore
         /// </summary>
         public void RestoreActionPoints()
         {
-            currentActionPoints = maxActionPoints;
+            if (combatEntity.ActionPoint == null)
+            {
+                Debug.LogError($"[EnemyCore] {gameObject.name} 沒有 ActionPoint 組件");
+                return;
+            }
+            
+            combatEntity.ActionPoint.RefillAP();
         }
     
         /// <summary>
@@ -184,7 +188,7 @@ namespace Wuxia.GameCore
             SetState(EnemyState.ExecutingTurn);
             RestoreActionPoints();
             
-            Debug.Log($"{gameObject.name} 開始回合，AP: {currentActionPoints}");
+            Debug.Log($"{gameObject.name} 開始回合，AP: {combatEntity.ActionPoint.AP}");
         }
         
         /// <summary>
@@ -192,7 +196,7 @@ namespace Wuxia.GameCore
         /// </summary>
         public IEnumerator ExecuteTurn()
         {
-            Debug.Log($"{gameObject.name} ExecuteTurn started, state: {currentState}, AP: {currentActionPoints}");
+            Debug.Log($"{gameObject.name} ExecuteTurn started, state: {currentState}, AP: {combatEntity.ActionPoint?.AP}");
             
             if (currentState != EnemyState.ExecutingTurn) 
             {
@@ -236,7 +240,7 @@ namespace Wuxia.GameCore
                     yield return action.Execute(this);
                     
                     // 檢查是否還有 AP 繼續執行其他行動
-                    if (currentActionPoints <= 0)
+                    if (combatEntity.ActionPoint.AP <= 0)
                     {
                         Debug.Log($"{gameObject.name} AP 耗盡，結束回合");
                         break;
@@ -248,7 +252,7 @@ namespace Wuxia.GameCore
                 }
             }
             
-            Debug.Log($"{gameObject.name} 策略執行完畢，剩餘 AP: {currentActionPoints}");
+            Debug.Log($"{gameObject.name} 策略執行完畢，剩餘 AP: {combatEntity.ActionPoint.AP}");
             
             // 結束回合
             EndTurn();
@@ -273,7 +277,7 @@ namespace Wuxia.GameCore
             }
             
             SetState(EnemyState.TurnComplete);
-            Debug.Log($"{gameObject.name} 回合結束，剩餘AP: {currentActionPoints}");
+            Debug.Log($"{gameObject.name} 回合結束，剩餘AP: {combatEntity.ActionPoint.AP}");
         }
         
         // --- 私有方法 (Private Methods) ---

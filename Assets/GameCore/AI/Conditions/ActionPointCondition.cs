@@ -21,7 +21,7 @@ namespace Wuxia.GameCore
         {
             if (enemy == null) return false;
             
-            float currentAP = enemy.CurrentActionPoints;
+            float currentAP = enemy.combatEntity.ActionPoint.AP;
             
             switch (comparison)
             {

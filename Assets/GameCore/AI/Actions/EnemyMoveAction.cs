@@ -89,7 +89,7 @@ namespace Wuxia.GameCore
         
         protected override bool CanExecuteInternal(EnemyCore enemy)
         {
-            if (enemy.CurrentActionPoints < CombatConfig.Instance.APCostPerMeter)
+            if (enemy.combatEntity.ActionPoint.AP < CombatConfig.Instance.APCostPerMeter)
                 return false;
             
             return true; // 簡單檢查，可以加入更複雜的邏輯
@@ -115,16 +115,17 @@ namespace Wuxia.GameCore
         private IEnumerator ExecuteToPlayerChase(EnemyCore enemy)
         {
             // 檢查是否已初始化
+            ActionPoint actionPoint = enemy.combatEntity.ActionPoint;
             if (!isInitialized || cachedTarget == null)
             {
                 Debug.LogError($"[AI] {enemy.gameObject.name} ToPlayer 移動未正確初始化，無法執行");
                 yield break;
             }
             
-            Debug.Log($"[AI] {enemy.gameObject.name} 開始追逐玩家, AP: {enemy.CurrentActionPoints}, 目標: {cachedTarget.name}");
+            Debug.Log($"[AI] {enemy.gameObject.name} 開始追逐玩家, AP: {actionPoint.AP}, 目標: {cachedTarget.name}");
             
             // 持續追逐直到條件不滿足
-            while (enemy.CurrentActionPoints > stoppingRemainingAP)
+            while (actionPoint.AP > stoppingRemainingAP)
             {
                 // 檢查目標是否仍然存在且有效
                 if (cachedTarget == null || !cachedTarget.gameObject.activeInHierarchy)
@@ -147,14 +148,14 @@ namespace Wuxia.GameCore
                 
                 if (!moved)
                 {
-                    Debug.Log($"[AI] {enemy.gameObject.name} 無法繼續移動，剩餘AP: {enemy.CurrentActionPoints}");
+                    Debug.Log($"[AI] {enemy.gameObject.name} 無法繼續移動，剩餘AP: {actionPoint.AP}");
                     break;
                 }
                 
                 yield return null; // 等待下一幀
             }
             
-            Debug.Log($"[AI] {enemy.gameObject.name} 追逐完成，剩餘AP: {enemy.CurrentActionPoints}");
+            Debug.Log($"[AI] {enemy.gameObject.name} 追逐完成，剩餘AP: {actionPoint.AP}");
             
             // 清理NavMesh
             CleanupNavMesh(enemy);
@@ -168,15 +169,15 @@ namespace Wuxia.GameCore
             Vector3 destination = CalculateDestination(enemy);
             float distanceToMove = Vector3.Distance(enemy.transform.position, destination);
             float apCost = distanceToMove * CombatConfig.Instance.APCostPerMeter;
-            
+            ActionPoint actionPoint = enemy.combatEntity.ActionPoint;
             // 檢查AP是否足夠
-            if (enemy.CurrentActionPoints < apCost)
+            if (actionPoint.AP < apCost)
             {
                 // 只移動能負擔的距離
-                distanceToMove = enemy.CurrentActionPoints / CombatConfig.Instance.APCostPerMeter;
+                distanceToMove = actionPoint.AP / CombatConfig.Instance.APCostPerMeter;
                 Vector3 direction = (destination - enemy.transform.position).normalized;
                 destination = enemy.transform.position + direction * distanceToMove;
-                apCost = enemy.CurrentActionPoints;
+                apCost = actionPoint.AP;
             }
             
             Debug.Log($"[AI] Enemy moving to {destination}, distance: {distanceToMove}, AP cost: {apCost}");
@@ -360,15 +361,16 @@ namespace Wuxia.GameCore
         /// </summary>
         private bool MoveTowardsTarget(EnemyCore enemy, Transform target)
         {
+            ActionPoint actionPoint = enemy.combatEntity.ActionPoint;
             if (target == null)
             {
                 Debug.Log($"[AI] {enemy.gameObject.name} MoveTowardsTarget: 沒有目標");
                 return false;
             }
             
-            if (enemy.CurrentActionPoints <= 0)
+            if (actionPoint.AP <= 0)
             {
-                Debug.Log($"[AI] {enemy.gameObject.name} MoveTowardsTarget: AP不足 ({enemy.CurrentActionPoints})");
+                Debug.Log($"[AI] {enemy.gameObject.name} MoveTowardsTarget: AP不足 ({actionPoint.AP})");
                 return false;
             }
             // 統一使用NavMeshAgent移動
@@ -390,11 +392,12 @@ namespace Wuxia.GameCore
             // 計算這一幀要移動的距離
             float frameDistance = enemy.moveSpeed * Time.deltaTime;
             float apCost = frameDistance * CombatConfig.Instance.APCostPerMeter;
+            ActionPoint actionPoint = enemy.combatEntity.ActionPoint;
             // 檢查AP是否足夠
-            if (enemy.CurrentActionPoints < apCost)
+            if (actionPoint.AP < apCost)
             {
-                frameDistance = enemy.CurrentActionPoints / CombatConfig.Instance.APCostPerMeter;
-                apCost = enemy.CurrentActionPoints;
+                frameDistance = actionPoint.AP / CombatConfig.Instance.APCostPerMeter;
+                apCost = actionPoint.AP;
             }
             
             if (frameDistance > 0)

@@ -54,11 +54,16 @@ namespace Wuxia.GameCore
             yield return new WaitForSeconds(waitDuration);
             
             // 恢復AP（但不超過最大值）
-            float currentAP = enemy.CurrentActionPoints;
-            float newAP = Mathf.Min(currentAP + apRecovery, enemy.MaxActionPoints);
+            float currentAP = enemy.combatEntity.ActionPoint.AP;
+            float maxAP = enemy.combatEntity.ActionPoint.MaxAP;
+            float newAP = Mathf.Min(currentAP + apRecovery, maxAP);
             
-            // 注意：這裡直接設置currentActionPoints，因為SpendActionPoints是減少AP的
-            // 在實際實現中，你可能需要在EnemyCore中加入RestoreActionPoints方法
+            // 直接設置AP值
+            if (enemy.combatEntity.ActionPoint != null)
+            {
+                enemy.combatEntity.ActionPoint.AP = newAP;
+            }
+            
             Debug.Log($"[AI] Enemy recovered {apRecovery} AP. Current AP: {newAP}");
         }
         
