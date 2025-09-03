@@ -63,7 +63,10 @@ namespace Wuxia.GameCore
                     // 玩家使用 BlockingSystem
                     if (ownerEntity != null && ownerEntity.Faction == CombatEntityFaction.Ally)
                     {
-                        if (BlockingSystem.Instance != null && BlockingSystem.Instance.CheckBlockWindow(Time.time))
+                        // 取得架勢傷害值
+                        float postureDamage = dealer.GetPostureDamage();
+                        
+                        if (BlockingSystem.Instance != null && BlockingSystem.Instance.CheckBlockWindow(Time.time, ownerEntity, postureDamage))
                         {
                             isBlocked = true;
                         }

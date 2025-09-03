@@ -87,12 +87,36 @@ namespace Wuxia.GameCore
         /// 檢查是否在格擋窗口內
         /// </summary>
         /// <param name="damageTime">受到傷害的時間</param>
+        /// <param name="targetEntity">格擋的戰鬥實體</param>
+        /// <param name="postureDamage">格擋時消耗的架勢值</param>
         /// <returns>是否成功格擋</returns>
-        public bool CheckBlockWindow(float damageTime)
+        public bool CheckBlockWindow(float damageTime, CombatEntity targetEntity, float postureDamage)
         {
             if (lastRightClickTime < 0f)
             {
                 return false; // 沒有格擋輸入
+            }
+            
+            // 檢查目標實體是否存在
+            if (targetEntity == null)
+            {
+                Debug.LogError("[BlockingSystem] 目標戰鬥實體為 null，無法進行格擋檢查");
+                return false;
+            }
+            
+            // 檢查架勢點數組件
+            PosturePoint posturePoint = targetEntity.PosturePoint;
+            if (posturePoint == null)
+            {
+                Debug.LogError($"[BlockingSystem] {targetEntity.Name} 沒有 PosturePoint 組件，無法格擋");
+                return false;
+            }
+            
+            // 檢查架勢是否足夠
+            if (posturePoint.CurrentPP <= 0f)
+            {
+                Debug.Log($"[BlockingSystem] {targetEntity.Name} 架勢不足，無法格擋 (當前架勢: {posturePoint.CurrentPP})");
+                return false;
             }
             
             float timeDifference = (damageTime - lastRightClickTime) * 1000f; // 轉換為毫秒
@@ -103,6 +127,9 @@ namespace Wuxia.GameCore
             if (timeDifference >= 0f && timeDifference <= preBlockWindowMs)
             {
                 Debug.Log($"[BlockingSystem] 預判格擋成功！時間差: {timeDifference:F1}ms");
+                // 消耗架勢點數
+                posturePoint.ConsumePosture(postureDamage);
+                Debug.Log($"[BlockingSystem] {targetEntity.Name} 格擋消耗架勢: {postureDamage}, 剩餘架勢: {posturePoint.CurrentPP}");
                 onBlockSuccess?.Invoke();
                 return true;
             }
@@ -111,6 +138,9 @@ namespace Wuxia.GameCore
             if (timeDifference >= -postBlockWindowMs && timeDifference < 0f)
             {
                 Debug.Log($"[BlockingSystem] 反應格擋成功！時間差: {timeDifference:F1}ms");
+                // 消耗架勢點數
+                posturePoint.ConsumePosture(postureDamage);
+                Debug.Log($"[BlockingSystem] {targetEntity.Name} 格擋消耗架勢: {postureDamage}, 剩餘架勢: {posturePoint.CurrentPP}");
                 onBlockSuccess?.Invoke();
                 return true;
             }

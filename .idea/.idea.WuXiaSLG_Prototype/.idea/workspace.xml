@@ -7,8 +7,11 @@
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Character/CharacterCore.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/DamageDealer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/DamageDealer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Control/BlockingSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Control/BlockingSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/DamageReceiver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/DamageReceiver.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/Enemy.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/UI/UIDamageNumberSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/UI/UIDamageNumberSpawner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +38,8 @@
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyAttackAction.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyMoveAction.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyRangeAttackAction.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Actions/EnemyWaitAction.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Conditions/ActionPointCondition.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Core/EnemyAISystem.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Core/EnemyStrategy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/AI/Core/ICondition.cs" root0="FORCE_HIGHLIGHTING" />
@@ -52,6 +57,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/CombatCameraController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/CombatCore.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/CombatEntity.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/GameCore/Control/PosturePoint.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Debug/ForwardDirectionVisualizer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Editor/CharacterSkillsAutoSetup.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Editor/TargetedIndicatorAutoSetup.cs" root0="FORCE_HIGHLIGHTING" />
@@ -77,7 +83,6 @@
     <setting file="file://$PROJECT_DIR$/Assets/GameCore/Utility/SectorMeshTest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Plugins/Sirenix/Odin Inspector/Modules/Unity.Addressables/AddressablesInspectors.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Selectable.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -192,6 +197,7 @@
       <workItem from="1756187509782" duration="14737000" />
       <workItem from="1756275504474" duration="4760000" />
       <workItem from="1756705297782" duration="12736000" />
+      <workItem from="1756874658827" duration="1302000" />
     </task>
     <servers />
   </component>

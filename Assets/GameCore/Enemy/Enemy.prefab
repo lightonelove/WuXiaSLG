@@ -1524,9 +1524,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14a79d641e2906045a9f30a395b3f753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPosturePoint: 100
-  maxPosturePoint: 100
-  recoveryPerTurn: 30
+  currentPosturePoint: 15
+  maxPosturePoint: 15
+  recoveryPerTurn: 10
   OnPostureChanged:
     m_PersistentCalls:
       m_Calls: []
