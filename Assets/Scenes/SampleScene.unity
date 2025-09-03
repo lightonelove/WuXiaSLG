@@ -25921,30 +25921,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1dd1d0769c99bda4b91b604ac3545431, type: 3}
---- !u!1 &314012449 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1588288096788536482, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
-  m_PrefabInstance: {fileID: 1319667451}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &314012450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 314012449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdbc36e79b7a22d46a779c1fca388500, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiDamageNumberPrefab: {fileID: 654962155742320905, guid: 88b85777e6860d64594e05e0e66c369f, type: 3}
-  spawnOffset: {x: 0, y: 1.5, z: 0}
-  targetCanvas: {fileID: 0}
-  combatEntity: {fileID: 0}
-  blockTextColor: {r: 0, g: 1, b: 1, a: 1}
-  blockText: "\u683C\u64CB!!"
-  damageReceiver: {fileID: 0}
 --- !u!1001 &314510743
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66245,10 +66221,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1588288096788536482, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 314012450}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
 --- !u!1001 &1320387538
 PrefabInstance:
@@ -98183,6 +98156,14 @@ PrefabInstance:
       propertyPath: priority
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6521915943191416996, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: maxPosturePoint
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6521915943191416996, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
+      propertyPath: currentPosturePoint
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7146826614908490065, guid: b0b8fc08b29385c4c9c7a75490667bd2, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.55
@@ -98730,6 +98711,14 @@ PrefabInstance:
     - target: {fileID: 3357253579956752450, guid: cf2a4183917391442884c41998698ea9, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3574970534969026451, guid: cf2a4183917391442884c41998698ea9, type: 3}
+      propertyPath: maxPosturePoint
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 3574970534969026451, guid: cf2a4183917391442884c41998698ea9, type: 3}
+      propertyPath: currentPosturePoint
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 3595991799834754161, guid: cf2a4183917391442884c41998698ea9, type: 3}
       propertyPath: m_IsActive

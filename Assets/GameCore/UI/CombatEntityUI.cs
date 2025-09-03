@@ -17,16 +17,20 @@ namespace Wuxia.GameCore
         
         [Tooltip("是否顯示血條（可動態控制）")] 
         public bool showHealthBar = true;
-
-
+        
+        [Tooltip("是否顯示架勢條（可動態控制）")]
+        public bool showPostureBar = true;
         
         // --- 私有變數 ---
         private GameObject combatEntityInstance;
         private GameObject healthBarObj;
+        private GameObject postureBarObj;
         
         private UIFollowWorldObject followScript;
         private Slider healthSlider;
+        private Slider postureSlider;
         private Health health;
+        private PosturePoint posturePoint;
 
         // Health 組件自動在上方設定，用於管理血量 
 
@@ -40,9 +44,14 @@ namespace Wuxia.GameCore
             }
 
             health = combatEntity.health;
+            posturePoint = combatEntity.PosturePoint;
             // 實體化血條
             InstantiateHealthBar();
             UpdateHealth(health.CurrentHealth, health.MaxHealth);
+            if (posturePoint != null)
+            {
+                UpdatePosture(posturePoint.CurrentPP, posturePoint.MaxPP);
+            }
 
         }
 
@@ -61,7 +70,19 @@ namespace Wuxia.GameCore
             // 獲取血條上的必要元件
             followScript = combatEntityInstance.GetComponent<UIFollowWorldObject>();
             healthBarObj = combatEntityInstance.transform.Find("HealthBar").gameObject;
-            healthSlider =  healthBarObj.GetComponent<Slider>();
+            healthSlider = healthBarObj.GetComponent<Slider>();
+            
+            // 獲取架勢條元件
+            Transform postureBarTransform = combatEntityInstance.transform.Find("PostureBar");
+            if (postureBarTransform != null)
+            {
+                postureBarObj = postureBarTransform.gameObject;
+                postureSlider = postureBarObj.GetComponent<Slider>();
+            }
+            else
+            {
+                Debug.LogWarning("找不到 PostureBar，請確認 Prefab 中有 PostureBar 物件");
+            }
             
             Debug.Log("Hello?2222");
             // 設定跟隨目標
@@ -88,6 +109,18 @@ namespace Wuxia.GameCore
             healthSlider.maxValue = maxHealth;
             healthSlider.value = currentHealth;
         }
+        
+        /// <summary>
+        /// 更新架勢條的顯示
+        /// </summary>
+        /// <param name="currentPosture">當前架勢點數</param>
+        /// <param name="maxPosture">最大架勢點數</param>
+        public void UpdatePosture(float currentPosture, float maxPosture)
+        {
+            if (postureSlider == null) return;
+            postureSlider.maxValue = maxPosture;
+            postureSlider.value = currentPosture;
+        }
 
         public void Update()
         {
@@ -96,10 +129,21 @@ namespace Wuxia.GameCore
                 UpdateHealth(health.CurrentHealth, health.MaxHealth);
             }
             
+            if (posturePoint != null)
+            {
+                UpdatePosture(posturePoint.CurrentPP, posturePoint.MaxPP);
+            }
+            
             // 根據 showHealthBar 設定來控制血條顯示
             if (healthBarObj != null && healthBarObj.activeInHierarchy != showHealthBar)
             {
                 healthBarObj.SetActive(showHealthBar);
+            }
+            
+            // 根據 showPostureBar 設定來控制架勢條顯示
+            if (postureBarObj != null && postureBarObj.activeInHierarchy != showPostureBar)
+            {
+                postureBarObj.SetActive(showPostureBar);
             }
         }
         
@@ -123,6 +167,28 @@ namespace Wuxia.GameCore
         public void SetHealth(Health newHealth)
         {
             health = newHealth;
+        }
+        
+        /// <summary>
+        /// 手動設定 PosturePoint 組件
+        /// </summary>
+        /// <param name="newPosturePoint">新的 PosturePoint 組件</param>
+        public void SetPosturePoint(PosturePoint newPosturePoint)
+        {
+            posturePoint = newPosturePoint;
+        }
+        
+        /// <summary>
+        /// 設定架勢條是否顯示
+        /// </summary>
+        /// <param name="show">是否顯示架勢條</param>
+        public void SetPostureBarVisible(bool show)
+        {
+            showPostureBar = show;
+            if (postureBarObj != null)
+            {
+                postureBarObj.SetActive(show);
+            }
         }
 
         // 當角色物件被銷毀時，也要一併銷毀它對應的血條
