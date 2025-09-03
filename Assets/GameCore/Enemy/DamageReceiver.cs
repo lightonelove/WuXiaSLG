@@ -74,7 +74,9 @@ namespace Wuxia.GameCore
                     // 敵人使用機率格擋
                     else if (ownerEntity != null && ownerEntity.Faction == CombatEntityFaction.Hostile)
                     {
-                        isBlocked = CheckEnemyAutoBlock();
+                        // 取得架勢傷害值
+                        float postureDamage = dealer.GetPostureDamage();
+                        isBlocked = CheckEnemyAutoBlock(postureDamage);
                     }
                     
                     if (isBlocked)
@@ -125,12 +127,28 @@ namespace Wuxia.GameCore
         /// <summary>
         /// 檢查敵人是否自動格擋
         /// </summary>
+        /// <param name="postureDamage">格擋時消耗的架勢值</param>
         /// <returns>是否格擋成功</returns>
-        private bool CheckEnemyAutoBlock()
+        private bool CheckEnemyAutoBlock(float postureDamage)
         {
             if (ownerEntity == null || ownerEntity.entityStats == null)
             {
                 Debug.LogError($"[DamageReceiver] CheckEnemyAutoBlock: ownerEntity 或 entityStats 為 null");
+                return false;
+            }
+            
+            // 檢查架勢點數組件
+            PosturePoint posturePoint = ownerEntity.PosturePoint;
+            if (posturePoint == null)
+            {
+                Debug.LogError($"[DamageReceiver] {ownerEntity.Name} 沒有 PosturePoint 組件，無法格擋");
+                return false;
+            }
+            
+            // 檢查架勢是否足夠
+            if (posturePoint.CurrentPP <= 0f)
+            {
+                Debug.Log($"[DamageReceiver] {ownerEntity.Name} 架勢不足，無法格擋 (當前架勢: {posturePoint.CurrentPP})");
                 return false;
             }
             
@@ -142,6 +160,9 @@ namespace Wuxia.GameCore
             if (willBlock)
             {
                 Debug.Log($"[DamageReceiver] {ownerEntity.Name} 觸發自動格擋 (機率: {blockRate:F1}%, 擲骰: {randomValue:F1})");
+                // 消耗架勢點數
+                posturePoint.ConsumePosture(postureDamage);
+                Debug.Log($"[DamageReceiver] {ownerEntity.Name} 格擋消耗架勢: {postureDamage}, 剩餘架勢: {posturePoint.CurrentPP}");
             }
             
             return willBlock;
