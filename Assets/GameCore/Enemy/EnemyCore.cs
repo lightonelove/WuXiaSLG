@@ -92,6 +92,18 @@ namespace Wuxia.GameCore
         private void Start()
         {
             damageReceiver.onDamaged.AddListener(ToHurt);
+            
+            // 訂閱格擋事件
+            if (damageReceiver.onDamageBlocked != null)
+            {
+                damageReceiver.onDamageBlocked.AddListener(PlayParryAnimation);
+            }
+            
+            // 訂閱架勢破壞事件
+            if (combatEntity.PosturePoint != null && combatEntity.PosturePoint.OnPostureBroken != null)
+            {
+                combatEntity.PosturePoint.OnPostureBroken.AddListener(PlayPostureBreakAnimation);
+            }
         }
 
         // --- 公開方法 (Public Methods) ---
@@ -173,6 +185,38 @@ namespace Wuxia.GameCore
         {
             SetState(EnemyState.Idle);
             animator.Play("Idle");
+        }
+        
+        /// <summary>
+        /// 播放格擋動畫
+        /// </summary>
+        public void PlayParryAnimation()
+        {
+            if (animator == null)
+            {
+                Debug.LogError($"[EnemyCore] {gameObject.name} 沒有 Animator 組件，無法播放格擋動畫");
+                return;
+            }
+            
+            Debug.Log($"[EnemyCore] {gameObject.name} 播放格擋動畫");
+            animator.Play("Parry");
+            animator.playbackTime = 0;
+        }
+        
+        /// <summary>
+        /// 播放架勢破壞動畫
+        /// </summary>
+        public void PlayPostureBreakAnimation()
+        {
+            if (animator == null)
+            {
+                Debug.LogError($"[EnemyCore] {gameObject.name} 沒有 Animator 組件，無法播放架勢破壞動畫");
+                return;
+            }
+            
+            Debug.Log($"[EnemyCore] {gameObject.name} 播放架勢破壞動畫");
+            animator.Play("PostureBreak");
+            animator.playbackTime = 0;
         }
         
         

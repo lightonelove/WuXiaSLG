@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="279a0370-d472-4044-91e4-8c885265f889" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WuXiaSLG_Prototype/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameCore/Enemy/EnemyCore.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,7 +193,7 @@
       <workItem from="1756187509782" duration="14737000" />
       <workItem from="1756275504474" duration="4760000" />
       <workItem from="1756705297782" duration="12736000" />
-      <workItem from="1756874658827" duration="10770000" />
+      <workItem from="1756874658827" duration="11698000" />
     </task>
     <servers />
   </component>
