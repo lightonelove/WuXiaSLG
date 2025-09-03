@@ -91,7 +91,7 @@ namespace Wuxia.GameCore
         /// <summary>
         /// 創建格擋文字 UI
         /// </summary>
-        private void CreateBlockTextUI()
+        private void CreateBlockTextUI(DamageDealer attacker)
         {
             if (uiDamageNumberPrefab == null || targetCanvas == null)
             {
@@ -138,7 +138,7 @@ namespace Wuxia.GameCore
         [Button]
         public void TestBlockText()
         {
-            CreateBlockTextUI();
+            CreateBlockTextUI(null);
         }
     }
 }

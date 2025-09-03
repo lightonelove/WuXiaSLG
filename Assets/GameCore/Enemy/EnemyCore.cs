@@ -188,9 +188,18 @@ namespace Wuxia.GameCore
         }
         
         /// <summary>
-        /// 播放格擋動畫
+        /// 播放格擋動畫（無參數版本，保持向後兼容）
         /// </summary>
         public void PlayParryAnimation()
+        {
+            PlayParryAnimation(null);
+        }
+        
+        /// <summary>
+        /// 播放格擋動畫（帶攻擊者資訊，會自動轉向攻擊者）
+        /// </summary>
+        /// <param name="attacker">攻擊者的 DamageDealer</param>
+        public void PlayParryAnimation(DamageDealer attacker)
         {
             if (animator == null)
             {
@@ -198,9 +207,58 @@ namespace Wuxia.GameCore
                 return;
             }
             
-            Debug.Log($"[EnemyCore] {gameObject.name} 播放格擋動畫");
+            // 轉向攻擊者
+            FaceAttacker(attacker);
+            
+            Debug.Log($"[EnemyCore] {gameObject.name} 播放格擋動畫並面對攻擊者");
             animator.Play("Parry");
             animator.playbackTime = 0;
+        }
+        
+        /// <summary>
+        /// 讓角色面對攻擊者
+        /// </summary>
+        /// <param name="attacker">攻擊者的 DamageDealer</param>
+        private void FaceAttacker(DamageDealer attacker)
+        {
+            if (attacker == null)
+            {
+                Debug.LogWarning($"[EnemyCore] {gameObject.name} 無法面對攻擊者：攻擊者為 null");
+                return;
+            }
+            
+            // 獲取攻擊者位置
+            Vector3 attackerPosition = Vector3.zero;
+            
+            // 嘗試從 DamageDealer 的 sourceCombatEntity 獲取位置
+            if (attacker.sourceCombatEntity != null)
+            {
+                attackerPosition = attacker.sourceCombatEntity.transform.position;
+                Debug.Log($"[EnemyCore] {gameObject.name} 使用攻擊者戰鬥實體位置: {attacker.sourceCombatEntity.Name}");
+            }
+            else
+            {
+                // 如果沒有 sourceCombatEntity，使用 DamageDealer 本身的位置
+                attackerPosition = attacker.transform.position;
+                Debug.Log($"[EnemyCore] {gameObject.name} 使用 DamageDealer 位置");
+            }
+            
+            // 計算面對方向（只考慮 X-Z 平面，忽略 Y 軸差異）
+            Vector3 direction = attackerPosition - transform.position;
+            direction.y = 0; // 忽略垂直方向差異
+            
+            if (direction.magnitude > 0.1f) // 避免距離太近造成的計算問題
+            {
+                // 平滑轉向攻擊者
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1.0f);
+                
+                Debug.Log($"[EnemyCore] {gameObject.name} 轉向攻擊者，方向: {direction}");
+            }
+            else
+            {
+                Debug.LogWarning($"[EnemyCore] {gameObject.name} 與攻擊者距離太近，無法計算轉向");
+            }
         }
         
         /// <summary>

@@ -26,7 +26,7 @@ namespace Wuxia.GameCore
         public DamageEvent onDamaged;
         
         [System.Serializable]
-        public class BlockEvent : UnityEvent { }
+        public class BlockEvent : UnityEvent<DamageDealer> { }
         [Header("格擋事件")]
         public BlockEvent onDamageBlocked;
         
@@ -83,7 +83,7 @@ namespace Wuxia.GameCore
                     {
                         // 格擋成功，傷害變為 0
                         finalDamage = 0f;
-                        onDamageBlocked?.Invoke();
+                        onDamageBlocked?.Invoke(dealer);
                         Debug.Log($"[DamageReceiver] {gameObject.name} 成功格擋了 {originalDamage} 點傷害！");
                         
                         // 嘗試反彈投射物
